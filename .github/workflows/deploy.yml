@@ -17,7 +17,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '18'
-          cache: 'npm'
 
       - name: Install dependencies
         run: npm install
@@ -25,10 +24,10 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Add custom domain and nojekyll
+      - name: Add deployment files
         run: |
-          touch ./out/.nojekyll
-          echo "codesprintpro.github.io" > ./out/CNAME
+          touch out/.nojekyll
+          echo "codesprintpro.github.io" > out/CNAME
 
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4
