@@ -4,8 +4,9 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  basePath: '',
-  assetPrefix: '',
+  // Remove basePath and assetPrefix if this is your main site
+  // basePath: '',
+  // assetPrefix: '',
 }
 
 module.exports = nextConfig 
