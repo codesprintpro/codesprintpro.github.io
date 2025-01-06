@@ -6,11 +6,12 @@ on:
       - master
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v3
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
@@ -21,10 +22,12 @@ jobs:
         run: npm install
 
       - name: Build
-        run: npm run build && npm run export
+        run: npm run build
 
-      - name: Add .nojekyll file
-        run: touch ./out/.nojekyll
+      - name: Add deployment files
+        run: |
+          touch out/.nojekyll
+          echo "codesprintpro.github.io" > out/CNAME
 
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4

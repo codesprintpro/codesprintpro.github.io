@@ -4,9 +4,11 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  // Remove basePath and assetPrefix if this is your main site
-  // basePath: '',
-  // assetPrefix: '',
+  // Add trailing slash to ensure proper routing
+  trailingSlash: true,
+  // Remove comments and enable these lines
+  basePath: '',
+  assetPrefix: ''
 }
 
 module.exports = nextConfig 
