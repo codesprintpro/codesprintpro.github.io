@@ -124,4 +124,4 @@ I actively contribute to the developer community by answering queries on StackOv
 Feel free to connect with me for discussions, collaborations, or feedback. Let's build and share knowledge together!
 
 Email: sachinsarawgi201143@gmail.com  
-LinkedIn: [Sachin Sarawgi](https://www.linkedin.com/in/sachinsarawgi/)
+LinkedIn: [Sachin Sarawgi](https://www.linkedin.com/in/sachin-sarawgi/)
