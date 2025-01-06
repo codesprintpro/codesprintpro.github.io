@@ -4,12 +4,11 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  // Since this is your user page (username.github.io), we don't need basePath
-  basePath: '',
-  // This ensures assets are loaded correctly
-  assetPrefix: process.env.NODE_ENV === 'production' ? '' : '',
-  // This is important for Next.js to know it's a static site
+  // Add trailing slash to ensure proper routing
   trailingSlash: true,
+  // Remove comments and enable these lines
+  basePath: '',
+  assetPrefix: ''
 }
 
 module.exports = nextConfig 
