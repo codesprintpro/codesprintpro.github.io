@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import React from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -7,19 +7,19 @@ import { useRouter } from 'next/router'
 interface NavLinkProps {
   href: string
   children: React.ReactNode
+  onClick?: () => void
 }
 
-const NavLink: React.FC<NavLinkProps> = ({ href, children }) => {
+const NavLink: React.FC<NavLinkProps> = ({ href, children, onClick }) => {
   const router = useRouter()
   const isContributionsPage = router.pathname === '/contributions'
   
-  // If we're on the contributions page and the href is a hash link,
-  // redirect to home page with the hash
   const handleClick = (e: React.MouseEvent) => {
     if (isContributionsPage && href.startsWith('#')) {
       e.preventDefault()
       router.push(`/${href}`)
     }
+    onClick?.()
   }
 
   return (
@@ -35,6 +35,7 @@ const NavLink: React.FC<NavLinkProps> = ({ href, children }) => {
 
 export const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const router = useRouter()
 
   useEffect(() => {
@@ -45,6 +46,10 @@ export const Navbar: React.FC = () => {
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
+
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false)
+  }
 
   return (
     <motion.nav 
@@ -64,9 +69,9 @@ export const Navbar: React.FC = () => {
             SS
           </Link>
           
+          {/* Desktop Navigation */}
           <div className="hidden md:flex space-x-8">
             {router.pathname === '/contributions' ? (
-              // Links for contributions page
               <>
                 <Link href="/#about">About</Link>
                 <Link href="/#portfolio">Portfolio</Link>
@@ -74,7 +79,6 @@ export const Navbar: React.FC = () => {
                 <Link href="/#contact">Contact</Link>
               </>
             ) : (
-              // Links for home page
               <>
                 <NavLink href="#about">About</NavLink>
                 <NavLink href="#portfolio">Portfolio</NavLink>
@@ -83,8 +87,109 @@ export const Navbar: React.FC = () => {
               </>
             )}
           </div>
+
+          {/* Mobile Menu Button */}
+          <button
+            className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label="Toggle mobile menu"
+          >
+            <svg
+              className="w-6 h-6 text-gray-600"
+              fill="none"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              {isMobileMenuOpen ? (
+                <path d="M6 18L18 6M6 6l12 12" />
+              ) : (
+                <path d="M4 6h16M4 12h16M4 18h16" />
+              )}
+            </svg>
+          </button>
         </div>
       </div>
+
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="md:hidden bg-white shadow-lg"
+          >
+            <div className="flex flex-col py-2">
+              {router.pathname === '/contributions' ? (
+                <>
+                  <Link 
+                    href="/#about" 
+                    className="px-4 py-3 text-base font-medium text-gray-600 hover:text-blue-600 hover:bg-gray-50 transition-colors"
+                    onClick={closeMobileMenu}
+                  >
+                    About
+                  </Link>
+                  <Link 
+                    href="/#portfolio"
+                    className="px-4 py-3 text-base font-medium text-gray-600 hover:text-blue-600 hover:bg-gray-50 transition-colors"
+                    onClick={closeMobileMenu}
+                  >
+                    Portfolio
+                  </Link>
+                  <Link 
+                    href="/contributions"
+                    className="px-4 py-3 text-base font-medium text-gray-600 hover:text-blue-600 hover:bg-gray-50 transition-colors"
+                    onClick={closeMobileMenu}
+                  >
+                    Blog & Contributions
+                  </Link>
+                  <Link 
+                    href="/#contact"
+                    className="px-4 py-3 text-base font-medium text-gray-600 hover:text-blue-600 hover:bg-gray-50 transition-colors"
+                    onClick={closeMobileMenu}
+                  >
+                    Contact
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Link 
+                    href="#about"
+                    className="px-4 py-3 text-base font-medium text-gray-600 hover:text-blue-600 hover:bg-gray-50 transition-colors"
+                    onClick={closeMobileMenu}
+                  >
+                    About
+                  </Link>
+                  <Link 
+                    href="#portfolio"
+                    className="px-4 py-3 text-base font-medium text-gray-600 hover:text-blue-600 hover:bg-gray-50 transition-colors"
+                    onClick={closeMobileMenu}
+                  >
+                    Portfolio
+                  </Link>
+                  <Link 
+                    href="/contributions"
+                    className="px-4 py-3 text-base font-medium text-gray-600 hover:text-blue-600 hover:bg-gray-50 transition-colors"
+                    onClick={closeMobileMenu}
+                  >
+                    Blog & Contributions
+                  </Link>
+                  <Link 
+                    href="#contact"
+                    className="px-4 py-3 text-base font-medium text-gray-600 hover:text-blue-600 hover:bg-gray-50 transition-colors"
+                    onClick={closeMobileMenu}
+                  >
+                    Contact
+                  </Link>
+                </>
+              )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.nav>
   )
 } 
