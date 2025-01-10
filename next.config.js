@@ -4,11 +4,9 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  // Add trailing slash to ensure proper routing
+  assetPrefix: process.env.NODE_ENV === 'production' ? '/' : '',
   trailingSlash: true,
-  // Remove comments and enable these lines
-  basePath: '',
-  assetPrefix: ''
+  basePath: ''
 }
 
 module.exports = nextConfig 
