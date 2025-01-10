@@ -9,10 +9,14 @@ A modern, responsive portfolio website built with Next.js, TypeScript, and Tailw
 - Server-side rendering with Next.js
 - Type-safe development with TypeScript
 - Modern styling with TailwindCSS
-- Contact form functionality
+- Contact form with Supabase integration
 - Blog section integrated with Medium posts
 - Portfolio section showcasing projects
 - Accessibility features
+- Mobile-friendly navigation
+- Custom 404 page
+- SEO optimized
+- Progressive Web App (PWA) support
 
 ## 🛠️ Tech Stack
 
@@ -20,12 +24,28 @@ A modern, responsive portfolio website built with Next.js, TypeScript, and Tailw
 - **Language**: TypeScript
 - **Styling**: TailwindCSS
 - **Animations**: Framer Motion
+- **Database**: Supabase
 - **Icons**: Font Awesome
 - **Font**: Inter (Google Fonts)
 - **Development Tools**: ESLint, Prettier
-
+- **Deployment**: GitHub Pages
 
 ## 💻 Development
+
+### Prerequisites
+
+- Node.js 18 or later
+- npm or yarn
+- Supabase account for contact form
+
+### Environment Variables
+
+Create a `.env.local` file in the root directory:
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon
+```
 
 ### Code Style
 
