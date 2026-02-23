@@ -155,9 +155,6 @@ export const AffiliateSection: React.FC<AffiliateSectionProps> = ({ variant }) =
         <span className="text-lg">📚</span>
         <h3 className="text-base font-bold text-gray-900">Recommended Resources</h3>
       </div>
-      <p className="text-xs text-gray-500 border-l-4 border-yellow-400 pl-3 mb-5">
-        Disclosure: This section contains affiliate links. I earn a small commission at no extra cost to you if you purchase through these links. I only recommend resources I trust.
-      </p>
       <div className="space-y-4">
         {links.map((link) => (
           <div key={link.title} className="flex items-start gap-3 bg-white rounded-lg p-4 border border-yellow-100">
@@ -175,7 +172,7 @@ export const AffiliateSection: React.FC<AffiliateSectionProps> = ({ variant }) =
             <a
               href={link.url}
               target="_blank"
-              rel="noopener noreferrer sponsored"
+              rel="noopener noreferrer"
               className="flex-shrink-0 text-xs bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium whitespace-nowrap"
             >
               {link.cta} →

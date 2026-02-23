@@ -65,7 +65,25 @@ export default function Home({ featuredPosts, categories }: HomeProps) {
           content="Deep-dive articles on System Design, Java, Kafka, Redis, AI/ML and AWS by Sachin Sarawgi."
         />
         <meta property="og:url" content="https://codesprintpro.com/" />
+        <meta property="og:image" content="https://codesprintpro.com/images/og-default.jpg" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
         <meta property="og:site_name" content="CodeSprintPro" />
+
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="CodeSprintPro — Tech Blog Hub" />
+        <meta
+          name="twitter:description"
+          content="Deep-dive articles on System Design, Java, Kafka, Redis, AI/ML and AWS by Sachin Sarawgi."
+        />
+        <meta name="twitter:image" content="https://codesprintpro.com/images/og-default.jpg" />
+
+        {/* Keywords */}
+        <meta
+          name="keywords"
+          content="system design, java, kafka, redis, distributed systems, aws, backend engineering, engineering manager, microservices"
+        />
 
         <script
           type="application/ld+json"

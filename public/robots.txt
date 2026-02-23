@@ -1,0 +1,5 @@
+# robots.txt — codesprintpro.com
+User-agent: *
+Allow: /
+
+Sitemap: https://codesprintpro.com/sitemap.xml

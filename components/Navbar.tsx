@@ -31,12 +31,21 @@ export const Navbar: React.FC = () => {
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     if (!href.startsWith('/#')) return
-    // Hash links only need router push when not on homepage
-    if (router.pathname !== '/') {
-      e.preventDefault()
-      router.push(href)
-    }
+    e.preventDefault()
+    const sectionId = href.replace('/#', '')
     closeMobileMenu()
+
+    if (router.pathname === '/') {
+      // Already on homepage — scroll directly
+      document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' })
+    } else {
+      // Navigate to homepage then scroll after render
+      router.push('/').then(() => {
+        setTimeout(() => {
+          document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' })
+        }, 150)
+      })
+    }
   }
 
   return (
