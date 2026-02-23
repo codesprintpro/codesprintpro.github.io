@@ -9,17 +9,19 @@ import { Contact } from '@/components/sections/Contact'
 import { Navbar } from '@/components/Navbar'
 import { Footer } from '@/components/Footer'
 import { BlogCard } from '@/components/blog/BlogCard'
-import { getFeaturedPosts, getAllCategories, BlogPostMeta, BlogCategory } from '@/lib/blog'
+import { getFeaturedPosts, getAllCategories, getAllPosts, BlogPostMeta, BlogCategory } from '@/lib/blog'
 
 interface HomeProps {
   featuredPosts: BlogPostMeta[]
   categories: Array<{ name: BlogCategory; count: number }>
+  totalArticles: number
 }
 
 export const getStaticProps: GetStaticProps<HomeProps> = async () => {
   const featuredPosts = getFeaturedPosts(5)
   const categories = getAllCategories()
-  return { props: { featuredPosts, categories } }
+  const totalArticles = getAllPosts().length
+  return { props: { featuredPosts, categories, totalArticles } }
 }
 
 const CATEGORY_CONFIG: Record<string, { icon: string; color: string; border: string }> = {
@@ -32,7 +34,7 @@ const CATEGORY_CONFIG: Record<string, { icon: string; color: string; border: str
   'Data Engineering': { icon: '⚡', color: 'bg-teal-50',   border: 'border-teal-200' },
 }
 
-export default function Home({ featuredPosts, categories }: HomeProps) {
+export default function Home({ featuredPosts, categories, totalArticles }: HomeProps) {
   const [mainFeatured, ...restFeatured] = featuredPosts
 
   return (
@@ -208,7 +210,7 @@ export default function Home({ featuredPosts, categories }: HomeProps) {
           )}
 
           {/* 4. About */}
-          <About />
+          <About totalArticles={totalArticles} />
 
           {/* 5. Portfolio */}
           <Portfolio />
