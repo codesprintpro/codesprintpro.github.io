@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+
 @layer base {
   html {
     scroll-behavior: smooth;
@@ -14,6 +15,47 @@
   /* Font Awesome Icons */
   .fab {
     font-family: 'Font Awesome 5 Brands';
+  }
+
+  /* Prism code block overrides — actual code (has language-* class) */
+  pre[class*="language-"] {
+    @apply rounded-lg text-sm overflow-x-auto my-6;
+    max-width: 100%;
+  }
+
+  :not(pre) > code[class*="language-"] {
+    @apply px-1.5 py-0.5 rounded bg-blue-50 text-blue-700 text-sm;
+    font-size: 0.875em;
+  }
+
+  /*
+   * Plain code blocks (no language tag) — used for architecture diagrams,
+   * comparisons, and conceptual text. Render as a readable callout box,
+   * NOT as dark code.
+   */
+  .prose pre:not([class*="language-"]) {
+    background-color: #f0f9ff !important;  /* light blue-50 */
+    color: #1e293b !important;             /* slate-800 — high contrast readable */
+    border-left: 4px solid #3b82f6;        /* blue-500 accent */
+    border-radius: 0.5rem;
+    padding: 1rem 1.25rem;
+    margin: 1.5rem 0;
+    font-size: 0.85rem;
+    line-height: 1.75;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    box-shadow: none !important;
+    font-family: ui-monospace, 'SF Mono', 'Cascadia Code', 'Fira Mono', monospace;
+  }
+
+  /* Inline code inside plain pre — transparent so parent bg shows */
+  .prose pre:not([class*="language-"]) code {
+    background: transparent !important;
+    color: inherit !important;
+    padding: 0 !important;
+    font-size: inherit !important;
+    border-radius: 0;
+    font-family: inherit;
   }
 }
 

@@ -4,11 +4,11 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  // Add trailing slash to ensure proper routing
   trailingSlash: true,
-  // Remove comments and enable these lines
   basePath: '',
-  assetPrefix: ''
+  assetPrefix: '',
+  // Transpile ESM-only packages so Next.js webpack can bundle them in getStaticProps
+  transpilePackages: ['remark', 'remark-gfm', 'remark-html', 'remark-parse', 'unified', 'bail', 'is-plain-obj', 'trough', 'vfile', 'vfile-message'],
 }
 
 module.exports = nextConfig 
