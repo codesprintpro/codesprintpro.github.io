@@ -1,0 +1,400 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8" data-next-head=""/><meta name="viewport" content="width=device-width" data-next-head=""/><title data-next-head="">Multi-Tenancy Architecture: Database, Application, and Infrastructure Patterns<!-- --> | CodeSprintPro</title><meta name="description" content="Production multi-tenancy: database isolation models (shared schema, shared database, separate database), tenant routing, data partitioning strategies, cross-tenant query prevention, Spring Boot tenant context propagation, and the trade-offs at each isolation level." data-next-head=""/><meta name="author" content="Sachin Sarawgi" data-next-head=""/><link rel="canonical" href="https://codesprintpro.com/blog/multi-tenancy-architecture/" data-next-head=""/><meta property="og:type" content="article" data-next-head=""/><meta property="og:title" content="Multi-Tenancy Architecture: Database, Application, and Infrastructure Patterns" data-next-head=""/><meta property="og:description" content="Production multi-tenancy: database isolation models (shared schema, shared database, separate database), tenant routing, data partitioning strategies, cross-tenant query prevention, Spring Boot tenant context propagation, and the trade-offs at each isolation level." data-next-head=""/><meta property="og:url" content="https://codesprintpro.com/blog/multi-tenancy-architecture/" data-next-head=""/><meta property="og:image" content="https://codesprintpro.com/images/og-default.jpg" data-next-head=""/><meta property="og:site_name" content="CodeSprintPro" data-next-head=""/><meta property="article:published_time" content="2025-05-24" data-next-head=""/><meta property="article:author" content="Sachin Sarawgi" data-next-head=""/><meta property="article:section" content="System Design" data-next-head=""/><meta property="article:tag" content="multi-tenancy" data-next-head=""/><meta property="article:tag" content="saas" data-next-head=""/><meta property="article:tag" content="system design" data-next-head=""/><meta property="article:tag" content="database" data-next-head=""/><meta property="article:tag" content="spring boot" data-next-head=""/><meta property="article:tag" content="architecture" data-next-head=""/><meta property="article:tag" content="isolation" data-next-head=""/><meta name="twitter:card" content="summary_large_image" data-next-head=""/><meta name="twitter:title" content="Multi-Tenancy Architecture: Database, Application, and Infrastructure Patterns" data-next-head=""/><meta name="twitter:description" content="Production multi-tenancy: database isolation models (shared schema, shared database, separate database), tenant routing, data partitioning strategies, cross-tenant query prevention, Spring Boot tenant context propagation, and the trade-offs at each isolation level." data-next-head=""/><meta name="twitter:image" content="https://codesprintpro.com/images/og-default.jpg" data-next-head=""/><script type="application/ld+json" data-next-head="">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Multi-Tenancy Architecture: Database, Application, and Infrastructure Patterns","description":"Production multi-tenancy: database isolation models (shared schema, shared database, separate database), tenant routing, data partitioning strategies, cross-tenant query prevention, Spring Boot tenant context propagation, and the trade-offs at each isolation level.","image":"https://codesprintpro.com/images/og-default.jpg","datePublished":"2025-05-24","dateModified":"2025-05-24","author":{"@type":"Person","name":"Sachin Sarawgi","url":"https://codesprintpro.com","sameAs":["https://www.linkedin.com/in/sachin-sarawgi/","https://github.com/codesprintpro","https://medium.com/@codesprintpro"]},"publisher":{"@type":"Organization","name":"CodeSprintPro","url":"https://codesprintpro.com","logo":{"@type":"ImageObject","url":"https://codesprintpro.com/favicon/favicon-96x96.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codesprintpro.com/blog/multi-tenancy-architecture/"},"keywords":"multi-tenancy, saas, system design, database, spring boot, architecture, isolation","articleSection":"System Design"}</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerPolicy="no-referrer"/><script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script><link rel="preload" href="/_next/static/media/e4af272ccee01ff0-s.p.woff2" as="font" type="font/woff2" crossorigin="anonymous" data-next-font="size-adjust"/><link rel="preload" href="/_next/static/css/735d4373f93910ca.css" as="style"/><link rel="stylesheet" href="/_next/static/css/735d4373f93910ca.css" data-n-g=""/><noscript data-n-css=""></noscript><script defer="" nomodule="" src="/_next/static/chunks/polyfills-42372ed130431b0a.js"></script><script src="/_next/static/chunks/webpack-11a4a2dad04962bb.js" defer=""></script><script src="/_next/static/chunks/framework-1ce91eb6f9ecda85.js" defer=""></script><script src="/_next/static/chunks/main-c7f4109f032d7b6e.js" defer=""></script><script src="/_next/static/chunks/pages/_app-1a852bd9e38c70ab.js" defer=""></script><script src="/_next/static/chunks/730-db7827467817f501.js" defer=""></script><script src="/_next/static/chunks/90-1cd4611704c3dbe0.js" defer=""></script><script src="/_next/static/chunks/440-29f4b99a44e744b5.js" defer=""></script><script src="/_next/static/chunks/pages/blog/%5Bslug%5D-0c1b14a33d5e05ee.js" defer=""></script><script src="/_next/static/rpFn_jslWZ9qPkJwor7RD/_buildManifest.js" defer=""></script><script src="/_next/static/rpFn_jslWZ9qPkJwor7RD/_ssgManifest.js" defer=""></script></head><body><div id="__next"><main class="__className_f367f3"><div class="min-h-screen bg-white"><nav class="fixed w-full z-50 transition-all duration-300 bg-white shadow-md" style="transform:translateY(-100px) translateZ(0)"><div class="container mx-auto px-4 sm:px-6 lg:px-8"><div class="flex items-center justify-between h-16"><a class="text-xl font-bold transition-colors text-blue-600" href="/">CodeSprintPro</a><div class="hidden md:flex items-center space-x-8"><a class="text-sm font-medium transition-colors text-blue-600" href="/blog/">Blog</a><a class="text-sm font-medium transition-colors text-gray-600 hover:text-blue-600" href="/#about">About</a><a class="text-sm font-medium transition-colors text-gray-600 hover:text-blue-600" href="/#portfolio">Portfolio</a><a class="text-sm font-medium transition-colors text-gray-600 hover:text-blue-600" href="/#contact">Contact</a></div><button class="md:hidden p-2 rounded-lg transition-colors hover:bg-gray-100 text-gray-600" aria-label="Toggle mobile menu"><svg class="w-6 h-6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor"><path d="M4 6h16M4 12h16M4 18h16"></path></svg></button></div></div></nav><div class="pt-20"><div class="bg-gradient-to-br from-gray-900 to-blue-950 py-16"><div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl"><nav class="flex items-center gap-2 text-sm text-gray-400 mb-6"><a class="hover:text-white transition-colors" href="/">Home</a><span>/</span><a class="hover:text-white transition-colors" href="/blog/">Blog</a><span>/</span><span class="text-gray-300 truncate max-w-xs">Multi-Tenancy Architecture: Database, Application, and Infrastructure Patterns</span></nav><span class="inline-block text-xs font-semibold px-3 py-1 rounded-full bg-blue-100 text-blue-700 mb-4">System Design</span><h1 class="text-3xl md:text-5xl font-bold text-white mb-4 leading-tight">Multi-Tenancy Architecture: Database, Application, and Infrastructure Patterns</h1><p class="text-gray-300 text-lg mb-6 max-w-3xl">Production multi-tenancy: database isolation models (shared schema, shared database, separate database), tenant routing, data partitioning strategies, cross-tenant query prevention, Spring Boot tenant context propagation, and the trade-offs at each isolation level.</p><div class="flex flex-wrap items-center gap-4 text-gray-400 text-sm"><span class="flex items-center gap-1.5"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>Sachin Sarawgi</span><span>·</span><span>May 24, 2025</span><span>·</span><span class="flex items-center gap-1"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>8 min read</span></div><div class="flex flex-wrap gap-2 mt-4"><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->multi-tenancy</span><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->saas</span><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->system design</span><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->database</span><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->spring boot</span><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->architecture</span><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->isolation</span></div></div></div><div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl py-12"><div class="flex gap-12"><div class="flex-1 min-w-0"><article class="prose prose-lg max-w-none prose-headings:text-gray-900 prose-headings:font-bold prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-4 prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3 prose-p:text-gray-700 prose-p:leading-relaxed prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline prose-strong:text-gray-900 prose-blockquote:border-blue-600 prose-blockquote:text-gray-600 prose-code:text-blue-700 prose-code:bg-blue-50 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-sm prose-code:before:content-none prose-code:after:content-none prose-pre:rounded-xl prose-img:rounded-xl prose-img:shadow-md prose-table:text-sm prose-th:bg-gray-100 prose-th:text-gray-700"><p>Multi-tenancy is the architecture pattern where a single deployed instance of a software system serves multiple customers (tenants), with each tenant's data logically or physically isolated from others. It's the foundation of SaaS products. The isolation model you choose is a fundamental architectural decision — it determines your security posture, operational complexity, cost structure, and scalability ceiling.</p>
+<h2>The Three Isolation Models</h2>
+<pre><code>Model 1: Shared Schema (Row-Level Isolation)
+┌────────────────────────────────────────────┐
+│  Single database, single schema            │
+│  Every table has a tenant_id column        │
+│  tenant A rows: tenant_id='A'              │
+│  tenant B rows: tenant_id='B'              │
+│  All tenants share tables                  │
+└────────────────────────────────────────────┘
+Cost: Lowest    Security: Lowest    Scale: Highest
+
+Model 2: Shared Database, Separate Schemas
+┌────────────────────────────────────────────┐
+│  Single database server                    │
+│  Schema per tenant: tenant_a.orders        │
+│                     tenant_b.orders        │
+│  No shared tables (except system tables)   │
+└────────────────────────────────────────────┘
+Cost: Medium    Security: Medium    Scale: Medium
+
+Model 3: Separate Database (Database per Tenant)
+┌──────────┐   ┌──────────┐   ┌──────────┐
+│ Tenant A │   │ Tenant B │   │ Tenant C │
+│    DB    │   │    DB    │   │    DB    │
+└──────────┘   └──────────┘   └──────────┘
+Cost: Highest   Security: Highest  Scale: Limited
+</code></pre>
+<p>Most SaaS products start with shared schema (simplest) and migrate toward separate databases as they land larger enterprise customers who demand data isolation guarantees.</p>
+<h2>Model 1: Shared Schema with Row-Level Security</h2>
+<p><strong>PostgreSQL Row-Level Security (RLS):</strong></p>
+<pre><code class="language-sql">-- Enable RLS on every tenant-scoped table:
+ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
+
+-- Create policy: users can only see rows matching their tenant_id
+CREATE POLICY tenant_isolation ON orders
+    USING (tenant_id = current_setting('app.current_tenant')::UUID);
+
+-- Set tenant context per connection/transaction:
+SET app.current_tenant = '550e8400-e29b-41d4-a716-446655440000';
+
+-- Now ALL queries on orders are automatically filtered:
+SELECT * FROM orders;
+-- Equivalent to: SELECT * FROM orders WHERE tenant_id = '550e8400-...'
+-- Even if a query accidentally omits the tenant_id filter — RLS enforces it
+</code></pre>
+<p>RLS is a defense-in-depth layer. Even if application code has a bug that omits the tenant filter, RLS prevents cross-tenant data leakage at the database level.</p>
+<p><strong>Spring Boot implementation:</strong></p>
+<pre><code class="language-java">// Tenant context holder (thread-local):
+public class TenantContext {
+    private static final ThreadLocal&#x3C;String> currentTenant = new ThreadLocal&#x3C;>();
+
+    public static void setCurrentTenant(String tenantId) {
+        currentTenant.set(tenantId);
+    }
+
+    public static String getCurrentTenant() {
+        return currentTenant.get();
+    }
+
+    public static void clear() {
+        currentTenant.remove();
+    }
+}
+
+// Interceptor: extract tenant from request and set context
+@Component
+public class TenantInterceptor implements HandlerInterceptor {
+
+    @Override
+    public boolean preHandle(HttpServletRequest request,
+                              HttpServletResponse response,
+                              Object handler) {
+        // Option 1: Tenant from subdomain (acme.app.com → tenant=acme)
+        String host = request.getServerName();
+        String tenantId = host.split("\\.")[0];
+
+        // Option 2: Tenant from JWT claim (more reliable)
+        String jwt = extractJwt(request);
+        String tenantId2 = jwtService.getTenantId(jwt);
+
+        // Option 3: Tenant from request header (for internal APIs)
+        String tenantId3 = request.getHeader("X-Tenant-ID");
+
+        TenantContext.setCurrentTenant(tenantId2);
+        return true;
+    }
+
+    @Override
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response,
+                                 Object handler, Exception ex) {
+        TenantContext.clear();  // CRITICAL: clean up thread-local or risk tenant leakage
+    }
+}
+
+// Hibernate multi-tenancy — pass tenant_id to every query automatically:
+@Component
+public class TenantIdentifierResolver implements CurrentTenantIdentifierResolver {
+    @Override
+    public String resolveCurrentTenantIdentifier() {
+        String tenantId = TenantContext.getCurrentTenant();
+        return tenantId != null ? tenantId : "default";
+    }
+
+    @Override
+    public boolean validateExistingCurrentSessions() {
+        return true;
+    }
+}
+
+// Entity: tenant_id on every table:
+@Entity
+@Table(name = "orders")
+@FilterDef(name = "tenantFilter", parameters = @ParamDef(name = "tenantId", type = String.class))
+@Filter(name = "tenantFilter", condition = "tenant_id = :tenantId")
+public class Order {
+
+    @Id
+    private UUID id;
+
+    @Column(name = "tenant_id", nullable = false, updatable = false)
+    private UUID tenantId;
+
+    // ... other fields
+}
+</code></pre>
+<p><strong>The critical risk in shared schema: accidental cross-tenant queries</strong></p>
+<pre><code class="language-java">// VULNERABLE: Developer forgets to add tenant filter
+public List&#x3C;Order> findRecentOrders() {
+    return em.createQuery("FROM Order WHERE created_at > :date", Order.class)
+        .setParameter("date", LocalDate.now().minusDays(7))
+        .getResultList();
+    // Returns orders from ALL tenants — data breach
+}
+
+// SAFE: Always include tenant_id
+public List&#x3C;Order> findRecentOrders() {
+    String tenantId = TenantContext.getCurrentTenant();
+    return em.createQuery(
+        "FROM Order WHERE tenant_id = :tenantId AND created_at > :date", Order.class)
+        .setParameter("tenantId", UUID.fromString(tenantId))
+        .setParameter("date", LocalDate.now().minusDays(7))
+        .getResultList();
+}
+
+// SAFER: Use Hibernate @Filter applied globally (can't forget it):
+// Session.enableFilter("tenantFilter").setParameter("tenantId", tenantId)
+// This adds the filter condition to ALL queries for the session
+</code></pre>
+<h2>Model 2: Schema-Per-Tenant</h2>
+<pre><code class="language-java">// Hibernate connection pool routing:
+@Configuration
+public class MultiTenantDataSourceConfig implements MultiTenantConnectionProvider {
+
+    @Autowired
+    private DataSource dataSource;
+
+    @Override
+    public Connection getConnection(String tenantIdentifier) throws SQLException {
+        Connection connection = dataSource.getConnection();
+        // Switch schema to tenant's schema:
+        connection.createStatement().execute(
+            "SET search_path TO tenant_" + sanitize(tenantIdentifier) + ", public"
+        );
+        return connection;
+    }
+
+    @Override
+    public void releaseConnection(String tenantIdentifier, Connection connection) throws SQLException {
+        connection.createStatement().execute("SET search_path TO public");
+        connection.close();
+    }
+
+    private String sanitize(String tenantId) {
+        // CRITICAL: Sanitize to prevent SQL injection via tenant ID
+        if (!tenantId.matches("^[a-zA-Z0-9_-]+$")) {
+            throw new SecurityException("Invalid tenant ID");
+        }
+        return tenantId;
+    }
+}
+
+// Schema provisioning (when a new tenant signs up):
+@Service
+public class TenantProvisioningService {
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
+    @Transactional
+    public void provisionTenant(String tenantId) {
+        String schema = "tenant_" + sanitize(tenantId);
+
+        // Create schema:
+        jdbcTemplate.execute("CREATE SCHEMA IF NOT EXISTS " + schema);
+
+        // Run migrations for this schema:
+        Flyway.configure()
+            .dataSource(dataSource)
+            .schemas(schema)
+            .locations("classpath:db/migration")
+            .load()
+            .migrate();
+
+        log.info("Provisioned schema for tenant: {}", tenantId);
+    }
+}
+</code></pre>
+<p>Schema-per-tenant allows schema customization per tenant (enterprise customers often want custom fields). However, running migrations across thousands of schemas becomes a management challenge — a migration that takes 1 second per schema takes 17 minutes across 1,000 tenants.</p>
+<h2>Model 3: Database-Per-Tenant with Dynamic Routing</h2>
+<pre><code class="language-java">// Connection pool per tenant (HikariCP):
+@Service
+public class TenantDataSourceService {
+
+    private final Map&#x3C;String, DataSource> dataSources = new ConcurrentHashMap&#x3C;>();
+    private final TenantConfigRepository tenantConfigRepository;
+
+    public DataSource getDataSource(String tenantId) {
+        return dataSources.computeIfAbsent(tenantId, this::createDataSource);
+    }
+
+    private DataSource createDataSource(String tenantId) {
+        TenantConfig config = tenantConfigRepository.findById(tenantId)
+            .orElseThrow(() -> new TenantNotFoundException(tenantId));
+
+        HikariConfig hikariConfig = new HikariConfig();
+        hikariConfig.setJdbcUrl(config.getDatabaseUrl());
+        hikariConfig.setUsername(config.getDbUser());
+        hikariConfig.setPassword(config.getDbPassword());
+        hikariConfig.setMaximumPoolSize(5);     // Small pool per tenant
+        hikariConfig.setMinimumIdle(1);
+        hikariConfig.setConnectionTimeout(5000);
+        hikariConfig.setPoolName("tenant-" + tenantId);
+
+        return new HikariDataSource(hikariConfig);
+    }
+}
+
+// Spring AbstractRoutingDataSource:
+@Component
+public class TenantAwareDataSource extends AbstractRoutingDataSource {
+
+    @Autowired
+    private TenantDataSourceService tenantDataSourceService;
+
+    @Override
+    protected Object determineCurrentLookupKey() {
+        return TenantContext.getCurrentTenant();
+    }
+
+    @Override
+    protected DataSource determineTargetDataSource() {
+        String tenantId = TenantContext.getCurrentTenant();
+        return tenantDataSourceService.getDataSource(tenantId);
+    }
+}
+</code></pre>
+<p><strong>Database-per-tenant operational challenges:</strong></p>
+<ul>
+<li>1,000 tenants = 1,000 database connection pools = potential for many idle connections</li>
+<li>Schema migrations must run against all tenant databases (usually via a migration runner that loops over all tenants)</li>
+<li>Monitoring 1,000 separate databases requires aggregated observability</li>
+<li>Cost scales linearly with tenant count (no sharing)</li>
+</ul>
+<h2>Tenant Onboarding and Lifecycle</h2>
+<pre><code class="language-java">@Service
+public class TenantLifecycleService {
+
+    // Asynchronous provisioning (tenant creation shouldn't block the signup response):
+    @Async
+    public CompletableFuture&#x3C;Void> provisionNewTenant(TenantSignupRequest request) {
+        String tenantId = UUID.randomUUID().toString();
+
+        // 1. Create database record for tenant:
+        Tenant tenant = tenantRepository.save(new Tenant(tenantId, request.getCompanyName()));
+
+        // 2. Provision infrastructure (database/schema):
+        tenantProvisioningService.provision(tenantId);
+
+        // 3. Seed default data (roles, settings, sample data):
+        tenantSeedingService.seedDefaults(tenantId);
+
+        // 4. Send welcome email:
+        emailService.sendWelcome(tenant, request.getAdminEmail());
+
+        // 5. Update provisioning status:
+        tenant.setStatus(TenantStatus.ACTIVE);
+        tenantRepository.save(tenant);
+
+        return CompletableFuture.completedFuture(null);
+    }
+
+    @Transactional
+    public void suspendTenant(String tenantId) {
+        Tenant tenant = tenantRepository.findById(tenantId)
+            .orElseThrow(() -> new TenantNotFoundException(tenantId));
+        tenant.setStatus(TenantStatus.SUSPENDED);
+        tenantRepository.save(tenant);
+
+        // Revoke active sessions:
+        sessionService.revokeAllForTenant(tenantId);
+    }
+}
+</code></pre>
+<h2>Cross-Tenant Analytics (Admin Queries)</h2>
+<p>Admin queries (aggregate statistics across all tenants) require bypassing tenant isolation:</p>
+<pre><code class="language-java">// Dedicated admin data source — separate connection with elevated permissions:
+@Configuration
+public class AdminDataSourceConfig {
+
+    @Bean("adminDataSource")
+    public DataSource adminDataSource() {
+        HikariConfig config = new HikariConfig();
+        config.setJdbcUrl(adminDbUrl);
+        config.setUsername(adminDbUser);
+        config.setPassword(adminDbPassword);
+        return new HikariDataSource(config);
+    }
+}
+
+@Repository
+public class AdminAnalyticsRepository {
+
+    @Autowired
+    @Qualifier("adminDataSource")
+    private DataSource adminDataSource;
+
+    // Admin-only: revenue across all tenants
+    public List&#x3C;TenantRevenue> getRevenueByTenant(LocalDate startDate) {
+        // In shared schema: query without tenant filter
+        // In schema-per-tenant: UNION across all schemas
+        // In db-per-tenant: federated query or aggregated via ETL pipeline
+    }
+}
+
+// Protect with role-based access:
+@PreAuthorize("hasRole('PLATFORM_ADMIN')")
+@GetMapping("/admin/analytics/revenue")
+public ResponseEntity&#x3C;List&#x3C;TenantRevenue>> getRevenue(@RequestParam LocalDate startDate) {
+    return ResponseEntity.ok(adminAnalyticsRepository.getRevenueByTenant(startDate));
+}
+</code></pre>
+<h2>Choosing the Right Model</h2>
+<table>
+<thead>
+<tr>
+<th>Factor</th>
+<th>Shared Schema</th>
+<th>Schema-per-Tenant</th>
+<th>DB-per-Tenant</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Setup complexity</td>
+<td>Low</td>
+<td>Medium</td>
+<td>High</td>
+</tr>
+<tr>
+<td>Per-tenant cost</td>
+<td>Lowest</td>
+<td>Low</td>
+<td>High</td>
+</tr>
+<tr>
+<td>Data isolation</td>
+<td>Logical only</td>
+<td>Stronger</td>
+<td>Strongest</td>
+</tr>
+<tr>
+<td>Enterprise compliance</td>
+<td>Difficult</td>
+<td>Possible</td>
+<td>Easy</td>
+</tr>
+<tr>
+<td>Schema customization</td>
+<td>Hard</td>
+<td>Possible</td>
+<td>Easy</td>
+</tr>
+<tr>
+<td>Migration complexity</td>
+<td>Low</td>
+<td>Medium</td>
+<td>High (per-DB)</td>
+</tr>
+<tr>
+<td>Max tenant scale</td>
+<td>100,000+</td>
+<td>10,000</td>
+<td>~1,000</td>
+</tr>
+</tbody>
+</table>
+<p>Start with shared schema unless your target customers have strict data residency requirements on day one. Add schema-per-tenant for enterprise tiers where compliance demands it. Reserve database-per-tenant for your largest, highest-paying customers who need dedicated infrastructure guarantees.</p>
+<p>The multi-tenancy model shapes every subsequent architectural decision — data backup, disaster recovery, schema evolution, performance isolation, and compliance reporting. Make this choice deliberately, with full awareness of where you want to be in 3-5 years, not just what's easiest to build today.</p>
+</article><div class="my-10 rounded-xl border border-yellow-200 bg-yellow-50 p-6"><div class="flex items-center gap-2 mb-1"><span class="text-lg">📚</span><h3 class="text-base font-bold text-gray-900">Recommended Resources</h3></div><div class="space-y-4"><div class="flex items-start gap-3 bg-white rounded-lg p-4 border border-yellow-100"><div class="flex-1 min-w-0"><div class="flex items-center gap-2 flex-wrap mb-1"><span class="font-semibold text-gray-900 text-sm">System Design Interview — Alex Xu</span><span class="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-medium">Best Seller</span></div><p class="text-xs text-gray-600">Step-by-step guide to ace system design interviews with real-world examples.</p></div><a href="https://amzn.to/3TqsPRp" target="_blank" rel="noopener noreferrer" class="flex-shrink-0 text-xs bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium whitespace-nowrap">View on Amazon<!-- --> →</a></div><div class="flex items-start gap-3 bg-white rounded-lg p-4 border border-yellow-100"><div class="flex-1 min-w-0"><div class="flex items-center gap-2 flex-wrap mb-1"><span class="font-semibold text-gray-900 text-sm">Grokking System Design on Educative</span></div><p class="text-xs text-gray-600">Interactive course teaching system design with visual diagrams and practice problems.</p></div><a href="https://www.educative.io/courses/grokking-the-system-design-interview" target="_blank" rel="noopener noreferrer" class="flex-shrink-0 text-xs bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium whitespace-nowrap">View Course<!-- --> →</a></div><div class="flex items-start gap-3 bg-white rounded-lg p-4 border border-yellow-100"><div class="flex-1 min-w-0"><div class="flex items-center gap-2 flex-wrap mb-1"><span class="font-semibold text-gray-900 text-sm">Designing Data-Intensive Applications</span></div><p class="text-xs text-gray-600">Martin Kleppmann&#x27;s book is essential reading for any system design role.</p></div><a href="https://amzn.to/3RyKzOA" target="_blank" rel="noopener noreferrer" class="flex-shrink-0 text-xs bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium whitespace-nowrap">View on Amazon<!-- --> →</a></div></div></div><div class="mt-10 pt-8 border-t border-gray-100"><p class="text-sm text-gray-500 mb-3">Found this useful? Share it:</p><div class="flex gap-3"><a href="https://twitter.com/intent/tweet?text=Multi-Tenancy%20Architecture%3A%20Database%2C%20Application%2C%20and%20Infrastructure%20Patterns&amp;url=https%3A%2F%2Fcodesprintpro.com%2Fblog%2Fmulti-tenancy-architecture%2F" target="_blank" rel="noopener noreferrer" class="text-xs bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors">Share on X/Twitter</a><a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fcodesprintpro.com%2Fblog%2Fmulti-tenancy-architecture%2F" target="_blank" rel="noopener noreferrer" class="text-xs bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">Share on LinkedIn</a></div></div></div><aside class="hidden lg:block w-64 flex-shrink-0"><nav class="hidden lg:block sticky top-24"><h4 class="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-3">On This Page</h4><ul class="space-y-1"><li class=""><a href="#the-three-isolation-models" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">The Three Isolation Models</a></li><li class=""><a href="#model-1-shared-schema-with-row-level-security" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Model 1: Shared Schema with Row-Level Security</a></li><li class=""><a href="#model-2-schema-per-tenant" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Model 2: Schema-Per-Tenant</a></li><li class=""><a href="#model-3-database-per-tenant-with-dynamic-routing" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Model 3: Database-Per-Tenant with Dynamic Routing</a></li><li class=""><a href="#tenant-onboarding-and-lifecycle" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Tenant Onboarding and Lifecycle</a></li><li class=""><a href="#cross-tenant-analytics-admin-queries" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Cross-Tenant Analytics (Admin Queries)</a></li><li class=""><a href="#choosing-the-right-model" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Choosing the Right Model</a></li></ul></nav></aside></div><div class="mt-16 pt-10 border-t border-gray-100"><h2 class="text-2xl font-bold text-gray-900 mb-6">Related Articles</h2><div class="grid grid-cols-1 md:grid-cols-3 gap-6"><a href="/blog/observability-opentelemetry-production/"><article class="group bg-white rounded-xl border border-gray-200 p-6 h-full cursor-pointer hover:border-blue-300 hover:shadow-lg transition-all"><span class="inline-block text-xs font-semibold px-3 py-1 rounded-full mb-3 bg-blue-100 text-blue-700">System Design</span><h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors leading-snug">Building Production Observability with OpenTelemetry and Grafana Stack</h3><p class="text-gray-600 text-sm mb-4 line-clamp-3">Observability is not the same as monitoring. Monitoring tells you something is wrong. Observability lets you understand why — by exploring system state through metrics, traces, and logs without needing to know in advance…</p><div class="flex items-center justify-between text-xs text-gray-400"><span>Jul 3, 2025</span><span class="flex items-center gap-1"><svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>6 min read</span></div><div class="mt-3 flex flex-wrap gap-1"><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->observability</span><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->opentelemetry</span><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->prometheus</span></div></article></a><a href="/blog/event-sourcing-cqrs-production/"><article class="group bg-white rounded-xl border border-gray-200 p-6 h-full cursor-pointer hover:border-blue-300 hover:shadow-lg transition-all"><span class="inline-block text-xs font-semibold px-3 py-1 rounded-full mb-3 bg-blue-100 text-blue-700">System Design</span><h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors leading-snug">Event Sourcing and CQRS in Production: Beyond the Theory</h3><p class="text-gray-600 text-sm mb-4 line-clamp-3">Event sourcing is one of those patterns that looks elegant in conference talks and becomes surprisingly complex in production systems. The theory — store events instead of state, derive state by replaying events — is sou…</p><div class="flex items-center justify-between text-xs text-gray-400"><span>Jun 23, 2025</span><span class="flex items-center gap-1"><svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>7 min read</span></div><div class="mt-3 flex flex-wrap gap-1"><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->event sourcing</span><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->cqrs</span><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->system design</span></div></article></a><a href="/blog/grpc-vs-rest-vs-graphql/"><article class="group bg-white rounded-xl border border-gray-200 p-6 h-full cursor-pointer hover:border-blue-300 hover:shadow-lg transition-all"><span class="inline-block text-xs font-semibold px-3 py-1 rounded-full mb-3 bg-blue-100 text-blue-700">System Design</span><h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors leading-snug">gRPC vs REST vs GraphQL: Choosing the Right API Protocol</h3><p class="text-gray-600 text-sm mb-4 line-clamp-3">API protocol selection has a longer lifespan than almost any other technical decision. REST APIs from 2010 are still running in production. gRPC services chosen for internal communication in 2018 are tightly coupled to t…</p><div class="flex items-center justify-between text-xs text-gray-400"><span>Jun 18, 2025</span><span class="flex items-center gap-1"><svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>7 min read</span></div><div class="mt-3 flex flex-wrap gap-1"><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->grpc</span><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->rest</span><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->graphql</span></div></article></a></div></div><div class="mt-12 text-center"><a class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium transition-colors" href="/blog/">← Back to all articles</a></div></div></div><footer class="bg-gray-900 text-white py-12"><div class="container mx-auto px-4 sm:px-6 lg:px-8"><div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8"><div class="col-span-1 md:col-span-1"><div><a class="text-xl font-bold block mb-3 text-white hover:text-blue-400 transition-colors" href="/">CodeSprintPro</a></div><p class="text-gray-400 text-sm mb-4 leading-relaxed">Deep-dive technical content on System Design, Java, Databases, AI/ML, and AWS — by Sachin Sarawgi.</p><div class="flex space-x-4"><a href="https://github.com/codesprintpro" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors" aria-label="Visit GitHub profile"><i class="fab fa-github text-xl"></i></a><a href="https://www.linkedin.com/in/sachin-sarawgi/" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors" aria-label="Visit LinkedIn profile"><i class="fab fa-linkedin text-xl"></i></a><a href="https://medium.com/@codesprintpro" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors" aria-label="Visit Medium profile"><i class="fab fa-medium text-xl"></i></a></div></div><div><h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 mb-4">Quick Links</h3><ul class="space-y-2"><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">Blog</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/#about">About</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/#portfolio">Portfolio</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/#contact">Contact</a></div></li></ul></div><div><h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 mb-4">Categories</h3><ul class="space-y-2"><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">System Design</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">Java</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">Databases</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">AI/ML</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">AWS</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">Messaging</a></div></li></ul></div><div><h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 mb-4">Contact</h3><ul class="space-y-2 text-gray-400 text-sm"><li><a href="mailto:sachinsarawgi201143@gmail.com" class="hover:text-white transition-colors flex items-center gap-2"><i class="fas fa-envelope"></i> Email</a></li><li><a href="https://www.linkedin.com/in/sachin-sarawgi/" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors flex items-center gap-2"><i class="fab fa-linkedin"></i> LinkedIn</a></li><li><a href="https://github.com/codesprintpro" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors flex items-center gap-2"><i class="fab fa-github"></i> GitHub</a></li></ul></div></div><div class="border-t border-gray-800 pt-6 flex flex-col md:flex-row justify-between items-center gap-2"><p class="text-gray-500 text-sm">© <!-- -->2026<!-- --> CodeSprintPro · Sachin Sarawgi. All rights reserved.</p><p class="text-gray-600 text-xs">Built with Next.js · TailwindCSS · Deployed on GitHub Pages</p></div></div></footer></div></main></div><script id="__NEXT_DATA__" type="application/json">{"props":{"pageProps":{"post":{"title":"Multi-Tenancy Architecture: Database, Application, and Infrastructure Patterns","description":"Production multi-tenancy: database isolation models (shared schema, shared database, separate database), tenant routing, data partitioning strategies, cross-tenant query prevention, Spring Boot tenant context propagation, and the trade-offs at each isolation level.","date":"2025-05-24","category":"System Design","tags":["multi-tenancy","saas","system design","database","spring boot","architecture","isolation"],"featured":false,"affiliateSection":"system-design-courses","slug":"multi-tenancy-architecture","readingTime":"8 min read","excerpt":"Multi-tenancy is the architecture pattern where a single deployed instance of a software system serves multiple customers (tenants), with each tenant's data logically or physically isolated from others. It's the foundati…","contentHtml":"\u003cp\u003eMulti-tenancy is the architecture pattern where a single deployed instance of a software system serves multiple customers (tenants), with each tenant's data logically or physically isolated from others. It's the foundation of SaaS products. The isolation model you choose is a fundamental architectural decision — it determines your security posture, operational complexity, cost structure, and scalability ceiling.\u003c/p\u003e\n\u003ch2\u003eThe Three Isolation Models\u003c/h2\u003e\n\u003cpre\u003e\u003ccode\u003eModel 1: Shared Schema (Row-Level Isolation)\n┌────────────────────────────────────────────┐\n│  Single database, single schema            │\n│  Every table has a tenant_id column        │\n│  tenant A rows: tenant_id='A'              │\n│  tenant B rows: tenant_id='B'              │\n│  All tenants share tables                  │\n└────────────────────────────────────────────┘\nCost: Lowest    Security: Lowest    Scale: Highest\n\nModel 2: Shared Database, Separate Schemas\n┌────────────────────────────────────────────┐\n│  Single database server                    │\n│  Schema per tenant: tenant_a.orders        │\n│                     tenant_b.orders        │\n│  No shared tables (except system tables)   │\n└────────────────────────────────────────────┘\nCost: Medium    Security: Medium    Scale: Medium\n\nModel 3: Separate Database (Database per Tenant)\n┌──────────┐   ┌──────────┐   ┌──────────┐\n│ Tenant A │   │ Tenant B │   │ Tenant C │\n│    DB    │   │    DB    │   │    DB    │\n└──────────┘   └──────────┘   └──────────┘\nCost: Highest   Security: Highest  Scale: Limited\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eMost SaaS products start with shared schema (simplest) and migrate toward separate databases as they land larger enterprise customers who demand data isolation guarantees.\u003c/p\u003e\n\u003ch2\u003eModel 1: Shared Schema with Row-Level Security\u003c/h2\u003e\n\u003cp\u003e\u003cstrong\u003ePostgreSQL Row-Level Security (RLS):\u003c/strong\u003e\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-sql\"\u003e-- Enable RLS on every tenant-scoped table:\nALTER TABLE orders ENABLE ROW LEVEL SECURITY;\n\n-- Create policy: users can only see rows matching their tenant_id\nCREATE POLICY tenant_isolation ON orders\n    USING (tenant_id = current_setting('app.current_tenant')::UUID);\n\n-- Set tenant context per connection/transaction:\nSET app.current_tenant = '550e8400-e29b-41d4-a716-446655440000';\n\n-- Now ALL queries on orders are automatically filtered:\nSELECT * FROM orders;\n-- Equivalent to: SELECT * FROM orders WHERE tenant_id = '550e8400-...'\n-- Even if a query accidentally omits the tenant_id filter — RLS enforces it\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eRLS is a defense-in-depth layer. Even if application code has a bug that omits the tenant filter, RLS prevents cross-tenant data leakage at the database level.\u003c/p\u003e\n\u003cp\u003e\u003cstrong\u003eSpring Boot implementation:\u003c/strong\u003e\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-java\"\u003e// Tenant context holder (thread-local):\npublic class TenantContext {\n    private static final ThreadLocal\u0026#x3C;String\u003e currentTenant = new ThreadLocal\u0026#x3C;\u003e();\n\n    public static void setCurrentTenant(String tenantId) {\n        currentTenant.set(tenantId);\n    }\n\n    public static String getCurrentTenant() {\n        return currentTenant.get();\n    }\n\n    public static void clear() {\n        currentTenant.remove();\n    }\n}\n\n// Interceptor: extract tenant from request and set context\n@Component\npublic class TenantInterceptor implements HandlerInterceptor {\n\n    @Override\n    public boolean preHandle(HttpServletRequest request,\n                              HttpServletResponse response,\n                              Object handler) {\n        // Option 1: Tenant from subdomain (acme.app.com → tenant=acme)\n        String host = request.getServerName();\n        String tenantId = host.split(\"\\\\.\")[0];\n\n        // Option 2: Tenant from JWT claim (more reliable)\n        String jwt = extractJwt(request);\n        String tenantId2 = jwtService.getTenantId(jwt);\n\n        // Option 3: Tenant from request header (for internal APIs)\n        String tenantId3 = request.getHeader(\"X-Tenant-ID\");\n\n        TenantContext.setCurrentTenant(tenantId2);\n        return true;\n    }\n\n    @Override\n    public void afterCompletion(HttpServletRequest request, HttpServletResponse response,\n                                 Object handler, Exception ex) {\n        TenantContext.clear();  // CRITICAL: clean up thread-local or risk tenant leakage\n    }\n}\n\n// Hibernate multi-tenancy — pass tenant_id to every query automatically:\n@Component\npublic class TenantIdentifierResolver implements CurrentTenantIdentifierResolver {\n    @Override\n    public String resolveCurrentTenantIdentifier() {\n        String tenantId = TenantContext.getCurrentTenant();\n        return tenantId != null ? tenantId : \"default\";\n    }\n\n    @Override\n    public boolean validateExistingCurrentSessions() {\n        return true;\n    }\n}\n\n// Entity: tenant_id on every table:\n@Entity\n@Table(name = \"orders\")\n@FilterDef(name = \"tenantFilter\", parameters = @ParamDef(name = \"tenantId\", type = String.class))\n@Filter(name = \"tenantFilter\", condition = \"tenant_id = :tenantId\")\npublic class Order {\n\n    @Id\n    private UUID id;\n\n    @Column(name = \"tenant_id\", nullable = false, updatable = false)\n    private UUID tenantId;\n\n    // ... other fields\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e\u003cstrong\u003eThe critical risk in shared schema: accidental cross-tenant queries\u003c/strong\u003e\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-java\"\u003e// VULNERABLE: Developer forgets to add tenant filter\npublic List\u0026#x3C;Order\u003e findRecentOrders() {\n    return em.createQuery(\"FROM Order WHERE created_at \u003e :date\", Order.class)\n        .setParameter(\"date\", LocalDate.now().minusDays(7))\n        .getResultList();\n    // Returns orders from ALL tenants — data breach\n}\n\n// SAFE: Always include tenant_id\npublic List\u0026#x3C;Order\u003e findRecentOrders() {\n    String tenantId = TenantContext.getCurrentTenant();\n    return em.createQuery(\n        \"FROM Order WHERE tenant_id = :tenantId AND created_at \u003e :date\", Order.class)\n        .setParameter(\"tenantId\", UUID.fromString(tenantId))\n        .setParameter(\"date\", LocalDate.now().minusDays(7))\n        .getResultList();\n}\n\n// SAFER: Use Hibernate @Filter applied globally (can't forget it):\n// Session.enableFilter(\"tenantFilter\").setParameter(\"tenantId\", tenantId)\n// This adds the filter condition to ALL queries for the session\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch2\u003eModel 2: Schema-Per-Tenant\u003c/h2\u003e\n\u003cpre\u003e\u003ccode class=\"language-java\"\u003e// Hibernate connection pool routing:\n@Configuration\npublic class MultiTenantDataSourceConfig implements MultiTenantConnectionProvider {\n\n    @Autowired\n    private DataSource dataSource;\n\n    @Override\n    public Connection getConnection(String tenantIdentifier) throws SQLException {\n        Connection connection = dataSource.getConnection();\n        // Switch schema to tenant's schema:\n        connection.createStatement().execute(\n            \"SET search_path TO tenant_\" + sanitize(tenantIdentifier) + \", public\"\n        );\n        return connection;\n    }\n\n    @Override\n    public void releaseConnection(String tenantIdentifier, Connection connection) throws SQLException {\n        connection.createStatement().execute(\"SET search_path TO public\");\n        connection.close();\n    }\n\n    private String sanitize(String tenantId) {\n        // CRITICAL: Sanitize to prevent SQL injection via tenant ID\n        if (!tenantId.matches(\"^[a-zA-Z0-9_-]+$\")) {\n            throw new SecurityException(\"Invalid tenant ID\");\n        }\n        return tenantId;\n    }\n}\n\n// Schema provisioning (when a new tenant signs up):\n@Service\npublic class TenantProvisioningService {\n\n    @Autowired\n    private JdbcTemplate jdbcTemplate;\n\n    @Transactional\n    public void provisionTenant(String tenantId) {\n        String schema = \"tenant_\" + sanitize(tenantId);\n\n        // Create schema:\n        jdbcTemplate.execute(\"CREATE SCHEMA IF NOT EXISTS \" + schema);\n\n        // Run migrations for this schema:\n        Flyway.configure()\n            .dataSource(dataSource)\n            .schemas(schema)\n            .locations(\"classpath:db/migration\")\n            .load()\n            .migrate();\n\n        log.info(\"Provisioned schema for tenant: {}\", tenantId);\n    }\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eSchema-per-tenant allows schema customization per tenant (enterprise customers often want custom fields). However, running migrations across thousands of schemas becomes a management challenge — a migration that takes 1 second per schema takes 17 minutes across 1,000 tenants.\u003c/p\u003e\n\u003ch2\u003eModel 3: Database-Per-Tenant with Dynamic Routing\u003c/h2\u003e\n\u003cpre\u003e\u003ccode class=\"language-java\"\u003e// Connection pool per tenant (HikariCP):\n@Service\npublic class TenantDataSourceService {\n\n    private final Map\u0026#x3C;String, DataSource\u003e dataSources = new ConcurrentHashMap\u0026#x3C;\u003e();\n    private final TenantConfigRepository tenantConfigRepository;\n\n    public DataSource getDataSource(String tenantId) {\n        return dataSources.computeIfAbsent(tenantId, this::createDataSource);\n    }\n\n    private DataSource createDataSource(String tenantId) {\n        TenantConfig config = tenantConfigRepository.findById(tenantId)\n            .orElseThrow(() -\u003e new TenantNotFoundException(tenantId));\n\n        HikariConfig hikariConfig = new HikariConfig();\n        hikariConfig.setJdbcUrl(config.getDatabaseUrl());\n        hikariConfig.setUsername(config.getDbUser());\n        hikariConfig.setPassword(config.getDbPassword());\n        hikariConfig.setMaximumPoolSize(5);     // Small pool per tenant\n        hikariConfig.setMinimumIdle(1);\n        hikariConfig.setConnectionTimeout(5000);\n        hikariConfig.setPoolName(\"tenant-\" + tenantId);\n\n        return new HikariDataSource(hikariConfig);\n    }\n}\n\n// Spring AbstractRoutingDataSource:\n@Component\npublic class TenantAwareDataSource extends AbstractRoutingDataSource {\n\n    @Autowired\n    private TenantDataSourceService tenantDataSourceService;\n\n    @Override\n    protected Object determineCurrentLookupKey() {\n        return TenantContext.getCurrentTenant();\n    }\n\n    @Override\n    protected DataSource determineTargetDataSource() {\n        String tenantId = TenantContext.getCurrentTenant();\n        return tenantDataSourceService.getDataSource(tenantId);\n    }\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e\u003cstrong\u003eDatabase-per-tenant operational challenges:\u003c/strong\u003e\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003e1,000 tenants = 1,000 database connection pools = potential for many idle connections\u003c/li\u003e\n\u003cli\u003eSchema migrations must run against all tenant databases (usually via a migration runner that loops over all tenants)\u003c/li\u003e\n\u003cli\u003eMonitoring 1,000 separate databases requires aggregated observability\u003c/li\u003e\n\u003cli\u003eCost scales linearly with tenant count (no sharing)\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2\u003eTenant Onboarding and Lifecycle\u003c/h2\u003e\n\u003cpre\u003e\u003ccode class=\"language-java\"\u003e@Service\npublic class TenantLifecycleService {\n\n    // Asynchronous provisioning (tenant creation shouldn't block the signup response):\n    @Async\n    public CompletableFuture\u0026#x3C;Void\u003e provisionNewTenant(TenantSignupRequest request) {\n        String tenantId = UUID.randomUUID().toString();\n\n        // 1. Create database record for tenant:\n        Tenant tenant = tenantRepository.save(new Tenant(tenantId, request.getCompanyName()));\n\n        // 2. Provision infrastructure (database/schema):\n        tenantProvisioningService.provision(tenantId);\n\n        // 3. Seed default data (roles, settings, sample data):\n        tenantSeedingService.seedDefaults(tenantId);\n\n        // 4. Send welcome email:\n        emailService.sendWelcome(tenant, request.getAdminEmail());\n\n        // 5. Update provisioning status:\n        tenant.setStatus(TenantStatus.ACTIVE);\n        tenantRepository.save(tenant);\n\n        return CompletableFuture.completedFuture(null);\n    }\n\n    @Transactional\n    public void suspendTenant(String tenantId) {\n        Tenant tenant = tenantRepository.findById(tenantId)\n            .orElseThrow(() -\u003e new TenantNotFoundException(tenantId));\n        tenant.setStatus(TenantStatus.SUSPENDED);\n        tenantRepository.save(tenant);\n\n        // Revoke active sessions:\n        sessionService.revokeAllForTenant(tenantId);\n    }\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch2\u003eCross-Tenant Analytics (Admin Queries)\u003c/h2\u003e\n\u003cp\u003eAdmin queries (aggregate statistics across all tenants) require bypassing tenant isolation:\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-java\"\u003e// Dedicated admin data source — separate connection with elevated permissions:\n@Configuration\npublic class AdminDataSourceConfig {\n\n    @Bean(\"adminDataSource\")\n    public DataSource adminDataSource() {\n        HikariConfig config = new HikariConfig();\n        config.setJdbcUrl(adminDbUrl);\n        config.setUsername(adminDbUser);\n        config.setPassword(adminDbPassword);\n        return new HikariDataSource(config);\n    }\n}\n\n@Repository\npublic class AdminAnalyticsRepository {\n\n    @Autowired\n    @Qualifier(\"adminDataSource\")\n    private DataSource adminDataSource;\n\n    // Admin-only: revenue across all tenants\n    public List\u0026#x3C;TenantRevenue\u003e getRevenueByTenant(LocalDate startDate) {\n        // In shared schema: query without tenant filter\n        // In schema-per-tenant: UNION across all schemas\n        // In db-per-tenant: federated query or aggregated via ETL pipeline\n    }\n}\n\n// Protect with role-based access:\n@PreAuthorize(\"hasRole('PLATFORM_ADMIN')\")\n@GetMapping(\"/admin/analytics/revenue\")\npublic ResponseEntity\u0026#x3C;List\u0026#x3C;TenantRevenue\u003e\u003e getRevenue(@RequestParam LocalDate startDate) {\n    return ResponseEntity.ok(adminAnalyticsRepository.getRevenueByTenant(startDate));\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch2\u003eChoosing the Right Model\u003c/h2\u003e\n\u003ctable\u003e\n\u003cthead\u003e\n\u003ctr\u003e\n\u003cth\u003eFactor\u003c/th\u003e\n\u003cth\u003eShared Schema\u003c/th\u003e\n\u003cth\u003eSchema-per-Tenant\u003c/th\u003e\n\u003cth\u003eDB-per-Tenant\u003c/th\u003e\n\u003c/tr\u003e\n\u003c/thead\u003e\n\u003ctbody\u003e\n\u003ctr\u003e\n\u003ctd\u003eSetup complexity\u003c/td\u003e\n\u003ctd\u003eLow\u003c/td\u003e\n\u003ctd\u003eMedium\u003c/td\u003e\n\u003ctd\u003eHigh\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003ePer-tenant cost\u003c/td\u003e\n\u003ctd\u003eLowest\u003c/td\u003e\n\u003ctd\u003eLow\u003c/td\u003e\n\u003ctd\u003eHigh\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003eData isolation\u003c/td\u003e\n\u003ctd\u003eLogical only\u003c/td\u003e\n\u003ctd\u003eStronger\u003c/td\u003e\n\u003ctd\u003eStrongest\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003eEnterprise compliance\u003c/td\u003e\n\u003ctd\u003eDifficult\u003c/td\u003e\n\u003ctd\u003ePossible\u003c/td\u003e\n\u003ctd\u003eEasy\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003eSchema customization\u003c/td\u003e\n\u003ctd\u003eHard\u003c/td\u003e\n\u003ctd\u003ePossible\u003c/td\u003e\n\u003ctd\u003eEasy\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003eMigration complexity\u003c/td\u003e\n\u003ctd\u003eLow\u003c/td\u003e\n\u003ctd\u003eMedium\u003c/td\u003e\n\u003ctd\u003eHigh (per-DB)\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003eMax tenant scale\u003c/td\u003e\n\u003ctd\u003e100,000+\u003c/td\u003e\n\u003ctd\u003e10,000\u003c/td\u003e\n\u003ctd\u003e~1,000\u003c/td\u003e\n\u003c/tr\u003e\n\u003c/tbody\u003e\n\u003c/table\u003e\n\u003cp\u003eStart with shared schema unless your target customers have strict data residency requirements on day one. Add schema-per-tenant for enterprise tiers where compliance demands it. Reserve database-per-tenant for your largest, highest-paying customers who need dedicated infrastructure guarantees.\u003c/p\u003e\n\u003cp\u003eThe multi-tenancy model shapes every subsequent architectural decision — data backup, disaster recovery, schema evolution, performance isolation, and compliance reporting. Make this choice deliberately, with full awareness of where you want to be in 3-5 years, not just what's easiest to build today.\u003c/p\u003e\n","tableOfContents":[{"id":"the-three-isolation-models","text":"The Three Isolation Models","level":2},{"id":"model-1-shared-schema-with-row-level-security","text":"Model 1: Shared Schema with Row-Level Security","level":2},{"id":"model-2-schema-per-tenant","text":"Model 2: Schema-Per-Tenant","level":2},{"id":"model-3-database-per-tenant-with-dynamic-routing","text":"Model 3: Database-Per-Tenant with Dynamic Routing","level":2},{"id":"tenant-onboarding-and-lifecycle","text":"Tenant Onboarding and Lifecycle","level":2},{"id":"cross-tenant-analytics-admin-queries","text":"Cross-Tenant Analytics (Admin Queries)","level":2},{"id":"choosing-the-right-model","text":"Choosing the Right Model","level":2}]},"relatedPosts":[{"title":"Building Production Observability with OpenTelemetry and Grafana Stack","description":"End-to-end observability implementation: distributed tracing with OpenTelemetry, metrics with Prometheus, structured logging with Loki, and the dashboards and alerts that actually help during incidents.","date":"2025-07-03","category":"System Design","tags":["observability","opentelemetry","prometheus","grafana","loki","tracing","spring boot","monitoring"],"featured":false,"affiliateSection":"system-design-courses","slug":"observability-opentelemetry-production","readingTime":"6 min read","excerpt":"Observability is not the same as monitoring. Monitoring tells you something is wrong. Observability lets you understand why — by exploring system state through metrics, traces, and logs without needing to know in advance…"},{"title":"Event Sourcing and CQRS in Production: Beyond the Theory","description":"What event sourcing actually looks like in production Java systems: event store design, snapshot strategies, projection rebuilding, CQRS read model synchronization, and the operational challenges nobody talks about.","date":"2025-06-23","category":"System Design","tags":["event sourcing","cqrs","system design","java","distributed systems","kafka","spring boot"],"featured":false,"affiliateSection":"distributed-systems-books","slug":"event-sourcing-cqrs-production","readingTime":"7 min read","excerpt":"Event sourcing is one of those patterns that looks elegant in conference talks and becomes surprisingly complex in production systems. The theory — store events instead of state, derive state by replaying events — is sou…"},{"title":"gRPC vs REST vs GraphQL: Choosing the Right API Protocol","description":"A technical comparison of REST, gRPC, and GraphQL across performance, developer experience, schema evolution, streaming, and real production use cases. When each protocol wins and where each falls short.","date":"2025-06-18","category":"System Design","tags":["grpc","rest","graphql","api design","system design","microservices","protocol buffers"],"featured":false,"affiliateSection":"system-design-courses","slug":"grpc-vs-rest-vs-graphql","readingTime":"7 min read","excerpt":"API protocol selection has a longer lifespan than almost any other technical decision. REST APIs from 2010 are still running in production. gRPC services chosen for internal communication in 2018 are tightly coupled to t…"}]},"__N_SSG":true},"page":"/blog/[slug]","query":{"slug":"multi-tenancy-architecture"},"buildId":"rpFn_jslWZ9qPkJwor7RD","isFallback":false,"gsp":true,"scriptLoader":[]}</script></body></html>

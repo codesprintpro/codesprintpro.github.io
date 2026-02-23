@@ -1,0 +1,362 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8" data-next-head=""/><meta name="viewport" content="width=device-width" data-next-head=""/><title data-next-head="">Designing Idempotent Payment Systems in Distributed Architecture<!-- --> | CodeSprintPro</title><meta name="description" content="How duplicate payments happen in real systems, idempotency key design, race condition handling, Redis vs DB for idempotency stores, and the production incident that shaped our architecture." data-next-head=""/><meta name="author" content="Sachin Sarawgi" data-next-head=""/><link rel="canonical" href="https://codesprintpro.com/blog/idempotent-payment-systems/" data-next-head=""/><meta property="og:type" content="article" data-next-head=""/><meta property="og:title" content="Designing Idempotent Payment Systems in Distributed Architecture" data-next-head=""/><meta property="og:description" content="How duplicate payments happen in real systems, idempotency key design, race condition handling, Redis vs DB for idempotency stores, and the production incident that shaped our architecture." data-next-head=""/><meta property="og:url" content="https://codesprintpro.com/blog/idempotent-payment-systems/" data-next-head=""/><meta property="og:image" content="https://codesprintpro.com/images/og-default.jpg" data-next-head=""/><meta property="og:site_name" content="CodeSprintPro" data-next-head=""/><meta property="article:published_time" content="2025-04-26" data-next-head=""/><meta property="article:author" content="Sachin Sarawgi" data-next-head=""/><meta property="article:section" content="System Design" data-next-head=""/><meta property="article:tag" content="payments" data-next-head=""/><meta property="article:tag" content="idempotency" data-next-head=""/><meta property="article:tag" content="distributed systems" data-next-head=""/><meta property="article:tag" content="java" data-next-head=""/><meta property="article:tag" content="spring boot" data-next-head=""/><meta property="article:tag" content="fintech" data-next-head=""/><meta property="article:tag" content="system design" data-next-head=""/><meta name="twitter:card" content="summary_large_image" data-next-head=""/><meta name="twitter:title" content="Designing Idempotent Payment Systems in Distributed Architecture" data-next-head=""/><meta name="twitter:description" content="How duplicate payments happen in real systems, idempotency key design, race condition handling, Redis vs DB for idempotency stores, and the production incident that shaped our architecture." data-next-head=""/><meta name="twitter:image" content="https://codesprintpro.com/images/og-default.jpg" data-next-head=""/><script type="application/ld+json" data-next-head="">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Designing Idempotent Payment Systems in Distributed Architecture","description":"How duplicate payments happen in real systems, idempotency key design, race condition handling, Redis vs DB for idempotency stores, and the production incident that shaped our architecture.","image":"https://codesprintpro.com/images/og-default.jpg","datePublished":"2025-04-26","dateModified":"2025-04-26","author":{"@type":"Person","name":"Sachin Sarawgi","url":"https://codesprintpro.com","sameAs":["https://www.linkedin.com/in/sachin-sarawgi/","https://github.com/codesprintpro","https://medium.com/@codesprintpro"]},"publisher":{"@type":"Organization","name":"CodeSprintPro","url":"https://codesprintpro.com","logo":{"@type":"ImageObject","url":"https://codesprintpro.com/favicon/favicon-96x96.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codesprintpro.com/blog/idempotent-payment-systems/"},"keywords":"payments, idempotency, distributed systems, java, spring boot, fintech, system design","articleSection":"System Design"}</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerPolicy="no-referrer"/><script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script><link rel="preload" href="/_next/static/media/e4af272ccee01ff0-s.p.woff2" as="font" type="font/woff2" crossorigin="anonymous" data-next-font="size-adjust"/><link rel="preload" href="/_next/static/css/735d4373f93910ca.css" as="style"/><link rel="stylesheet" href="/_next/static/css/735d4373f93910ca.css" data-n-g=""/><noscript data-n-css=""></noscript><script defer="" nomodule="" src="/_next/static/chunks/polyfills-42372ed130431b0a.js"></script><script src="/_next/static/chunks/webpack-11a4a2dad04962bb.js" defer=""></script><script src="/_next/static/chunks/framework-1ce91eb6f9ecda85.js" defer=""></script><script src="/_next/static/chunks/main-c7f4109f032d7b6e.js" defer=""></script><script src="/_next/static/chunks/pages/_app-1a852bd9e38c70ab.js" defer=""></script><script src="/_next/static/chunks/730-db7827467817f501.js" defer=""></script><script src="/_next/static/chunks/90-1cd4611704c3dbe0.js" defer=""></script><script src="/_next/static/chunks/440-29f4b99a44e744b5.js" defer=""></script><script src="/_next/static/chunks/pages/blog/%5Bslug%5D-0c1b14a33d5e05ee.js" defer=""></script><script src="/_next/static/rpFn_jslWZ9qPkJwor7RD/_buildManifest.js" defer=""></script><script src="/_next/static/rpFn_jslWZ9qPkJwor7RD/_ssgManifest.js" defer=""></script></head><body><div id="__next"><main class="__className_f367f3"><div class="min-h-screen bg-white"><nav class="fixed w-full z-50 transition-all duration-300 bg-white shadow-md" style="transform:translateY(-100px) translateZ(0)"><div class="container mx-auto px-4 sm:px-6 lg:px-8"><div class="flex items-center justify-between h-16"><a class="text-xl font-bold transition-colors text-blue-600" href="/">CodeSprintPro</a><div class="hidden md:flex items-center space-x-8"><a class="text-sm font-medium transition-colors text-blue-600" href="/blog/">Blog</a><a class="text-sm font-medium transition-colors text-gray-600 hover:text-blue-600" href="/#about">About</a><a class="text-sm font-medium transition-colors text-gray-600 hover:text-blue-600" href="/#portfolio">Portfolio</a><a class="text-sm font-medium transition-colors text-gray-600 hover:text-blue-600" href="/#contact">Contact</a></div><button class="md:hidden p-2 rounded-lg transition-colors hover:bg-gray-100 text-gray-600" aria-label="Toggle mobile menu"><svg class="w-6 h-6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor"><path d="M4 6h16M4 12h16M4 18h16"></path></svg></button></div></div></nav><div class="pt-20"><div class="bg-gradient-to-br from-gray-900 to-blue-950 py-16"><div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl"><nav class="flex items-center gap-2 text-sm text-gray-400 mb-6"><a class="hover:text-white transition-colors" href="/">Home</a><span>/</span><a class="hover:text-white transition-colors" href="/blog/">Blog</a><span>/</span><span class="text-gray-300 truncate max-w-xs">Designing Idempotent Payment Systems in Distributed Architecture</span></nav><span class="inline-block text-xs font-semibold px-3 py-1 rounded-full bg-blue-100 text-blue-700 mb-4">System Design</span><h1 class="text-3xl md:text-5xl font-bold text-white mb-4 leading-tight">Designing Idempotent Payment Systems in Distributed Architecture</h1><p class="text-gray-300 text-lg mb-6 max-w-3xl">How duplicate payments happen in real systems, idempotency key design, race condition handling, Redis vs DB for idempotency stores, and the production incident that shaped our architecture.</p><div class="flex flex-wrap items-center gap-4 text-gray-400 text-sm"><span class="flex items-center gap-1.5"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>Sachin Sarawgi</span><span>·</span><span>April 26, 2025</span><span>·</span><span class="flex items-center gap-1"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>11 min read</span></div><div class="flex flex-wrap gap-2 mt-4"><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->payments</span><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->idempotency</span><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->distributed systems</span><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->java</span><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->spring boot</span><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->fintech</span><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->system design</span></div></div></div><div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl py-12"><div class="flex gap-12"><div class="flex-1 min-w-0"><article class="prose prose-lg max-w-none prose-headings:text-gray-900 prose-headings:font-bold prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-4 prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3 prose-p:text-gray-700 prose-p:leading-relaxed prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline prose-strong:text-gray-900 prose-blockquote:border-blue-600 prose-blockquote:text-gray-600 prose-code:text-blue-700 prose-code:bg-blue-50 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-sm prose-code:before:content-none prose-code:after:content-none prose-pre:rounded-xl prose-img:rounded-xl prose-img:shadow-md prose-table:text-sm prose-th:bg-gray-100 prose-th:text-gray-700"><p>Duplicate payments are not a theoretical edge case. In any distributed payment system operating at scale, they are a guaranteed occurrence. Networks time out. Clients retry. Proxies retry on behalf of clients. Load balancers retry on 502s. The question is never "can we prevent duplicate requests?" — we cannot. The question is "can we prevent duplicate charges?"</p>
+<p>This article covers the complete design of an idempotent payment system, including the race conditions that catch engineers off guard and the production incident that reshaped how our team thinks about distributed side effects.</p>
+<h2>How Duplicate Payment Requests Happen</h2>
+<p>Duplicates in payment systems originate from multiple layers simultaneously:</p>
+<pre><code>Duplicate sources:
+
+Client App ──retry─► API Gateway ──retry─► Load Balancer ──► Payment Service
+     │                    │                      │
+     │                    │                      │
+  Network           5xx response             Health check
+  timeout           from service             failure +
+  (30s default)     (retry policy)           retry
+</code></pre>
+<p><strong>Client-side retries:</strong> A mobile app's payment SDK has a 10-second timeout. The network is slow. At 10 seconds, the SDK retries. The original request arrives at second 11 — now both requests are in flight.</p>
+<p><strong>Proxy and infrastructure retries:</strong> AWS ALB retries on 5xx responses. Nginx has <code>proxy_next_upstream</code>. Your service mesh (Istio, Linkerd) has retry policies. Each layer that retries multiplies the duplicate risk.</p>
+<p><strong>Retry storms:</strong> After a downstream payment gateway recovers from a brief outage, all queued retries flush simultaneously. 10,000 retries arrive in 500ms. Your payment service processes some; others are duplicated in the rush.</p>
+<p><strong>At-least-once message delivery:</strong> If payments flow through Kafka, SQS, or any at-least-once messaging system, your consumer will eventually process the same payment event twice.</p>
+<h2>Idempotency Keys and Database Design</h2>
+<p>An idempotency key is a client-generated, globally unique token that identifies a specific payment request. Same key = same request = same result.</p>
+<pre><code>HTTP Header approach:
+POST /payments
+Idempotency-Key: idem_key_a3b4c5d6e7f8901234567890
+
+Request body:
+{
+  "user_id": "usr_123",
+  "amount": 9999,
+  "currency": "USD",
+  "payment_method_id": "pm_456"
+}
+</code></pre>
+<p>The server stores the idempotency key and its result. On duplicate request: return the stored result, skip processing.</p>
+<h3>Database Schema for Idempotency</h3>
+<pre><code class="language-sql">-- Idempotency store
+CREATE TABLE idempotency_keys (
+    idempotency_key     VARCHAR(255) NOT NULL,
+    user_id             BIGINT NOT NULL,
+    request_hash        VARCHAR(64) NOT NULL,   -- SHA-256 of request body
+    status              VARCHAR(20) NOT NULL DEFAULT 'PROCESSING',
+    -- status: PROCESSING | COMPLETED | FAILED
+    response_status     INT,                    -- HTTP status code
+    response_body       JSONB,                  -- Stored response
+    created_at          TIMESTAMPTZ DEFAULT NOW(),
+    completed_at        TIMESTAMPTZ,
+    expires_at          TIMESTAMPTZ DEFAULT NOW() + INTERVAL '24 hours',
+    PRIMARY KEY (idempotency_key),
+    INDEX idx_idem_user_created (user_id, created_at)
+);
+
+-- Payments table
+CREATE TABLE payments (
+    payment_id          UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    idempotency_key     VARCHAR(255) NOT NULL UNIQUE,
+    user_id             BIGINT NOT NULL,
+    amount              DECIMAL(19,4) NOT NULL,
+    currency            CHAR(3) NOT NULL,
+    payment_method_id   VARCHAR(255) NOT NULL,
+    status              VARCHAR(20) NOT NULL,
+    gateway_charge_id   VARCHAR(255),           -- External gateway ID
+    created_at          TIMESTAMPTZ DEFAULT NOW(),
+    FOREIGN KEY (idempotency_key) REFERENCES idempotency_keys(idempotency_key)
+);
+</code></pre>
+<p>The <code>request_hash</code> column enables an important safety check: if a client sends the same idempotency key with a different request body, that's a bug in the client. Return <code>422 Unprocessable Entity</code> rather than processing a potentially different amount.</p>
+<h2>Race Conditions and Locking Strategies</h2>
+<p>The naive implementation has a classic TOCTOU race condition:</p>
+<pre><code>Thread A: SELECT * FROM idempotency_keys WHERE key='idem_123' → Not found
+Thread B: SELECT * FROM idempotency_keys WHERE key='idem_123' → Not found
+Thread A: INSERT INTO idempotency_keys → Success
+Thread B: INSERT INTO idempotency_keys → Duplicate key error OR succeeds (duplicate charge!)
+</code></pre>
+<h3>Strategy 1: Database Unique Constraint (Preferred)</h3>
+<pre><code class="language-java">@Transactional(isolation = Isolation.READ_COMMITTED)
+public PaymentResponse processPayment(String idempotencyKey, PaymentRequest request) {
+    // Attempt atomic insert - fails on duplicate key
+    try {
+        jdbcTemplate.update(
+            """
+            INSERT INTO idempotency_keys (idempotency_key, user_id, request_hash, status)
+            VALUES (?, ?, ?, 'PROCESSING')
+            """,
+            idempotencyKey, request.userId(), sha256(request)
+        );
+    } catch (DuplicateKeyException e) {
+        // Another thread or request is processing / has processed this key
+        return getStoredResponse(idempotencyKey, request);
+    }
+
+    // Only one thread reaches here per idempotency key
+    try {
+        PaymentResult result = chargeGateway(request);
+        storeResult(idempotencyKey, result);
+        return PaymentResponse.success(result);
+    } catch (Exception e) {
+        markFailed(idempotencyKey, e);
+        throw e;
+    }
+}
+
+private PaymentResponse getStoredResponse(String key, PaymentRequest request) {
+    IdempotencyRecord record = findRecord(key);
+
+    // Validate request body matches
+    if (!record.requestHash().equals(sha256(request))) {
+        throw new IdempotencyConflictException(
+            "Idempotency key reused with different request body");
+    }
+
+    return switch (record.status()) {
+        case "PROCESSING" -> throw new PaymentInProgressException(
+            "Payment is being processed, retry in 1 second");
+        case "COMPLETED"  -> PaymentResponse.fromStored(record.responseBody());
+        case "FAILED"     -> PaymentResponse.fromStoredFailure(record.responseBody());
+        default -> throw new IllegalStateException("Unknown status: " + record.status());
+    };
+}
+</code></pre>
+<p>The database unique constraint enforces mutual exclusion at the storage layer. No distributed lock needed.</p>
+<h3>Strategy 2: Pessimistic Locking with SELECT FOR UPDATE</h3>
+<p>For scenarios where you need to read-then-update atomically:</p>
+<pre><code class="language-java">@Transactional
+public PaymentResponse processPaymentLocked(String idempotencyKey, PaymentRequest request) {
+    // Lock the row, or insert if absent
+    Optional&#x3C;IdempotencyRecord> existing = jdbcTemplate.query(
+        "SELECT * FROM idempotency_keys WHERE idempotency_key = ? FOR UPDATE",
+        idempotencyKeyRowMapper, idempotencyKey
+    ).stream().findFirst();
+
+    if (existing.isPresent()) {
+        return handleExisting(existing.get(), request);
+    }
+
+    // Safe to insert — we hold the lock on this key's position
+    jdbcTemplate.update(
+        "INSERT INTO idempotency_keys (idempotency_key, user_id, request_hash, status) VALUES (?, ?, ?, 'PROCESSING')",
+        idempotencyKey, request.userId(), sha256(request)
+    );
+
+    return executePayment(idempotencyKey, request);
+}
+</code></pre>
+<p><code>SELECT FOR UPDATE</code> with a non-existent row doesn't actually lock anything in most databases. Use gap locking or a distributed lock for that case.</p>
+<h2>Redis vs Database for Idempotency Store</h2>
+<p>Both work, but they have different trade-off profiles:</p>
+<table>
+<thead>
+<tr>
+<th>Dimension</th>
+<th>PostgreSQL</th>
+<th>Redis</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Consistency</td>
+<td>ACID, durable</td>
+<td>Eventual (if using Redis Cluster)</td>
+</tr>
+<tr>
+<td>Latency</td>
+<td>1–5ms</td>
+<td>&#x3C; 1ms</td>
+</tr>
+<tr>
+<td>Throughput</td>
+<td>10K ops/s (single node)</td>
+<td>100K+ ops/s</td>
+</tr>
+<tr>
+<td>TTL management</td>
+<td>Manual (cron job)</td>
+<td>Native TTL</td>
+</tr>
+<tr>
+<td>Data co-location</td>
+<td>Same DB transaction</td>
+<td>Separate system, no transactions</td>
+</tr>
+<tr>
+<td>Operational complexity</td>
+<td>Existing infra</td>
+<td>Additional service</td>
+</tr>
+<tr>
+<td>Risk on failure</td>
+<td>Payment processing stops</td>
+<td>Falls back gracefully</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Use PostgreSQL when:</strong></p>
+<ul>
+<li>You need the idempotency check and payment insert to be in the same ACID transaction</li>
+<li>You cannot afford to lose idempotency records on Redis failure</li>
+<li>Throughput is under 5,000 payments/second</li>
+</ul>
+<p><strong>Use Redis when:</strong></p>
+<ul>
+<li>Your payment volume exceeds PostgreSQL's comfortable range</li>
+<li>You accept that Redis failure means falling back to processing (with idempotent downstream)</li>
+<li>You use Redis Cluster with persistence (AOF + RDB) for durability</li>
+</ul>
+<p><strong>Hybrid approach</strong> used at high-scale fintechs:</p>
+<pre><code>Request arrives with idempotency key
+     │
+     ▼
+Check Redis cache (fast path):
+     │
+     ├── Found in Redis → Return cached response (&#x3C; 1ms)
+     │
+     └── Not in Redis
+               │
+               ▼
+         PostgreSQL (authoritative):
+               │
+               ├── Found in DB → Cache in Redis, return response
+               │
+               └── Not in DB → Process payment, insert to DB, cache in Redis
+</code></pre>
+<p>Redis acts as a read-through cache. Database is authoritative. On Redis failure, requests fall through to the database — slower but correct.</p>
+<pre><code class="language-java">@Service
+public class HybridIdempotencyService {
+
+    public Optional&#x3C;PaymentResponse> checkCache(String key) {
+        try {
+            String cached = redisTemplate.opsForValue().get("idem:" + key);
+            return Optional.ofNullable(cached)
+                .map(json -> deserialize(json, PaymentResponse.class));
+        } catch (RedisConnectionFailureException e) {
+            log.warn("Redis unavailable, falling through to DB: {}", e.getMessage());
+            return Optional.empty(); // Degrade gracefully
+        }
+    }
+
+    public void cacheResult(String key, PaymentResponse response) {
+        try {
+            redisTemplate.opsForValue().set(
+                "idem:" + key,
+                serialize(response),
+                Duration.ofHours(24)
+            );
+        } catch (RedisConnectionFailureException e) {
+            log.warn("Redis unavailable, result not cached: {}", e.getMessage());
+            // Continue — DB has the authoritative record
+        }
+    }
+}
+</code></pre>
+<h2>Failure Scenarios</h2>
+<p><strong>Scenario 1: Payment succeeds at gateway, response lost on return</strong></p>
+<pre><code>Service → Gateway: charge($100) → Gateway charges card ✓
+Gateway → Service: HTTP 200 with charge_id [network failure]
+Service: times out, marks as FAILED
+Client: retries with same idempotency key
+Service: processes payment again → DOUBLE CHARGE
+</code></pre>
+<p><strong>Fix:</strong> Use the gateway's idempotency support. Stripe, Braintree, and Adyen all accept an idempotency key on charge requests. If the same key is sent twice, they return the same result without charging twice. Store <code>gateway_charge_id</code> and verify before processing:</p>
+<pre><code class="language-java">public PaymentResult chargeWithGatewayIdempotency(PaymentRequest req, String idempotencyKey) {
+    StripeRequest stripeReq = StripeRequest.builder()
+        .amount(req.amount())
+        .currency(req.currency())
+        .paymentMethodId(req.paymentMethodId())
+        .idempotencyKey(idempotencyKey)  // Pass through to gateway
+        .build();
+
+    return stripeClient.charges().create(stripeReq);
+}
+</code></pre>
+<p><strong>Scenario 2: PROCESSING status stuck (service crash mid-payment)</strong></p>
+<p>If the service crashes after inserting <code>PROCESSING</code> but before updating to <code>COMPLETED</code>, the idempotency key is locked in PROCESSING forever. Client retries get <code>PaymentInProgressException</code>.</p>
+<p>Fix: Time-bound PROCESSING status:</p>
+<pre><code class="language-sql">-- Detect stuck PROCESSING keys (job runs every minute)
+SELECT idempotency_key
+FROM idempotency_keys
+WHERE status = 'PROCESSING'
+  AND created_at &#x3C; NOW() - INTERVAL '2 minutes';
+
+-- For each stuck key: check gateway for actual status
+-- If gateway has charge: mark COMPLETED with gateway result
+-- If gateway has no charge: mark FAILED, safe to retry
+</code></pre>
+<h2>Text-Based Architecture Diagram</h2>
+<pre><code>Idempotent Payment Flow:
+
+Mobile Client
+     │
+     │  POST /payments
+     │  Idempotency-Key: idem_abc123
+     ▼
+API Gateway (rate limiting, auth)
+     │
+     ▼
+Payment Service
+     │
+     ├─[1]─► Redis: GET idem:idem_abc123
+     │           │
+     │           ├── Cache hit → Return cached response (END)
+     │           └── Cache miss → continue
+     │
+     ├─[2]─► PostgreSQL: INSERT INTO idempotency_keys
+     │           │
+     │           ├── DuplicateKeyException → Fetch + return stored result (END)
+     │           └── Insert success → continue (exclusive processing)
+     │
+     ├─[3]─► Payment Gateway (Stripe/Braintree)
+     │        with gateway idempotency key
+     │           │
+     │           ├── Success: charge_id=ch_xyz
+     │           └── Failure: error code + message
+     │
+     ├─[4]─► PostgreSQL: UPDATE idempotency_keys SET status='COMPLETED'
+     │        + INSERT INTO payments
+     │        (single transaction)
+     │
+     └─[5]─► Redis: SET idem:idem_abc123 = response (TTL=24h)
+                   └── Return response to client
+</code></pre>
+<h2>Monitoring and Observability</h2>
+<pre><code class="language-java">@Component
+public class PaymentMetrics {
+
+    private final Counter duplicatePaymentAttempts;
+    private final Counter stuckProcessingKeys;
+
+    public PaymentMetrics(MeterRegistry registry) {
+        this.duplicatePaymentAttempts = Counter.builder("payments.duplicate_attempts")
+            .description("Idempotency key reuse count")
+            .register(registry);
+
+        this.stuckProcessingKeys = Counter.builder("payments.stuck_processing_keys")
+            .description("Payments stuck in PROCESSING status")
+            .register(registry);
+    }
+}
+</code></pre>
+<p>Key metrics to alert on:</p>
+<ul>
+<li><code>payments.duplicate_attempts > 100/min</code> — possible retry storm in progress</li>
+<li><code>payments.stuck_processing_keys > 0</code> — service crashes or network partitions happening</li>
+<li><code>payments.gateway_idempotency_conflict > 0</code> — gateway received same key with different amount (client bug)</li>
+<li>P99 latency of idempotency key lookup > 50ms — database under pressure</li>
+</ul>
+<h2>Real Production Incident</h2>
+<p><strong>Context:</strong> Fintech platform, 50,000 payments/day, Spring Boot + PostgreSQL.</p>
+<p><strong>Incident:</strong> Black Friday sale. Payment volume spiked 10×. Our payment gateway (external) was slow — 8-second response times vs normal 800ms. Our API timeout was 10 seconds. Result: 80% of payment requests timed out client-side at the 10-second mark. All clients retried immediately with the same idempotency keys.</p>
+<p>The retry storm overwhelmed the gateway. The gateway rate-limited us. More timeouts. More retries. A feedback loop.</p>
+<p><strong>What saved us:</strong> Idempotency keys in our database. Despite the chaos, every payment was processed exactly once. Clients that got timeouts eventually got responses on retry — the response was pulled from our idempotency store rather than charging the card again.</p>
+<p><strong>What hurt us:</strong> 70% of our API capacity was consumed by duplicate requests hitting the idempotency cache. Our P99 API latency hit 15 seconds for legitimate new payments.</p>
+<p><strong>Post-incident fixes:</strong></p>
+<ol>
+<li>Redis cache for idempotency hot path — duplicate requests now cost 0.5ms instead of 5ms database lookup</li>
+<li>Separate thread pool for idempotency lookups vs new payment processing</li>
+<li>Exponential backoff enforced server-side: 429 Too Many Requests with <code>Retry-After</code> header</li>
+<li>Gateway circuit breaker: open after 20% of requests exceed 5 seconds</li>
+</ol>
+<h2>Lessons Learned in Production</h2>
+<p><strong>1. Idempotency is not optional.</strong> It is a core payment system requirement, not an edge case handler. Build it in from day one, not after your first duplicate charge incident.</p>
+<p><strong>2. Client-side idempotency keys must be generated before the first attempt.</strong> Generate the key before calling the API, persist it locally, use the same key on retries. Don't generate a new key on retry — that defeats the purpose.</p>
+<p><strong>3. Your gateway must support idempotency keys too.</strong> A payment service that is idempotent but calls a gateway that isn't still causes double charges. Validate your gateway's idempotency behavior explicitly.</p>
+<p><strong>4. <code>PROCESSING</code> status must be time-bounded with a recovery job.</strong> A payment stuck in PROCESSING indefinitely blocks the customer's ability to retry. This is as bad as a double charge from a UX perspective.</p>
+<p><strong>5. Separate idempotency check latency from payment processing latency in your metrics.</strong> Cache hits should be sub-millisecond. If your idempotency P99 is growing, you have either a traffic spike or an index problem — both need different responses.</p>
+</article><div class="my-10 rounded-xl border border-yellow-200 bg-yellow-50 p-6"><div class="flex items-center gap-2 mb-1"><span class="text-lg">📚</span><h3 class="text-base font-bold text-gray-900">Recommended Resources</h3></div><div class="space-y-4"><div class="flex items-start gap-3 bg-white rounded-lg p-4 border border-yellow-100"><div class="flex-1 min-w-0"><div class="flex items-center gap-2 flex-wrap mb-1"><span class="font-semibold text-gray-900 text-sm">System Design Interview — Alex Xu</span><span class="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-medium">Best Seller</span></div><p class="text-xs text-gray-600">Step-by-step guide to ace system design interviews with real-world examples.</p></div><a href="https://amzn.to/3TqsPRp" target="_blank" rel="noopener noreferrer" class="flex-shrink-0 text-xs bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium whitespace-nowrap">View on Amazon<!-- --> →</a></div><div class="flex items-start gap-3 bg-white rounded-lg p-4 border border-yellow-100"><div class="flex-1 min-w-0"><div class="flex items-center gap-2 flex-wrap mb-1"><span class="font-semibold text-gray-900 text-sm">Grokking System Design on Educative</span></div><p class="text-xs text-gray-600">Interactive course teaching system design with visual diagrams and practice problems.</p></div><a href="https://www.educative.io/courses/grokking-the-system-design-interview" target="_blank" rel="noopener noreferrer" class="flex-shrink-0 text-xs bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium whitespace-nowrap">View Course<!-- --> →</a></div><div class="flex items-start gap-3 bg-white rounded-lg p-4 border border-yellow-100"><div class="flex-1 min-w-0"><div class="flex items-center gap-2 flex-wrap mb-1"><span class="font-semibold text-gray-900 text-sm">Designing Data-Intensive Applications</span></div><p class="text-xs text-gray-600">Martin Kleppmann&#x27;s book is essential reading for any system design role.</p></div><a href="https://amzn.to/3RyKzOA" target="_blank" rel="noopener noreferrer" class="flex-shrink-0 text-xs bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium whitespace-nowrap">View on Amazon<!-- --> →</a></div></div></div><div class="mt-10 pt-8 border-t border-gray-100"><p class="text-sm text-gray-500 mb-3">Found this useful? Share it:</p><div class="flex gap-3"><a href="https://twitter.com/intent/tweet?text=Designing%20Idempotent%20Payment%20Systems%20in%20Distributed%20Architecture&amp;url=https%3A%2F%2Fcodesprintpro.com%2Fblog%2Fidempotent-payment-systems%2F" target="_blank" rel="noopener noreferrer" class="text-xs bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors">Share on X/Twitter</a><a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fcodesprintpro.com%2Fblog%2Fidempotent-payment-systems%2F" target="_blank" rel="noopener noreferrer" class="text-xs bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">Share on LinkedIn</a></div></div></div><aside class="hidden lg:block w-64 flex-shrink-0"><nav class="hidden lg:block sticky top-24"><h4 class="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-3">On This Page</h4><ul class="space-y-1"><li class=""><a href="#how-duplicate-payment-requests-happen" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">How Duplicate Payment Requests Happen</a></li><li class=""><a href="#idempotency-keys-and-database-design" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Idempotency Keys and Database Design</a></li><li class="ml-4"><a href="#database-schema-for-idempotency" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 text-xs">Database Schema for Idempotency</a></li><li class=""><a href="#race-conditions-and-locking-strategies" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Race Conditions and Locking Strategies</a></li><li class="ml-4"><a href="#strategy-1-database-unique-constraint-preferred" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 text-xs">Strategy 1: Database Unique Constraint (Preferred)</a></li><li class="ml-4"><a href="#strategy-2-pessimistic-locking-with-select-for-update" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 text-xs">Strategy 2: Pessimistic Locking with SELECT FOR UPDATE</a></li><li class=""><a href="#redis-vs-database-for-idempotency-store" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Redis vs Database for Idempotency Store</a></li><li class=""><a href="#failure-scenarios" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Failure Scenarios</a></li><li class=""><a href="#text-based-architecture-diagram" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Text-Based Architecture Diagram</a></li><li class=""><a href="#monitoring-and-observability" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Monitoring and Observability</a></li><li class=""><a href="#real-production-incident" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Real Production Incident</a></li><li class=""><a href="#lessons-learned-in-production" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Lessons Learned in Production</a></li></ul></nav></aside></div><div class="mt-16 pt-10 border-t border-gray-100"><h2 class="text-2xl font-bold text-gray-900 mb-6">Related Articles</h2><div class="grid grid-cols-1 md:grid-cols-3 gap-6"><a href="/blog/observability-opentelemetry-production/"><article class="group bg-white rounded-xl border border-gray-200 p-6 h-full cursor-pointer hover:border-blue-300 hover:shadow-lg transition-all"><span class="inline-block text-xs font-semibold px-3 py-1 rounded-full mb-3 bg-blue-100 text-blue-700">System Design</span><h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors leading-snug">Building Production Observability with OpenTelemetry and Grafana Stack</h3><p class="text-gray-600 text-sm mb-4 line-clamp-3">Observability is not the same as monitoring. Monitoring tells you something is wrong. Observability lets you understand why — by exploring system state through metrics, traces, and logs without needing to know in advance…</p><div class="flex items-center justify-between text-xs text-gray-400"><span>Jul 3, 2025</span><span class="flex items-center gap-1"><svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>6 min read</span></div><div class="mt-3 flex flex-wrap gap-1"><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->observability</span><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->opentelemetry</span><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->prometheus</span></div></article></a><a href="/blog/event-sourcing-cqrs-production/"><article class="group bg-white rounded-xl border border-gray-200 p-6 h-full cursor-pointer hover:border-blue-300 hover:shadow-lg transition-all"><span class="inline-block text-xs font-semibold px-3 py-1 rounded-full mb-3 bg-blue-100 text-blue-700">System Design</span><h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors leading-snug">Event Sourcing and CQRS in Production: Beyond the Theory</h3><p class="text-gray-600 text-sm mb-4 line-clamp-3">Event sourcing is one of those patterns that looks elegant in conference talks and becomes surprisingly complex in production systems. The theory — store events instead of state, derive state by replaying events — is sou…</p><div class="flex items-center justify-between text-xs text-gray-400"><span>Jun 23, 2025</span><span class="flex items-center gap-1"><svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>7 min read</span></div><div class="mt-3 flex flex-wrap gap-1"><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->event sourcing</span><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->cqrs</span><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->system design</span></div></article></a><a href="/blog/grpc-vs-rest-vs-graphql/"><article class="group bg-white rounded-xl border border-gray-200 p-6 h-full cursor-pointer hover:border-blue-300 hover:shadow-lg transition-all"><span class="inline-block text-xs font-semibold px-3 py-1 rounded-full mb-3 bg-blue-100 text-blue-700">System Design</span><h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors leading-snug">gRPC vs REST vs GraphQL: Choosing the Right API Protocol</h3><p class="text-gray-600 text-sm mb-4 line-clamp-3">API protocol selection has a longer lifespan than almost any other technical decision. REST APIs from 2010 are still running in production. gRPC services chosen for internal communication in 2018 are tightly coupled to t…</p><div class="flex items-center justify-between text-xs text-gray-400"><span>Jun 18, 2025</span><span class="flex items-center gap-1"><svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>7 min read</span></div><div class="mt-3 flex flex-wrap gap-1"><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->grpc</span><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->rest</span><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->graphql</span></div></article></a></div></div><div class="mt-12 text-center"><a class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium transition-colors" href="/blog/">← Back to all articles</a></div></div></div><footer class="bg-gray-900 text-white py-12"><div class="container mx-auto px-4 sm:px-6 lg:px-8"><div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8"><div class="col-span-1 md:col-span-1"><div><a class="text-xl font-bold block mb-3 text-white hover:text-blue-400 transition-colors" href="/">CodeSprintPro</a></div><p class="text-gray-400 text-sm mb-4 leading-relaxed">Deep-dive technical content on System Design, Java, Databases, AI/ML, and AWS — by Sachin Sarawgi.</p><div class="flex space-x-4"><a href="https://github.com/codesprintpro" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors" aria-label="Visit GitHub profile"><i class="fab fa-github text-xl"></i></a><a href="https://www.linkedin.com/in/sachin-sarawgi/" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors" aria-label="Visit LinkedIn profile"><i class="fab fa-linkedin text-xl"></i></a><a href="https://medium.com/@codesprintpro" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors" aria-label="Visit Medium profile"><i class="fab fa-medium text-xl"></i></a></div></div><div><h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 mb-4">Quick Links</h3><ul class="space-y-2"><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">Blog</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/#about">About</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/#portfolio">Portfolio</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/#contact">Contact</a></div></li></ul></div><div><h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 mb-4">Categories</h3><ul class="space-y-2"><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">System Design</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">Java</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">Databases</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">AI/ML</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">AWS</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">Messaging</a></div></li></ul></div><div><h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 mb-4">Contact</h3><ul class="space-y-2 text-gray-400 text-sm"><li><a href="mailto:sachinsarawgi201143@gmail.com" class="hover:text-white transition-colors flex items-center gap-2"><i class="fas fa-envelope"></i> Email</a></li><li><a href="https://www.linkedin.com/in/sachin-sarawgi/" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors flex items-center gap-2"><i class="fab fa-linkedin"></i> LinkedIn</a></li><li><a href="https://github.com/codesprintpro" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors flex items-center gap-2"><i class="fab fa-github"></i> GitHub</a></li></ul></div></div><div class="border-t border-gray-800 pt-6 flex flex-col md:flex-row justify-between items-center gap-2"><p class="text-gray-500 text-sm">© <!-- -->2026<!-- --> CodeSprintPro · Sachin Sarawgi. All rights reserved.</p><p class="text-gray-600 text-xs">Built with Next.js · TailwindCSS · Deployed on GitHub Pages</p></div></div></footer></div></main></div><script id="__NEXT_DATA__" type="application/json">{"props":{"pageProps":{"post":{"title":"Designing Idempotent Payment Systems in Distributed Architecture","description":"How duplicate payments happen in real systems, idempotency key design, race condition handling, Redis vs DB for idempotency stores, and the production incident that shaped our architecture.","date":"2025-04-26","category":"System Design","tags":["payments","idempotency","distributed systems","java","spring boot","fintech","system design"],"featured":false,"affiliateSection":"system-design-courses","slug":"idempotent-payment-systems","readingTime":"11 min read","excerpt":"Duplicate payments are not a theoretical edge case. In any distributed payment system operating at scale, they are a guaranteed occurrence. Networks time out. Clients retry. Proxies retry on behalf of clients. Load balan…","contentHtml":"\u003cp\u003eDuplicate payments are not a theoretical edge case. In any distributed payment system operating at scale, they are a guaranteed occurrence. Networks time out. Clients retry. Proxies retry on behalf of clients. Load balancers retry on 502s. The question is never \"can we prevent duplicate requests?\" — we cannot. The question is \"can we prevent duplicate charges?\"\u003c/p\u003e\n\u003cp\u003eThis article covers the complete design of an idempotent payment system, including the race conditions that catch engineers off guard and the production incident that reshaped how our team thinks about distributed side effects.\u003c/p\u003e\n\u003ch2\u003eHow Duplicate Payment Requests Happen\u003c/h2\u003e\n\u003cp\u003eDuplicates in payment systems originate from multiple layers simultaneously:\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003eDuplicate sources:\n\nClient App ──retry─► API Gateway ──retry─► Load Balancer ──► Payment Service\n     │                    │                      │\n     │                    │                      │\n  Network           5xx response             Health check\n  timeout           from service             failure +\n  (30s default)     (retry policy)           retry\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e\u003cstrong\u003eClient-side retries:\u003c/strong\u003e A mobile app's payment SDK has a 10-second timeout. The network is slow. At 10 seconds, the SDK retries. The original request arrives at second 11 — now both requests are in flight.\u003c/p\u003e\n\u003cp\u003e\u003cstrong\u003eProxy and infrastructure retries:\u003c/strong\u003e AWS ALB retries on 5xx responses. Nginx has \u003ccode\u003eproxy_next_upstream\u003c/code\u003e. Your service mesh (Istio, Linkerd) has retry policies. Each layer that retries multiplies the duplicate risk.\u003c/p\u003e\n\u003cp\u003e\u003cstrong\u003eRetry storms:\u003c/strong\u003e After a downstream payment gateway recovers from a brief outage, all queued retries flush simultaneously. 10,000 retries arrive in 500ms. Your payment service processes some; others are duplicated in the rush.\u003c/p\u003e\n\u003cp\u003e\u003cstrong\u003eAt-least-once message delivery:\u003c/strong\u003e If payments flow through Kafka, SQS, or any at-least-once messaging system, your consumer will eventually process the same payment event twice.\u003c/p\u003e\n\u003ch2\u003eIdempotency Keys and Database Design\u003c/h2\u003e\n\u003cp\u003eAn idempotency key is a client-generated, globally unique token that identifies a specific payment request. Same key = same request = same result.\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003eHTTP Header approach:\nPOST /payments\nIdempotency-Key: idem_key_a3b4c5d6e7f8901234567890\n\nRequest body:\n{\n  \"user_id\": \"usr_123\",\n  \"amount\": 9999,\n  \"currency\": \"USD\",\n  \"payment_method_id\": \"pm_456\"\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eThe server stores the idempotency key and its result. On duplicate request: return the stored result, skip processing.\u003c/p\u003e\n\u003ch3\u003eDatabase Schema for Idempotency\u003c/h3\u003e\n\u003cpre\u003e\u003ccode class=\"language-sql\"\u003e-- Idempotency store\nCREATE TABLE idempotency_keys (\n    idempotency_key     VARCHAR(255) NOT NULL,\n    user_id             BIGINT NOT NULL,\n    request_hash        VARCHAR(64) NOT NULL,   -- SHA-256 of request body\n    status              VARCHAR(20) NOT NULL DEFAULT 'PROCESSING',\n    -- status: PROCESSING | COMPLETED | FAILED\n    response_status     INT,                    -- HTTP status code\n    response_body       JSONB,                  -- Stored response\n    created_at          TIMESTAMPTZ DEFAULT NOW(),\n    completed_at        TIMESTAMPTZ,\n    expires_at          TIMESTAMPTZ DEFAULT NOW() + INTERVAL '24 hours',\n    PRIMARY KEY (idempotency_key),\n    INDEX idx_idem_user_created (user_id, created_at)\n);\n\n-- Payments table\nCREATE TABLE payments (\n    payment_id          UUID DEFAULT gen_random_uuid() PRIMARY KEY,\n    idempotency_key     VARCHAR(255) NOT NULL UNIQUE,\n    user_id             BIGINT NOT NULL,\n    amount              DECIMAL(19,4) NOT NULL,\n    currency            CHAR(3) NOT NULL,\n    payment_method_id   VARCHAR(255) NOT NULL,\n    status              VARCHAR(20) NOT NULL,\n    gateway_charge_id   VARCHAR(255),           -- External gateway ID\n    created_at          TIMESTAMPTZ DEFAULT NOW(),\n    FOREIGN KEY (idempotency_key) REFERENCES idempotency_keys(idempotency_key)\n);\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eThe \u003ccode\u003erequest_hash\u003c/code\u003e column enables an important safety check: if a client sends the same idempotency key with a different request body, that's a bug in the client. Return \u003ccode\u003e422 Unprocessable Entity\u003c/code\u003e rather than processing a potentially different amount.\u003c/p\u003e\n\u003ch2\u003eRace Conditions and Locking Strategies\u003c/h2\u003e\n\u003cp\u003eThe naive implementation has a classic TOCTOU race condition:\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003eThread A: SELECT * FROM idempotency_keys WHERE key='idem_123' → Not found\nThread B: SELECT * FROM idempotency_keys WHERE key='idem_123' → Not found\nThread A: INSERT INTO idempotency_keys → Success\nThread B: INSERT INTO idempotency_keys → Duplicate key error OR succeeds (duplicate charge!)\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch3\u003eStrategy 1: Database Unique Constraint (Preferred)\u003c/h3\u003e\n\u003cpre\u003e\u003ccode class=\"language-java\"\u003e@Transactional(isolation = Isolation.READ_COMMITTED)\npublic PaymentResponse processPayment(String idempotencyKey, PaymentRequest request) {\n    // Attempt atomic insert - fails on duplicate key\n    try {\n        jdbcTemplate.update(\n            \"\"\"\n            INSERT INTO idempotency_keys (idempotency_key, user_id, request_hash, status)\n            VALUES (?, ?, ?, 'PROCESSING')\n            \"\"\",\n            idempotencyKey, request.userId(), sha256(request)\n        );\n    } catch (DuplicateKeyException e) {\n        // Another thread or request is processing / has processed this key\n        return getStoredResponse(idempotencyKey, request);\n    }\n\n    // Only one thread reaches here per idempotency key\n    try {\n        PaymentResult result = chargeGateway(request);\n        storeResult(idempotencyKey, result);\n        return PaymentResponse.success(result);\n    } catch (Exception e) {\n        markFailed(idempotencyKey, e);\n        throw e;\n    }\n}\n\nprivate PaymentResponse getStoredResponse(String key, PaymentRequest request) {\n    IdempotencyRecord record = findRecord(key);\n\n    // Validate request body matches\n    if (!record.requestHash().equals(sha256(request))) {\n        throw new IdempotencyConflictException(\n            \"Idempotency key reused with different request body\");\n    }\n\n    return switch (record.status()) {\n        case \"PROCESSING\" -\u003e throw new PaymentInProgressException(\n            \"Payment is being processed, retry in 1 second\");\n        case \"COMPLETED\"  -\u003e PaymentResponse.fromStored(record.responseBody());\n        case \"FAILED\"     -\u003e PaymentResponse.fromStoredFailure(record.responseBody());\n        default -\u003e throw new IllegalStateException(\"Unknown status: \" + record.status());\n    };\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eThe database unique constraint enforces mutual exclusion at the storage layer. No distributed lock needed.\u003c/p\u003e\n\u003ch3\u003eStrategy 2: Pessimistic Locking with SELECT FOR UPDATE\u003c/h3\u003e\n\u003cp\u003eFor scenarios where you need to read-then-update atomically:\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-java\"\u003e@Transactional\npublic PaymentResponse processPaymentLocked(String idempotencyKey, PaymentRequest request) {\n    // Lock the row, or insert if absent\n    Optional\u0026#x3C;IdempotencyRecord\u003e existing = jdbcTemplate.query(\n        \"SELECT * FROM idempotency_keys WHERE idempotency_key = ? FOR UPDATE\",\n        idempotencyKeyRowMapper, idempotencyKey\n    ).stream().findFirst();\n\n    if (existing.isPresent()) {\n        return handleExisting(existing.get(), request);\n    }\n\n    // Safe to insert — we hold the lock on this key's position\n    jdbcTemplate.update(\n        \"INSERT INTO idempotency_keys (idempotency_key, user_id, request_hash, status) VALUES (?, ?, ?, 'PROCESSING')\",\n        idempotencyKey, request.userId(), sha256(request)\n    );\n\n    return executePayment(idempotencyKey, request);\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e\u003ccode\u003eSELECT FOR UPDATE\u003c/code\u003e with a non-existent row doesn't actually lock anything in most databases. Use gap locking or a distributed lock for that case.\u003c/p\u003e\n\u003ch2\u003eRedis vs Database for Idempotency Store\u003c/h2\u003e\n\u003cp\u003eBoth work, but they have different trade-off profiles:\u003c/p\u003e\n\u003ctable\u003e\n\u003cthead\u003e\n\u003ctr\u003e\n\u003cth\u003eDimension\u003c/th\u003e\n\u003cth\u003ePostgreSQL\u003c/th\u003e\n\u003cth\u003eRedis\u003c/th\u003e\n\u003c/tr\u003e\n\u003c/thead\u003e\n\u003ctbody\u003e\n\u003ctr\u003e\n\u003ctd\u003eConsistency\u003c/td\u003e\n\u003ctd\u003eACID, durable\u003c/td\u003e\n\u003ctd\u003eEventual (if using Redis Cluster)\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003eLatency\u003c/td\u003e\n\u003ctd\u003e1–5ms\u003c/td\u003e\n\u003ctd\u003e\u0026#x3C; 1ms\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003eThroughput\u003c/td\u003e\n\u003ctd\u003e10K ops/s (single node)\u003c/td\u003e\n\u003ctd\u003e100K+ ops/s\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003eTTL management\u003c/td\u003e\n\u003ctd\u003eManual (cron job)\u003c/td\u003e\n\u003ctd\u003eNative TTL\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003eData co-location\u003c/td\u003e\n\u003ctd\u003eSame DB transaction\u003c/td\u003e\n\u003ctd\u003eSeparate system, no transactions\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003eOperational complexity\u003c/td\u003e\n\u003ctd\u003eExisting infra\u003c/td\u003e\n\u003ctd\u003eAdditional service\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003eRisk on failure\u003c/td\u003e\n\u003ctd\u003ePayment processing stops\u003c/td\u003e\n\u003ctd\u003eFalls back gracefully\u003c/td\u003e\n\u003c/tr\u003e\n\u003c/tbody\u003e\n\u003c/table\u003e\n\u003cp\u003e\u003cstrong\u003eUse PostgreSQL when:\u003c/strong\u003e\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eYou need the idempotency check and payment insert to be in the same ACID transaction\u003c/li\u003e\n\u003cli\u003eYou cannot afford to lose idempotency records on Redis failure\u003c/li\u003e\n\u003cli\u003eThroughput is under 5,000 payments/second\u003c/li\u003e\n\u003c/ul\u003e\n\u003cp\u003e\u003cstrong\u003eUse Redis when:\u003c/strong\u003e\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eYour payment volume exceeds PostgreSQL's comfortable range\u003c/li\u003e\n\u003cli\u003eYou accept that Redis failure means falling back to processing (with idempotent downstream)\u003c/li\u003e\n\u003cli\u003eYou use Redis Cluster with persistence (AOF + RDB) for durability\u003c/li\u003e\n\u003c/ul\u003e\n\u003cp\u003e\u003cstrong\u003eHybrid approach\u003c/strong\u003e used at high-scale fintechs:\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003eRequest arrives with idempotency key\n     │\n     ▼\nCheck Redis cache (fast path):\n     │\n     ├── Found in Redis → Return cached response (\u0026#x3C; 1ms)\n     │\n     └── Not in Redis\n               │\n               ▼\n         PostgreSQL (authoritative):\n               │\n               ├── Found in DB → Cache in Redis, return response\n               │\n               └── Not in DB → Process payment, insert to DB, cache in Redis\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eRedis acts as a read-through cache. Database is authoritative. On Redis failure, requests fall through to the database — slower but correct.\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-java\"\u003e@Service\npublic class HybridIdempotencyService {\n\n    public Optional\u0026#x3C;PaymentResponse\u003e checkCache(String key) {\n        try {\n            String cached = redisTemplate.opsForValue().get(\"idem:\" + key);\n            return Optional.ofNullable(cached)\n                .map(json -\u003e deserialize(json, PaymentResponse.class));\n        } catch (RedisConnectionFailureException e) {\n            log.warn(\"Redis unavailable, falling through to DB: {}\", e.getMessage());\n            return Optional.empty(); // Degrade gracefully\n        }\n    }\n\n    public void cacheResult(String key, PaymentResponse response) {\n        try {\n            redisTemplate.opsForValue().set(\n                \"idem:\" + key,\n                serialize(response),\n                Duration.ofHours(24)\n            );\n        } catch (RedisConnectionFailureException e) {\n            log.warn(\"Redis unavailable, result not cached: {}\", e.getMessage());\n            // Continue — DB has the authoritative record\n        }\n    }\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch2\u003eFailure Scenarios\u003c/h2\u003e\n\u003cp\u003e\u003cstrong\u003eScenario 1: Payment succeeds at gateway, response lost on return\u003c/strong\u003e\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003eService → Gateway: charge($100) → Gateway charges card ✓\nGateway → Service: HTTP 200 with charge_id [network failure]\nService: times out, marks as FAILED\nClient: retries with same idempotency key\nService: processes payment again → DOUBLE CHARGE\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e\u003cstrong\u003eFix:\u003c/strong\u003e Use the gateway's idempotency support. Stripe, Braintree, and Adyen all accept an idempotency key on charge requests. If the same key is sent twice, they return the same result without charging twice. Store \u003ccode\u003egateway_charge_id\u003c/code\u003e and verify before processing:\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-java\"\u003epublic PaymentResult chargeWithGatewayIdempotency(PaymentRequest req, String idempotencyKey) {\n    StripeRequest stripeReq = StripeRequest.builder()\n        .amount(req.amount())\n        .currency(req.currency())\n        .paymentMethodId(req.paymentMethodId())\n        .idempotencyKey(idempotencyKey)  // Pass through to gateway\n        .build();\n\n    return stripeClient.charges().create(stripeReq);\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e\u003cstrong\u003eScenario 2: PROCESSING status stuck (service crash mid-payment)\u003c/strong\u003e\u003c/p\u003e\n\u003cp\u003eIf the service crashes after inserting \u003ccode\u003ePROCESSING\u003c/code\u003e but before updating to \u003ccode\u003eCOMPLETED\u003c/code\u003e, the idempotency key is locked in PROCESSING forever. Client retries get \u003ccode\u003ePaymentInProgressException\u003c/code\u003e.\u003c/p\u003e\n\u003cp\u003eFix: Time-bound PROCESSING status:\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-sql\"\u003e-- Detect stuck PROCESSING keys (job runs every minute)\nSELECT idempotency_key\nFROM idempotency_keys\nWHERE status = 'PROCESSING'\n  AND created_at \u0026#x3C; NOW() - INTERVAL '2 minutes';\n\n-- For each stuck key: check gateway for actual status\n-- If gateway has charge: mark COMPLETED with gateway result\n-- If gateway has no charge: mark FAILED, safe to retry\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch2\u003eText-Based Architecture Diagram\u003c/h2\u003e\n\u003cpre\u003e\u003ccode\u003eIdempotent Payment Flow:\n\nMobile Client\n     │\n     │  POST /payments\n     │  Idempotency-Key: idem_abc123\n     ▼\nAPI Gateway (rate limiting, auth)\n     │\n     ▼\nPayment Service\n     │\n     ├─[1]─► Redis: GET idem:idem_abc123\n     │           │\n     │           ├── Cache hit → Return cached response (END)\n     │           └── Cache miss → continue\n     │\n     ├─[2]─► PostgreSQL: INSERT INTO idempotency_keys\n     │           │\n     │           ├── DuplicateKeyException → Fetch + return stored result (END)\n     │           └── Insert success → continue (exclusive processing)\n     │\n     ├─[3]─► Payment Gateway (Stripe/Braintree)\n     │        with gateway idempotency key\n     │           │\n     │           ├── Success: charge_id=ch_xyz\n     │           └── Failure: error code + message\n     │\n     ├─[4]─► PostgreSQL: UPDATE idempotency_keys SET status='COMPLETED'\n     │        + INSERT INTO payments\n     │        (single transaction)\n     │\n     └─[5]─► Redis: SET idem:idem_abc123 = response (TTL=24h)\n                   └── Return response to client\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch2\u003eMonitoring and Observability\u003c/h2\u003e\n\u003cpre\u003e\u003ccode class=\"language-java\"\u003e@Component\npublic class PaymentMetrics {\n\n    private final Counter duplicatePaymentAttempts;\n    private final Counter stuckProcessingKeys;\n\n    public PaymentMetrics(MeterRegistry registry) {\n        this.duplicatePaymentAttempts = Counter.builder(\"payments.duplicate_attempts\")\n            .description(\"Idempotency key reuse count\")\n            .register(registry);\n\n        this.stuckProcessingKeys = Counter.builder(\"payments.stuck_processing_keys\")\n            .description(\"Payments stuck in PROCESSING status\")\n            .register(registry);\n    }\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eKey metrics to alert on:\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ccode\u003epayments.duplicate_attempts \u003e 100/min\u003c/code\u003e — possible retry storm in progress\u003c/li\u003e\n\u003cli\u003e\u003ccode\u003epayments.stuck_processing_keys \u003e 0\u003c/code\u003e — service crashes or network partitions happening\u003c/li\u003e\n\u003cli\u003e\u003ccode\u003epayments.gateway_idempotency_conflict \u003e 0\u003c/code\u003e — gateway received same key with different amount (client bug)\u003c/li\u003e\n\u003cli\u003eP99 latency of idempotency key lookup \u003e 50ms — database under pressure\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2\u003eReal Production Incident\u003c/h2\u003e\n\u003cp\u003e\u003cstrong\u003eContext:\u003c/strong\u003e Fintech platform, 50,000 payments/day, Spring Boot + PostgreSQL.\u003c/p\u003e\n\u003cp\u003e\u003cstrong\u003eIncident:\u003c/strong\u003e Black Friday sale. Payment volume spiked 10×. Our payment gateway (external) was slow — 8-second response times vs normal 800ms. Our API timeout was 10 seconds. Result: 80% of payment requests timed out client-side at the 10-second mark. All clients retried immediately with the same idempotency keys.\u003c/p\u003e\n\u003cp\u003eThe retry storm overwhelmed the gateway. The gateway rate-limited us. More timeouts. More retries. A feedback loop.\u003c/p\u003e\n\u003cp\u003e\u003cstrong\u003eWhat saved us:\u003c/strong\u003e Idempotency keys in our database. Despite the chaos, every payment was processed exactly once. Clients that got timeouts eventually got responses on retry — the response was pulled from our idempotency store rather than charging the card again.\u003c/p\u003e\n\u003cp\u003e\u003cstrong\u003eWhat hurt us:\u003c/strong\u003e 70% of our API capacity was consumed by duplicate requests hitting the idempotency cache. Our P99 API latency hit 15 seconds for legitimate new payments.\u003c/p\u003e\n\u003cp\u003e\u003cstrong\u003ePost-incident fixes:\u003c/strong\u003e\u003c/p\u003e\n\u003col\u003e\n\u003cli\u003eRedis cache for idempotency hot path — duplicate requests now cost 0.5ms instead of 5ms database lookup\u003c/li\u003e\n\u003cli\u003eSeparate thread pool for idempotency lookups vs new payment processing\u003c/li\u003e\n\u003cli\u003eExponential backoff enforced server-side: 429 Too Many Requests with \u003ccode\u003eRetry-After\u003c/code\u003e header\u003c/li\u003e\n\u003cli\u003eGateway circuit breaker: open after 20% of requests exceed 5 seconds\u003c/li\u003e\n\u003c/ol\u003e\n\u003ch2\u003eLessons Learned in Production\u003c/h2\u003e\n\u003cp\u003e\u003cstrong\u003e1. Idempotency is not optional.\u003c/strong\u003e It is a core payment system requirement, not an edge case handler. Build it in from day one, not after your first duplicate charge incident.\u003c/p\u003e\n\u003cp\u003e\u003cstrong\u003e2. Client-side idempotency keys must be generated before the first attempt.\u003c/strong\u003e Generate the key before calling the API, persist it locally, use the same key on retries. Don't generate a new key on retry — that defeats the purpose.\u003c/p\u003e\n\u003cp\u003e\u003cstrong\u003e3. Your gateway must support idempotency keys too.\u003c/strong\u003e A payment service that is idempotent but calls a gateway that isn't still causes double charges. Validate your gateway's idempotency behavior explicitly.\u003c/p\u003e\n\u003cp\u003e\u003cstrong\u003e4. \u003ccode\u003ePROCESSING\u003c/code\u003e status must be time-bounded with a recovery job.\u003c/strong\u003e A payment stuck in PROCESSING indefinitely blocks the customer's ability to retry. This is as bad as a double charge from a UX perspective.\u003c/p\u003e\n\u003cp\u003e\u003cstrong\u003e5. Separate idempotency check latency from payment processing latency in your metrics.\u003c/strong\u003e Cache hits should be sub-millisecond. If your idempotency P99 is growing, you have either a traffic spike or an index problem — both need different responses.\u003c/p\u003e\n","tableOfContents":[{"id":"how-duplicate-payment-requests-happen","text":"How Duplicate Payment Requests Happen","level":2},{"id":"idempotency-keys-and-database-design","text":"Idempotency Keys and Database Design","level":2},{"id":"database-schema-for-idempotency","text":"Database Schema for Idempotency","level":3},{"id":"race-conditions-and-locking-strategies","text":"Race Conditions and Locking Strategies","level":2},{"id":"strategy-1-database-unique-constraint-preferred","text":"Strategy 1: Database Unique Constraint (Preferred)","level":3},{"id":"strategy-2-pessimistic-locking-with-select-for-update","text":"Strategy 2: Pessimistic Locking with SELECT FOR UPDATE","level":3},{"id":"redis-vs-database-for-idempotency-store","text":"Redis vs Database for Idempotency Store","level":2},{"id":"failure-scenarios","text":"Failure Scenarios","level":2},{"id":"text-based-architecture-diagram","text":"Text-Based Architecture Diagram","level":2},{"id":"monitoring-and-observability","text":"Monitoring and Observability","level":2},{"id":"real-production-incident","text":"Real Production Incident","level":2},{"id":"lessons-learned-in-production","text":"Lessons Learned in Production","level":2}]},"relatedPosts":[{"title":"Building Production Observability with OpenTelemetry and Grafana Stack","description":"End-to-end observability implementation: distributed tracing with OpenTelemetry, metrics with Prometheus, structured logging with Loki, and the dashboards and alerts that actually help during incidents.","date":"2025-07-03","category":"System Design","tags":["observability","opentelemetry","prometheus","grafana","loki","tracing","spring boot","monitoring"],"featured":false,"affiliateSection":"system-design-courses","slug":"observability-opentelemetry-production","readingTime":"6 min read","excerpt":"Observability is not the same as monitoring. Monitoring tells you something is wrong. Observability lets you understand why — by exploring system state through metrics, traces, and logs without needing to know in advance…"},{"title":"Event Sourcing and CQRS in Production: Beyond the Theory","description":"What event sourcing actually looks like in production Java systems: event store design, snapshot strategies, projection rebuilding, CQRS read model synchronization, and the operational challenges nobody talks about.","date":"2025-06-23","category":"System Design","tags":["event sourcing","cqrs","system design","java","distributed systems","kafka","spring boot"],"featured":false,"affiliateSection":"distributed-systems-books","slug":"event-sourcing-cqrs-production","readingTime":"7 min read","excerpt":"Event sourcing is one of those patterns that looks elegant in conference talks and becomes surprisingly complex in production systems. The theory — store events instead of state, derive state by replaying events — is sou…"},{"title":"gRPC vs REST vs GraphQL: Choosing the Right API Protocol","description":"A technical comparison of REST, gRPC, and GraphQL across performance, developer experience, schema evolution, streaming, and real production use cases. When each protocol wins and where each falls short.","date":"2025-06-18","category":"System Design","tags":["grpc","rest","graphql","api design","system design","microservices","protocol buffers"],"featured":false,"affiliateSection":"system-design-courses","slug":"grpc-vs-rest-vs-graphql","readingTime":"7 min read","excerpt":"API protocol selection has a longer lifespan than almost any other technical decision. REST APIs from 2010 are still running in production. gRPC services chosen for internal communication in 2018 are tightly coupled to t…"}]},"__N_SSG":true},"page":"/blog/[slug]","query":{"slug":"idempotent-payment-systems"},"buildId":"rpFn_jslWZ9qPkJwor7RD","isFallback":false,"gsp":true,"scriptLoader":[]}</script></body></html>

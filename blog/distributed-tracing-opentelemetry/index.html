@@ -1,0 +1,372 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8" data-next-head=""/><meta name="viewport" content="width=device-width" data-next-head=""/><title data-next-head="">Distributed Tracing with OpenTelemetry: End-to-End Observability<!-- --> | CodeSprintPro</title><meta name="description" content="Implement distributed tracing across microservices using OpenTelemetry, Jaeger, and Spring Boot. Learn trace context propagation, span correlation, and production observability patterns." data-next-head=""/><meta name="author" content="Sachin Sarawgi" data-next-head=""/><link rel="canonical" href="https://codesprintpro.com/blog/distributed-tracing-opentelemetry/" data-next-head=""/><meta property="og:type" content="article" data-next-head=""/><meta property="og:title" content="Distributed Tracing with OpenTelemetry: End-to-End Observability" data-next-head=""/><meta property="og:description" content="Implement distributed tracing across microservices using OpenTelemetry, Jaeger, and Spring Boot. Learn trace context propagation, span correlation, and production observability patterns." data-next-head=""/><meta property="og:url" content="https://codesprintpro.com/blog/distributed-tracing-opentelemetry/" data-next-head=""/><meta property="og:image" content="https://codesprintpro.com/images/og-default.jpg" data-next-head=""/><meta property="og:site_name" content="CodeSprintPro" data-next-head=""/><meta property="article:published_time" content="2025-03-05" data-next-head=""/><meta property="article:author" content="Sachin Sarawgi" data-next-head=""/><meta property="article:section" content="System Design" data-next-head=""/><meta property="article:tag" content="observability" data-next-head=""/><meta property="article:tag" content="opentelemetry" data-next-head=""/><meta property="article:tag" content="distributed tracing" data-next-head=""/><meta property="article:tag" content="jaeger" data-next-head=""/><meta property="article:tag" content="spring boot" data-next-head=""/><meta property="article:tag" content="microservices" data-next-head=""/><meta name="twitter:card" content="summary_large_image" data-next-head=""/><meta name="twitter:title" content="Distributed Tracing with OpenTelemetry: End-to-End Observability" data-next-head=""/><meta name="twitter:description" content="Implement distributed tracing across microservices using OpenTelemetry, Jaeger, and Spring Boot. Learn trace context propagation, span correlation, and production observability patterns." data-next-head=""/><meta name="twitter:image" content="https://codesprintpro.com/images/og-default.jpg" data-next-head=""/><script type="application/ld+json" data-next-head="">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Distributed Tracing with OpenTelemetry: End-to-End Observability","description":"Implement distributed tracing across microservices using OpenTelemetry, Jaeger, and Spring Boot. Learn trace context propagation, span correlation, and production observability patterns.","image":"https://codesprintpro.com/images/og-default.jpg","datePublished":"2025-03-05","dateModified":"2025-03-05","author":{"@type":"Person","name":"Sachin Sarawgi","url":"https://codesprintpro.com","sameAs":["https://www.linkedin.com/in/sachin-sarawgi/","https://github.com/codesprintpro","https://medium.com/@codesprintpro"]},"publisher":{"@type":"Organization","name":"CodeSprintPro","url":"https://codesprintpro.com","logo":{"@type":"ImageObject","url":"https://codesprintpro.com/favicon/favicon-96x96.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codesprintpro.com/blog/distributed-tracing-opentelemetry/"},"keywords":"observability, opentelemetry, distributed tracing, jaeger, spring boot, microservices","articleSection":"System Design"}</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerPolicy="no-referrer"/><script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script><link rel="preload" href="/_next/static/media/e4af272ccee01ff0-s.p.woff2" as="font" type="font/woff2" crossorigin="anonymous" data-next-font="size-adjust"/><link rel="preload" href="/_next/static/css/735d4373f93910ca.css" as="style"/><link rel="stylesheet" href="/_next/static/css/735d4373f93910ca.css" data-n-g=""/><noscript data-n-css=""></noscript><script defer="" nomodule="" src="/_next/static/chunks/polyfills-42372ed130431b0a.js"></script><script src="/_next/static/chunks/webpack-11a4a2dad04962bb.js" defer=""></script><script src="/_next/static/chunks/framework-1ce91eb6f9ecda85.js" defer=""></script><script src="/_next/static/chunks/main-c7f4109f032d7b6e.js" defer=""></script><script src="/_next/static/chunks/pages/_app-1a852bd9e38c70ab.js" defer=""></script><script src="/_next/static/chunks/730-db7827467817f501.js" defer=""></script><script src="/_next/static/chunks/90-1cd4611704c3dbe0.js" defer=""></script><script src="/_next/static/chunks/440-29f4b99a44e744b5.js" defer=""></script><script src="/_next/static/chunks/pages/blog/%5Bslug%5D-0c1b14a33d5e05ee.js" defer=""></script><script src="/_next/static/rpFn_jslWZ9qPkJwor7RD/_buildManifest.js" defer=""></script><script src="/_next/static/rpFn_jslWZ9qPkJwor7RD/_ssgManifest.js" defer=""></script></head><body><div id="__next"><main class="__className_f367f3"><div class="min-h-screen bg-white"><nav class="fixed w-full z-50 transition-all duration-300 bg-white shadow-md" style="transform:translateY(-100px) translateZ(0)"><div class="container mx-auto px-4 sm:px-6 lg:px-8"><div class="flex items-center justify-between h-16"><a class="text-xl font-bold transition-colors text-blue-600" href="/">CodeSprintPro</a><div class="hidden md:flex items-center space-x-8"><a class="text-sm font-medium transition-colors text-blue-600" href="/blog/">Blog</a><a class="text-sm font-medium transition-colors text-gray-600 hover:text-blue-600" href="/#about">About</a><a class="text-sm font-medium transition-colors text-gray-600 hover:text-blue-600" href="/#portfolio">Portfolio</a><a class="text-sm font-medium transition-colors text-gray-600 hover:text-blue-600" href="/#contact">Contact</a></div><button class="md:hidden p-2 rounded-lg transition-colors hover:bg-gray-100 text-gray-600" aria-label="Toggle mobile menu"><svg class="w-6 h-6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor"><path d="M4 6h16M4 12h16M4 18h16"></path></svg></button></div></div></nav><div class="pt-20"><div class="bg-gradient-to-br from-gray-900 to-blue-950 py-16"><div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl"><nav class="flex items-center gap-2 text-sm text-gray-400 mb-6"><a class="hover:text-white transition-colors" href="/">Home</a><span>/</span><a class="hover:text-white transition-colors" href="/blog/">Blog</a><span>/</span><span class="text-gray-300 truncate max-w-xs">Distributed Tracing with OpenTelemetry: End-to-End Observability</span></nav><span class="inline-block text-xs font-semibold px-3 py-1 rounded-full bg-blue-100 text-blue-700 mb-4">System Design</span><h1 class="text-3xl md:text-5xl font-bold text-white mb-4 leading-tight">Distributed Tracing with OpenTelemetry: End-to-End Observability</h1><p class="text-gray-300 text-lg mb-6 max-w-3xl">Implement distributed tracing across microservices using OpenTelemetry, Jaeger, and Spring Boot. Learn trace context propagation, span correlation, and production observability patterns.</p><div class="flex flex-wrap items-center gap-4 text-gray-400 text-sm"><span class="flex items-center gap-1.5"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>Sachin Sarawgi</span><span>·</span><span>March 5, 2025</span><span>·</span><span class="flex items-center gap-1"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>11 min read</span></div><div class="flex flex-wrap gap-2 mt-4"><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->observability</span><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->opentelemetry</span><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->distributed tracing</span><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->jaeger</span><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->spring boot</span><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->microservices</span></div></div></div><div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl py-12"><div class="flex gap-12"><div class="flex-1 min-w-0"><article class="prose prose-lg max-w-none prose-headings:text-gray-900 prose-headings:font-bold prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-4 prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3 prose-p:text-gray-700 prose-p:leading-relaxed prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline prose-strong:text-gray-900 prose-blockquote:border-blue-600 prose-blockquote:text-gray-600 prose-code:text-blue-700 prose-code:bg-blue-50 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-sm prose-code:before:content-none prose-code:after:content-none prose-pre:rounded-xl prose-img:rounded-xl prose-img:shadow-md prose-table:text-sm prose-th:bg-gray-100 prose-th:text-gray-700"><p>A request enters your system, touches 8 services, and takes 3 seconds. Which service is slow? Without distributed tracing, you're correlating timestamps across 8 log files. With distributed tracing, you click on the trace and see the waterfall: Service A took 50ms, Service B took 2800ms. Problem found.</p>
+<h2>How Distributed Tracing Works</h2>
+<p>Before instrumenting anything, it helps to understand the data model. The trace below shows what a real slow checkout request looks like after tracing is in place. Each indented line is a span — a named, timed operation. The tree structure shows causality: which service called which, and how long each call took. Without this structure, you would be staring at timestamps across 8 separate log streams trying to reconstruct the same picture manually.</p>
+<pre><code>Request: POST /checkout
+
+Trace ID: abc-123 (spans entire request, crosses all services)
+
+Span tree:
+  [abc-123] API Gateway          0ms - 3100ms  ←──── Root span
+    [abc-123] Order Service       5ms - 3090ms
+      [abc-123] Validate Cart     5ms - 50ms
+      [abc-123] Inventory Service 55ms - 300ms  ← External call
+      [abc-123] Payment Service   305ms - 3085ms ← SLOW — 2780ms!
+        [abc-123] Stripe API      310ms - 3080ms ← Stripe timeout
+
+Problem: Payment Service → Stripe call took 2770ms
+Fix: Implement timeout + retry for Stripe calls
+</code></pre>
+<p>Each <strong>trace</strong> represents one end-to-end request. Each <strong>span</strong> represents one operation within that trace. Spans have parent-child relationships forming a tree.</p>
+<h2>OpenTelemetry: The Standard</h2>
+<p>OpenTelemetry (OTel) is the industry standard for instrumentation — vendor-neutral, CNCF project. It replaces Zipkin/Jaeger-specific SDKs.</p>
+<p>The architecture diagram below shows the data flow from your application through the OTel Collector to your backend storage systems. The Collector is the critical piece — it acts as a buffer and router between your application's telemetry output and whichever backends you use. If you change from Jaeger to Grafana Tempo next year, you update the Collector configuration and leave your application code untouched. This vendor neutrality is the primary reason to use OTel over instrumenting directly against a backend SDK.</p>
+<pre><code>Your App
+  │ OTel SDK (instrumentation)
+  │
+  ▼
+OTel Collector (receive, process, export)
+  │
+  ├──► Jaeger (traces UI)
+  ├──► Prometheus (metrics)
+  └──► Elasticsearch (logs)
+</code></pre>
+<h2>Spring Boot Auto-Instrumentation</h2>
+<p>The easiest path — Spring Boot 3 has first-class OpenTelemetry support via Spring Actuator + Micrometer Tracing.</p>
+<p>Add the following three dependencies to get automatic instrumentation of your entire Spring Boot application. The <code>micrometer-tracing-bridge-otel</code> dependency bridges Spring's internal tracing abstraction to the OTel SDK, so all Spring components (RestTemplate, JPA, Kafka) emit traces without any code changes.</p>
+<pre><code class="language-xml">&#x3C;!-- pom.xml -->
+&#x3C;dependency>
+    &#x3C;groupId>io.micrometer&#x3C;/groupId>
+    &#x3C;artifactId>micrometer-tracing-bridge-otel&#x3C;/artifactId>
+&#x3C;/dependency>
+&#x3C;dependency>
+    &#x3C;groupId>io.opentelemetry&#x3C;/groupId>
+    &#x3C;artifactId>opentelemetry-exporter-otlp&#x3C;/artifactId>
+&#x3C;/dependency>
+&#x3C;dependency>
+    &#x3C;groupId>io.opentelemetry.instrumentation&#x3C;/groupId>
+    &#x3C;artifactId>opentelemetry-spring-boot-starter&#x3C;/artifactId>
+    &#x3C;version>2.9.0&#x3C;/version>
+&#x3C;/dependency>
+</code></pre>
+<p>The application configuration below is where you define your service identity and connect to your OTel Collector. The <code>sampling.probability: 1.0</code> setting traces 100% of requests — appropriate for development where you want full coverage. In production, you will lower this to 0.01-0.1 to control data volume and cost, or switch to tail-based sampling entirely (covered later).</p>
+<pre><code class="language-yaml"># application.yml
+spring:
+  application:
+    name: order-service
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0      # 100% in dev, 0.01-0.1 in production
+
+otel:
+  exporter:
+    otlp:
+      endpoint: http://otel-collector:4317
+  resource:
+    attributes:
+      service.name: order-service
+      service.version: 1.0.0
+      deployment.environment: production
+</code></pre>
+<p>With these dependencies, Spring Boot automatically instruments:</p>
+<ul>
+<li>All HTTP requests/responses (RestTemplate, WebClient, @RestController)</li>
+<li>All database calls (Spring Data, JDBC)</li>
+<li>All Kafka producer/consumer operations</li>
+<li>All @Scheduled and async operations</li>
+</ul>
+<p><strong>Zero code changes required for basic tracing.</strong></p>
+<h2>Manual Instrumentation: Custom Spans</h2>
+<p>For business logic you want to trace explicitly:</p>
+<p>Auto-instrumentation captures framework-level operations but has no awareness of your business logic. When you want to understand how long inventory validation took versus payment processing within a single service, you need custom spans. The checkout example below creates a parent span for the entire operation and child spans for each sub-step — giving you granular timing data for each business decision, plus structured tags that make spans searchable by customer, order size, or failure reason.</p>
+<pre><code class="language-java">@Service
+public class CheckoutService {
+
+    private final Tracer tracer;
+
+    public CheckoutService(Tracer tracer) {
+        this.tracer = tracer;
+    }
+
+    public CheckoutResult checkout(CheckoutRequest request) {
+        // Create a custom span for the entire checkout flow
+        Span span = tracer.nextSpan()
+            .name("checkout.process")
+            .tag("customer.id", request.getCustomerId())
+            .tag("cart.item_count", String.valueOf(request.getItems().size()))
+            .start();
+
+        try (Tracer.SpanInScope ws = tracer.withSpan(span)) {
+
+            // Child span: inventory validation
+            CheckoutResult inventoryResult = withSpan("checkout.validate_inventory", () -> {
+                return inventoryService.validateAndReserve(request.getItems());
+            });
+
+            if (!inventoryResult.isSuccess()) {
+                span.tag("checkout.failure_reason", "inventory_unavailable");
+                span.event("inventory_check_failed");
+                return CheckoutResult.inventoryFailed(inventoryResult.getUnavailableItems());
+            }
+
+            // Child span: payment processing
+            PaymentResult paymentResult = withSpan("checkout.process_payment", () -> {
+                return paymentService.charge(request.getPaymentMethod(), inventoryResult.getTotal());
+            });
+
+            span.tag("payment.provider", paymentResult.getProvider());
+            span.tag("checkout.success", "true");
+
+            return CheckoutResult.success(paymentResult.getOrderId());
+
+        } catch (Exception e) {
+            span.tag("error", "true");
+            span.tag("error.message", e.getMessage());
+            throw e;
+        } finally {
+            span.end();
+        }
+    }
+
+    private &#x3C;T> T withSpan(String name, Supplier&#x3C;T> operation) {
+        Span childSpan = tracer.nextSpan().name(name).start();
+        try (Tracer.SpanInScope ws = tracer.withSpan(childSpan)) {
+            return operation.get();
+        } catch (Exception e) {
+            childSpan.tag("error", "true");
+            throw e;
+        } finally {
+            childSpan.end();
+        }
+    }
+}
+</code></pre>
+<p>The <code>span.end()</code> call in the <code>finally</code> block is essential — an unclosed span is never exported to Jaeger. Always use try/finally or the try-with-resources pattern to guarantee spans are closed, even when exceptions propagate.</p>
+<h2>Trace Context Propagation</h2>
+<p>Spans across services need the trace ID to be passed in HTTP headers. Spring Boot does this automatically, but for custom HTTP clients:</p>
+<p>Trace context propagation is what makes distributed tracing distributed. Without it, each service creates its own isolated trace with no connection to the upstream caller. The W3C <code>traceparent</code> header format is now the standard way to carry trace context across process boundaries — it encodes the trace ID, parent span ID, and sampling flag in a single header that all compliant frameworks recognize automatically.</p>
+<pre><code class="language-java">// W3C Trace Context standard (use this — it's the industry standard)
+// Headers: traceparent: 00-traceId-spanId-flags
+
+@Bean
+public RestTemplate tracingRestTemplate(RestTemplateBuilder builder) {
+    return builder
+        .additionalInterceptors(new TracingClientHttpRequestInterceptor())
+        .build();
+}
+
+// For Kafka: propagate trace context in message headers
+@Service
+public class OrderEventPublisher {
+
+    @Autowired
+    private KafkaTemplate&#x3C;String, OrderEvent> kafkaTemplate;
+
+    @Autowired
+    private Tracer tracer;
+
+    public void publish(OrderEvent event) {
+        Span currentSpan = tracer.currentSpan();
+
+        ProducerRecord&#x3C;String, OrderEvent> record = new ProducerRecord&#x3C;>("order-events", event);
+
+        // Inject current trace context into Kafka headers
+        if (currentSpan != null) {
+            TextMapPropagator propagator = GlobalOpenTelemetry.getPropagators().getTextMapPropagator();
+            propagator.inject(
+                Context.current(),
+                record.headers(),
+                (headers, key, value) -> headers.add(key, value.getBytes())
+            );
+        }
+
+        kafkaTemplate.send(record);
+    }
+}
+
+// Consumer: extract trace context from Kafka headers
+@KafkaListener(topics = "order-events")
+public void handleOrderEvent(ConsumerRecord&#x3C;String, OrderEvent> record) {
+    // Extract trace context from headers
+    Context extractedContext = GlobalOpenTelemetry.getPropagators()
+        .getTextMapPropagator()
+        .extract(Context.current(), record.headers(),
+            (headers, key) -> new String(headers.lastHeader(key).value())
+        );
+
+    // Start a new span that's a child of the producer span
+    Span span = tracer.nextSpan(extractedContext)
+        .name("kafka.consume.order-events")
+        .start();
+
+    try (Tracer.SpanInScope ws = tracer.withSpan(span)) {
+        processOrder(record.value());
+    } finally {
+        span.end();
+    }
+}
+</code></pre>
+<p>The Kafka propagation pattern deserves special attention: the producer injects trace context into Kafka message headers, and the consumer extracts it to create a child span. This creates a single trace that spans the publish/consume boundary — even though the consumer may run minutes or hours later on a completely different instance. Without this, your async event processing appears as disconnected, orphaned traces.</p>
+<h2>OpenTelemetry Collector Configuration</h2>
+<p>The Collector is where you shape your telemetry data before it reaches your backends. The configuration below is a production-ready pipeline that batches spans for efficiency, samples 10% in production, enriches all spans with environment metadata, and drops health check spans that add noise without diagnostic value.</p>
+<pre><code class="language-yaml"># otel-collector.yaml
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+
+processors:
+  batch:
+    timeout: 1s
+    send_batch_size: 1024
+
+  # Sample 10% in production (saves cost)
+  probabilistic_sampler:
+    sampling_percentage: 10
+
+  # Add environment attribute to all spans
+  resource:
+    attributes:
+      - key: deployment.environment
+        value: production
+        action: insert
+
+  # Drop health check traces (noise)
+  filter:
+    traces:
+      span:
+        - 'attributes["http.route"] == "/health"'
+        - 'attributes["http.route"] == "/actuator/health"'
+
+exporters:
+  jaeger:
+    endpoint: http://jaeger:14250
+
+  # Also export to Tempo (Grafana) for correlated metrics+traces
+  otlp/tempo:
+    endpoint: http://tempo:4317
+
+  # Export to Elasticsearch for long-term storage
+  elasticsearch:
+    endpoints: [http://elasticsearch:9200]
+    index: traces-{yyyy.MM.dd}
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [batch, probabilistic_sampler, resource, filter]
+      exporters: [jaeger, otlp/tempo]
+</code></pre>
+<p>The filter processor that drops <code>/health</code> and <code>/actuator/health</code> spans is worth calling out explicitly — at 10,000 RPS with Kubernetes liveness probes running every 10 seconds, health check spans can account for 30-40% of your total trace volume without providing any diagnostic value. Filtering them at the Collector prevents wasted storage and keeps your trace UI clean.</p>
+<h2>Correlating Traces with Logs</h2>
+<p>Traces tell you which service is slow — logs tell you why. The connection between them is the trace ID, which needs to appear in every log line so you can pivot from a slow span in Jaeger directly to the log lines that explain what happened.</p>
+<pre><code class="language-java">// Add trace ID to all log entries — essential for correlation
+// Spring Boot + Logback — automatic with micrometer-tracing
+
+// logback-spring.xml
+&#x3C;configuration>
+  &#x3C;appender name="JSON" class="ch.qos.logback.core.ConsoleAppender">
+    &#x3C;encoder class="net.logstash.logback.encoder.LogstashEncoder">
+      &#x3C;!-- Automatically includes traceId and spanId from MDC -->
+      &#x3C;includeMdcKeyName>traceId&#x3C;/includeMdcKeyName>
+      &#x3C;includeMdcKeyName>spanId&#x3C;/includeMdcKeyName>
+    &#x3C;/encoder>
+  &#x3C;/appender>
+&#x3C;/configuration>
+</code></pre>
+<p>With <code>micrometer-tracing</code> on the classpath, Spring automatically writes the current trace ID and span ID into the logging MDC (Mapped Diagnostic Context). Every log line your application writes will automatically include both fields — no manual log decoration needed. The JSON output below shows what this looks like in practice.</p>
+<pre><code class="language-json">// Log output — every log line has traceId
+{
+  "timestamp": "2025-03-05T10:15:32.045Z",
+  "level": "INFO",
+  "logger": "CheckoutService",
+  "message": "Processing payment for order abc-123",
+  "traceId": "4bf92f3577b34da6a3ce929d0e0e4736",
+  "spanId": "00f067aa0ba902b7",
+  "service": "order-service"
+}
+</code></pre>
+<p>Now in Jaeger, you click a slow span, copy the traceId, and search Elasticsearch for all logs with that traceId. You go from trace → exact log lines that caused the failure.</p>
+<h2>Production Sampling Strategies</h2>
+<p>Sampling is the most consequential operational decision in your tracing setup. At 10,000 RPS with 100% sampling, you are exporting 10,000 traces per second — roughly 864 million traces per day. The cost and storage implications make 100% sampling infeasible in production, but naive random sampling means you are likely to miss the exact traces you need most (errors and slow requests).</p>
+<pre><code class="language-java">// Don't trace 100% in production — at 10,000 RPS, that's enormous data
+// Strategies:
+
+// 1. Head-based sampling (decide at trace start)
+// Simple: sample 1% of all traces
+// Problem: you miss rare slow/error traces
+
+// 2. Tail-based sampling (decide after trace completes) — better
+// Always sample:
+//   - Errors (status >= 400)
+//   - Slow traces (duration > 2 seconds)
+//   - Low-traffic traces
+// Sample 1% of fast/successful traces
+
+// In OTel Collector (tail-based sampling):
+processors:
+  tail_sampling:
+    decision_wait: 10s      # Wait 10s after trace start to decide
+    policies:
+      - name: errors
+        type: status_code
+        status_code: {status_codes: [ERROR]}
+      - name: slow-traces
+        type: latency
+        latency: {threshold_ms: 2000}
+      - name: probabilistic-1-percent
+        type: probabilistic
+        probabilistic: {sampling_percentage: 1}
+    operator: or            # Include if ANY policy matches
+</code></pre>
+<p>The tail-based sampler above is the recommended production configuration: it guarantees you always capture error traces and slow traces (the ones you actually need for debugging), while sampling only 1% of the fast/successful traces (which are useful for baseline statistics but not individual analysis). The <code>decision_wait: 10s</code> delay means the Collector buffers span data for 10 seconds before deciding — long enough to see whether the full trace completed with errors.</p>
+<h2>Observability Dashboard: The Three Pillars</h2>
+<p>With traces, logs, and metrics all in place, the workflow for debugging a production incident becomes deterministic. The three-step investigation pattern below shows how each telemetry type builds on the last to identify root cause without guesswork.</p>
+<pre><code>Metrics (Prometheus/Grafana): WHAT is broken
+  - p99 latency: 3.2s ← abnormal
+  - Error rate: 12% ← abnormal
+  - Throughput: 800 RPS ← normal
+
+Traces (Jaeger): WHERE it's broken
+  - Click slow trace → waterfall
+  - Payment Service: 2800ms of 3200ms total
+  - Span: "stripe.charge" — status=ERROR
+
+Logs (Elasticsearch): WHY it's broken
+  - Filter by traceId
+  - "Connection timeout after 2000ms: https://api.stripe.com"
+  - Log 12 seconds earlier: "Stripe circuit breaker opened"
+</code></pre>
+<p>Distributed tracing without logs and metrics is incomplete. The full observability picture requires all three: metrics tell you something is wrong, traces tell you where, logs tell you why. OpenTelemetry gives you a unified way to instrument all three from the same codebase.</p>
+<h2>Quick Start: Local Development</h2>
+<p>The fastest way to validate your instrumentation is working is to run Jaeger and the OTel Collector locally. The docker-compose configuration below gives you a complete observability stack in two containers — no cloud accounts, no billing, no configuration beyond a single YAML file.</p>
+<pre><code class="language-yaml"># docker-compose.yml
+version: '3.8'
+services:
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    ports:
+      - "16686:16686"   # Jaeger UI
+      - "14250:14250"   # gRPC
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:latest
+    volumes:
+      - ./otel-collector.yaml:/etc/otel-collector.yaml
+    command: ["--config=/etc/otel-collector.yaml"]
+    ports:
+      - "4317:4317"   # OTLP gRPC
+      - "4318:4318"   # OTLP HTTP
+    depends_on:
+      - jaeger
+</code></pre>
+<p>Navigate to <code>localhost:16686</code> after running your app — you'll see traces. Click any trace to see the full waterfall. Click any span to see attributes, logs, and events.</p>
+<p>The shift from "check logs on 8 servers" to "click on the trace" is one of the largest productivity improvements in microservices operations. Instrument once, debug forever.</p>
+</article><div class="my-10 rounded-xl border border-yellow-200 bg-yellow-50 p-6"><div class="flex items-center gap-2 mb-1"><span class="text-lg">📚</span><h3 class="text-base font-bold text-gray-900">Recommended Resources</h3></div><div class="space-y-4"><div class="flex items-start gap-3 bg-white rounded-lg p-4 border border-yellow-100"><div class="flex-1 min-w-0"><div class="flex items-center gap-2 flex-wrap mb-1"><span class="font-semibold text-gray-900 text-sm">System Design Interview — Alex Xu</span><span class="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-medium">Best Seller</span></div><p class="text-xs text-gray-600">Step-by-step guide to ace system design interviews with real-world examples.</p></div><a href="https://amzn.to/3TqsPRp" target="_blank" rel="noopener noreferrer" class="flex-shrink-0 text-xs bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium whitespace-nowrap">View on Amazon<!-- --> →</a></div><div class="flex items-start gap-3 bg-white rounded-lg p-4 border border-yellow-100"><div class="flex-1 min-w-0"><div class="flex items-center gap-2 flex-wrap mb-1"><span class="font-semibold text-gray-900 text-sm">Grokking System Design on Educative</span></div><p class="text-xs text-gray-600">Interactive course teaching system design with visual diagrams and practice problems.</p></div><a href="https://www.educative.io/courses/grokking-the-system-design-interview" target="_blank" rel="noopener noreferrer" class="flex-shrink-0 text-xs bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium whitespace-nowrap">View Course<!-- --> →</a></div><div class="flex items-start gap-3 bg-white rounded-lg p-4 border border-yellow-100"><div class="flex-1 min-w-0"><div class="flex items-center gap-2 flex-wrap mb-1"><span class="font-semibold text-gray-900 text-sm">Designing Data-Intensive Applications</span></div><p class="text-xs text-gray-600">Martin Kleppmann&#x27;s book is essential reading for any system design role.</p></div><a href="https://amzn.to/3RyKzOA" target="_blank" rel="noopener noreferrer" class="flex-shrink-0 text-xs bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium whitespace-nowrap">View on Amazon<!-- --> →</a></div></div></div><div class="mt-10 pt-8 border-t border-gray-100"><p class="text-sm text-gray-500 mb-3">Found this useful? Share it:</p><div class="flex gap-3"><a href="https://twitter.com/intent/tweet?text=Distributed%20Tracing%20with%20OpenTelemetry%3A%20End-to-End%20Observability&amp;url=https%3A%2F%2Fcodesprintpro.com%2Fblog%2Fdistributed-tracing-opentelemetry%2F" target="_blank" rel="noopener noreferrer" class="text-xs bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors">Share on X/Twitter</a><a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fcodesprintpro.com%2Fblog%2Fdistributed-tracing-opentelemetry%2F" target="_blank" rel="noopener noreferrer" class="text-xs bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">Share on LinkedIn</a></div></div></div><aside class="hidden lg:block w-64 flex-shrink-0"><nav class="hidden lg:block sticky top-24"><h4 class="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-3">On This Page</h4><ul class="space-y-1"><li class=""><a href="#how-distributed-tracing-works" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">How Distributed Tracing Works</a></li><li class=""><a href="#opentelemetry-the-standard" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">OpenTelemetry: The Standard</a></li><li class=""><a href="#spring-boot-auto-instrumentation" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Spring Boot Auto-Instrumentation</a></li><li class=""><a href="#manual-instrumentation-custom-spans" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Manual Instrumentation: Custom Spans</a></li><li class=""><a href="#trace-context-propagation" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Trace Context Propagation</a></li><li class=""><a href="#opentelemetry-collector-configuration" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">OpenTelemetry Collector Configuration</a></li><li class=""><a href="#correlating-traces-with-logs" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Correlating Traces with Logs</a></li><li class=""><a href="#production-sampling-strategies" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Production Sampling Strategies</a></li><li class=""><a href="#observability-dashboard-the-three-pillars" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Observability Dashboard: The Three Pillars</a></li><li class=""><a href="#quick-start-local-development" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Quick Start: Local Development</a></li></ul></nav></aside></div><div class="mt-16 pt-10 border-t border-gray-100"><h2 class="text-2xl font-bold text-gray-900 mb-6">Related Articles</h2><div class="grid grid-cols-1 md:grid-cols-3 gap-6"><a href="/blog/observability-opentelemetry-production/"><article class="group bg-white rounded-xl border border-gray-200 p-6 h-full cursor-pointer hover:border-blue-300 hover:shadow-lg transition-all"><span class="inline-block text-xs font-semibold px-3 py-1 rounded-full mb-3 bg-blue-100 text-blue-700">System Design</span><h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors leading-snug">Building Production Observability with OpenTelemetry and Grafana Stack</h3><p class="text-gray-600 text-sm mb-4 line-clamp-3">Observability is not the same as monitoring. Monitoring tells you something is wrong. Observability lets you understand why — by exploring system state through metrics, traces, and logs without needing to know in advance…</p><div class="flex items-center justify-between text-xs text-gray-400"><span>Jul 3, 2025</span><span class="flex items-center gap-1"><svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>6 min read</span></div><div class="mt-3 flex flex-wrap gap-1"><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->observability</span><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->opentelemetry</span><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->prometheus</span></div></article></a><a href="/blog/event-sourcing-cqrs-production/"><article class="group bg-white rounded-xl border border-gray-200 p-6 h-full cursor-pointer hover:border-blue-300 hover:shadow-lg transition-all"><span class="inline-block text-xs font-semibold px-3 py-1 rounded-full mb-3 bg-blue-100 text-blue-700">System Design</span><h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors leading-snug">Event Sourcing and CQRS in Production: Beyond the Theory</h3><p class="text-gray-600 text-sm mb-4 line-clamp-3">Event sourcing is one of those patterns that looks elegant in conference talks and becomes surprisingly complex in production systems. The theory — store events instead of state, derive state by replaying events — is sou…</p><div class="flex items-center justify-between text-xs text-gray-400"><span>Jun 23, 2025</span><span class="flex items-center gap-1"><svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>7 min read</span></div><div class="mt-3 flex flex-wrap gap-1"><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->event sourcing</span><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->cqrs</span><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->system design</span></div></article></a><a href="/blog/grpc-vs-rest-vs-graphql/"><article class="group bg-white rounded-xl border border-gray-200 p-6 h-full cursor-pointer hover:border-blue-300 hover:shadow-lg transition-all"><span class="inline-block text-xs font-semibold px-3 py-1 rounded-full mb-3 bg-blue-100 text-blue-700">System Design</span><h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors leading-snug">gRPC vs REST vs GraphQL: Choosing the Right API Protocol</h3><p class="text-gray-600 text-sm mb-4 line-clamp-3">API protocol selection has a longer lifespan than almost any other technical decision. REST APIs from 2010 are still running in production. gRPC services chosen for internal communication in 2018 are tightly coupled to t…</p><div class="flex items-center justify-between text-xs text-gray-400"><span>Jun 18, 2025</span><span class="flex items-center gap-1"><svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>7 min read</span></div><div class="mt-3 flex flex-wrap gap-1"><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->grpc</span><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->rest</span><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->graphql</span></div></article></a></div></div><div class="mt-12 text-center"><a class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium transition-colors" href="/blog/">← Back to all articles</a></div></div></div><footer class="bg-gray-900 text-white py-12"><div class="container mx-auto px-4 sm:px-6 lg:px-8"><div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8"><div class="col-span-1 md:col-span-1"><div><a class="text-xl font-bold block mb-3 text-white hover:text-blue-400 transition-colors" href="/">CodeSprintPro</a></div><p class="text-gray-400 text-sm mb-4 leading-relaxed">Deep-dive technical content on System Design, Java, Databases, AI/ML, and AWS — by Sachin Sarawgi.</p><div class="flex space-x-4"><a href="https://github.com/codesprintpro" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors" aria-label="Visit GitHub profile"><i class="fab fa-github text-xl"></i></a><a href="https://www.linkedin.com/in/sachin-sarawgi/" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors" aria-label="Visit LinkedIn profile"><i class="fab fa-linkedin text-xl"></i></a><a href="https://medium.com/@codesprintpro" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors" aria-label="Visit Medium profile"><i class="fab fa-medium text-xl"></i></a></div></div><div><h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 mb-4">Quick Links</h3><ul class="space-y-2"><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">Blog</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/#about">About</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/#portfolio">Portfolio</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/#contact">Contact</a></div></li></ul></div><div><h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 mb-4">Categories</h3><ul class="space-y-2"><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">System Design</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">Java</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">Databases</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">AI/ML</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">AWS</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">Messaging</a></div></li></ul></div><div><h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 mb-4">Contact</h3><ul class="space-y-2 text-gray-400 text-sm"><li><a href="mailto:sachinsarawgi201143@gmail.com" class="hover:text-white transition-colors flex items-center gap-2"><i class="fas fa-envelope"></i> Email</a></li><li><a href="https://www.linkedin.com/in/sachin-sarawgi/" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors flex items-center gap-2"><i class="fab fa-linkedin"></i> LinkedIn</a></li><li><a href="https://github.com/codesprintpro" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors flex items-center gap-2"><i class="fab fa-github"></i> GitHub</a></li></ul></div></div><div class="border-t border-gray-800 pt-6 flex flex-col md:flex-row justify-between items-center gap-2"><p class="text-gray-500 text-sm">© <!-- -->2026<!-- --> CodeSprintPro · Sachin Sarawgi. All rights reserved.</p><p class="text-gray-600 text-xs">Built with Next.js · TailwindCSS · Deployed on GitHub Pages</p></div></div></footer></div></main></div><script id="__NEXT_DATA__" type="application/json">{"props":{"pageProps":{"post":{"title":"Distributed Tracing with OpenTelemetry: End-to-End Observability","description":"Implement distributed tracing across microservices using OpenTelemetry, Jaeger, and Spring Boot. Learn trace context propagation, span correlation, and production observability patterns.","date":"2025-03-05","category":"System Design","tags":["observability","opentelemetry","distributed tracing","jaeger","spring boot","microservices"],"featured":false,"affiliateSection":"system-design-courses","slug":"distributed-tracing-opentelemetry","readingTime":"11 min read","excerpt":"A request enters your system, touches 8 services, and takes 3 seconds. Which service is slow? Without distributed tracing, you're correlating timestamps across 8 log files. With distributed tracing, you click on the trac…","contentHtml":"\u003cp\u003eA request enters your system, touches 8 services, and takes 3 seconds. Which service is slow? Without distributed tracing, you're correlating timestamps across 8 log files. With distributed tracing, you click on the trace and see the waterfall: Service A took 50ms, Service B took 2800ms. Problem found.\u003c/p\u003e\n\u003ch2\u003eHow Distributed Tracing Works\u003c/h2\u003e\n\u003cp\u003eBefore instrumenting anything, it helps to understand the data model. The trace below shows what a real slow checkout request looks like after tracing is in place. Each indented line is a span — a named, timed operation. The tree structure shows causality: which service called which, and how long each call took. Without this structure, you would be staring at timestamps across 8 separate log streams trying to reconstruct the same picture manually.\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003eRequest: POST /checkout\n\nTrace ID: abc-123 (spans entire request, crosses all services)\n\nSpan tree:\n  [abc-123] API Gateway          0ms - 3100ms  ←──── Root span\n    [abc-123] Order Service       5ms - 3090ms\n      [abc-123] Validate Cart     5ms - 50ms\n      [abc-123] Inventory Service 55ms - 300ms  ← External call\n      [abc-123] Payment Service   305ms - 3085ms ← SLOW — 2780ms!\n        [abc-123] Stripe API      310ms - 3080ms ← Stripe timeout\n\nProblem: Payment Service → Stripe call took 2770ms\nFix: Implement timeout + retry for Stripe calls\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eEach \u003cstrong\u003etrace\u003c/strong\u003e represents one end-to-end request. Each \u003cstrong\u003espan\u003c/strong\u003e represents one operation within that trace. Spans have parent-child relationships forming a tree.\u003c/p\u003e\n\u003ch2\u003eOpenTelemetry: The Standard\u003c/h2\u003e\n\u003cp\u003eOpenTelemetry (OTel) is the industry standard for instrumentation — vendor-neutral, CNCF project. It replaces Zipkin/Jaeger-specific SDKs.\u003c/p\u003e\n\u003cp\u003eThe architecture diagram below shows the data flow from your application through the OTel Collector to your backend storage systems. The Collector is the critical piece — it acts as a buffer and router between your application's telemetry output and whichever backends you use. If you change from Jaeger to Grafana Tempo next year, you update the Collector configuration and leave your application code untouched. This vendor neutrality is the primary reason to use OTel over instrumenting directly against a backend SDK.\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003eYour App\n  │ OTel SDK (instrumentation)\n  │\n  ▼\nOTel Collector (receive, process, export)\n  │\n  ├──► Jaeger (traces UI)\n  ├──► Prometheus (metrics)\n  └──► Elasticsearch (logs)\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch2\u003eSpring Boot Auto-Instrumentation\u003c/h2\u003e\n\u003cp\u003eThe easiest path — Spring Boot 3 has first-class OpenTelemetry support via Spring Actuator + Micrometer Tracing.\u003c/p\u003e\n\u003cp\u003eAdd the following three dependencies to get automatic instrumentation of your entire Spring Boot application. The \u003ccode\u003emicrometer-tracing-bridge-otel\u003c/code\u003e dependency bridges Spring's internal tracing abstraction to the OTel SDK, so all Spring components (RestTemplate, JPA, Kafka) emit traces without any code changes.\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-xml\"\u003e\u0026#x3C;!-- pom.xml --\u003e\n\u0026#x3C;dependency\u003e\n    \u0026#x3C;groupId\u003eio.micrometer\u0026#x3C;/groupId\u003e\n    \u0026#x3C;artifactId\u003emicrometer-tracing-bridge-otel\u0026#x3C;/artifactId\u003e\n\u0026#x3C;/dependency\u003e\n\u0026#x3C;dependency\u003e\n    \u0026#x3C;groupId\u003eio.opentelemetry\u0026#x3C;/groupId\u003e\n    \u0026#x3C;artifactId\u003eopentelemetry-exporter-otlp\u0026#x3C;/artifactId\u003e\n\u0026#x3C;/dependency\u003e\n\u0026#x3C;dependency\u003e\n    \u0026#x3C;groupId\u003eio.opentelemetry.instrumentation\u0026#x3C;/groupId\u003e\n    \u0026#x3C;artifactId\u003eopentelemetry-spring-boot-starter\u0026#x3C;/artifactId\u003e\n    \u0026#x3C;version\u003e2.9.0\u0026#x3C;/version\u003e\n\u0026#x3C;/dependency\u003e\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eThe application configuration below is where you define your service identity and connect to your OTel Collector. The \u003ccode\u003esampling.probability: 1.0\u003c/code\u003e setting traces 100% of requests — appropriate for development where you want full coverage. In production, you will lower this to 0.01-0.1 to control data volume and cost, or switch to tail-based sampling entirely (covered later).\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-yaml\"\u003e# application.yml\nspring:\n  application:\n    name: order-service\n\nmanagement:\n  tracing:\n    sampling:\n      probability: 1.0      # 100% in dev, 0.01-0.1 in production\n\notel:\n  exporter:\n    otlp:\n      endpoint: http://otel-collector:4317\n  resource:\n    attributes:\n      service.name: order-service\n      service.version: 1.0.0\n      deployment.environment: production\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eWith these dependencies, Spring Boot automatically instruments:\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eAll HTTP requests/responses (RestTemplate, WebClient, @RestController)\u003c/li\u003e\n\u003cli\u003eAll database calls (Spring Data, JDBC)\u003c/li\u003e\n\u003cli\u003eAll Kafka producer/consumer operations\u003c/li\u003e\n\u003cli\u003eAll @Scheduled and async operations\u003c/li\u003e\n\u003c/ul\u003e\n\u003cp\u003e\u003cstrong\u003eZero code changes required for basic tracing.\u003c/strong\u003e\u003c/p\u003e\n\u003ch2\u003eManual Instrumentation: Custom Spans\u003c/h2\u003e\n\u003cp\u003eFor business logic you want to trace explicitly:\u003c/p\u003e\n\u003cp\u003eAuto-instrumentation captures framework-level operations but has no awareness of your business logic. When you want to understand how long inventory validation took versus payment processing within a single service, you need custom spans. The checkout example below creates a parent span for the entire operation and child spans for each sub-step — giving you granular timing data for each business decision, plus structured tags that make spans searchable by customer, order size, or failure reason.\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-java\"\u003e@Service\npublic class CheckoutService {\n\n    private final Tracer tracer;\n\n    public CheckoutService(Tracer tracer) {\n        this.tracer = tracer;\n    }\n\n    public CheckoutResult checkout(CheckoutRequest request) {\n        // Create a custom span for the entire checkout flow\n        Span span = tracer.nextSpan()\n            .name(\"checkout.process\")\n            .tag(\"customer.id\", request.getCustomerId())\n            .tag(\"cart.item_count\", String.valueOf(request.getItems().size()))\n            .start();\n\n        try (Tracer.SpanInScope ws = tracer.withSpan(span)) {\n\n            // Child span: inventory validation\n            CheckoutResult inventoryResult = withSpan(\"checkout.validate_inventory\", () -\u003e {\n                return inventoryService.validateAndReserve(request.getItems());\n            });\n\n            if (!inventoryResult.isSuccess()) {\n                span.tag(\"checkout.failure_reason\", \"inventory_unavailable\");\n                span.event(\"inventory_check_failed\");\n                return CheckoutResult.inventoryFailed(inventoryResult.getUnavailableItems());\n            }\n\n            // Child span: payment processing\n            PaymentResult paymentResult = withSpan(\"checkout.process_payment\", () -\u003e {\n                return paymentService.charge(request.getPaymentMethod(), inventoryResult.getTotal());\n            });\n\n            span.tag(\"payment.provider\", paymentResult.getProvider());\n            span.tag(\"checkout.success\", \"true\");\n\n            return CheckoutResult.success(paymentResult.getOrderId());\n\n        } catch (Exception e) {\n            span.tag(\"error\", \"true\");\n            span.tag(\"error.message\", e.getMessage());\n            throw e;\n        } finally {\n            span.end();\n        }\n    }\n\n    private \u0026#x3C;T\u003e T withSpan(String name, Supplier\u0026#x3C;T\u003e operation) {\n        Span childSpan = tracer.nextSpan().name(name).start();\n        try (Tracer.SpanInScope ws = tracer.withSpan(childSpan)) {\n            return operation.get();\n        } catch (Exception e) {\n            childSpan.tag(\"error\", \"true\");\n            throw e;\n        } finally {\n            childSpan.end();\n        }\n    }\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eThe \u003ccode\u003espan.end()\u003c/code\u003e call in the \u003ccode\u003efinally\u003c/code\u003e block is essential — an unclosed span is never exported to Jaeger. Always use try/finally or the try-with-resources pattern to guarantee spans are closed, even when exceptions propagate.\u003c/p\u003e\n\u003ch2\u003eTrace Context Propagation\u003c/h2\u003e\n\u003cp\u003eSpans across services need the trace ID to be passed in HTTP headers. Spring Boot does this automatically, but for custom HTTP clients:\u003c/p\u003e\n\u003cp\u003eTrace context propagation is what makes distributed tracing distributed. Without it, each service creates its own isolated trace with no connection to the upstream caller. The W3C \u003ccode\u003etraceparent\u003c/code\u003e header format is now the standard way to carry trace context across process boundaries — it encodes the trace ID, parent span ID, and sampling flag in a single header that all compliant frameworks recognize automatically.\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-java\"\u003e// W3C Trace Context standard (use this — it's the industry standard)\n// Headers: traceparent: 00-traceId-spanId-flags\n\n@Bean\npublic RestTemplate tracingRestTemplate(RestTemplateBuilder builder) {\n    return builder\n        .additionalInterceptors(new TracingClientHttpRequestInterceptor())\n        .build();\n}\n\n// For Kafka: propagate trace context in message headers\n@Service\npublic class OrderEventPublisher {\n\n    @Autowired\n    private KafkaTemplate\u0026#x3C;String, OrderEvent\u003e kafkaTemplate;\n\n    @Autowired\n    private Tracer tracer;\n\n    public void publish(OrderEvent event) {\n        Span currentSpan = tracer.currentSpan();\n\n        ProducerRecord\u0026#x3C;String, OrderEvent\u003e record = new ProducerRecord\u0026#x3C;\u003e(\"order-events\", event);\n\n        // Inject current trace context into Kafka headers\n        if (currentSpan != null) {\n            TextMapPropagator propagator = GlobalOpenTelemetry.getPropagators().getTextMapPropagator();\n            propagator.inject(\n                Context.current(),\n                record.headers(),\n                (headers, key, value) -\u003e headers.add(key, value.getBytes())\n            );\n        }\n\n        kafkaTemplate.send(record);\n    }\n}\n\n// Consumer: extract trace context from Kafka headers\n@KafkaListener(topics = \"order-events\")\npublic void handleOrderEvent(ConsumerRecord\u0026#x3C;String, OrderEvent\u003e record) {\n    // Extract trace context from headers\n    Context extractedContext = GlobalOpenTelemetry.getPropagators()\n        .getTextMapPropagator()\n        .extract(Context.current(), record.headers(),\n            (headers, key) -\u003e new String(headers.lastHeader(key).value())\n        );\n\n    // Start a new span that's a child of the producer span\n    Span span = tracer.nextSpan(extractedContext)\n        .name(\"kafka.consume.order-events\")\n        .start();\n\n    try (Tracer.SpanInScope ws = tracer.withSpan(span)) {\n        processOrder(record.value());\n    } finally {\n        span.end();\n    }\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eThe Kafka propagation pattern deserves special attention: the producer injects trace context into Kafka message headers, and the consumer extracts it to create a child span. This creates a single trace that spans the publish/consume boundary — even though the consumer may run minutes or hours later on a completely different instance. Without this, your async event processing appears as disconnected, orphaned traces.\u003c/p\u003e\n\u003ch2\u003eOpenTelemetry Collector Configuration\u003c/h2\u003e\n\u003cp\u003eThe Collector is where you shape your telemetry data before it reaches your backends. The configuration below is a production-ready pipeline that batches spans for efficiency, samples 10% in production, enriches all spans with environment metadata, and drops health check spans that add noise without diagnostic value.\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-yaml\"\u003e# otel-collector.yaml\nreceivers:\n  otlp:\n    protocols:\n      grpc:\n        endpoint: 0.0.0.0:4317\n      http:\n        endpoint: 0.0.0.0:4318\n\nprocessors:\n  batch:\n    timeout: 1s\n    send_batch_size: 1024\n\n  # Sample 10% in production (saves cost)\n  probabilistic_sampler:\n    sampling_percentage: 10\n\n  # Add environment attribute to all spans\n  resource:\n    attributes:\n      - key: deployment.environment\n        value: production\n        action: insert\n\n  # Drop health check traces (noise)\n  filter:\n    traces:\n      span:\n        - 'attributes[\"http.route\"] == \"/health\"'\n        - 'attributes[\"http.route\"] == \"/actuator/health\"'\n\nexporters:\n  jaeger:\n    endpoint: http://jaeger:14250\n\n  # Also export to Tempo (Grafana) for correlated metrics+traces\n  otlp/tempo:\n    endpoint: http://tempo:4317\n\n  # Export to Elasticsearch for long-term storage\n  elasticsearch:\n    endpoints: [http://elasticsearch:9200]\n    index: traces-{yyyy.MM.dd}\n\nservice:\n  pipelines:\n    traces:\n      receivers: [otlp]\n      processors: [batch, probabilistic_sampler, resource, filter]\n      exporters: [jaeger, otlp/tempo]\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eThe filter processor that drops \u003ccode\u003e/health\u003c/code\u003e and \u003ccode\u003e/actuator/health\u003c/code\u003e spans is worth calling out explicitly — at 10,000 RPS with Kubernetes liveness probes running every 10 seconds, health check spans can account for 30-40% of your total trace volume without providing any diagnostic value. Filtering them at the Collector prevents wasted storage and keeps your trace UI clean.\u003c/p\u003e\n\u003ch2\u003eCorrelating Traces with Logs\u003c/h2\u003e\n\u003cp\u003eTraces tell you which service is slow — logs tell you why. The connection between them is the trace ID, which needs to appear in every log line so you can pivot from a slow span in Jaeger directly to the log lines that explain what happened.\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-java\"\u003e// Add trace ID to all log entries — essential for correlation\n// Spring Boot + Logback — automatic with micrometer-tracing\n\n// logback-spring.xml\n\u0026#x3C;configuration\u003e\n  \u0026#x3C;appender name=\"JSON\" class=\"ch.qos.logback.core.ConsoleAppender\"\u003e\n    \u0026#x3C;encoder class=\"net.logstash.logback.encoder.LogstashEncoder\"\u003e\n      \u0026#x3C;!-- Automatically includes traceId and spanId from MDC --\u003e\n      \u0026#x3C;includeMdcKeyName\u003etraceId\u0026#x3C;/includeMdcKeyName\u003e\n      \u0026#x3C;includeMdcKeyName\u003espanId\u0026#x3C;/includeMdcKeyName\u003e\n    \u0026#x3C;/encoder\u003e\n  \u0026#x3C;/appender\u003e\n\u0026#x3C;/configuration\u003e\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eWith \u003ccode\u003emicrometer-tracing\u003c/code\u003e on the classpath, Spring automatically writes the current trace ID and span ID into the logging MDC (Mapped Diagnostic Context). Every log line your application writes will automatically include both fields — no manual log decoration needed. The JSON output below shows what this looks like in practice.\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-json\"\u003e// Log output — every log line has traceId\n{\n  \"timestamp\": \"2025-03-05T10:15:32.045Z\",\n  \"level\": \"INFO\",\n  \"logger\": \"CheckoutService\",\n  \"message\": \"Processing payment for order abc-123\",\n  \"traceId\": \"4bf92f3577b34da6a3ce929d0e0e4736\",\n  \"spanId\": \"00f067aa0ba902b7\",\n  \"service\": \"order-service\"\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eNow in Jaeger, you click a slow span, copy the traceId, and search Elasticsearch for all logs with that traceId. You go from trace → exact log lines that caused the failure.\u003c/p\u003e\n\u003ch2\u003eProduction Sampling Strategies\u003c/h2\u003e\n\u003cp\u003eSampling is the most consequential operational decision in your tracing setup. At 10,000 RPS with 100% sampling, you are exporting 10,000 traces per second — roughly 864 million traces per day. The cost and storage implications make 100% sampling infeasible in production, but naive random sampling means you are likely to miss the exact traces you need most (errors and slow requests).\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-java\"\u003e// Don't trace 100% in production — at 10,000 RPS, that's enormous data\n// Strategies:\n\n// 1. Head-based sampling (decide at trace start)\n// Simple: sample 1% of all traces\n// Problem: you miss rare slow/error traces\n\n// 2. Tail-based sampling (decide after trace completes) — better\n// Always sample:\n//   - Errors (status \u003e= 400)\n//   - Slow traces (duration \u003e 2 seconds)\n//   - Low-traffic traces\n// Sample 1% of fast/successful traces\n\n// In OTel Collector (tail-based sampling):\nprocessors:\n  tail_sampling:\n    decision_wait: 10s      # Wait 10s after trace start to decide\n    policies:\n      - name: errors\n        type: status_code\n        status_code: {status_codes: [ERROR]}\n      - name: slow-traces\n        type: latency\n        latency: {threshold_ms: 2000}\n      - name: probabilistic-1-percent\n        type: probabilistic\n        probabilistic: {sampling_percentage: 1}\n    operator: or            # Include if ANY policy matches\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eThe tail-based sampler above is the recommended production configuration: it guarantees you always capture error traces and slow traces (the ones you actually need for debugging), while sampling only 1% of the fast/successful traces (which are useful for baseline statistics but not individual analysis). The \u003ccode\u003edecision_wait: 10s\u003c/code\u003e delay means the Collector buffers span data for 10 seconds before deciding — long enough to see whether the full trace completed with errors.\u003c/p\u003e\n\u003ch2\u003eObservability Dashboard: The Three Pillars\u003c/h2\u003e\n\u003cp\u003eWith traces, logs, and metrics all in place, the workflow for debugging a production incident becomes deterministic. The three-step investigation pattern below shows how each telemetry type builds on the last to identify root cause without guesswork.\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003eMetrics (Prometheus/Grafana): WHAT is broken\n  - p99 latency: 3.2s ← abnormal\n  - Error rate: 12% ← abnormal\n  - Throughput: 800 RPS ← normal\n\nTraces (Jaeger): WHERE it's broken\n  - Click slow trace → waterfall\n  - Payment Service: 2800ms of 3200ms total\n  - Span: \"stripe.charge\" — status=ERROR\n\nLogs (Elasticsearch): WHY it's broken\n  - Filter by traceId\n  - \"Connection timeout after 2000ms: https://api.stripe.com\"\n  - Log 12 seconds earlier: \"Stripe circuit breaker opened\"\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eDistributed tracing without logs and metrics is incomplete. The full observability picture requires all three: metrics tell you something is wrong, traces tell you where, logs tell you why. OpenTelemetry gives you a unified way to instrument all three from the same codebase.\u003c/p\u003e\n\u003ch2\u003eQuick Start: Local Development\u003c/h2\u003e\n\u003cp\u003eThe fastest way to validate your instrumentation is working is to run Jaeger and the OTel Collector locally. The docker-compose configuration below gives you a complete observability stack in two containers — no cloud accounts, no billing, no configuration beyond a single YAML file.\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-yaml\"\u003e# docker-compose.yml\nversion: '3.8'\nservices:\n  jaeger:\n    image: jaegertracing/all-in-one:latest\n    ports:\n      - \"16686:16686\"   # Jaeger UI\n      - \"14250:14250\"   # gRPC\n    environment:\n      - COLLECTOR_OTLP_ENABLED=true\n\n  otel-collector:\n    image: otel/opentelemetry-collector-contrib:latest\n    volumes:\n      - ./otel-collector.yaml:/etc/otel-collector.yaml\n    command: [\"--config=/etc/otel-collector.yaml\"]\n    ports:\n      - \"4317:4317\"   # OTLP gRPC\n      - \"4318:4318\"   # OTLP HTTP\n    depends_on:\n      - jaeger\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eNavigate to \u003ccode\u003elocalhost:16686\u003c/code\u003e after running your app — you'll see traces. Click any trace to see the full waterfall. Click any span to see attributes, logs, and events.\u003c/p\u003e\n\u003cp\u003eThe shift from \"check logs on 8 servers\" to \"click on the trace\" is one of the largest productivity improvements in microservices operations. Instrument once, debug forever.\u003c/p\u003e\n","tableOfContents":[{"id":"how-distributed-tracing-works","text":"How Distributed Tracing Works","level":2},{"id":"opentelemetry-the-standard","text":"OpenTelemetry: The Standard","level":2},{"id":"spring-boot-auto-instrumentation","text":"Spring Boot Auto-Instrumentation","level":2},{"id":"manual-instrumentation-custom-spans","text":"Manual Instrumentation: Custom Spans","level":2},{"id":"trace-context-propagation","text":"Trace Context Propagation","level":2},{"id":"opentelemetry-collector-configuration","text":"OpenTelemetry Collector Configuration","level":2},{"id":"correlating-traces-with-logs","text":"Correlating Traces with Logs","level":2},{"id":"production-sampling-strategies","text":"Production Sampling Strategies","level":2},{"id":"observability-dashboard-the-three-pillars","text":"Observability Dashboard: The Three Pillars","level":2},{"id":"quick-start-local-development","text":"Quick Start: Local Development","level":2}]},"relatedPosts":[{"title":"Building Production Observability with OpenTelemetry and Grafana Stack","description":"End-to-end observability implementation: distributed tracing with OpenTelemetry, metrics with Prometheus, structured logging with Loki, and the dashboards and alerts that actually help during incidents.","date":"2025-07-03","category":"System Design","tags":["observability","opentelemetry","prometheus","grafana","loki","tracing","spring boot","monitoring"],"featured":false,"affiliateSection":"system-design-courses","slug":"observability-opentelemetry-production","readingTime":"6 min read","excerpt":"Observability is not the same as monitoring. Monitoring tells you something is wrong. Observability lets you understand why — by exploring system state through metrics, traces, and logs without needing to know in advance…"},{"title":"Event Sourcing and CQRS in Production: Beyond the Theory","description":"What event sourcing actually looks like in production Java systems: event store design, snapshot strategies, projection rebuilding, CQRS read model synchronization, and the operational challenges nobody talks about.","date":"2025-06-23","category":"System Design","tags":["event sourcing","cqrs","system design","java","distributed systems","kafka","spring boot"],"featured":false,"affiliateSection":"distributed-systems-books","slug":"event-sourcing-cqrs-production","readingTime":"7 min read","excerpt":"Event sourcing is one of those patterns that looks elegant in conference talks and becomes surprisingly complex in production systems. The theory — store events instead of state, derive state by replaying events — is sou…"},{"title":"gRPC vs REST vs GraphQL: Choosing the Right API Protocol","description":"A technical comparison of REST, gRPC, and GraphQL across performance, developer experience, schema evolution, streaming, and real production use cases. When each protocol wins and where each falls short.","date":"2025-06-18","category":"System Design","tags":["grpc","rest","graphql","api design","system design","microservices","protocol buffers"],"featured":false,"affiliateSection":"system-design-courses","slug":"grpc-vs-rest-vs-graphql","readingTime":"7 min read","excerpt":"API protocol selection has a longer lifespan than almost any other technical decision. REST APIs from 2010 are still running in production. gRPC services chosen for internal communication in 2018 are tightly coupled to t…"}]},"__N_SSG":true},"page":"/blog/[slug]","query":{"slug":"distributed-tracing-opentelemetry"},"buildId":"rpFn_jslWZ9qPkJwor7RD","isFallback":false,"gsp":true,"scriptLoader":[]}</script></body></html>

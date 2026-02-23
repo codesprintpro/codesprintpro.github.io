@@ -1,0 +1,316 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8" data-next-head=""/><meta name="viewport" content="width=device-width" data-next-head=""/><title data-next-head="">Terraform Infrastructure as Code: Production Patterns and Pitfalls<!-- --> | CodeSprintPro</title><meta name="description" content="Production Terraform: module design, state management with S3 and DynamoDB locking, workspace strategies for multi-environment deployments, sensitive variable handling, drift detection, and the Terraform anti-patterns that cause outages." data-next-head=""/><meta name="author" content="Sachin Sarawgi" data-next-head=""/><link rel="canonical" href="https://codesprintpro.com/blog/terraform-infrastructure-as-code/" data-next-head=""/><meta property="og:type" content="article" data-next-head=""/><meta property="og:title" content="Terraform Infrastructure as Code: Production Patterns and Pitfalls" data-next-head=""/><meta property="og:description" content="Production Terraform: module design, state management with S3 and DynamoDB locking, workspace strategies for multi-environment deployments, sensitive variable handling, drift detection, and the Terraform anti-patterns that cause outages." data-next-head=""/><meta property="og:url" content="https://codesprintpro.com/blog/terraform-infrastructure-as-code/" data-next-head=""/><meta property="og:image" content="https://codesprintpro.com/images/og-default.jpg" data-next-head=""/><meta property="og:site_name" content="CodeSprintPro" data-next-head=""/><meta property="article:published_time" content="2025-05-14" data-next-head=""/><meta property="article:author" content="Sachin Sarawgi" data-next-head=""/><meta property="article:section" content="AWS" data-next-head=""/><meta property="article:tag" content="terraform" data-next-head=""/><meta property="article:tag" content="infrastructure as code" data-next-head=""/><meta property="article:tag" content="aws" data-next-head=""/><meta property="article:tag" content="devops" data-next-head=""/><meta property="article:tag" content="s3" data-next-head=""/><meta property="article:tag" content="modules" data-next-head=""/><meta property="article:tag" content="ci/cd" data-next-head=""/><meta name="twitter:card" content="summary_large_image" data-next-head=""/><meta name="twitter:title" content="Terraform Infrastructure as Code: Production Patterns and Pitfalls" data-next-head=""/><meta name="twitter:description" content="Production Terraform: module design, state management with S3 and DynamoDB locking, workspace strategies for multi-environment deployments, sensitive variable handling, drift detection, and the Terraform anti-patterns that cause outages." data-next-head=""/><meta name="twitter:image" content="https://codesprintpro.com/images/og-default.jpg" data-next-head=""/><script type="application/ld+json" data-next-head="">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Terraform Infrastructure as Code: Production Patterns and Pitfalls","description":"Production Terraform: module design, state management with S3 and DynamoDB locking, workspace strategies for multi-environment deployments, sensitive variable handling, drift detection, and the Terraform anti-patterns that cause outages.","image":"https://codesprintpro.com/images/og-default.jpg","datePublished":"2025-05-14","dateModified":"2025-05-14","author":{"@type":"Person","name":"Sachin Sarawgi","url":"https://codesprintpro.com","sameAs":["https://www.linkedin.com/in/sachin-sarawgi/","https://github.com/codesprintpro","https://medium.com/@codesprintpro"]},"publisher":{"@type":"Organization","name":"CodeSprintPro","url":"https://codesprintpro.com","logo":{"@type":"ImageObject","url":"https://codesprintpro.com/favicon/favicon-96x96.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codesprintpro.com/blog/terraform-infrastructure-as-code/"},"keywords":"terraform, infrastructure as code, aws, devops, s3, modules, ci/cd","articleSection":"AWS"}</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerPolicy="no-referrer"/><script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script><link rel="preload" href="/_next/static/media/e4af272ccee01ff0-s.p.woff2" as="font" type="font/woff2" crossorigin="anonymous" data-next-font="size-adjust"/><link rel="preload" href="/_next/static/css/735d4373f93910ca.css" as="style"/><link rel="stylesheet" href="/_next/static/css/735d4373f93910ca.css" data-n-g=""/><noscript data-n-css=""></noscript><script defer="" nomodule="" src="/_next/static/chunks/polyfills-42372ed130431b0a.js"></script><script src="/_next/static/chunks/webpack-11a4a2dad04962bb.js" defer=""></script><script src="/_next/static/chunks/framework-1ce91eb6f9ecda85.js" defer=""></script><script src="/_next/static/chunks/main-c7f4109f032d7b6e.js" defer=""></script><script src="/_next/static/chunks/pages/_app-1a852bd9e38c70ab.js" defer=""></script><script src="/_next/static/chunks/730-db7827467817f501.js" defer=""></script><script src="/_next/static/chunks/90-1cd4611704c3dbe0.js" defer=""></script><script src="/_next/static/chunks/440-29f4b99a44e744b5.js" defer=""></script><script src="/_next/static/chunks/pages/blog/%5Bslug%5D-0c1b14a33d5e05ee.js" defer=""></script><script src="/_next/static/rpFn_jslWZ9qPkJwor7RD/_buildManifest.js" defer=""></script><script src="/_next/static/rpFn_jslWZ9qPkJwor7RD/_ssgManifest.js" defer=""></script></head><body><div id="__next"><main class="__className_f367f3"><div class="min-h-screen bg-white"><nav class="fixed w-full z-50 transition-all duration-300 bg-white shadow-md" style="transform:translateY(-100px) translateZ(0)"><div class="container mx-auto px-4 sm:px-6 lg:px-8"><div class="flex items-center justify-between h-16"><a class="text-xl font-bold transition-colors text-blue-600" href="/">CodeSprintPro</a><div class="hidden md:flex items-center space-x-8"><a class="text-sm font-medium transition-colors text-blue-600" href="/blog/">Blog</a><a class="text-sm font-medium transition-colors text-gray-600 hover:text-blue-600" href="/#about">About</a><a class="text-sm font-medium transition-colors text-gray-600 hover:text-blue-600" href="/#portfolio">Portfolio</a><a class="text-sm font-medium transition-colors text-gray-600 hover:text-blue-600" href="/#contact">Contact</a></div><button class="md:hidden p-2 rounded-lg transition-colors hover:bg-gray-100 text-gray-600" aria-label="Toggle mobile menu"><svg class="w-6 h-6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor"><path d="M4 6h16M4 12h16M4 18h16"></path></svg></button></div></div></nav><div class="pt-20"><div class="bg-gradient-to-br from-gray-900 to-blue-950 py-16"><div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl"><nav class="flex items-center gap-2 text-sm text-gray-400 mb-6"><a class="hover:text-white transition-colors" href="/">Home</a><span>/</span><a class="hover:text-white transition-colors" href="/blog/">Blog</a><span>/</span><span class="text-gray-300 truncate max-w-xs">Terraform Infrastructure as Code: Production Patterns and Pitfalls</span></nav><span class="inline-block text-xs font-semibold px-3 py-1 rounded-full bg-blue-100 text-blue-700 mb-4">AWS</span><h1 class="text-3xl md:text-5xl font-bold text-white mb-4 leading-tight">Terraform Infrastructure as Code: Production Patterns and Pitfalls</h1><p class="text-gray-300 text-lg mb-6 max-w-3xl">Production Terraform: module design, state management with S3 and DynamoDB locking, workspace strategies for multi-environment deployments, sensitive variable handling, drift detection, and the Terraform anti-patterns that cause outages.</p><div class="flex flex-wrap items-center gap-4 text-gray-400 text-sm"><span class="flex items-center gap-1.5"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>Sachin Sarawgi</span><span>·</span><span>May 14, 2025</span><span>·</span><span class="flex items-center gap-1"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>7 min read</span></div><div class="flex flex-wrap gap-2 mt-4"><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->terraform</span><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->infrastructure as code</span><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->aws</span><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->devops</span><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->s3</span><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->modules</span><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->ci/cd</span></div></div></div><div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl py-12"><div class="flex gap-12"><div class="flex-1 min-w-0"><article class="prose prose-lg max-w-none prose-headings:text-gray-900 prose-headings:font-bold prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-4 prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3 prose-p:text-gray-700 prose-p:leading-relaxed prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline prose-strong:text-gray-900 prose-blockquote:border-blue-600 prose-blockquote:text-gray-600 prose-code:text-blue-700 prose-code:bg-blue-50 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-sm prose-code:before:content-none prose-code:after:content-none prose-pre:rounded-xl prose-img:rounded-xl prose-img:shadow-md prose-table:text-sm prose-th:bg-gray-100 prose-th:text-gray-700"><p>Terraform is the industry-standard tool for Infrastructure as Code (IaC) — defining cloud infrastructure as declarative HCL configuration that can be version-controlled, reviewed, and applied reproducibly. The value proposition is real: no more manual console clicks, no more "works in staging but not production" configurations, no more knowledge silos about how infrastructure is set up. The pitfalls are equally real: state corruption, accidental resource deletion, and modules that become maintenance nightmares.</p>
+<h2>Project Structure for Production</h2>
+<pre><code>infrastructure/
+├── modules/              # Reusable modules
+│   ├── vpc/
+│   │   ├── main.tf
+│   │   ├── variables.tf
+│   │   └── outputs.tf
+│   ├── eks-cluster/
+│   ├── rds-postgres/
+│   └── ecs-service/
+├── environments/         # Environment-specific configurations
+│   ├── prod/
+│   │   ├── main.tf       # Uses modules with prod-specific values
+│   │   ├── variables.tf
+│   │   └── backend.tf    # Points to prod state file
+│   ├── staging/
+│   └── dev/
+└── global/               # Cross-environment resources (Route53, IAM)
+    ├── main.tf
+    └── backend.tf
+</code></pre>
+<p>This structure separates reusable infrastructure patterns (modules) from environment-specific configuration (environments). Each environment is an independent Terraform root module with its own state file.</p>
+<h2>Remote State with S3 and DynamoDB Locking</h2>
+<p>Local state (<code>terraform.tfstate</code>) is never acceptable in a team environment. Remote state in S3 with DynamoDB locking is the standard AWS pattern:</p>
+<pre><code class="language-hcl"># bootstrap/main.tf — create state infrastructure first (bootstrapping)
+resource "aws_s3_bucket" "terraform_state" {
+  bucket = "company-terraform-state-${data.aws_caller_identity.current.account_id}"
+  # Prevent accidental deletion:
+  lifecycle {
+    prevent_destroy = true
+  }
+}
+
+resource "aws_s3_bucket_versioning" "terraform_state" {
+  bucket = aws_s3_bucket.terraform_state.id
+  versioning_configuration {
+    status = "Enabled"  # Every state change is versioned — rollback possible
+  }
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "terraform_state" {
+  bucket = aws_s3_bucket.terraform_state.id
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "aws:kms"  # Encrypt state at rest
+    }
+  }
+}
+
+resource "aws_dynamodb_table" "terraform_locks" {
+  name         = "terraform-state-locks"
+  billing_mode = "PAY_PER_REQUEST"
+  hash_key     = "LockID"
+
+  attribute {
+    name = "LockID"
+    type = "S"
+  }
+}
+
+# environments/prod/backend.tf:
+terraform {
+  backend "s3" {
+    bucket         = "company-terraform-state-123456789012"
+    key            = "prod/terraform.tfstate"   # Unique key per environment
+    region         = "us-east-1"
+    encrypt        = true
+    dynamodb_table = "terraform-state-locks"   # DynamoDB for locking
+  }
+}
+</code></pre>
+<p>DynamoDB locking prevents two engineers from running <code>terraform apply</code> simultaneously — concurrent applies on the same state cause corruption. One apply blocks while the other holds the lock.</p>
+<h2>Module Design Patterns</h2>
+<pre><code class="language-hcl"># modules/rds-postgres/main.tf — reusable RDS module:
+variable "identifier" {
+  description = "Database instance identifier"
+  type        = string
+}
+
+variable "instance_class" {
+  description = "RDS instance type"
+  type        = string
+  default     = "db.t3.medium"
+}
+
+variable "allocated_storage_gb" {
+  type    = number
+  default = 20
+}
+
+variable "environment" {
+  description = "Environment name (used for tagging)"
+  type        = string
+  validation {
+    condition     = contains(["prod", "staging", "dev"], var.environment)
+    error_message = "environment must be prod, staging, or dev"
+  }
+}
+
+variable "database_password" {
+  description = "Master database password"
+  type        = string
+  sensitive   = true  # Never printed in terraform output
+}
+
+resource "aws_db_instance" "this" {
+  identifier             = var.identifier
+  engine                 = "postgres"
+  engine_version         = "15.4"
+  instance_class         = var.instance_class
+  allocated_storage      = var.allocated_storage_gb
+  storage_type           = "gp3"
+  storage_encrypted      = true
+
+  db_name  = "appdb"
+  username = "admin"
+  password = var.database_password
+
+  # Prod: Multi-AZ for high availability; dev: single-AZ for cost
+  multi_az = var.environment == "prod"
+
+  # Prod: 7-day backups; dev: 1 day
+  backup_retention_period = var.environment == "prod" ? 7 : 1
+
+  # Prevent accidental deletion in production:
+  deletion_protection = var.environment == "prod"
+  skip_final_snapshot = var.environment != "prod"
+  final_snapshot_identifier = var.environment == "prod" ? "${var.identifier}-final" : null
+
+  vpc_security_group_ids = [aws_security_group.rds.id]
+  db_subnet_group_name   = aws_db_subnet_group.this.name
+
+  tags = {
+    Environment = var.environment
+    ManagedBy   = "terraform"
+    Module      = "rds-postgres"
+  }
+}
+
+output "endpoint" {
+  description = "RDS connection endpoint"
+  value       = aws_db_instance.this.endpoint
+}
+
+output "port" {
+  value = aws_db_instance.this.port
+}
+
+# environments/prod/main.tf — using the module:
+module "orders_db" {
+  source = "../../modules/rds-postgres"
+
+  identifier           = "orders-prod"
+  instance_class       = "db.r6g.large"
+  allocated_storage_gb = 100
+  environment          = "prod"
+  database_password    = var.db_password  # From secrets manager or env var
+}
+
+# Reference module output:
+output "orders_db_endpoint" {
+  value     = module.orders_db.endpoint
+  sensitive = false
+}
+</code></pre>
+<h2>Sensitive Variables: Never Hardcode Secrets</h2>
+<pre><code class="language-hcl"># WRONG: Secret in plaintext
+variable "db_password" {
+  default = "supersecretpassword123"  # Committed to git — security incident
+}
+
+# WRONG: Sensitive value in terraform.tfvars committed to git
+db_password = "supersecretpassword123"
+
+# RIGHT: Read from AWS Secrets Manager:
+data "aws_secretsmanager_secret_version" "db_password" {
+  secret_id = "prod/orders-db/password"
+}
+
+locals {
+  db_password = jsondecode(data.aws_secretsmanager_secret_version.db_password.secret_string)["password"]
+}
+
+module "orders_db" {
+  source            = "../../modules/rds-postgres"
+  database_password = local.db_password  # Read from Secrets Manager, never hardcoded
+}
+
+# RIGHT: Pass via environment variable (CI/CD):
+# TF_VAR_db_password=... terraform apply
+# GitHub Actions secret → TF_VAR_db_password environment variable
+</code></pre>
+<p><strong>Mark sensitive outputs:</strong></p>
+<pre><code class="language-hcl">output "db_endpoint" {
+  value     = module.orders_db.endpoint
+  sensitive = false  # Endpoint is not sensitive (you know it from Route53)
+}
+
+output "db_password" {
+  value     = module.orders_db.password
+  sensitive = true   # Never printed in plan/apply output
+}
+</code></pre>
+<h2>Workspaces vs. Separate State Files</h2>
+<p>Terraform workspaces create separate state files within the same backend. They sound like the right tool for multiple environments, but they have a critical limitation: all workspace configs share the same <code>.tf</code> files. This prevents environment-specific configuration like <code>instance_class = "db.r6g.large"</code> in prod and <code>instance_class = "db.t3.small"</code> in dev (unless you use many conditionals on <code>terraform.workspace</code>).</p>
+<p><strong>Recommendation:</strong> Separate directories (as shown in the project structure above) are cleaner than workspaces for environment isolation. Each environment has its own <code>main.tf</code> with explicit values. Workspaces work well for feature branches or PR preview environments where the configuration is identical except for the state.</p>
+<h2>CI/CD Pipeline Integration</h2>
+<pre><code class="language-yaml"># .github/workflows/terraform.yml:
+name: Terraform
+
+on:
+  pull_request:
+    paths: ['infrastructure/**']
+  push:
+    branches: [main]
+    paths: ['infrastructure/**']
+
+jobs:
+  plan:
+    name: Terraform Plan
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_TERRAFORM_ROLE_ARN }}  # OIDC, no keys
+          aws-region: us-east-1
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.7.0"
+
+      - name: Terraform Init
+        run: terraform init
+        working-directory: infrastructure/environments/prod
+
+      - name: Terraform Plan
+        id: plan
+        run: terraform plan -no-color -out=tfplan
+        working-directory: infrastructure/environments/prod
+        env:
+          TF_VAR_db_password: ${{ secrets.PROD_DB_PASSWORD }}
+
+      - name: Comment Plan on PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const plan = `${{ steps.plan.outputs.stdout }}`
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '```hcl\n' + plan + '\n```'
+            })
+
+  apply:
+    name: Terraform Apply
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' &#x26;&#x26; github.event_name == 'push'
+    environment: production  # Requires manual approval in GitHub
+    steps:
+      - uses: actions/checkout@v4
+      # ... (same init steps)
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
+        working-directory: infrastructure/environments/prod
+</code></pre>
+<h2>Preventing Accidental Destruction</h2>
+<p>Terraform's <code>destroy</code> capability is as powerful as it is dangerous. Guards against accidental destruction:</p>
+<pre><code class="language-hcl"># Resource-level protection:
+resource "aws_rds_cluster" "orders" {
+  lifecycle {
+    prevent_destroy = true  # terraform destroy will fail with an error
+  }
+}
+
+# Prevent replacement (some changes destroy and recreate resources):
+resource "aws_elasticsearch_domain" "search" {
+  lifecycle {
+    # Force team to explicitly acknowledge destruction:
+    prevent_destroy = true
+    # Ignore tag changes that would otherwise trigger replacement:
+    ignore_changes = [tags]
+  }
+}
+</code></pre>
+<pre><code class="language-bash"># Plan always before apply — never apply blindly:
+terraform plan -out=tfplan
+# Review: look for "-" (destroy) lines carefully
+# Especially: aws_rds_instance will be DESTROYED → check WHY
+
+# Targeted apply for surgical changes:
+terraform apply -target=module.orders_db  # Only apply orders_db module
+
+# Refresh state without changing resources:
+terraform refresh  # Detects drift between state and actual infrastructure
+</code></pre>
+<h2>Drift Detection</h2>
+<p>Real infrastructure drifts from Terraform state when engineers make manual changes in the console, incident responses bypass automation, or resources are modified by external automation.</p>
+<pre><code class="language-bash"># Detect drift:
+terraform plan -refresh-only
+# Shows: "Objects have changed outside of Terraform"
+# Lists actual vs. expected state for each drifted resource
+
+# Import resources created outside Terraform into state:
+terraform import aws_s3_bucket.logs my-application-logs-bucket
+# Now Terraform manages this bucket — future changes go through Terraform
+</code></pre>
+<p><strong>Organizational discipline:</strong> The hardest part of IaC is not the tooling — it's the culture. Every infrastructure change must go through Terraform or it creates drift. Enforce this with IAM policies that deny manual resource creation in production, and use AWS Config rules to detect manually created resources.</p>
+<p>Terraform's power comes from predictability — the plan shows exactly what will change before anything does. That predictability only holds when every change goes through the plan/apply cycle, sensitive data stays in secrets management, and state is shared, locked, and versioned. The teams that treat <code>terraform plan</code> output with the same rigor they treat code review catch infrastructure problems before they become production incidents.</p>
+</article><div class="my-10 rounded-xl border border-yellow-200 bg-yellow-50 p-6"><div class="flex items-center gap-2 mb-1"><span class="text-lg">📚</span><h3 class="text-base font-bold text-gray-900">Recommended Resources</h3></div><div class="space-y-4"><div class="flex items-start gap-3 bg-white rounded-lg p-4 border border-yellow-100"><div class="flex-1 min-w-0"><div class="flex items-center gap-2 flex-wrap mb-1"><span class="font-semibold text-gray-900 text-sm">AWS Solutions Architect Associate — Udemy</span><span class="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-medium">Best Seller</span></div><p class="text-xs text-gray-600">Most popular AWS certification course by Stephane Maarek.</p></div><a href="https://www.udemy.com/course/aws-certified-solutions-architect-associate-saa-c03/" target="_blank" rel="noopener noreferrer" class="flex-shrink-0 text-xs bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium whitespace-nowrap">View Course<!-- --> →</a></div><div class="flex items-start gap-3 bg-white rounded-lg p-4 border border-yellow-100"><div class="flex-1 min-w-0"><div class="flex items-center gap-2 flex-wrap mb-1"><span class="font-semibold text-gray-900 text-sm">AWS in Action, 3rd Edition</span></div><p class="text-xs text-gray-600">Hands-on guide to building cloud applications on AWS.</p></div><a href="https://amzn.to/3Vmf49E" target="_blank" rel="noopener noreferrer" class="flex-shrink-0 text-xs bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium whitespace-nowrap">View on Amazon<!-- --> →</a></div></div></div><div class="mt-10 pt-8 border-t border-gray-100"><p class="text-sm text-gray-500 mb-3">Found this useful? Share it:</p><div class="flex gap-3"><a href="https://twitter.com/intent/tweet?text=Terraform%20Infrastructure%20as%20Code%3A%20Production%20Patterns%20and%20Pitfalls&amp;url=https%3A%2F%2Fcodesprintpro.com%2Fblog%2Fterraform-infrastructure-as-code%2F" target="_blank" rel="noopener noreferrer" class="text-xs bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors">Share on X/Twitter</a><a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fcodesprintpro.com%2Fblog%2Fterraform-infrastructure-as-code%2F" target="_blank" rel="noopener noreferrer" class="text-xs bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">Share on LinkedIn</a></div></div></div><aside class="hidden lg:block w-64 flex-shrink-0"><nav class="hidden lg:block sticky top-24"><h4 class="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-3">On This Page</h4><ul class="space-y-1"><li class=""><a href="#project-structure-for-production" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Project Structure for Production</a></li><li class=""><a href="#remote-state-with-s3-and-dynamodb-locking" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Remote State with S3 and DynamoDB Locking</a></li><li class=""><a href="#module-design-patterns" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Module Design Patterns</a></li><li class=""><a href="#sensitive-variables-never-hardcode-secrets" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Sensitive Variables: Never Hardcode Secrets</a></li><li class=""><a href="#workspaces-vs-separate-state-files" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Workspaces vs. Separate State Files</a></li><li class=""><a href="#cicd-pipeline-integration" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">CI/CD Pipeline Integration</a></li><li class=""><a href="#preventing-accidental-destruction" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Preventing Accidental Destruction</a></li><li class=""><a href="#drift-detection" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Drift Detection</a></li></ul></nav></aside></div><div class="mt-16 pt-10 border-t border-gray-100"><h2 class="text-2xl font-bold text-gray-900 mb-6">Related Articles</h2><div class="grid grid-cols-1 md:grid-cols-3 gap-6"><a href="/blog/aws-lambda-production-patterns/"><article class="group bg-white rounded-xl border border-gray-200 p-6 h-full cursor-pointer hover:border-blue-300 hover:shadow-lg transition-all"><span class="inline-block text-xs font-semibold px-3 py-1 rounded-full mb-3 bg-yellow-100 text-yellow-700">AWS</span><h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors leading-snug">AWS Lambda in Production: Cold Starts, Concurrency, and Cost Optimization</h3><p class="text-gray-600 text-sm mb-4 line-clamp-3">Lambda&#x27;s value proposition is compelling: run code without managing servers, pay per invocation, scale from zero to 10,000 concurrent executions without configuration. The reality is a set of execution model nuances that…</p><div class="flex items-center justify-between text-xs text-gray-400"><span>Jun 28, 2025</span><span class="flex items-center gap-1"><svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>7 min read</span></div><div class="mt-3 flex flex-wrap gap-1"><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->aws</span><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->lambda</span><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->serverless</span></div></article></a><a href="/blog/kubernetes-production-best-practices/"><article class="group bg-white rounded-xl border border-gray-200 p-6 h-full cursor-pointer hover:border-blue-300 hover:shadow-lg transition-all"><span class="inline-block text-xs font-semibold px-3 py-1 rounded-full mb-3 bg-yellow-100 text-yellow-700">AWS</span><h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors leading-snug">Kubernetes in Production: Patterns Every Backend Engineer Must Know</h3><p class="text-gray-600 text-sm mb-4 line-clamp-3">Running a container in Kubernetes and running a production workload in Kubernetes are different disciplines. The gap between  and a service that survives node failures, deployment rollouts, and traffic spikes without use…</p><div class="flex items-center justify-between text-xs text-gray-400"><span>Jun 8, 2025</span><span class="flex items-center gap-1"><svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>6 min read</span></div><div class="mt-3 flex flex-wrap gap-1"><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->kubernetes</span><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->k8s</span><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->devops</span></div></article></a><a href="/blog/cloud-cost-optimization/"><article class="group bg-white rounded-xl border border-gray-200 p-6 h-full cursor-pointer hover:border-blue-300 hover:shadow-lg transition-all"><span class="inline-block text-xs font-semibold px-3 py-1 rounded-full mb-3 bg-yellow-100 text-yellow-700">AWS</span><h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors leading-snug">Cloud Cost Optimization: Engineering Practices That Cut AWS Bills by 50%</h3><p class="text-gray-600 text-sm mb-4 line-clamp-3">Cloud bills scale with usage — but they also scale with inattention. Most teams that haven&#x27;t deliberately optimized their AWS spend are 30-50% over what they need to pay for the same workload. The savings come from a pre…</p><div class="flex items-center justify-between text-xs text-gray-400"><span>Apr 29, 2025</span><span class="flex items-center gap-1"><svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>7 min read</span></div><div class="mt-3 flex flex-wrap gap-1"><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->aws</span><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->cost optimization</span><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->ec2</span></div></article></a></div></div><div class="mt-12 text-center"><a class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium transition-colors" href="/blog/">← Back to all articles</a></div></div></div><footer class="bg-gray-900 text-white py-12"><div class="container mx-auto px-4 sm:px-6 lg:px-8"><div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8"><div class="col-span-1 md:col-span-1"><div><a class="text-xl font-bold block mb-3 text-white hover:text-blue-400 transition-colors" href="/">CodeSprintPro</a></div><p class="text-gray-400 text-sm mb-4 leading-relaxed">Deep-dive technical content on System Design, Java, Databases, AI/ML, and AWS — by Sachin Sarawgi.</p><div class="flex space-x-4"><a href="https://github.com/codesprintpro" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors" aria-label="Visit GitHub profile"><i class="fab fa-github text-xl"></i></a><a href="https://www.linkedin.com/in/sachin-sarawgi/" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors" aria-label="Visit LinkedIn profile"><i class="fab fa-linkedin text-xl"></i></a><a href="https://medium.com/@codesprintpro" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors" aria-label="Visit Medium profile"><i class="fab fa-medium text-xl"></i></a></div></div><div><h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 mb-4">Quick Links</h3><ul class="space-y-2"><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">Blog</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/#about">About</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/#portfolio">Portfolio</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/#contact">Contact</a></div></li></ul></div><div><h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 mb-4">Categories</h3><ul class="space-y-2"><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">System Design</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">Java</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">Databases</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">AI/ML</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">AWS</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">Messaging</a></div></li></ul></div><div><h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 mb-4">Contact</h3><ul class="space-y-2 text-gray-400 text-sm"><li><a href="mailto:sachinsarawgi201143@gmail.com" class="hover:text-white transition-colors flex items-center gap-2"><i class="fas fa-envelope"></i> Email</a></li><li><a href="https://www.linkedin.com/in/sachin-sarawgi/" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors flex items-center gap-2"><i class="fab fa-linkedin"></i> LinkedIn</a></li><li><a href="https://github.com/codesprintpro" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors flex items-center gap-2"><i class="fab fa-github"></i> GitHub</a></li></ul></div></div><div class="border-t border-gray-800 pt-6 flex flex-col md:flex-row justify-between items-center gap-2"><p class="text-gray-500 text-sm">© <!-- -->2026<!-- --> CodeSprintPro · Sachin Sarawgi. All rights reserved.</p><p class="text-gray-600 text-xs">Built with Next.js · TailwindCSS · Deployed on GitHub Pages</p></div></div></footer></div></main></div><script id="__NEXT_DATA__" type="application/json">{"props":{"pageProps":{"post":{"title":"Terraform Infrastructure as Code: Production Patterns and Pitfalls","description":"Production Terraform: module design, state management with S3 and DynamoDB locking, workspace strategies for multi-environment deployments, sensitive variable handling, drift detection, and the Terraform anti-patterns that cause outages.","date":"2025-05-14","category":"AWS","tags":["terraform","infrastructure as code","aws","devops","s3","modules","ci/cd"],"featured":false,"affiliateSection":"aws-resources","slug":"terraform-infrastructure-as-code","readingTime":"7 min read","excerpt":"Terraform is the industry-standard tool for Infrastructure as Code (IaC) — defining cloud infrastructure as declarative HCL configuration that can be version-controlled, reviewed, and applied reproducibly. The value prop…","contentHtml":"\u003cp\u003eTerraform is the industry-standard tool for Infrastructure as Code (IaC) — defining cloud infrastructure as declarative HCL configuration that can be version-controlled, reviewed, and applied reproducibly. The value proposition is real: no more manual console clicks, no more \"works in staging but not production\" configurations, no more knowledge silos about how infrastructure is set up. The pitfalls are equally real: state corruption, accidental resource deletion, and modules that become maintenance nightmares.\u003c/p\u003e\n\u003ch2\u003eProject Structure for Production\u003c/h2\u003e\n\u003cpre\u003e\u003ccode\u003einfrastructure/\n├── modules/              # Reusable modules\n│   ├── vpc/\n│   │   ├── main.tf\n│   │   ├── variables.tf\n│   │   └── outputs.tf\n│   ├── eks-cluster/\n│   ├── rds-postgres/\n│   └── ecs-service/\n├── environments/         # Environment-specific configurations\n│   ├── prod/\n│   │   ├── main.tf       # Uses modules with prod-specific values\n│   │   ├── variables.tf\n│   │   └── backend.tf    # Points to prod state file\n│   ├── staging/\n│   └── dev/\n└── global/               # Cross-environment resources (Route53, IAM)\n    ├── main.tf\n    └── backend.tf\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eThis structure separates reusable infrastructure patterns (modules) from environment-specific configuration (environments). Each environment is an independent Terraform root module with its own state file.\u003c/p\u003e\n\u003ch2\u003eRemote State with S3 and DynamoDB Locking\u003c/h2\u003e\n\u003cp\u003eLocal state (\u003ccode\u003eterraform.tfstate\u003c/code\u003e) is never acceptable in a team environment. Remote state in S3 with DynamoDB locking is the standard AWS pattern:\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-hcl\"\u003e# bootstrap/main.tf — create state infrastructure first (bootstrapping)\nresource \"aws_s3_bucket\" \"terraform_state\" {\n  bucket = \"company-terraform-state-${data.aws_caller_identity.current.account_id}\"\n  # Prevent accidental deletion:\n  lifecycle {\n    prevent_destroy = true\n  }\n}\n\nresource \"aws_s3_bucket_versioning\" \"terraform_state\" {\n  bucket = aws_s3_bucket.terraform_state.id\n  versioning_configuration {\n    status = \"Enabled\"  # Every state change is versioned — rollback possible\n  }\n}\n\nresource \"aws_s3_bucket_server_side_encryption_configuration\" \"terraform_state\" {\n  bucket = aws_s3_bucket.terraform_state.id\n  rule {\n    apply_server_side_encryption_by_default {\n      sse_algorithm = \"aws:kms\"  # Encrypt state at rest\n    }\n  }\n}\n\nresource \"aws_dynamodb_table\" \"terraform_locks\" {\n  name         = \"terraform-state-locks\"\n  billing_mode = \"PAY_PER_REQUEST\"\n  hash_key     = \"LockID\"\n\n  attribute {\n    name = \"LockID\"\n    type = \"S\"\n  }\n}\n\n# environments/prod/backend.tf:\nterraform {\n  backend \"s3\" {\n    bucket         = \"company-terraform-state-123456789012\"\n    key            = \"prod/terraform.tfstate\"   # Unique key per environment\n    region         = \"us-east-1\"\n    encrypt        = true\n    dynamodb_table = \"terraform-state-locks\"   # DynamoDB for locking\n  }\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eDynamoDB locking prevents two engineers from running \u003ccode\u003eterraform apply\u003c/code\u003e simultaneously — concurrent applies on the same state cause corruption. One apply blocks while the other holds the lock.\u003c/p\u003e\n\u003ch2\u003eModule Design Patterns\u003c/h2\u003e\n\u003cpre\u003e\u003ccode class=\"language-hcl\"\u003e# modules/rds-postgres/main.tf — reusable RDS module:\nvariable \"identifier\" {\n  description = \"Database instance identifier\"\n  type        = string\n}\n\nvariable \"instance_class\" {\n  description = \"RDS instance type\"\n  type        = string\n  default     = \"db.t3.medium\"\n}\n\nvariable \"allocated_storage_gb\" {\n  type    = number\n  default = 20\n}\n\nvariable \"environment\" {\n  description = \"Environment name (used for tagging)\"\n  type        = string\n  validation {\n    condition     = contains([\"prod\", \"staging\", \"dev\"], var.environment)\n    error_message = \"environment must be prod, staging, or dev\"\n  }\n}\n\nvariable \"database_password\" {\n  description = \"Master database password\"\n  type        = string\n  sensitive   = true  # Never printed in terraform output\n}\n\nresource \"aws_db_instance\" \"this\" {\n  identifier             = var.identifier\n  engine                 = \"postgres\"\n  engine_version         = \"15.4\"\n  instance_class         = var.instance_class\n  allocated_storage      = var.allocated_storage_gb\n  storage_type           = \"gp3\"\n  storage_encrypted      = true\n\n  db_name  = \"appdb\"\n  username = \"admin\"\n  password = var.database_password\n\n  # Prod: Multi-AZ for high availability; dev: single-AZ for cost\n  multi_az = var.environment == \"prod\"\n\n  # Prod: 7-day backups; dev: 1 day\n  backup_retention_period = var.environment == \"prod\" ? 7 : 1\n\n  # Prevent accidental deletion in production:\n  deletion_protection = var.environment == \"prod\"\n  skip_final_snapshot = var.environment != \"prod\"\n  final_snapshot_identifier = var.environment == \"prod\" ? \"${var.identifier}-final\" : null\n\n  vpc_security_group_ids = [aws_security_group.rds.id]\n  db_subnet_group_name   = aws_db_subnet_group.this.name\n\n  tags = {\n    Environment = var.environment\n    ManagedBy   = \"terraform\"\n    Module      = \"rds-postgres\"\n  }\n}\n\noutput \"endpoint\" {\n  description = \"RDS connection endpoint\"\n  value       = aws_db_instance.this.endpoint\n}\n\noutput \"port\" {\n  value = aws_db_instance.this.port\n}\n\n# environments/prod/main.tf — using the module:\nmodule \"orders_db\" {\n  source = \"../../modules/rds-postgres\"\n\n  identifier           = \"orders-prod\"\n  instance_class       = \"db.r6g.large\"\n  allocated_storage_gb = 100\n  environment          = \"prod\"\n  database_password    = var.db_password  # From secrets manager or env var\n}\n\n# Reference module output:\noutput \"orders_db_endpoint\" {\n  value     = module.orders_db.endpoint\n  sensitive = false\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch2\u003eSensitive Variables: Never Hardcode Secrets\u003c/h2\u003e\n\u003cpre\u003e\u003ccode class=\"language-hcl\"\u003e# WRONG: Secret in plaintext\nvariable \"db_password\" {\n  default = \"supersecretpassword123\"  # Committed to git — security incident\n}\n\n# WRONG: Sensitive value in terraform.tfvars committed to git\ndb_password = \"supersecretpassword123\"\n\n# RIGHT: Read from AWS Secrets Manager:\ndata \"aws_secretsmanager_secret_version\" \"db_password\" {\n  secret_id = \"prod/orders-db/password\"\n}\n\nlocals {\n  db_password = jsondecode(data.aws_secretsmanager_secret_version.db_password.secret_string)[\"password\"]\n}\n\nmodule \"orders_db\" {\n  source            = \"../../modules/rds-postgres\"\n  database_password = local.db_password  # Read from Secrets Manager, never hardcoded\n}\n\n# RIGHT: Pass via environment variable (CI/CD):\n# TF_VAR_db_password=... terraform apply\n# GitHub Actions secret → TF_VAR_db_password environment variable\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e\u003cstrong\u003eMark sensitive outputs:\u003c/strong\u003e\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-hcl\"\u003eoutput \"db_endpoint\" {\n  value     = module.orders_db.endpoint\n  sensitive = false  # Endpoint is not sensitive (you know it from Route53)\n}\n\noutput \"db_password\" {\n  value     = module.orders_db.password\n  sensitive = true   # Never printed in plan/apply output\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch2\u003eWorkspaces vs. Separate State Files\u003c/h2\u003e\n\u003cp\u003eTerraform workspaces create separate state files within the same backend. They sound like the right tool for multiple environments, but they have a critical limitation: all workspace configs share the same \u003ccode\u003e.tf\u003c/code\u003e files. This prevents environment-specific configuration like \u003ccode\u003einstance_class = \"db.r6g.large\"\u003c/code\u003e in prod and \u003ccode\u003einstance_class = \"db.t3.small\"\u003c/code\u003e in dev (unless you use many conditionals on \u003ccode\u003eterraform.workspace\u003c/code\u003e).\u003c/p\u003e\n\u003cp\u003e\u003cstrong\u003eRecommendation:\u003c/strong\u003e Separate directories (as shown in the project structure above) are cleaner than workspaces for environment isolation. Each environment has its own \u003ccode\u003emain.tf\u003c/code\u003e with explicit values. Workspaces work well for feature branches or PR preview environments where the configuration is identical except for the state.\u003c/p\u003e\n\u003ch2\u003eCI/CD Pipeline Integration\u003c/h2\u003e\n\u003cpre\u003e\u003ccode class=\"language-yaml\"\u003e# .github/workflows/terraform.yml:\nname: Terraform\n\non:\n  pull_request:\n    paths: ['infrastructure/**']\n  push:\n    branches: [main]\n    paths: ['infrastructure/**']\n\njobs:\n  plan:\n    name: Terraform Plan\n    runs-on: ubuntu-latest\n    if: github.event_name == 'pull_request'\n    steps:\n      - uses: actions/checkout@v4\n\n      - name: Configure AWS credentials\n        uses: aws-actions/configure-aws-credentials@v4\n        with:\n          role-to-assume: ${{ secrets.AWS_TERRAFORM_ROLE_ARN }}  # OIDC, no keys\n          aws-region: us-east-1\n\n      - name: Setup Terraform\n        uses: hashicorp/setup-terraform@v3\n        with:\n          terraform_version: \"1.7.0\"\n\n      - name: Terraform Init\n        run: terraform init\n        working-directory: infrastructure/environments/prod\n\n      - name: Terraform Plan\n        id: plan\n        run: terraform plan -no-color -out=tfplan\n        working-directory: infrastructure/environments/prod\n        env:\n          TF_VAR_db_password: ${{ secrets.PROD_DB_PASSWORD }}\n\n      - name: Comment Plan on PR\n        uses: actions/github-script@v7\n        with:\n          script: |\n            const plan = `${{ steps.plan.outputs.stdout }}`\n            github.rest.issues.createComment({\n              issue_number: context.issue.number,\n              owner: context.repo.owner,\n              repo: context.repo.repo,\n              body: '```hcl\\n' + plan + '\\n```'\n            })\n\n  apply:\n    name: Terraform Apply\n    runs-on: ubuntu-latest\n    if: github.ref == 'refs/heads/main' \u0026#x26;\u0026#x26; github.event_name == 'push'\n    environment: production  # Requires manual approval in GitHub\n    steps:\n      - uses: actions/checkout@v4\n      # ... (same init steps)\n      - name: Terraform Apply\n        run: terraform apply -auto-approve\n        working-directory: infrastructure/environments/prod\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch2\u003ePreventing Accidental Destruction\u003c/h2\u003e\n\u003cp\u003eTerraform's \u003ccode\u003edestroy\u003c/code\u003e capability is as powerful as it is dangerous. Guards against accidental destruction:\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-hcl\"\u003e# Resource-level protection:\nresource \"aws_rds_cluster\" \"orders\" {\n  lifecycle {\n    prevent_destroy = true  # terraform destroy will fail with an error\n  }\n}\n\n# Prevent replacement (some changes destroy and recreate resources):\nresource \"aws_elasticsearch_domain\" \"search\" {\n  lifecycle {\n    # Force team to explicitly acknowledge destruction:\n    prevent_destroy = true\n    # Ignore tag changes that would otherwise trigger replacement:\n    ignore_changes = [tags]\n  }\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003cpre\u003e\u003ccode class=\"language-bash\"\u003e# Plan always before apply — never apply blindly:\nterraform plan -out=tfplan\n# Review: look for \"-\" (destroy) lines carefully\n# Especially: aws_rds_instance will be DESTROYED → check WHY\n\n# Targeted apply for surgical changes:\nterraform apply -target=module.orders_db  # Only apply orders_db module\n\n# Refresh state without changing resources:\nterraform refresh  # Detects drift between state and actual infrastructure\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch2\u003eDrift Detection\u003c/h2\u003e\n\u003cp\u003eReal infrastructure drifts from Terraform state when engineers make manual changes in the console, incident responses bypass automation, or resources are modified by external automation.\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-bash\"\u003e# Detect drift:\nterraform plan -refresh-only\n# Shows: \"Objects have changed outside of Terraform\"\n# Lists actual vs. expected state for each drifted resource\n\n# Import resources created outside Terraform into state:\nterraform import aws_s3_bucket.logs my-application-logs-bucket\n# Now Terraform manages this bucket — future changes go through Terraform\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e\u003cstrong\u003eOrganizational discipline:\u003c/strong\u003e The hardest part of IaC is not the tooling — it's the culture. Every infrastructure change must go through Terraform or it creates drift. Enforce this with IAM policies that deny manual resource creation in production, and use AWS Config rules to detect manually created resources.\u003c/p\u003e\n\u003cp\u003eTerraform's power comes from predictability — the plan shows exactly what will change before anything does. That predictability only holds when every change goes through the plan/apply cycle, sensitive data stays in secrets management, and state is shared, locked, and versioned. The teams that treat \u003ccode\u003eterraform plan\u003c/code\u003e output with the same rigor they treat code review catch infrastructure problems before they become production incidents.\u003c/p\u003e\n","tableOfContents":[{"id":"project-structure-for-production","text":"Project Structure for Production","level":2},{"id":"remote-state-with-s3-and-dynamodb-locking","text":"Remote State with S3 and DynamoDB Locking","level":2},{"id":"module-design-patterns","text":"Module Design Patterns","level":2},{"id":"sensitive-variables-never-hardcode-secrets","text":"Sensitive Variables: Never Hardcode Secrets","level":2},{"id":"workspaces-vs-separate-state-files","text":"Workspaces vs. Separate State Files","level":2},{"id":"cicd-pipeline-integration","text":"CI/CD Pipeline Integration","level":2},{"id":"preventing-accidental-destruction","text":"Preventing Accidental Destruction","level":2},{"id":"drift-detection","text":"Drift Detection","level":2}]},"relatedPosts":[{"title":"AWS Lambda in Production: Cold Starts, Concurrency, and Cost Optimization","description":"How Lambda execution environments work, cold start mitigation strategies, concurrency limits and throttling, Lambda power tuning, VPC networking costs, and when Lambda is the wrong tool.","date":"2025-06-28","category":"AWS","tags":["aws","lambda","serverless","java","cold start","performance","cost optimization"],"featured":false,"affiliateSection":"aws-resources","slug":"aws-lambda-production-patterns","readingTime":"7 min read","excerpt":"Lambda's value proposition is compelling: run code without managing servers, pay per invocation, scale from zero to 10,000 concurrent executions without configuration. The reality is a set of execution model nuances that…"},{"title":"Kubernetes in Production: Patterns Every Backend Engineer Must Know","description":"Resource requests and limits, liveness vs readiness probes, rolling deployments, HPA configuration, pod disruption budgets, and the mistakes that cause production outages in Kubernetes.","date":"2025-06-08","category":"AWS","tags":["kubernetes","k8s","devops","containers","deployment","aws","eks"],"featured":false,"affiliateSection":"aws-resources","slug":"kubernetes-production-best-practices","readingTime":"6 min read","excerpt":"Running a container in Kubernetes and running a production workload in Kubernetes are different disciplines. The gap between  and a service that survives node failures, deployment rollouts, and traffic spikes without use…"},{"title":"Cloud Cost Optimization: Engineering Practices That Cut AWS Bills by 50%","description":"Systematic AWS cost reduction: right-sizing EC2 and RDS instances, Savings Plans vs Reserved Instances, S3 lifecycle policies, data transfer cost elimination, EKS node optimization, RDS read replicas vs caching, and the observability stack for cost monitoring.","date":"2025-04-29","category":"AWS","tags":["aws","cost optimization","ec2","rds","s3","eks","savings plans","finops"],"featured":false,"affiliateSection":"aws-resources","slug":"cloud-cost-optimization","readingTime":"7 min read","excerpt":"Cloud bills scale with usage — but they also scale with inattention. Most teams that haven't deliberately optimized their AWS spend are 30-50% over what they need to pay for the same workload. The savings come from a pre…"}]},"__N_SSG":true},"page":"/blog/[slug]","query":{"slug":"terraform-infrastructure-as-code"},"buildId":"rpFn_jslWZ9qPkJwor7RD","isFallback":false,"gsp":true,"scriptLoader":[]}</script></body></html>

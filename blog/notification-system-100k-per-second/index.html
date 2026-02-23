@@ -1,0 +1,358 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8" data-next-head=""/><meta name="viewport" content="width=device-width" data-next-head=""/><title data-next-head="">Designing a High-Throughput Notification System for 100K Events per Second<!-- --> | CodeSprintPro</title><meta name="description" content="End-to-end architecture for a notification system handling 100,000 events per second: capacity planning, Kafka partition sizing, fan-out strategy, rate limiting, idempotency, and incident simulation." data-next-head=""/><meta name="author" content="Sachin Sarawgi" data-next-head=""/><link rel="canonical" href="https://codesprintpro.com/blog/notification-system-100k-per-second/" data-next-head=""/><meta property="og:type" content="article" data-next-head=""/><meta property="og:title" content="Designing a High-Throughput Notification System for 100K Events per Second" data-next-head=""/><meta property="og:description" content="End-to-end architecture for a notification system handling 100,000 events per second: capacity planning, Kafka partition sizing, fan-out strategy, rate limiting, idempotency, and incident simulation." data-next-head=""/><meta property="og:url" content="https://codesprintpro.com/blog/notification-system-100k-per-second/" data-next-head=""/><meta property="og:image" content="https://codesprintpro.com/images/og-default.jpg" data-next-head=""/><meta property="og:site_name" content="CodeSprintPro" data-next-head=""/><meta property="article:published_time" content="2025-05-10" data-next-head=""/><meta property="article:author" content="Sachin Sarawgi" data-next-head=""/><meta property="article:section" content="System Design" data-next-head=""/><meta property="article:tag" content="system design" data-next-head=""/><meta property="article:tag" content="notifications" data-next-head=""/><meta property="article:tag" content="kafka" data-next-head=""/><meta property="article:tag" content="throughput" data-next-head=""/><meta property="article:tag" content="capacity planning" data-next-head=""/><meta property="article:tag" content="distributed systems" data-next-head=""/><meta name="twitter:card" content="summary_large_image" data-next-head=""/><meta name="twitter:title" content="Designing a High-Throughput Notification System for 100K Events per Second" data-next-head=""/><meta name="twitter:description" content="End-to-end architecture for a notification system handling 100,000 events per second: capacity planning, Kafka partition sizing, fan-out strategy, rate limiting, idempotency, and incident simulation." data-next-head=""/><meta name="twitter:image" content="https://codesprintpro.com/images/og-default.jpg" data-next-head=""/><script type="application/ld+json" data-next-head="">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Designing a High-Throughput Notification System for 100K Events per Second","description":"End-to-end architecture for a notification system handling 100,000 events per second: capacity planning, Kafka partition sizing, fan-out strategy, rate limiting, idempotency, and incident simulation.","image":"https://codesprintpro.com/images/og-default.jpg","datePublished":"2025-05-10","dateModified":"2025-05-10","author":{"@type":"Person","name":"Sachin Sarawgi","url":"https://codesprintpro.com","sameAs":["https://www.linkedin.com/in/sachin-sarawgi/","https://github.com/codesprintpro","https://medium.com/@codesprintpro"]},"publisher":{"@type":"Organization","name":"CodeSprintPro","url":"https://codesprintpro.com","logo":{"@type":"ImageObject","url":"https://codesprintpro.com/favicon/favicon-96x96.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codesprintpro.com/blog/notification-system-100k-per-second/"},"keywords":"system design, notifications, kafka, throughput, capacity planning, distributed systems","articleSection":"System Design"}</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerPolicy="no-referrer"/><script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script><link rel="preload" href="/_next/static/media/e4af272ccee01ff0-s.p.woff2" as="font" type="font/woff2" crossorigin="anonymous" data-next-font="size-adjust"/><link rel="preload" href="/_next/static/css/735d4373f93910ca.css" as="style"/><link rel="stylesheet" href="/_next/static/css/735d4373f93910ca.css" data-n-g=""/><noscript data-n-css=""></noscript><script defer="" nomodule="" src="/_next/static/chunks/polyfills-42372ed130431b0a.js"></script><script src="/_next/static/chunks/webpack-11a4a2dad04962bb.js" defer=""></script><script src="/_next/static/chunks/framework-1ce91eb6f9ecda85.js" defer=""></script><script src="/_next/static/chunks/main-c7f4109f032d7b6e.js" defer=""></script><script src="/_next/static/chunks/pages/_app-1a852bd9e38c70ab.js" defer=""></script><script src="/_next/static/chunks/730-db7827467817f501.js" defer=""></script><script src="/_next/static/chunks/90-1cd4611704c3dbe0.js" defer=""></script><script src="/_next/static/chunks/440-29f4b99a44e744b5.js" defer=""></script><script src="/_next/static/chunks/pages/blog/%5Bslug%5D-0c1b14a33d5e05ee.js" defer=""></script><script src="/_next/static/rpFn_jslWZ9qPkJwor7RD/_buildManifest.js" defer=""></script><script src="/_next/static/rpFn_jslWZ9qPkJwor7RD/_ssgManifest.js" defer=""></script></head><body><div id="__next"><main class="__className_f367f3"><div class="min-h-screen bg-white"><nav class="fixed w-full z-50 transition-all duration-300 bg-white shadow-md" style="transform:translateY(-100px) translateZ(0)"><div class="container mx-auto px-4 sm:px-6 lg:px-8"><div class="flex items-center justify-between h-16"><a class="text-xl font-bold transition-colors text-blue-600" href="/">CodeSprintPro</a><div class="hidden md:flex items-center space-x-8"><a class="text-sm font-medium transition-colors text-blue-600" href="/blog/">Blog</a><a class="text-sm font-medium transition-colors text-gray-600 hover:text-blue-600" href="/#about">About</a><a class="text-sm font-medium transition-colors text-gray-600 hover:text-blue-600" href="/#portfolio">Portfolio</a><a class="text-sm font-medium transition-colors text-gray-600 hover:text-blue-600" href="/#contact">Contact</a></div><button class="md:hidden p-2 rounded-lg transition-colors hover:bg-gray-100 text-gray-600" aria-label="Toggle mobile menu"><svg class="w-6 h-6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor"><path d="M4 6h16M4 12h16M4 18h16"></path></svg></button></div></div></nav><div class="pt-20"><div class="bg-gradient-to-br from-gray-900 to-blue-950 py-16"><div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl"><nav class="flex items-center gap-2 text-sm text-gray-400 mb-6"><a class="hover:text-white transition-colors" href="/">Home</a><span>/</span><a class="hover:text-white transition-colors" href="/blog/">Blog</a><span>/</span><span class="text-gray-300 truncate max-w-xs">Designing a High-Throughput Notification System for 100K Events per Second</span></nav><span class="inline-block text-xs font-semibold px-3 py-1 rounded-full bg-blue-100 text-blue-700 mb-4">System Design</span><h1 class="text-3xl md:text-5xl font-bold text-white mb-4 leading-tight">Designing a High-Throughput Notification System for 100K Events per Second</h1><p class="text-gray-300 text-lg mb-6 max-w-3xl">End-to-end architecture for a notification system handling 100,000 events per second: capacity planning, Kafka partition sizing, fan-out strategy, rate limiting, idempotency, and incident simulation.</p><div class="flex flex-wrap items-center gap-4 text-gray-400 text-sm"><span class="flex items-center gap-1.5"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>Sachin Sarawgi</span><span>·</span><span>May 10, 2025</span><span>·</span><span class="flex items-center gap-1"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>10 min read</span></div><div class="flex flex-wrap gap-2 mt-4"><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->system design</span><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->notifications</span><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->kafka</span><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->throughput</span><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->capacity planning</span><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->distributed systems</span></div></div></div><div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl py-12"><div class="flex gap-12"><div class="flex-1 min-w-0"><article class="prose prose-lg max-w-none prose-headings:text-gray-900 prose-headings:font-bold prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-4 prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3 prose-p:text-gray-700 prose-p:leading-relaxed prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline prose-strong:text-gray-900 prose-blockquote:border-blue-600 prose-blockquote:text-gray-600 prose-code:text-blue-700 prose-code:bg-blue-50 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-sm prose-code:before:content-none prose-code:after:content-none prose-pre:rounded-xl prose-img:rounded-xl prose-img:shadow-md prose-table:text-sm prose-th:bg-gray-100 prose-th:text-gray-700"><p>100,000 events per second is not a notification system problem — it's a data pipeline problem that happens to produce notifications. Teams that approach it as a features problem ("we just need push, email, and SMS") build systems that collapse under load. The engineering challenge is the fan-out at scale: one event triggers notifications to potentially thousands of users, each notification routed through different channels, rate-limited per user, deduplicated, and delivered with retry guarantees.</p>
+<h2>Functional and Non-Functional Requirements</h2>
+<p><strong>Functional:</strong></p>
+<ul>
+<li>Ingest raw events from producer services (user actions, system events)</li>
+<li>Enrich events with user preferences and notification templates</li>
+<li>Route to appropriate channels: push (FCM/APNs), email, SMS, in-app</li>
+<li>Respect per-user preferences and quiet hours</li>
+<li>Track delivery status per notification</li>
+</ul>
+<p><strong>Non-Functional:</strong></p>
+<ul>
+<li>Ingest throughput: 100,000 events/second (peak)</li>
+<li>Delivery latency: &#x3C; 5 seconds end-to-end for push notifications</li>
+<li>Delivery latency: &#x3C; 60 seconds for email/SMS</li>
+<li>Availability: 99.9% (&#x3C; 8.7 hours downtime/year)</li>
+<li>At-least-once delivery with idempotent consumers</li>
+<li>Rate limiting: max 10 push notifications/user/hour</li>
+<li>Multi-region: active-active for ingestion, active-passive for delivery</li>
+</ul>
+<h2>Throughput Calculation and Capacity Planning</h2>
+<p>Raw event rate: 100,000 events/second</p>
+<p>Fan-out ratio: on average, each event triggers notifications for 5 users (social platform: a viral post triggers notifications to followers). Burst: 50× fan-out (celebrity post, flash sale).</p>
+<pre><code>Peak notification volume:
+100,000 events/s × 50 fan-out = 5,000,000 notifications/second (peak burst)
+100,000 events/s × 5 fan-out  = 500,000 notifications/second (average)
+
+Channel distribution:
+- Push: 70% → 350,000 push/second
+- In-app: 20% → 100,000 in-app/second
+- Email: 8%  → 40,000 email/second
+- SMS: 2%    → 10,000 SMS/second
+</code></pre>
+<p><strong>Storage sizing:</strong></p>
+<ul>
+<li>Each notification record: ~2KB</li>
+<li>Retention: 30 days</li>
+<li>Volume: 500,000/s × 86,400s × 30 days × 2KB = <strong>2.59 TB/day</strong></li>
+</ul>
+<p>This is a write-heavy storage problem. Cassandra or DynamoDB, not PostgreSQL.</p>
+<h2>Kafka Partition Planning</h2>
+<p>Kafka partitions determine parallelism. Rule: partition count ≥ peak consumer count × 1.5.</p>
+<p>For the event ingestion topic (<code>raw-events</code>):</p>
+<pre><code>Target throughput: 100,000 events/second × 1KB avg = 100 MB/s
+Kafka broker write throughput: ~200 MB/s per broker (practical limit)
+Minimum brokers: 100/200 = 0.5 → use 3 brokers for HA
+
+Target consumer parallelism: 200 consumer threads
+Partition count: 200 × 1.5 = 300 partitions
+</code></pre>
+<p>For the fan-out output topic (<code>notifications-to-send</code>):</p>
+<pre><code>Peak output: 5,000,000 notifications/second × 500B = 2,500 MB/s
+Brokers needed: 2,500/200 = 12.5 → 15 brokers (safety margin)
+Partitions: 1,500 (15 brokers × 100 partitions/broker)
+</code></pre>
+<pre><code>Topic Configuration:
+raw-events:
+  partitions: 300
+  replication-factor: 3
+  min.insync.replicas: 2
+  retention.ms: 3600000  # 1 hour (events are processed quickly)
+
+notifications-to-send:
+  partitions: 1500
+  replication-factor: 3
+  retention.ms: 86400000  # 24 hours (for replay on downstream failure)
+
+notification-status:
+  partitions: 300
+  replication-factor: 3
+  retention.ms: 604800000  # 7 days
+</code></pre>
+<h2>System Architecture</h2>
+<pre><code>High-Throughput Notification Architecture:
+
+Producer Services (100K events/s)
+[Order Service] [Social Service] [Marketing Service]
+        │              │                │
+        └──────────────┴────────────────┘
+                       │
+                       ▼ (Kafka, 100K msg/s)
+              ┌─────────────────┐
+              │   raw-events    │  300 partitions
+              │   topic         │
+              └────────┬────────┘
+                       │
+                       ▼
+          ┌────────────────────────┐
+          │   Event Processor      │  200 instances
+          │   - Validate           │  (Kafka consumer group)
+          │   - Deduplicate        │
+          │   - Enrich with        │
+          │     user prefs         │
+          └────────┬───────────────┘
+                   │ Fan-out (1 event → N notifications)
+                   ▼ (Kafka, 500K-5M msg/s peak)
+        ┌──────────────────────┐
+        │ notifications-to-    │  1500 partitions
+        │ send topic           │
+        └───┬──────────┬───────┘
+            │          │
+    ┌───────┘          └──────────┐
+    ▼                             ▼
+┌─────────────┐           ┌─────────────┐
+│  Push       │           │  Email/SMS  │
+│  Dispatcher │           │  Dispatcher │
+│  (FCM/APNs) │           │  (SES/SNS)  │
+│  500 inst   │           │  100 inst   │
+└──────┬──────┘           └──────┬──────┘
+       │                         │
+       ▼                         ▼
+┌──────────────────────────────────────┐
+│   Notification Status Store          │
+│   (Cassandra/DynamoDB)               │
+│   + notification-status Kafka topic  │
+└──────────────────────────────────────┘
+</code></pre>
+<h2>Database Schema</h2>
+<pre><code class="language-sql">-- Cassandra schema for notification storage
+-- Partition key = user_id for co-located user notification history
+-- Clustering key = created_at DESC for reverse-chronological reads
+
+CREATE TABLE notifications (
+    user_id         UUID,
+    notification_id UUID,
+    type            TEXT,          -- push | email | sms | in_app
+    title           TEXT,
+    body            TEXT,
+    status          TEXT,          -- pending | sent | delivered | failed
+    channel_msg_id  TEXT,          -- FCM message_id, SES message_id, etc.
+    idempotency_key TEXT,
+    metadata        MAP&#x3C;TEXT, TEXT>,
+    created_at      TIMESTAMP,
+    delivered_at    TIMESTAMP,
+    PRIMARY KEY ((user_id), created_at, notification_id)
+) WITH CLUSTERING ORDER BY (created_at DESC)
+  AND compaction = {'class': 'TimeWindowCompactionStrategy',
+                    'compaction_window_size': '1',
+                    'compaction_window_unit': 'DAYS'};
+
+-- TTL: auto-expire after 90 days
+ALTER TABLE notifications WITH default_time_to_live = 7776000;
+</code></pre>
+<h2>Fan-Out Problem and Solution</h2>
+<p>Fan-out is the amplification problem. One event → many notifications. Two strategies:</p>
+<p><strong>Push fan-out (eager):</strong> Expand the fan-out immediately when the event is ingested. For a post liked by 1M followers: generate 1M notification records instantly.</p>
+<pre><code>Pros: Delivery latency is predictable (no fan-out latency at read time)
+Cons: Hot events cause traffic spikes; wasteful for inactive users
+</code></pre>
+<p><strong>Pull fan-out (lazy):</strong> Store the event once; fan-out happens when the user opens the app.</p>
+<pre><code>Pros: Low write amplification; inactive users don't receive unnecessary processing
+Cons: First read after event is slow (fan-out happens on read)
+</code></pre>
+<p><strong>Hybrid (what large platforms use):</strong> Push fan-out for regular users (&#x3C; 10K followers). Pull fan-out for celebrity/high-follower accounts. Threshold: if sender follower count > 100K, use pull fan-out.</p>
+<pre><code class="language-java">@Service
+public class FanOutRouter {
+
+    private static final int PUSH_FANOUT_THRESHOLD = 100_000;
+
+    public void route(NotificationEvent event) {
+        long followerCount = userService.getFollowerCount(event.getSenderId());
+
+        if (followerCount &#x3C;= PUSH_FANOUT_THRESHOLD) {
+            // Eager fan-out: write a notification for each follower now
+            fanOutService.pushFanOut(event);
+        } else {
+            // Lazy fan-out: write event once, expand on read
+            fanOutService.lazyFanOut(event);
+        }
+    }
+}
+</code></pre>
+<h2>Rate Limiting</h2>
+<p>Rate limiting protects users from notification spam and protects downstream channels from overload.</p>
+<p><strong>Per-user rate limits:</strong> Redis sliding window counter:</p>
+<pre><code class="language-java">public boolean isAllowed(String userId, String channel) {
+    String key = "ratelimit:" + channel + ":" + userId;
+    long windowSeconds = 3600L; // 1 hour window
+    int maxAllowed = switch (channel) {
+        case "push"  -> 10;
+        case "email" -> 3;
+        case "sms"   -> 2;
+        default      -> 20;
+    };
+
+    // Lua script: atomic sliding window check
+    Long count = redisTemplate.execute(
+        SLIDING_WINDOW_SCRIPT,
+        Collections.singletonList(key),
+        String.valueOf(System.currentTimeMillis()),
+        String.valueOf(windowSeconds * 1000),
+        String.valueOf(maxAllowed)
+    );
+
+    return count != null &#x26;&#x26; count &#x3C;= maxAllowed;
+}
+</code></pre>
+<p><strong>Channel-level rate limits:</strong> FCM allows 600 notifications/second per project, SES defaults to 14 emails/second. Use a token bucket per channel:</p>
+<pre><code class="language-java">@Component
+public class ChannelRateLimiter {
+    // RateLimiter from Guava: token bucket implementation
+    private final Map&#x3C;String, RateLimiter> channelLimiters = Map.of(
+        "fcm",  RateLimiter.create(500),  // 500/s, below FCM limit
+        "apns", RateLimiter.create(1000), // 1000/s
+        "ses",  RateLimiter.create(100),  // 100/s, limit for burst safety
+        "sns",  RateLimiter.create(200)
+    );
+
+    public void acquire(String channel) {
+        channelLimiters.get(channel).acquire(); // Blocks until permit available
+    }
+}
+</code></pre>
+<h2>Backpressure Handling</h2>
+<p>When downstream channels are slow (FCM is degraded, SES is throttling), Kafka consumer lag grows. Handle it explicitly:</p>
+<pre><code class="language-java">@KafkaListener(topics = "notifications-to-send", groupId = "push-dispatcher")
+public void dispatch(ConsumerRecord&#x3C;String, NotificationMessage> record,
+                     Acknowledgment ack) {
+    NotificationMessage msg = record.value();
+
+    // Check channel health before consuming more
+    if (channelHealthMonitor.isUnhealthy("fcm")) {
+        // Pause this partition — let lag build in Kafka
+        consumer.pause(Collections.singleton(record.topicPartition()));
+        scheduledExecutor.schedule(() -> {
+            consumer.resume(Collections.singleton(record.topicPartition()));
+        }, 5, TimeUnit.SECONDS);
+        return; // Don't ack — will be redelivered
+    }
+
+    try {
+        channelRateLimiter.acquire("fcm");
+        FcmResult result = fcmClient.send(msg);
+        notificationStore.updateStatus(msg.getNotificationId(), "sent", result.getMessageId());
+        ack.acknowledge();
+    } catch (FcmThrottledException e) {
+        // Don't ack — will retry
+        Thread.sleep(1000);
+    }
+}
+</code></pre>
+<h2>Idempotency Design</h2>
+<p>The event processor may process the same event twice (Kafka at-least-once). Fan-out must be idempotent:</p>
+<pre><code class="language-java">@Transactional
+public void fanOut(NotificationEvent event) {
+    String dedupKey = "fanout:" + event.getEventId();
+
+    // Atomic insert — skip if already processed
+    boolean inserted = cassandraOps.insert(
+        new FanOutRecord(event.getEventId(), Instant.now())
+    ).wasApplied(); // Cassandra lightweight transaction
+
+    if (!inserted) {
+        log.info("Fan-out already processed for event: {}", event.getEventId());
+        return;
+    }
+
+    // Process fan-out only once
+    List&#x3C;Notification> notifications = generateNotifications(event);
+    kafkaTemplate.send("notifications-to-send", notifications);
+}
+</code></pre>
+<h2>Retry Strategy</h2>
+<pre><code>Retry topology:
+notifications-to-send
+        │
+        ├── FCM success → notification-status (delivered)
+        │
+        ├── FCM retryable error (5xx, timeout)
+        │       └── notifications-retry-30s (wait 30s)
+        │               └── notifications-retry-5m
+        │                       └── notifications-retry-30m
+        │                               └── notifications-dlq
+        │
+        └── FCM non-retryable (invalid token, app uninstalled)
+                └── Update user record: push token invalid
+                └── notifications-dlq (for audit)
+</code></pre>
+<h2>Horizontal Scaling</h2>
+<p>Each component scales independently:</p>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Scale trigger</th>
+<th>Scale mechanism</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Event Processor</td>
+<td>Kafka consumer lag > 10K</td>
+<td>Add consumer instances</td>
+</tr>
+<tr>
+<td>Push Dispatcher</td>
+<td>Kafka consumer lag + FCM latency</td>
+<td>Add consumer instances</td>
+</tr>
+<tr>
+<td>Email Dispatcher</td>
+<td>SES send rate limit</td>
+<td>Add SES sending identities</td>
+</tr>
+<tr>
+<td>Cassandra</td>
+<td>Disk > 70% or read latency > 5ms</td>
+<td>Add Cassandra nodes</td>
+</tr>
+</tbody>
+</table>
+<p>Kafka consumers scale horizontally up to the partition count. With 1,500 partitions on <code>notifications-to-send</code>, you can run 1,500 consumer threads — spread across ~100 pods × 15 threads each.</p>
+<h2>Monitoring and Alerting</h2>
+<pre><code>Critical alerts (page immediately):
+- Kafka consumer lag on notifications-to-send > 1,000,000 messages
+- Push delivery success rate &#x3C; 95% over 5 minutes
+- DLQ topic lag growing > 1000/minute
+- Cassandra write latency P99 > 100ms
+
+Warning alerts (ticket/slack):
+- Fan-out throughput > 80% of capacity (approaching limit)
+- Per-user rate limit hit rate > 5% (users getting suppressed at high rate)
+- Email bounce rate > 2%
+</code></pre>
+<p>Grafana dashboard panels:</p>
+<ul>
+<li>Events ingested/second (with 24h comparison)</li>
+<li>Fan-out ratio (events → notifications) — spike indicates viral content</li>
+<li>Notification delivery success rate by channel</li>
+<li>Kafka consumer lag by consumer group</li>
+<li>Channel latency P50/P95/P99</li>
+</ul>
+<h2>Incident Simulation</h2>
+<p><strong>Scenario:</strong> FCM has a 30-minute partial outage (50% error rate).</p>
+<p><strong>Impact without proper design:</strong></p>
+<ul>
+<li>Push dispatcher retries immediately</li>
+<li>2× traffic to FCM</li>
+<li>FCM rate-limits our project</li>
+<li>All push notifications backed up</li>
+<li>Downstream timeout cascade</li>
+</ul>
+<p><strong>Impact with proper design:</strong></p>
+<ul>
+<li>Circuit breaker opens after 20% FCM error rate</li>
+<li>Push Dispatcher pauses Kafka consumption on FCM topic</li>
+<li>Kafka lag builds (Kafka as buffer — this is the right behavior)</li>
+<li>Backpressure propagates cleanly — no retry storm</li>
+<li>Email/SMS/in-app continue unaffected (separate consumer groups)</li>
+<li>When FCM recovers: circuit breaker half-opens, dispatcher resumes, lag drains over 10 minutes</li>
+</ul>
+<p>The system degrades gracefully. Push notifications are delayed, not lost.</p>
+<h2>Trade-offs Discussion</h2>
+<p><strong>Consistency vs availability for rate limits:</strong> Using Redis for per-user rate limits means Redis failure bypasses rate limiting. Decision: accept this. Redis failure is transient; brief notification overshoot is acceptable. Alternative (DB-based rate limits) would cause rate limit checks to become a bottleneck under load.</p>
+<p><strong>Fan-out at write vs read:</strong> Push fan-out guarantees low delivery latency but wastes compute for inactive users. For a 100M user platform where 20% are active, push fan-out wastes 80% of fan-out compute. Hybrid strategy based on sender follower count is the right balance.</p>
+<p><strong>Kafka retention:</strong> 24-hour retention on the notification topic is long enough for downstream failures to recover and replay. 7-day retention would require much larger storage. 1-hour retention would not cover extended outages.</p>
+<p>The architecture scales to 100K events/second because every component is stateless and horizontally scalable, and Kafka absorbs all the burst capacity between components. The hard part is the fan-out math — design your Kafka partition count around your peak fan-out ratio, not your ingestion rate.</p>
+</article><div class="my-10 rounded-xl border border-yellow-200 bg-yellow-50 p-6"><div class="flex items-center gap-2 mb-1"><span class="text-lg">📚</span><h3 class="text-base font-bold text-gray-900">Recommended Resources</h3></div><div class="space-y-4"><div class="flex items-start gap-3 bg-white rounded-lg p-4 border border-yellow-100"><div class="flex-1 min-w-0"><div class="flex items-center gap-2 flex-wrap mb-1"><span class="font-semibold text-gray-900 text-sm">System Design Interview — Alex Xu</span><span class="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-medium">Best Seller</span></div><p class="text-xs text-gray-600">Step-by-step guide to ace system design interviews with real-world examples.</p></div><a href="https://amzn.to/3TqsPRp" target="_blank" rel="noopener noreferrer" class="flex-shrink-0 text-xs bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium whitespace-nowrap">View on Amazon<!-- --> →</a></div><div class="flex items-start gap-3 bg-white rounded-lg p-4 border border-yellow-100"><div class="flex-1 min-w-0"><div class="flex items-center gap-2 flex-wrap mb-1"><span class="font-semibold text-gray-900 text-sm">Grokking System Design on Educative</span></div><p class="text-xs text-gray-600">Interactive course teaching system design with visual diagrams and practice problems.</p></div><a href="https://www.educative.io/courses/grokking-the-system-design-interview" target="_blank" rel="noopener noreferrer" class="flex-shrink-0 text-xs bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium whitespace-nowrap">View Course<!-- --> →</a></div><div class="flex items-start gap-3 bg-white rounded-lg p-4 border border-yellow-100"><div class="flex-1 min-w-0"><div class="flex items-center gap-2 flex-wrap mb-1"><span class="font-semibold text-gray-900 text-sm">Designing Data-Intensive Applications</span></div><p class="text-xs text-gray-600">Martin Kleppmann&#x27;s book is essential reading for any system design role.</p></div><a href="https://amzn.to/3RyKzOA" target="_blank" rel="noopener noreferrer" class="flex-shrink-0 text-xs bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium whitespace-nowrap">View on Amazon<!-- --> →</a></div></div></div><div class="mt-10 pt-8 border-t border-gray-100"><p class="text-sm text-gray-500 mb-3">Found this useful? Share it:</p><div class="flex gap-3"><a href="https://twitter.com/intent/tweet?text=Designing%20a%20High-Throughput%20Notification%20System%20for%20100K%20Events%20per%20Second&amp;url=https%3A%2F%2Fcodesprintpro.com%2Fblog%2Fnotification-system-100k-per-second%2F" target="_blank" rel="noopener noreferrer" class="text-xs bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors">Share on X/Twitter</a><a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fcodesprintpro.com%2Fblog%2Fnotification-system-100k-per-second%2F" target="_blank" rel="noopener noreferrer" class="text-xs bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">Share on LinkedIn</a></div></div></div><aside class="hidden lg:block w-64 flex-shrink-0"><nav class="hidden lg:block sticky top-24"><h4 class="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-3">On This Page</h4><ul class="space-y-1"><li class=""><a href="#functional-and-non-functional-requirements" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Functional and Non-Functional Requirements</a></li><li class=""><a href="#throughput-calculation-and-capacity-planning" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Throughput Calculation and Capacity Planning</a></li><li class=""><a href="#kafka-partition-planning" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Kafka Partition Planning</a></li><li class=""><a href="#system-architecture" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">System Architecture</a></li><li class=""><a href="#database-schema" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Database Schema</a></li><li class=""><a href="#fan-out-problem-and-solution" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Fan-Out Problem and Solution</a></li><li class=""><a href="#rate-limiting" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Rate Limiting</a></li><li class=""><a href="#backpressure-handling" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Backpressure Handling</a></li><li class=""><a href="#idempotency-design" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Idempotency Design</a></li><li class=""><a href="#retry-strategy" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Retry Strategy</a></li><li class=""><a href="#horizontal-scaling" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Horizontal Scaling</a></li><li class=""><a href="#monitoring-and-alerting" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Monitoring and Alerting</a></li><li class=""><a href="#incident-simulation" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Incident Simulation</a></li><li class=""><a href="#trade-offs-discussion" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Trade-offs Discussion</a></li></ul></nav></aside></div><div class="mt-16 pt-10 border-t border-gray-100"><h2 class="text-2xl font-bold text-gray-900 mb-6">Related Articles</h2><div class="grid grid-cols-1 md:grid-cols-3 gap-6"><a href="/blog/observability-opentelemetry-production/"><article class="group bg-white rounded-xl border border-gray-200 p-6 h-full cursor-pointer hover:border-blue-300 hover:shadow-lg transition-all"><span class="inline-block text-xs font-semibold px-3 py-1 rounded-full mb-3 bg-blue-100 text-blue-700">System Design</span><h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors leading-snug">Building Production Observability with OpenTelemetry and Grafana Stack</h3><p class="text-gray-600 text-sm mb-4 line-clamp-3">Observability is not the same as monitoring. Monitoring tells you something is wrong. Observability lets you understand why — by exploring system state through metrics, traces, and logs without needing to know in advance…</p><div class="flex items-center justify-between text-xs text-gray-400"><span>Jul 3, 2025</span><span class="flex items-center gap-1"><svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>6 min read</span></div><div class="mt-3 flex flex-wrap gap-1"><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->observability</span><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->opentelemetry</span><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->prometheus</span></div></article></a><a href="/blog/event-sourcing-cqrs-production/"><article class="group bg-white rounded-xl border border-gray-200 p-6 h-full cursor-pointer hover:border-blue-300 hover:shadow-lg transition-all"><span class="inline-block text-xs font-semibold px-3 py-1 rounded-full mb-3 bg-blue-100 text-blue-700">System Design</span><h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors leading-snug">Event Sourcing and CQRS in Production: Beyond the Theory</h3><p class="text-gray-600 text-sm mb-4 line-clamp-3">Event sourcing is one of those patterns that looks elegant in conference talks and becomes surprisingly complex in production systems. The theory — store events instead of state, derive state by replaying events — is sou…</p><div class="flex items-center justify-between text-xs text-gray-400"><span>Jun 23, 2025</span><span class="flex items-center gap-1"><svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>7 min read</span></div><div class="mt-3 flex flex-wrap gap-1"><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->event sourcing</span><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->cqrs</span><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->system design</span></div></article></a><a href="/blog/grpc-vs-rest-vs-graphql/"><article class="group bg-white rounded-xl border border-gray-200 p-6 h-full cursor-pointer hover:border-blue-300 hover:shadow-lg transition-all"><span class="inline-block text-xs font-semibold px-3 py-1 rounded-full mb-3 bg-blue-100 text-blue-700">System Design</span><h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors leading-snug">gRPC vs REST vs GraphQL: Choosing the Right API Protocol</h3><p class="text-gray-600 text-sm mb-4 line-clamp-3">API protocol selection has a longer lifespan than almost any other technical decision. REST APIs from 2010 are still running in production. gRPC services chosen for internal communication in 2018 are tightly coupled to t…</p><div class="flex items-center justify-between text-xs text-gray-400"><span>Jun 18, 2025</span><span class="flex items-center gap-1"><svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>7 min read</span></div><div class="mt-3 flex flex-wrap gap-1"><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->grpc</span><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->rest</span><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->graphql</span></div></article></a></div></div><div class="mt-12 text-center"><a class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium transition-colors" href="/blog/">← Back to all articles</a></div></div></div><footer class="bg-gray-900 text-white py-12"><div class="container mx-auto px-4 sm:px-6 lg:px-8"><div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8"><div class="col-span-1 md:col-span-1"><div><a class="text-xl font-bold block mb-3 text-white hover:text-blue-400 transition-colors" href="/">CodeSprintPro</a></div><p class="text-gray-400 text-sm mb-4 leading-relaxed">Deep-dive technical content on System Design, Java, Databases, AI/ML, and AWS — by Sachin Sarawgi.</p><div class="flex space-x-4"><a href="https://github.com/codesprintpro" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors" aria-label="Visit GitHub profile"><i class="fab fa-github text-xl"></i></a><a href="https://www.linkedin.com/in/sachin-sarawgi/" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors" aria-label="Visit LinkedIn profile"><i class="fab fa-linkedin text-xl"></i></a><a href="https://medium.com/@codesprintpro" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors" aria-label="Visit Medium profile"><i class="fab fa-medium text-xl"></i></a></div></div><div><h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 mb-4">Quick Links</h3><ul class="space-y-2"><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">Blog</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/#about">About</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/#portfolio">Portfolio</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/#contact">Contact</a></div></li></ul></div><div><h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 mb-4">Categories</h3><ul class="space-y-2"><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">System Design</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">Java</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">Databases</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">AI/ML</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">AWS</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">Messaging</a></div></li></ul></div><div><h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 mb-4">Contact</h3><ul class="space-y-2 text-gray-400 text-sm"><li><a href="mailto:sachinsarawgi201143@gmail.com" class="hover:text-white transition-colors flex items-center gap-2"><i class="fas fa-envelope"></i> Email</a></li><li><a href="https://www.linkedin.com/in/sachin-sarawgi/" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors flex items-center gap-2"><i class="fab fa-linkedin"></i> LinkedIn</a></li><li><a href="https://github.com/codesprintpro" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors flex items-center gap-2"><i class="fab fa-github"></i> GitHub</a></li></ul></div></div><div class="border-t border-gray-800 pt-6 flex flex-col md:flex-row justify-between items-center gap-2"><p class="text-gray-500 text-sm">© <!-- -->2026<!-- --> CodeSprintPro · Sachin Sarawgi. All rights reserved.</p><p class="text-gray-600 text-xs">Built with Next.js · TailwindCSS · Deployed on GitHub Pages</p></div></div></footer></div></main></div><script id="__NEXT_DATA__" type="application/json">{"props":{"pageProps":{"post":{"title":"Designing a High-Throughput Notification System for 100K Events per Second","description":"End-to-end architecture for a notification system handling 100,000 events per second: capacity planning, Kafka partition sizing, fan-out strategy, rate limiting, idempotency, and incident simulation.","date":"2025-05-10","category":"System Design","tags":["system design","notifications","kafka","throughput","capacity planning","distributed systems"],"featured":false,"affiliateSection":"system-design-courses","slug":"notification-system-100k-per-second","readingTime":"10 min read","excerpt":"100,000 events per second is not a notification system problem — it's a data pipeline problem that happens to produce notifications. Teams that approach it as a features problem (\"we just need push, email, and SMS\") buil…","contentHtml":"\u003cp\u003e100,000 events per second is not a notification system problem — it's a data pipeline problem that happens to produce notifications. Teams that approach it as a features problem (\"we just need push, email, and SMS\") build systems that collapse under load. The engineering challenge is the fan-out at scale: one event triggers notifications to potentially thousands of users, each notification routed through different channels, rate-limited per user, deduplicated, and delivered with retry guarantees.\u003c/p\u003e\n\u003ch2\u003eFunctional and Non-Functional Requirements\u003c/h2\u003e\n\u003cp\u003e\u003cstrong\u003eFunctional:\u003c/strong\u003e\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eIngest raw events from producer services (user actions, system events)\u003c/li\u003e\n\u003cli\u003eEnrich events with user preferences and notification templates\u003c/li\u003e\n\u003cli\u003eRoute to appropriate channels: push (FCM/APNs), email, SMS, in-app\u003c/li\u003e\n\u003cli\u003eRespect per-user preferences and quiet hours\u003c/li\u003e\n\u003cli\u003eTrack delivery status per notification\u003c/li\u003e\n\u003c/ul\u003e\n\u003cp\u003e\u003cstrong\u003eNon-Functional:\u003c/strong\u003e\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eIngest throughput: 100,000 events/second (peak)\u003c/li\u003e\n\u003cli\u003eDelivery latency: \u0026#x3C; 5 seconds end-to-end for push notifications\u003c/li\u003e\n\u003cli\u003eDelivery latency: \u0026#x3C; 60 seconds for email/SMS\u003c/li\u003e\n\u003cli\u003eAvailability: 99.9% (\u0026#x3C; 8.7 hours downtime/year)\u003c/li\u003e\n\u003cli\u003eAt-least-once delivery with idempotent consumers\u003c/li\u003e\n\u003cli\u003eRate limiting: max 10 push notifications/user/hour\u003c/li\u003e\n\u003cli\u003eMulti-region: active-active for ingestion, active-passive for delivery\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2\u003eThroughput Calculation and Capacity Planning\u003c/h2\u003e\n\u003cp\u003eRaw event rate: 100,000 events/second\u003c/p\u003e\n\u003cp\u003eFan-out ratio: on average, each event triggers notifications for 5 users (social platform: a viral post triggers notifications to followers). Burst: 50× fan-out (celebrity post, flash sale).\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003ePeak notification volume:\n100,000 events/s × 50 fan-out = 5,000,000 notifications/second (peak burst)\n100,000 events/s × 5 fan-out  = 500,000 notifications/second (average)\n\nChannel distribution:\n- Push: 70% → 350,000 push/second\n- In-app: 20% → 100,000 in-app/second\n- Email: 8%  → 40,000 email/second\n- SMS: 2%    → 10,000 SMS/second\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e\u003cstrong\u003eStorage sizing:\u003c/strong\u003e\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eEach notification record: ~2KB\u003c/li\u003e\n\u003cli\u003eRetention: 30 days\u003c/li\u003e\n\u003cli\u003eVolume: 500,000/s × 86,400s × 30 days × 2KB = \u003cstrong\u003e2.59 TB/day\u003c/strong\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003cp\u003eThis is a write-heavy storage problem. Cassandra or DynamoDB, not PostgreSQL.\u003c/p\u003e\n\u003ch2\u003eKafka Partition Planning\u003c/h2\u003e\n\u003cp\u003eKafka partitions determine parallelism. Rule: partition count ≥ peak consumer count × 1.5.\u003c/p\u003e\n\u003cp\u003eFor the event ingestion topic (\u003ccode\u003eraw-events\u003c/code\u003e):\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003eTarget throughput: 100,000 events/second × 1KB avg = 100 MB/s\nKafka broker write throughput: ~200 MB/s per broker (practical limit)\nMinimum brokers: 100/200 = 0.5 → use 3 brokers for HA\n\nTarget consumer parallelism: 200 consumer threads\nPartition count: 200 × 1.5 = 300 partitions\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eFor the fan-out output topic (\u003ccode\u003enotifications-to-send\u003c/code\u003e):\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003ePeak output: 5,000,000 notifications/second × 500B = 2,500 MB/s\nBrokers needed: 2,500/200 = 12.5 → 15 brokers (safety margin)\nPartitions: 1,500 (15 brokers × 100 partitions/broker)\n\u003c/code\u003e\u003c/pre\u003e\n\u003cpre\u003e\u003ccode\u003eTopic Configuration:\nraw-events:\n  partitions: 300\n  replication-factor: 3\n  min.insync.replicas: 2\n  retention.ms: 3600000  # 1 hour (events are processed quickly)\n\nnotifications-to-send:\n  partitions: 1500\n  replication-factor: 3\n  retention.ms: 86400000  # 24 hours (for replay on downstream failure)\n\nnotification-status:\n  partitions: 300\n  replication-factor: 3\n  retention.ms: 604800000  # 7 days\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch2\u003eSystem Architecture\u003c/h2\u003e\n\u003cpre\u003e\u003ccode\u003eHigh-Throughput Notification Architecture:\n\nProducer Services (100K events/s)\n[Order Service] [Social Service] [Marketing Service]\n        │              │                │\n        └──────────────┴────────────────┘\n                       │\n                       ▼ (Kafka, 100K msg/s)\n              ┌─────────────────┐\n              │   raw-events    │  300 partitions\n              │   topic         │\n              └────────┬────────┘\n                       │\n                       ▼\n          ┌────────────────────────┐\n          │   Event Processor      │  200 instances\n          │   - Validate           │  (Kafka consumer group)\n          │   - Deduplicate        │\n          │   - Enrich with        │\n          │     user prefs         │\n          └────────┬───────────────┘\n                   │ Fan-out (1 event → N notifications)\n                   ▼ (Kafka, 500K-5M msg/s peak)\n        ┌──────────────────────┐\n        │ notifications-to-    │  1500 partitions\n        │ send topic           │\n        └───┬──────────┬───────┘\n            │          │\n    ┌───────┘          └──────────┐\n    ▼                             ▼\n┌─────────────┐           ┌─────────────┐\n│  Push       │           │  Email/SMS  │\n│  Dispatcher │           │  Dispatcher │\n│  (FCM/APNs) │           │  (SES/SNS)  │\n│  500 inst   │           │  100 inst   │\n└──────┬──────┘           └──────┬──────┘\n       │                         │\n       ▼                         ▼\n┌──────────────────────────────────────┐\n│   Notification Status Store          │\n│   (Cassandra/DynamoDB)               │\n│   + notification-status Kafka topic  │\n└──────────────────────────────────────┘\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch2\u003eDatabase Schema\u003c/h2\u003e\n\u003cpre\u003e\u003ccode class=\"language-sql\"\u003e-- Cassandra schema for notification storage\n-- Partition key = user_id for co-located user notification history\n-- Clustering key = created_at DESC for reverse-chronological reads\n\nCREATE TABLE notifications (\n    user_id         UUID,\n    notification_id UUID,\n    type            TEXT,          -- push | email | sms | in_app\n    title           TEXT,\n    body            TEXT,\n    status          TEXT,          -- pending | sent | delivered | failed\n    channel_msg_id  TEXT,          -- FCM message_id, SES message_id, etc.\n    idempotency_key TEXT,\n    metadata        MAP\u0026#x3C;TEXT, TEXT\u003e,\n    created_at      TIMESTAMP,\n    delivered_at    TIMESTAMP,\n    PRIMARY KEY ((user_id), created_at, notification_id)\n) WITH CLUSTERING ORDER BY (created_at DESC)\n  AND compaction = {'class': 'TimeWindowCompactionStrategy',\n                    'compaction_window_size': '1',\n                    'compaction_window_unit': 'DAYS'};\n\n-- TTL: auto-expire after 90 days\nALTER TABLE notifications WITH default_time_to_live = 7776000;\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch2\u003eFan-Out Problem and Solution\u003c/h2\u003e\n\u003cp\u003eFan-out is the amplification problem. One event → many notifications. Two strategies:\u003c/p\u003e\n\u003cp\u003e\u003cstrong\u003ePush fan-out (eager):\u003c/strong\u003e Expand the fan-out immediately when the event is ingested. For a post liked by 1M followers: generate 1M notification records instantly.\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003ePros: Delivery latency is predictable (no fan-out latency at read time)\nCons: Hot events cause traffic spikes; wasteful for inactive users\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e\u003cstrong\u003ePull fan-out (lazy):\u003c/strong\u003e Store the event once; fan-out happens when the user opens the app.\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003ePros: Low write amplification; inactive users don't receive unnecessary processing\nCons: First read after event is slow (fan-out happens on read)\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e\u003cstrong\u003eHybrid (what large platforms use):\u003c/strong\u003e Push fan-out for regular users (\u0026#x3C; 10K followers). Pull fan-out for celebrity/high-follower accounts. Threshold: if sender follower count \u003e 100K, use pull fan-out.\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-java\"\u003e@Service\npublic class FanOutRouter {\n\n    private static final int PUSH_FANOUT_THRESHOLD = 100_000;\n\n    public void route(NotificationEvent event) {\n        long followerCount = userService.getFollowerCount(event.getSenderId());\n\n        if (followerCount \u0026#x3C;= PUSH_FANOUT_THRESHOLD) {\n            // Eager fan-out: write a notification for each follower now\n            fanOutService.pushFanOut(event);\n        } else {\n            // Lazy fan-out: write event once, expand on read\n            fanOutService.lazyFanOut(event);\n        }\n    }\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch2\u003eRate Limiting\u003c/h2\u003e\n\u003cp\u003eRate limiting protects users from notification spam and protects downstream channels from overload.\u003c/p\u003e\n\u003cp\u003e\u003cstrong\u003ePer-user rate limits:\u003c/strong\u003e Redis sliding window counter:\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-java\"\u003epublic boolean isAllowed(String userId, String channel) {\n    String key = \"ratelimit:\" + channel + \":\" + userId;\n    long windowSeconds = 3600L; // 1 hour window\n    int maxAllowed = switch (channel) {\n        case \"push\"  -\u003e 10;\n        case \"email\" -\u003e 3;\n        case \"sms\"   -\u003e 2;\n        default      -\u003e 20;\n    };\n\n    // Lua script: atomic sliding window check\n    Long count = redisTemplate.execute(\n        SLIDING_WINDOW_SCRIPT,\n        Collections.singletonList(key),\n        String.valueOf(System.currentTimeMillis()),\n        String.valueOf(windowSeconds * 1000),\n        String.valueOf(maxAllowed)\n    );\n\n    return count != null \u0026#x26;\u0026#x26; count \u0026#x3C;= maxAllowed;\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e\u003cstrong\u003eChannel-level rate limits:\u003c/strong\u003e FCM allows 600 notifications/second per project, SES defaults to 14 emails/second. Use a token bucket per channel:\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-java\"\u003e@Component\npublic class ChannelRateLimiter {\n    // RateLimiter from Guava: token bucket implementation\n    private final Map\u0026#x3C;String, RateLimiter\u003e channelLimiters = Map.of(\n        \"fcm\",  RateLimiter.create(500),  // 500/s, below FCM limit\n        \"apns\", RateLimiter.create(1000), // 1000/s\n        \"ses\",  RateLimiter.create(100),  // 100/s, limit for burst safety\n        \"sns\",  RateLimiter.create(200)\n    );\n\n    public void acquire(String channel) {\n        channelLimiters.get(channel).acquire(); // Blocks until permit available\n    }\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch2\u003eBackpressure Handling\u003c/h2\u003e\n\u003cp\u003eWhen downstream channels are slow (FCM is degraded, SES is throttling), Kafka consumer lag grows. Handle it explicitly:\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-java\"\u003e@KafkaListener(topics = \"notifications-to-send\", groupId = \"push-dispatcher\")\npublic void dispatch(ConsumerRecord\u0026#x3C;String, NotificationMessage\u003e record,\n                     Acknowledgment ack) {\n    NotificationMessage msg = record.value();\n\n    // Check channel health before consuming more\n    if (channelHealthMonitor.isUnhealthy(\"fcm\")) {\n        // Pause this partition — let lag build in Kafka\n        consumer.pause(Collections.singleton(record.topicPartition()));\n        scheduledExecutor.schedule(() -\u003e {\n            consumer.resume(Collections.singleton(record.topicPartition()));\n        }, 5, TimeUnit.SECONDS);\n        return; // Don't ack — will be redelivered\n    }\n\n    try {\n        channelRateLimiter.acquire(\"fcm\");\n        FcmResult result = fcmClient.send(msg);\n        notificationStore.updateStatus(msg.getNotificationId(), \"sent\", result.getMessageId());\n        ack.acknowledge();\n    } catch (FcmThrottledException e) {\n        // Don't ack — will retry\n        Thread.sleep(1000);\n    }\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch2\u003eIdempotency Design\u003c/h2\u003e\n\u003cp\u003eThe event processor may process the same event twice (Kafka at-least-once). Fan-out must be idempotent:\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-java\"\u003e@Transactional\npublic void fanOut(NotificationEvent event) {\n    String dedupKey = \"fanout:\" + event.getEventId();\n\n    // Atomic insert — skip if already processed\n    boolean inserted = cassandraOps.insert(\n        new FanOutRecord(event.getEventId(), Instant.now())\n    ).wasApplied(); // Cassandra lightweight transaction\n\n    if (!inserted) {\n        log.info(\"Fan-out already processed for event: {}\", event.getEventId());\n        return;\n    }\n\n    // Process fan-out only once\n    List\u0026#x3C;Notification\u003e notifications = generateNotifications(event);\n    kafkaTemplate.send(\"notifications-to-send\", notifications);\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch2\u003eRetry Strategy\u003c/h2\u003e\n\u003cpre\u003e\u003ccode\u003eRetry topology:\nnotifications-to-send\n        │\n        ├── FCM success → notification-status (delivered)\n        │\n        ├── FCM retryable error (5xx, timeout)\n        │       └── notifications-retry-30s (wait 30s)\n        │               └── notifications-retry-5m\n        │                       └── notifications-retry-30m\n        │                               └── notifications-dlq\n        │\n        └── FCM non-retryable (invalid token, app uninstalled)\n                └── Update user record: push token invalid\n                └── notifications-dlq (for audit)\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch2\u003eHorizontal Scaling\u003c/h2\u003e\n\u003cp\u003eEach component scales independently:\u003c/p\u003e\n\u003ctable\u003e\n\u003cthead\u003e\n\u003ctr\u003e\n\u003cth\u003eComponent\u003c/th\u003e\n\u003cth\u003eScale trigger\u003c/th\u003e\n\u003cth\u003eScale mechanism\u003c/th\u003e\n\u003c/tr\u003e\n\u003c/thead\u003e\n\u003ctbody\u003e\n\u003ctr\u003e\n\u003ctd\u003eEvent Processor\u003c/td\u003e\n\u003ctd\u003eKafka consumer lag \u003e 10K\u003c/td\u003e\n\u003ctd\u003eAdd consumer instances\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003ePush Dispatcher\u003c/td\u003e\n\u003ctd\u003eKafka consumer lag + FCM latency\u003c/td\u003e\n\u003ctd\u003eAdd consumer instances\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003eEmail Dispatcher\u003c/td\u003e\n\u003ctd\u003eSES send rate limit\u003c/td\u003e\n\u003ctd\u003eAdd SES sending identities\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003eCassandra\u003c/td\u003e\n\u003ctd\u003eDisk \u003e 70% or read latency \u003e 5ms\u003c/td\u003e\n\u003ctd\u003eAdd Cassandra nodes\u003c/td\u003e\n\u003c/tr\u003e\n\u003c/tbody\u003e\n\u003c/table\u003e\n\u003cp\u003eKafka consumers scale horizontally up to the partition count. With 1,500 partitions on \u003ccode\u003enotifications-to-send\u003c/code\u003e, you can run 1,500 consumer threads — spread across ~100 pods × 15 threads each.\u003c/p\u003e\n\u003ch2\u003eMonitoring and Alerting\u003c/h2\u003e\n\u003cpre\u003e\u003ccode\u003eCritical alerts (page immediately):\n- Kafka consumer lag on notifications-to-send \u003e 1,000,000 messages\n- Push delivery success rate \u0026#x3C; 95% over 5 minutes\n- DLQ topic lag growing \u003e 1000/minute\n- Cassandra write latency P99 \u003e 100ms\n\nWarning alerts (ticket/slack):\n- Fan-out throughput \u003e 80% of capacity (approaching limit)\n- Per-user rate limit hit rate \u003e 5% (users getting suppressed at high rate)\n- Email bounce rate \u003e 2%\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eGrafana dashboard panels:\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eEvents ingested/second (with 24h comparison)\u003c/li\u003e\n\u003cli\u003eFan-out ratio (events → notifications) — spike indicates viral content\u003c/li\u003e\n\u003cli\u003eNotification delivery success rate by channel\u003c/li\u003e\n\u003cli\u003eKafka consumer lag by consumer group\u003c/li\u003e\n\u003cli\u003eChannel latency P50/P95/P99\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2\u003eIncident Simulation\u003c/h2\u003e\n\u003cp\u003e\u003cstrong\u003eScenario:\u003c/strong\u003e FCM has a 30-minute partial outage (50% error rate).\u003c/p\u003e\n\u003cp\u003e\u003cstrong\u003eImpact without proper design:\u003c/strong\u003e\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003ePush dispatcher retries immediately\u003c/li\u003e\n\u003cli\u003e2× traffic to FCM\u003c/li\u003e\n\u003cli\u003eFCM rate-limits our project\u003c/li\u003e\n\u003cli\u003eAll push notifications backed up\u003c/li\u003e\n\u003cli\u003eDownstream timeout cascade\u003c/li\u003e\n\u003c/ul\u003e\n\u003cp\u003e\u003cstrong\u003eImpact with proper design:\u003c/strong\u003e\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eCircuit breaker opens after 20% FCM error rate\u003c/li\u003e\n\u003cli\u003ePush Dispatcher pauses Kafka consumption on FCM topic\u003c/li\u003e\n\u003cli\u003eKafka lag builds (Kafka as buffer — this is the right behavior)\u003c/li\u003e\n\u003cli\u003eBackpressure propagates cleanly — no retry storm\u003c/li\u003e\n\u003cli\u003eEmail/SMS/in-app continue unaffected (separate consumer groups)\u003c/li\u003e\n\u003cli\u003eWhen FCM recovers: circuit breaker half-opens, dispatcher resumes, lag drains over 10 minutes\u003c/li\u003e\n\u003c/ul\u003e\n\u003cp\u003eThe system degrades gracefully. Push notifications are delayed, not lost.\u003c/p\u003e\n\u003ch2\u003eTrade-offs Discussion\u003c/h2\u003e\n\u003cp\u003e\u003cstrong\u003eConsistency vs availability for rate limits:\u003c/strong\u003e Using Redis for per-user rate limits means Redis failure bypasses rate limiting. Decision: accept this. Redis failure is transient; brief notification overshoot is acceptable. Alternative (DB-based rate limits) would cause rate limit checks to become a bottleneck under load.\u003c/p\u003e\n\u003cp\u003e\u003cstrong\u003eFan-out at write vs read:\u003c/strong\u003e Push fan-out guarantees low delivery latency but wastes compute for inactive users. For a 100M user platform where 20% are active, push fan-out wastes 80% of fan-out compute. Hybrid strategy based on sender follower count is the right balance.\u003c/p\u003e\n\u003cp\u003e\u003cstrong\u003eKafka retention:\u003c/strong\u003e 24-hour retention on the notification topic is long enough for downstream failures to recover and replay. 7-day retention would require much larger storage. 1-hour retention would not cover extended outages.\u003c/p\u003e\n\u003cp\u003eThe architecture scales to 100K events/second because every component is stateless and horizontally scalable, and Kafka absorbs all the burst capacity between components. The hard part is the fan-out math — design your Kafka partition count around your peak fan-out ratio, not your ingestion rate.\u003c/p\u003e\n","tableOfContents":[{"id":"functional-and-non-functional-requirements","text":"Functional and Non-Functional Requirements","level":2},{"id":"throughput-calculation-and-capacity-planning","text":"Throughput Calculation and Capacity Planning","level":2},{"id":"kafka-partition-planning","text":"Kafka Partition Planning","level":2},{"id":"system-architecture","text":"System Architecture","level":2},{"id":"database-schema","text":"Database Schema","level":2},{"id":"fan-out-problem-and-solution","text":"Fan-Out Problem and Solution","level":2},{"id":"rate-limiting","text":"Rate Limiting","level":2},{"id":"backpressure-handling","text":"Backpressure Handling","level":2},{"id":"idempotency-design","text":"Idempotency Design","level":2},{"id":"retry-strategy","text":"Retry Strategy","level":2},{"id":"horizontal-scaling","text":"Horizontal Scaling","level":2},{"id":"monitoring-and-alerting","text":"Monitoring and Alerting","level":2},{"id":"incident-simulation","text":"Incident Simulation","level":2},{"id":"trade-offs-discussion","text":"Trade-offs Discussion","level":2}]},"relatedPosts":[{"title":"Building Production Observability with OpenTelemetry and Grafana Stack","description":"End-to-end observability implementation: distributed tracing with OpenTelemetry, metrics with Prometheus, structured logging with Loki, and the dashboards and alerts that actually help during incidents.","date":"2025-07-03","category":"System Design","tags":["observability","opentelemetry","prometheus","grafana","loki","tracing","spring boot","monitoring"],"featured":false,"affiliateSection":"system-design-courses","slug":"observability-opentelemetry-production","readingTime":"6 min read","excerpt":"Observability is not the same as monitoring. Monitoring tells you something is wrong. Observability lets you understand why — by exploring system state through metrics, traces, and logs without needing to know in advance…"},{"title":"Event Sourcing and CQRS in Production: Beyond the Theory","description":"What event sourcing actually looks like in production Java systems: event store design, snapshot strategies, projection rebuilding, CQRS read model synchronization, and the operational challenges nobody talks about.","date":"2025-06-23","category":"System Design","tags":["event sourcing","cqrs","system design","java","distributed systems","kafka","spring boot"],"featured":false,"affiliateSection":"distributed-systems-books","slug":"event-sourcing-cqrs-production","readingTime":"7 min read","excerpt":"Event sourcing is one of those patterns that looks elegant in conference talks and becomes surprisingly complex in production systems. The theory — store events instead of state, derive state by replaying events — is sou…"},{"title":"gRPC vs REST vs GraphQL: Choosing the Right API Protocol","description":"A technical comparison of REST, gRPC, and GraphQL across performance, developer experience, schema evolution, streaming, and real production use cases. When each protocol wins and where each falls short.","date":"2025-06-18","category":"System Design","tags":["grpc","rest","graphql","api design","system design","microservices","protocol buffers"],"featured":false,"affiliateSection":"system-design-courses","slug":"grpc-vs-rest-vs-graphql","readingTime":"7 min read","excerpt":"API protocol selection has a longer lifespan than almost any other technical decision. REST APIs from 2010 are still running in production. gRPC services chosen for internal communication in 2018 are tightly coupled to t…"}]},"__N_SSG":true},"page":"/blog/[slug]","query":{"slug":"notification-system-100k-per-second"},"buildId":"rpFn_jslWZ9qPkJwor7RD","isFallback":false,"gsp":true,"scriptLoader":[]}</script></body></html>

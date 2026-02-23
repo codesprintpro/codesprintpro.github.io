@@ -1,0 +1,293 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8" data-next-head=""/><meta name="viewport" content="width=device-width" data-next-head=""/><title data-next-head="">Building Production Observability with OpenTelemetry and Grafana Stack<!-- --> | CodeSprintPro</title><meta name="description" content="End-to-end observability implementation: distributed tracing with OpenTelemetry, metrics with Prometheus, structured logging with Loki, and the dashboards and alerts that actually help during incidents." data-next-head=""/><meta name="author" content="Sachin Sarawgi" data-next-head=""/><link rel="canonical" href="https://codesprintpro.com/blog/observability-opentelemetry-production/" data-next-head=""/><meta property="og:type" content="article" data-next-head=""/><meta property="og:title" content="Building Production Observability with OpenTelemetry and Grafana Stack" data-next-head=""/><meta property="og:description" content="End-to-end observability implementation: distributed tracing with OpenTelemetry, metrics with Prometheus, structured logging with Loki, and the dashboards and alerts that actually help during incidents." data-next-head=""/><meta property="og:url" content="https://codesprintpro.com/blog/observability-opentelemetry-production/" data-next-head=""/><meta property="og:image" content="https://codesprintpro.com/images/og-default.jpg" data-next-head=""/><meta property="og:site_name" content="CodeSprintPro" data-next-head=""/><meta property="article:published_time" content="2025-07-03" data-next-head=""/><meta property="article:author" content="Sachin Sarawgi" data-next-head=""/><meta property="article:section" content="System Design" data-next-head=""/><meta property="article:tag" content="observability" data-next-head=""/><meta property="article:tag" content="opentelemetry" data-next-head=""/><meta property="article:tag" content="prometheus" data-next-head=""/><meta property="article:tag" content="grafana" data-next-head=""/><meta property="article:tag" content="loki" data-next-head=""/><meta property="article:tag" content="tracing" data-next-head=""/><meta property="article:tag" content="spring boot" data-next-head=""/><meta property="article:tag" content="monitoring" data-next-head=""/><meta name="twitter:card" content="summary_large_image" data-next-head=""/><meta name="twitter:title" content="Building Production Observability with OpenTelemetry and Grafana Stack" data-next-head=""/><meta name="twitter:description" content="End-to-end observability implementation: distributed tracing with OpenTelemetry, metrics with Prometheus, structured logging with Loki, and the dashboards and alerts that actually help during incidents." data-next-head=""/><meta name="twitter:image" content="https://codesprintpro.com/images/og-default.jpg" data-next-head=""/><script type="application/ld+json" data-next-head="">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Building Production Observability with OpenTelemetry and Grafana Stack","description":"End-to-end observability implementation: distributed tracing with OpenTelemetry, metrics with Prometheus, structured logging with Loki, and the dashboards and alerts that actually help during incidents.","image":"https://codesprintpro.com/images/og-default.jpg","datePublished":"2025-07-03","dateModified":"2025-07-03","author":{"@type":"Person","name":"Sachin Sarawgi","url":"https://codesprintpro.com","sameAs":["https://www.linkedin.com/in/sachin-sarawgi/","https://github.com/codesprintpro","https://medium.com/@codesprintpro"]},"publisher":{"@type":"Organization","name":"CodeSprintPro","url":"https://codesprintpro.com","logo":{"@type":"ImageObject","url":"https://codesprintpro.com/favicon/favicon-96x96.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codesprintpro.com/blog/observability-opentelemetry-production/"},"keywords":"observability, opentelemetry, prometheus, grafana, loki, tracing, spring boot, monitoring","articleSection":"System Design"}</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerPolicy="no-referrer"/><script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script><link rel="preload" href="/_next/static/media/e4af272ccee01ff0-s.p.woff2" as="font" type="font/woff2" crossorigin="anonymous" data-next-font="size-adjust"/><link rel="preload" href="/_next/static/css/735d4373f93910ca.css" as="style"/><link rel="stylesheet" href="/_next/static/css/735d4373f93910ca.css" data-n-g=""/><noscript data-n-css=""></noscript><script defer="" nomodule="" src="/_next/static/chunks/polyfills-42372ed130431b0a.js"></script><script src="/_next/static/chunks/webpack-11a4a2dad04962bb.js" defer=""></script><script src="/_next/static/chunks/framework-1ce91eb6f9ecda85.js" defer=""></script><script src="/_next/static/chunks/main-c7f4109f032d7b6e.js" defer=""></script><script src="/_next/static/chunks/pages/_app-1a852bd9e38c70ab.js" defer=""></script><script src="/_next/static/chunks/730-db7827467817f501.js" defer=""></script><script src="/_next/static/chunks/90-1cd4611704c3dbe0.js" defer=""></script><script src="/_next/static/chunks/440-29f4b99a44e744b5.js" defer=""></script><script src="/_next/static/chunks/pages/blog/%5Bslug%5D-0c1b14a33d5e05ee.js" defer=""></script><script src="/_next/static/rpFn_jslWZ9qPkJwor7RD/_buildManifest.js" defer=""></script><script src="/_next/static/rpFn_jslWZ9qPkJwor7RD/_ssgManifest.js" defer=""></script></head><body><div id="__next"><main class="__className_f367f3"><div class="min-h-screen bg-white"><nav class="fixed w-full z-50 transition-all duration-300 bg-white shadow-md" style="transform:translateY(-100px) translateZ(0)"><div class="container mx-auto px-4 sm:px-6 lg:px-8"><div class="flex items-center justify-between h-16"><a class="text-xl font-bold transition-colors text-blue-600" href="/">CodeSprintPro</a><div class="hidden md:flex items-center space-x-8"><a class="text-sm font-medium transition-colors text-blue-600" href="/blog/">Blog</a><a class="text-sm font-medium transition-colors text-gray-600 hover:text-blue-600" href="/#about">About</a><a class="text-sm font-medium transition-colors text-gray-600 hover:text-blue-600" href="/#portfolio">Portfolio</a><a class="text-sm font-medium transition-colors text-gray-600 hover:text-blue-600" href="/#contact">Contact</a></div><button class="md:hidden p-2 rounded-lg transition-colors hover:bg-gray-100 text-gray-600" aria-label="Toggle mobile menu"><svg class="w-6 h-6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor"><path d="M4 6h16M4 12h16M4 18h16"></path></svg></button></div></div></nav><div class="pt-20"><div class="bg-gradient-to-br from-gray-900 to-blue-950 py-16"><div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl"><nav class="flex items-center gap-2 text-sm text-gray-400 mb-6"><a class="hover:text-white transition-colors" href="/">Home</a><span>/</span><a class="hover:text-white transition-colors" href="/blog/">Blog</a><span>/</span><span class="text-gray-300 truncate max-w-xs">Building Production Observability with OpenTelemetry and Grafana Stack</span></nav><span class="inline-block text-xs font-semibold px-3 py-1 rounded-full bg-blue-100 text-blue-700 mb-4">System Design</span><h1 class="text-3xl md:text-5xl font-bold text-white mb-4 leading-tight">Building Production Observability with OpenTelemetry and Grafana Stack</h1><p class="text-gray-300 text-lg mb-6 max-w-3xl">End-to-end observability implementation: distributed tracing with OpenTelemetry, metrics with Prometheus, structured logging with Loki, and the dashboards and alerts that actually help during incidents.</p><div class="flex flex-wrap items-center gap-4 text-gray-400 text-sm"><span class="flex items-center gap-1.5"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>Sachin Sarawgi</span><span>·</span><span>July 3, 2025</span><span>·</span><span class="flex items-center gap-1"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>6 min read</span></div><div class="flex flex-wrap gap-2 mt-4"><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->observability</span><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->opentelemetry</span><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->prometheus</span><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->grafana</span><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->loki</span><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->tracing</span><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->spring boot</span><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->monitoring</span></div></div></div><div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl py-12"><div class="flex gap-12"><div class="flex-1 min-w-0"><article class="prose prose-lg max-w-none prose-headings:text-gray-900 prose-headings:font-bold prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-4 prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3 prose-p:text-gray-700 prose-p:leading-relaxed prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline prose-strong:text-gray-900 prose-blockquote:border-blue-600 prose-blockquote:text-gray-600 prose-code:text-blue-700 prose-code:bg-blue-50 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-sm prose-code:before:content-none prose-code:after:content-none prose-pre:rounded-xl prose-img:rounded-xl prose-img:shadow-md prose-table:text-sm prose-th:bg-gray-100 prose-th:text-gray-700"><p>Observability is not the same as monitoring. Monitoring tells you something is wrong. Observability lets you understand why — by exploring system state through metrics, traces, and logs without needing to know in advance what questions you'd ask. The three pillars are not a framework you layer on after the fact; they shape how you instrument and operate your services from the start.</p>
+<h2>The Three Pillars and How They Relate</h2>
+<pre><code>Request arrives at Service A
+
+Metrics:
+  http_requests_total{service="A", status="200"} += 1
+  http_request_duration_seconds{service="A", p99} = 0.284s
+  → Tell you WHAT is happening (rates, latency, error rates)
+
+Traces:
+  TraceID: abc123
+  SpanID:  span001 → ServiceA.handleRequest [150ms]
+    SpanID: span002 → ServiceB.getUser [80ms]
+      SpanID: span003 → PostgreSQL.query [70ms]
+  → Tell you WHERE time is spent in a specific request
+
+Logs:
+  {"level":"INFO","traceId":"abc123","spanId":"span002",
+   "message":"getUser called","userId":"12345","latency":80}
+  → Tell you WHAT happened inside a specific component
+
+Three pillars used together:
+Metrics alert (P99 > 2s) → trace the slow request (traceId from logs) → find the bottleneck span
+</code></pre>
+<h2>OpenTelemetry Java SDK Setup</h2>
+<p>OpenTelemetry is the vendor-neutral standard for instrumentation. Use the Java agent for automatic instrumentation of Spring Boot:</p>
+<pre><code class="language-bash"># Add Java agent to JVM startup:
+-javaagent:/opt/opentelemetry-javaagent.jar
+-Dotel.service.name=order-service
+-Dotel.service.version=2.1.0
+-Dotel.exporter.otlp.endpoint=http://otel-collector:4317
+-Dotel.traces.exporter=otlp
+-Dotel.metrics.exporter=otlp
+-Dotel.logs.exporter=otlp
+-Dotel.resource.attributes=deployment.environment=production,team=platform
+</code></pre>
+<p>The Java agent automatically instruments:</p>
+<ul>
+<li>Spring MVC (incoming HTTP spans)</li>
+<li>Spring WebFlux</li>
+<li>Hibernate/JDBC (database query spans)</li>
+<li>RestTemplate/WebClient (outgoing HTTP spans)</li>
+<li>Kafka producers/consumers</li>
+</ul>
+<p><strong>Manual instrumentation for business logic:</strong></p>
+<pre><code class="language-java">@Service
+public class OrderService {
+
+    private final Tracer tracer = GlobalOpenTelemetry.getTracer("order-service");
+    private final Meter meter = GlobalOpenTelemetry.getMeter("order-service");
+    private final LongCounter ordersCreated;
+
+    public OrderService() {
+        this.ordersCreated = meter.counterBuilder("orders.created")
+            .setDescription("Total orders created")
+            .setUnit("orders")
+            .build();
+    }
+
+    public Order createOrder(OrderRequest request) {
+        Span span = tracer.spanBuilder("createOrder")
+            .setAttribute("order.user_id", request.getUserId())
+            .setAttribute("order.item_count", request.getItems().size())
+            .startSpan();
+
+        try (Scope scope = span.makeCurrent()) {
+            validateInventory(request);    // Child span auto-created
+            chargePayment(request);        // Child span auto-created
+            Order order = orderRepository.save(Order.from(request));
+
+            span.setAttribute("order.id", order.getId().toString());
+            ordersCreated.add(1,
+                Attributes.of(
+                    AttributeKey.stringKey("channel"), request.getChannel(),
+                    AttributeKey.stringKey("payment_method"), request.getPaymentMethod()
+                )
+            );
+            return order;
+        } catch (Exception e) {
+            span.recordException(e);
+            span.setStatus(StatusCode.ERROR, e.getMessage());
+            throw e;
+        } finally {
+            span.end();
+        }
+    }
+}
+</code></pre>
+<h2>Prometheus Metrics Design</h2>
+<p>Good metrics answer operational questions. Design metrics around user-visible behavior:</p>
+<pre><code class="language-java">@Component
+public class MetricsConfig {
+
+    @Bean
+    public MeterRegistryCustomizer&#x3C;MeterRegistry> commonTags() {
+        return registry -> registry.config()
+            .commonTags(
+                "service", "order-service",
+                "version", "${spring.application.version}",
+                "env", "${spring.profiles.active}"
+            )
+            .meterFilter(MeterFilter.deny(id ->
+                id.getName().startsWith("jvm.threads") &#x26;&#x26;
+                !id.getTag("state").equals("runnable") // Only track runnable threads
+            ));
+    }
+}
+
+// Custom business metric: track payment failure reasons
+@Autowired
+private MeterRegistry registry;
+
+public void recordPaymentResult(String outcome, String reason) {
+    registry.counter("payments.processed",
+        "outcome", outcome,        // success, failed, declined
+        "reason", reason,          // insufficient_funds, expired_card, fraud_hold
+        "gateway", "stripe"
+    ).increment();
+}
+</code></pre>
+<p><strong>The RED method for services:</strong></p>
+<pre><code class="language-yaml"># Prometheus recording rules (pre-compute expensive queries):
+groups:
+  - name: service_red_metrics
+    rules:
+      - record: job:http_requests:rate5m
+        expr: rate(http_server_requests_seconds_count[5m])
+
+      - record: job:http_request_errors:rate5m
+        expr: rate(http_server_requests_seconds_count{status=~"5.."}[5m])
+
+      - record: job:http_error_ratio:rate5m
+        expr: job:http_request_errors:rate5m / job:http_requests:rate5m
+
+      - record: job:http_request_p99:rate5m
+        expr: histogram_quantile(0.99, rate(http_server_requests_seconds_bucket[5m]))
+</code></pre>
+<h2>Structured Logging with Loki</h2>
+<p>Loki stores logs as compressed log streams (label-indexed). Unlike Elasticsearch, Loki doesn't index log content — it indexes labels. This makes it fast and cheap.</p>
+<pre><code class="language-java">// Spring Boot structured logging with Logback:
+// logback-spring.xml:
+&#x3C;configuration>
+  &#x3C;appender name="JSON" class="ch.qos.logback.core.ConsoleAppender">
+    &#x3C;encoder class="net.logstash.logback.encoder.LogstashEncoder">
+      &#x3C;provider class="net.logstash.logback.composite.loggingevent.LoggingEventPatternJsonProvider">
+        &#x3C;pattern>{"timestamp":"%d{ISO8601}","level":"%level","logger":"%logger","message":"%msg"}&#x3C;/pattern>
+      &#x3C;/provider>
+      &#x3C;!-- Include MDC fields (traceId, spanId injected by OTel agent): -->
+      &#x3C;includeMdcKeyName>traceId&#x3C;/includeMdcKeyName>
+      &#x3C;includeMdcKeyName>spanId&#x3C;/includeMdcKeyName>
+      &#x3C;includeMdcKeyName>userId&#x3C;/includeMdcKeyName>
+    &#x3C;/encoder>
+  &#x3C;/appender>
+  &#x3C;root level="INFO">
+    &#x3C;appender-ref ref="JSON"/>
+  &#x3C;/root>
+&#x3C;/configuration>
+</code></pre>
+<p><strong>Loki query examples (LogQL):</strong></p>
+<pre><code class="language-logql"># Error rate for order service:
+rate({service="order-service", level="ERROR"}[5m])
+
+# Slow requests (> 1s) in last 15 minutes:
+{service="order-service"} |= "latency" | json | latencyMs > 1000
+
+# Correlate trace with logs:
+{service="order-service"} |= "abc123"  # Find all logs for traceId abc123
+
+# Log volume by endpoint:
+sum by (path) (rate({service="order-service"}[5m]))
+</code></pre>
+<h2>Grafana Dashboard: The Incident Response Dashboard</h2>
+<p>Every service should have one dashboard that tells you in 30 seconds whether the service is healthy:</p>
+<pre><code>┌─────────────────────────────────────────────────────────────────┐
+│  ORDER SERVICE — Production Dashboard                           │
+├──────────────┬──────────────┬──────────────┬────────────────────┤
+│  RPS         │  Error Rate  │  P99 Latency │  DB Connections    │
+│  1,247/s     │  0.12%       │  284ms       │  18/50             │
+│  ▼ -3%       │  ▲ normal    │  ▼ healthy   │  ▲ OK              │
+├──────────────┴──────────────┴──────────────┴────────────────────┤
+│  Request Rate (5m)     │  Error Rate (5m)                       │
+│  [graph]               │  [graph]                               │
+├────────────────────────┴───────────────────────────────────────┤
+│  Latency Distribution (P50/P95/P99)    │  Top Slow Endpoints    │
+│  [graph]                               │  [table]               │
+├────────────────────────────────────────┴───────────────────────┤
+│  Recent Errors (Loki logs, last 50)                             │
+│  [log panel — live tail during incidents]                       │
+└─────────────────────────────────────────────────────────────────┘
+</code></pre>
+<pre><code class="language-json">// Grafana panel JSON for error rate alert indicator:
+{
+  "type": "stat",
+  "title": "Error Rate",
+  "targets": [{
+    "expr": "sum(rate(http_server_requests_seconds_count{service=\"order-service\",status=~\"5..\"}[5m])) / sum(rate(http_server_requests_seconds_count{service=\"order-service\"}[5m]))",
+    "legendFormat": "Error %"
+  }],
+  "options": {
+    "colorMode": "background",
+    "thresholds": {
+      "steps": [
+        {"value": 0, "color": "green"},
+        {"value": 0.01, "color": "yellow"},
+        {"value": 0.05, "color": "red"}
+      ]
+    }
+  }
+}
+</code></pre>
+<h2>Alerting That Doesn't Create Alert Fatigue</h2>
+<p>Alert on symptoms, not causes:</p>
+<pre><code class="language-yaml"># Prometheus alerting rules:
+groups:
+  - name: service_slos
+    rules:
+      # Alert on user-visible symptoms:
+      - alert: HighErrorRate
+        expr: job:http_error_ratio:rate5m{service="order-service"} > 0.05
+        for: 2m
+        labels:
+          severity: critical
+          team: backend
+        annotations:
+          summary: "Order service error rate {{ $value | humanizePercentage }}"
+          runbook: "https://wiki/runbooks/order-service-errors"
+
+      - alert: HighP99Latency
+        expr: job:http_request_p99:rate5m{service="order-service"} > 2
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Order service P99 latency is {{ $value }}s"
+          dashboard: "https://grafana/d/order-service"
+
+      # Infrastructure alerts (lower priority):
+      - alert: HighDatabaseConnections
+        expr: hikaricp_connections_active / hikaricp_connections_max > 0.9
+        for: 3m
+        labels:
+          severity: warning
+</code></pre>
+<p><strong>What NOT to alert on:</strong></p>
+<ul>
+<li>CPU utilization (symptom: latency or errors, not CPU itself)</li>
+<li>Memory usage below limit (only alert near OOM)</li>
+<li>Individual host metrics (alert on aggregate service behavior)</li>
+</ul>
+<h2>Distributed Trace Analysis During Incidents</h2>
+<p>When P99 latency is high, use Jaeger/Tempo to find the slow spans:</p>
+<pre><code>Incident investigation workflow:
+
+1. Grafana alerts: P99 > 2s on order-service
+2. Open Tempo trace search:
+   service=order-service, duration>2000ms, last 15 minutes
+3. Sort by duration, examine top 5 slow traces
+4. Identify common slow span:
+   → PostgreSQL.query on orders table: 1.8s
+   → SELECT * FROM orders WHERE user_id=? ORDER BY created_at DESC
+5. Open query in pg_stat_statements:
+   → Missing index on (user_id, created_at)
+6. Create index CONCURRENTLY (online, no table lock)
+7. P99 drops to 180ms within 2 minutes
+
+Total time from alert to fix: 15 minutes.
+Without traces: hours of grep-based log analysis.
+</code></pre>
+<h2>Sampling Strategy</h2>
+<p>100% trace sampling at high throughput is expensive. Use tail-based sampling:</p>
+<pre><code class="language-yaml"># OpenTelemetry Collector config with tail-based sampling:
+processors:
+  tail_sampling:
+    decision_wait: 10s
+    num_traces: 100000
+    expected_new_traces_per_sec: 10000
+    policies:
+      - name: errors-policy
+        type: status_code
+        status_code: {status_codes: [ERROR]}
+        # Always sample errors
+      - name: slow-traces-policy
+        type: latency
+        latency: {threshold_ms: 1000}
+        # Sample traces > 1 second
+      - name: probabilistic-policy
+        type: probabilistic
+        probabilistic: {sampling_percentage: 1}
+        # Sample 1% of everything else
+</code></pre>
+<p>This captures 100% of errors and slow requests (the ones you care about) while sampling only 1% of healthy fast requests (the ones you don't need to analyze).</p>
+<p>Observability is an investment with compounding returns. Every hour spent on instrumentation now saves 10 hours of incident investigation later. The teams that build it in from day one navigate incidents in minutes. The teams that add it after a major outage spend the outage blind.</p>
+</article><div class="my-10 rounded-xl border border-yellow-200 bg-yellow-50 p-6"><div class="flex items-center gap-2 mb-1"><span class="text-lg">📚</span><h3 class="text-base font-bold text-gray-900">Recommended Resources</h3></div><div class="space-y-4"><div class="flex items-start gap-3 bg-white rounded-lg p-4 border border-yellow-100"><div class="flex-1 min-w-0"><div class="flex items-center gap-2 flex-wrap mb-1"><span class="font-semibold text-gray-900 text-sm">System Design Interview — Alex Xu</span><span class="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-medium">Best Seller</span></div><p class="text-xs text-gray-600">Step-by-step guide to ace system design interviews with real-world examples.</p></div><a href="https://amzn.to/3TqsPRp" target="_blank" rel="noopener noreferrer" class="flex-shrink-0 text-xs bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium whitespace-nowrap">View on Amazon<!-- --> →</a></div><div class="flex items-start gap-3 bg-white rounded-lg p-4 border border-yellow-100"><div class="flex-1 min-w-0"><div class="flex items-center gap-2 flex-wrap mb-1"><span class="font-semibold text-gray-900 text-sm">Grokking System Design on Educative</span></div><p class="text-xs text-gray-600">Interactive course teaching system design with visual diagrams and practice problems.</p></div><a href="https://www.educative.io/courses/grokking-the-system-design-interview" target="_blank" rel="noopener noreferrer" class="flex-shrink-0 text-xs bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium whitespace-nowrap">View Course<!-- --> →</a></div><div class="flex items-start gap-3 bg-white rounded-lg p-4 border border-yellow-100"><div class="flex-1 min-w-0"><div class="flex items-center gap-2 flex-wrap mb-1"><span class="font-semibold text-gray-900 text-sm">Designing Data-Intensive Applications</span></div><p class="text-xs text-gray-600">Martin Kleppmann&#x27;s book is essential reading for any system design role.</p></div><a href="https://amzn.to/3RyKzOA" target="_blank" rel="noopener noreferrer" class="flex-shrink-0 text-xs bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium whitespace-nowrap">View on Amazon<!-- --> →</a></div></div></div><div class="mt-10 pt-8 border-t border-gray-100"><p class="text-sm text-gray-500 mb-3">Found this useful? Share it:</p><div class="flex gap-3"><a href="https://twitter.com/intent/tweet?text=Building%20Production%20Observability%20with%20OpenTelemetry%20and%20Grafana%20Stack&amp;url=https%3A%2F%2Fcodesprintpro.com%2Fblog%2Fobservability-opentelemetry-production%2F" target="_blank" rel="noopener noreferrer" class="text-xs bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors">Share on X/Twitter</a><a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fcodesprintpro.com%2Fblog%2Fobservability-opentelemetry-production%2F" target="_blank" rel="noopener noreferrer" class="text-xs bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">Share on LinkedIn</a></div></div></div><aside class="hidden lg:block w-64 flex-shrink-0"><nav class="hidden lg:block sticky top-24"><h4 class="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-3">On This Page</h4><ul class="space-y-1"><li class=""><a href="#the-three-pillars-and-how-they-relate" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">The Three Pillars and How They Relate</a></li><li class=""><a href="#opentelemetry-java-sdk-setup" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">OpenTelemetry Java SDK Setup</a></li><li class=""><a href="#prometheus-metrics-design" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Prometheus Metrics Design</a></li><li class=""><a href="#structured-logging-with-loki" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Structured Logging with Loki</a></li><li class=""><a href="#grafana-dashboard-the-incident-response-dashboard" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Grafana Dashboard: The Incident Response Dashboard</a></li><li class=""><a href="#alerting-that-doesnt-create-alert-fatigue" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Alerting That Doesn&#x27;t Create Alert Fatigue</a></li><li class=""><a href="#distributed-trace-analysis-during-incidents" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Distributed Trace Analysis During Incidents</a></li><li class=""><a href="#sampling-strategy" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Sampling Strategy</a></li></ul></nav></aside></div><div class="mt-16 pt-10 border-t border-gray-100"><h2 class="text-2xl font-bold text-gray-900 mb-6">Related Articles</h2><div class="grid grid-cols-1 md:grid-cols-3 gap-6"><a href="/blog/event-sourcing-cqrs-production/"><article class="group bg-white rounded-xl border border-gray-200 p-6 h-full cursor-pointer hover:border-blue-300 hover:shadow-lg transition-all"><span class="inline-block text-xs font-semibold px-3 py-1 rounded-full mb-3 bg-blue-100 text-blue-700">System Design</span><h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors leading-snug">Event Sourcing and CQRS in Production: Beyond the Theory</h3><p class="text-gray-600 text-sm mb-4 line-clamp-3">Event sourcing is one of those patterns that looks elegant in conference talks and becomes surprisingly complex in production systems. The theory — store events instead of state, derive state by replaying events — is sou…</p><div class="flex items-center justify-between text-xs text-gray-400"><span>Jun 23, 2025</span><span class="flex items-center gap-1"><svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>7 min read</span></div><div class="mt-3 flex flex-wrap gap-1"><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->event sourcing</span><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->cqrs</span><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->system design</span></div></article></a><a href="/blog/grpc-vs-rest-vs-graphql/"><article class="group bg-white rounded-xl border border-gray-200 p-6 h-full cursor-pointer hover:border-blue-300 hover:shadow-lg transition-all"><span class="inline-block text-xs font-semibold px-3 py-1 rounded-full mb-3 bg-blue-100 text-blue-700">System Design</span><h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors leading-snug">gRPC vs REST vs GraphQL: Choosing the Right API Protocol</h3><p class="text-gray-600 text-sm mb-4 line-clamp-3">API protocol selection has a longer lifespan than almost any other technical decision. REST APIs from 2010 are still running in production. gRPC services chosen for internal communication in 2018 are tightly coupled to t…</p><div class="flex items-center justify-between text-xs text-gray-400"><span>Jun 18, 2025</span><span class="flex items-center gap-1"><svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>7 min read</span></div><div class="mt-3 flex flex-wrap gap-1"><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->grpc</span><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->rest</span><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->graphql</span></div></article></a><a href="/blog/multi-tenancy-architecture/"><article class="group bg-white rounded-xl border border-gray-200 p-6 h-full cursor-pointer hover:border-blue-300 hover:shadow-lg transition-all"><span class="inline-block text-xs font-semibold px-3 py-1 rounded-full mb-3 bg-blue-100 text-blue-700">System Design</span><h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors leading-snug">Multi-Tenancy Architecture: Database, Application, and Infrastructure Patterns</h3><p class="text-gray-600 text-sm mb-4 line-clamp-3">Multi-tenancy is the architecture pattern where a single deployed instance of a software system serves multiple customers (tenants), with each tenant&#x27;s data logically or physically isolated from others. It&#x27;s the foundati…</p><div class="flex items-center justify-between text-xs text-gray-400"><span>May 24, 2025</span><span class="flex items-center gap-1"><svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>8 min read</span></div><div class="mt-3 flex flex-wrap gap-1"><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->multi-tenancy</span><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->saas</span><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->system design</span></div></article></a></div></div><div class="mt-12 text-center"><a class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium transition-colors" href="/blog/">← Back to all articles</a></div></div></div><footer class="bg-gray-900 text-white py-12"><div class="container mx-auto px-4 sm:px-6 lg:px-8"><div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8"><div class="col-span-1 md:col-span-1"><div><a class="text-xl font-bold block mb-3 text-white hover:text-blue-400 transition-colors" href="/">CodeSprintPro</a></div><p class="text-gray-400 text-sm mb-4 leading-relaxed">Deep-dive technical content on System Design, Java, Databases, AI/ML, and AWS — by Sachin Sarawgi.</p><div class="flex space-x-4"><a href="https://github.com/codesprintpro" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors" aria-label="Visit GitHub profile"><i class="fab fa-github text-xl"></i></a><a href="https://www.linkedin.com/in/sachin-sarawgi/" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors" aria-label="Visit LinkedIn profile"><i class="fab fa-linkedin text-xl"></i></a><a href="https://medium.com/@codesprintpro" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors" aria-label="Visit Medium profile"><i class="fab fa-medium text-xl"></i></a></div></div><div><h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 mb-4">Quick Links</h3><ul class="space-y-2"><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">Blog</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/#about">About</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/#portfolio">Portfolio</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/#contact">Contact</a></div></li></ul></div><div><h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 mb-4">Categories</h3><ul class="space-y-2"><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">System Design</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">Java</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">Databases</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">AI/ML</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">AWS</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">Messaging</a></div></li></ul></div><div><h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 mb-4">Contact</h3><ul class="space-y-2 text-gray-400 text-sm"><li><a href="mailto:sachinsarawgi201143@gmail.com" class="hover:text-white transition-colors flex items-center gap-2"><i class="fas fa-envelope"></i> Email</a></li><li><a href="https://www.linkedin.com/in/sachin-sarawgi/" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors flex items-center gap-2"><i class="fab fa-linkedin"></i> LinkedIn</a></li><li><a href="https://github.com/codesprintpro" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors flex items-center gap-2"><i class="fab fa-github"></i> GitHub</a></li></ul></div></div><div class="border-t border-gray-800 pt-6 flex flex-col md:flex-row justify-between items-center gap-2"><p class="text-gray-500 text-sm">© <!-- -->2026<!-- --> CodeSprintPro · Sachin Sarawgi. All rights reserved.</p><p class="text-gray-600 text-xs">Built with Next.js · TailwindCSS · Deployed on GitHub Pages</p></div></div></footer></div></main></div><script id="__NEXT_DATA__" type="application/json">{"props":{"pageProps":{"post":{"title":"Building Production Observability with OpenTelemetry and Grafana Stack","description":"End-to-end observability implementation: distributed tracing with OpenTelemetry, metrics with Prometheus, structured logging with Loki, and the dashboards and alerts that actually help during incidents.","date":"2025-07-03","category":"System Design","tags":["observability","opentelemetry","prometheus","grafana","loki","tracing","spring boot","monitoring"],"featured":false,"affiliateSection":"system-design-courses","slug":"observability-opentelemetry-production","readingTime":"6 min read","excerpt":"Observability is not the same as monitoring. Monitoring tells you something is wrong. Observability lets you understand why — by exploring system state through metrics, traces, and logs without needing to know in advance…","contentHtml":"\u003cp\u003eObservability is not the same as monitoring. Monitoring tells you something is wrong. Observability lets you understand why — by exploring system state through metrics, traces, and logs without needing to know in advance what questions you'd ask. The three pillars are not a framework you layer on after the fact; they shape how you instrument and operate your services from the start.\u003c/p\u003e\n\u003ch2\u003eThe Three Pillars and How They Relate\u003c/h2\u003e\n\u003cpre\u003e\u003ccode\u003eRequest arrives at Service A\n\nMetrics:\n  http_requests_total{service=\"A\", status=\"200\"} += 1\n  http_request_duration_seconds{service=\"A\", p99} = 0.284s\n  → Tell you WHAT is happening (rates, latency, error rates)\n\nTraces:\n  TraceID: abc123\n  SpanID:  span001 → ServiceA.handleRequest [150ms]\n    SpanID: span002 → ServiceB.getUser [80ms]\n      SpanID: span003 → PostgreSQL.query [70ms]\n  → Tell you WHERE time is spent in a specific request\n\nLogs:\n  {\"level\":\"INFO\",\"traceId\":\"abc123\",\"spanId\":\"span002\",\n   \"message\":\"getUser called\",\"userId\":\"12345\",\"latency\":80}\n  → Tell you WHAT happened inside a specific component\n\nThree pillars used together:\nMetrics alert (P99 \u003e 2s) → trace the slow request (traceId from logs) → find the bottleneck span\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch2\u003eOpenTelemetry Java SDK Setup\u003c/h2\u003e\n\u003cp\u003eOpenTelemetry is the vendor-neutral standard for instrumentation. Use the Java agent for automatic instrumentation of Spring Boot:\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-bash\"\u003e# Add Java agent to JVM startup:\n-javaagent:/opt/opentelemetry-javaagent.jar\n-Dotel.service.name=order-service\n-Dotel.service.version=2.1.0\n-Dotel.exporter.otlp.endpoint=http://otel-collector:4317\n-Dotel.traces.exporter=otlp\n-Dotel.metrics.exporter=otlp\n-Dotel.logs.exporter=otlp\n-Dotel.resource.attributes=deployment.environment=production,team=platform\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eThe Java agent automatically instruments:\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eSpring MVC (incoming HTTP spans)\u003c/li\u003e\n\u003cli\u003eSpring WebFlux\u003c/li\u003e\n\u003cli\u003eHibernate/JDBC (database query spans)\u003c/li\u003e\n\u003cli\u003eRestTemplate/WebClient (outgoing HTTP spans)\u003c/li\u003e\n\u003cli\u003eKafka producers/consumers\u003c/li\u003e\n\u003c/ul\u003e\n\u003cp\u003e\u003cstrong\u003eManual instrumentation for business logic:\u003c/strong\u003e\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-java\"\u003e@Service\npublic class OrderService {\n\n    private final Tracer tracer = GlobalOpenTelemetry.getTracer(\"order-service\");\n    private final Meter meter = GlobalOpenTelemetry.getMeter(\"order-service\");\n    private final LongCounter ordersCreated;\n\n    public OrderService() {\n        this.ordersCreated = meter.counterBuilder(\"orders.created\")\n            .setDescription(\"Total orders created\")\n            .setUnit(\"orders\")\n            .build();\n    }\n\n    public Order createOrder(OrderRequest request) {\n        Span span = tracer.spanBuilder(\"createOrder\")\n            .setAttribute(\"order.user_id\", request.getUserId())\n            .setAttribute(\"order.item_count\", request.getItems().size())\n            .startSpan();\n\n        try (Scope scope = span.makeCurrent()) {\n            validateInventory(request);    // Child span auto-created\n            chargePayment(request);        // Child span auto-created\n            Order order = orderRepository.save(Order.from(request));\n\n            span.setAttribute(\"order.id\", order.getId().toString());\n            ordersCreated.add(1,\n                Attributes.of(\n                    AttributeKey.stringKey(\"channel\"), request.getChannel(),\n                    AttributeKey.stringKey(\"payment_method\"), request.getPaymentMethod()\n                )\n            );\n            return order;\n        } catch (Exception e) {\n            span.recordException(e);\n            span.setStatus(StatusCode.ERROR, e.getMessage());\n            throw e;\n        } finally {\n            span.end();\n        }\n    }\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch2\u003ePrometheus Metrics Design\u003c/h2\u003e\n\u003cp\u003eGood metrics answer operational questions. Design metrics around user-visible behavior:\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-java\"\u003e@Component\npublic class MetricsConfig {\n\n    @Bean\n    public MeterRegistryCustomizer\u0026#x3C;MeterRegistry\u003e commonTags() {\n        return registry -\u003e registry.config()\n            .commonTags(\n                \"service\", \"order-service\",\n                \"version\", \"${spring.application.version}\",\n                \"env\", \"${spring.profiles.active}\"\n            )\n            .meterFilter(MeterFilter.deny(id -\u003e\n                id.getName().startsWith(\"jvm.threads\") \u0026#x26;\u0026#x26;\n                !id.getTag(\"state\").equals(\"runnable\") // Only track runnable threads\n            ));\n    }\n}\n\n// Custom business metric: track payment failure reasons\n@Autowired\nprivate MeterRegistry registry;\n\npublic void recordPaymentResult(String outcome, String reason) {\n    registry.counter(\"payments.processed\",\n        \"outcome\", outcome,        // success, failed, declined\n        \"reason\", reason,          // insufficient_funds, expired_card, fraud_hold\n        \"gateway\", \"stripe\"\n    ).increment();\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e\u003cstrong\u003eThe RED method for services:\u003c/strong\u003e\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-yaml\"\u003e# Prometheus recording rules (pre-compute expensive queries):\ngroups:\n  - name: service_red_metrics\n    rules:\n      - record: job:http_requests:rate5m\n        expr: rate(http_server_requests_seconds_count[5m])\n\n      - record: job:http_request_errors:rate5m\n        expr: rate(http_server_requests_seconds_count{status=~\"5..\"}[5m])\n\n      - record: job:http_error_ratio:rate5m\n        expr: job:http_request_errors:rate5m / job:http_requests:rate5m\n\n      - record: job:http_request_p99:rate5m\n        expr: histogram_quantile(0.99, rate(http_server_requests_seconds_bucket[5m]))\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch2\u003eStructured Logging with Loki\u003c/h2\u003e\n\u003cp\u003eLoki stores logs as compressed log streams (label-indexed). Unlike Elasticsearch, Loki doesn't index log content — it indexes labels. This makes it fast and cheap.\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-java\"\u003e// Spring Boot structured logging with Logback:\n// logback-spring.xml:\n\u0026#x3C;configuration\u003e\n  \u0026#x3C;appender name=\"JSON\" class=\"ch.qos.logback.core.ConsoleAppender\"\u003e\n    \u0026#x3C;encoder class=\"net.logstash.logback.encoder.LogstashEncoder\"\u003e\n      \u0026#x3C;provider class=\"net.logstash.logback.composite.loggingevent.LoggingEventPatternJsonProvider\"\u003e\n        \u0026#x3C;pattern\u003e{\"timestamp\":\"%d{ISO8601}\",\"level\":\"%level\",\"logger\":\"%logger\",\"message\":\"%msg\"}\u0026#x3C;/pattern\u003e\n      \u0026#x3C;/provider\u003e\n      \u0026#x3C;!-- Include MDC fields (traceId, spanId injected by OTel agent): --\u003e\n      \u0026#x3C;includeMdcKeyName\u003etraceId\u0026#x3C;/includeMdcKeyName\u003e\n      \u0026#x3C;includeMdcKeyName\u003espanId\u0026#x3C;/includeMdcKeyName\u003e\n      \u0026#x3C;includeMdcKeyName\u003euserId\u0026#x3C;/includeMdcKeyName\u003e\n    \u0026#x3C;/encoder\u003e\n  \u0026#x3C;/appender\u003e\n  \u0026#x3C;root level=\"INFO\"\u003e\n    \u0026#x3C;appender-ref ref=\"JSON\"/\u003e\n  \u0026#x3C;/root\u003e\n\u0026#x3C;/configuration\u003e\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e\u003cstrong\u003eLoki query examples (LogQL):\u003c/strong\u003e\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-logql\"\u003e# Error rate for order service:\nrate({service=\"order-service\", level=\"ERROR\"}[5m])\n\n# Slow requests (\u003e 1s) in last 15 minutes:\n{service=\"order-service\"} |= \"latency\" | json | latencyMs \u003e 1000\n\n# Correlate trace with logs:\n{service=\"order-service\"} |= \"abc123\"  # Find all logs for traceId abc123\n\n# Log volume by endpoint:\nsum by (path) (rate({service=\"order-service\"}[5m]))\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch2\u003eGrafana Dashboard: The Incident Response Dashboard\u003c/h2\u003e\n\u003cp\u003eEvery service should have one dashboard that tells you in 30 seconds whether the service is healthy:\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003e┌─────────────────────────────────────────────────────────────────┐\n│  ORDER SERVICE — Production Dashboard                           │\n├──────────────┬──────────────┬──────────────┬────────────────────┤\n│  RPS         │  Error Rate  │  P99 Latency │  DB Connections    │\n│  1,247/s     │  0.12%       │  284ms       │  18/50             │\n│  ▼ -3%       │  ▲ normal    │  ▼ healthy   │  ▲ OK              │\n├──────────────┴──────────────┴──────────────┴────────────────────┤\n│  Request Rate (5m)     │  Error Rate (5m)                       │\n│  [graph]               │  [graph]                               │\n├────────────────────────┴───────────────────────────────────────┤\n│  Latency Distribution (P50/P95/P99)    │  Top Slow Endpoints    │\n│  [graph]                               │  [table]               │\n├────────────────────────────────────────┴───────────────────────┤\n│  Recent Errors (Loki logs, last 50)                             │\n│  [log panel — live tail during incidents]                       │\n└─────────────────────────────────────────────────────────────────┘\n\u003c/code\u003e\u003c/pre\u003e\n\u003cpre\u003e\u003ccode class=\"language-json\"\u003e// Grafana panel JSON for error rate alert indicator:\n{\n  \"type\": \"stat\",\n  \"title\": \"Error Rate\",\n  \"targets\": [{\n    \"expr\": \"sum(rate(http_server_requests_seconds_count{service=\\\"order-service\\\",status=~\\\"5..\\\"}[5m])) / sum(rate(http_server_requests_seconds_count{service=\\\"order-service\\\"}[5m]))\",\n    \"legendFormat\": \"Error %\"\n  }],\n  \"options\": {\n    \"colorMode\": \"background\",\n    \"thresholds\": {\n      \"steps\": [\n        {\"value\": 0, \"color\": \"green\"},\n        {\"value\": 0.01, \"color\": \"yellow\"},\n        {\"value\": 0.05, \"color\": \"red\"}\n      ]\n    }\n  }\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch2\u003eAlerting That Doesn't Create Alert Fatigue\u003c/h2\u003e\n\u003cp\u003eAlert on symptoms, not causes:\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-yaml\"\u003e# Prometheus alerting rules:\ngroups:\n  - name: service_slos\n    rules:\n      # Alert on user-visible symptoms:\n      - alert: HighErrorRate\n        expr: job:http_error_ratio:rate5m{service=\"order-service\"} \u003e 0.05\n        for: 2m\n        labels:\n          severity: critical\n          team: backend\n        annotations:\n          summary: \"Order service error rate {{ $value | humanizePercentage }}\"\n          runbook: \"https://wiki/runbooks/order-service-errors\"\n\n      - alert: HighP99Latency\n        expr: job:http_request_p99:rate5m{service=\"order-service\"} \u003e 2\n        for: 5m\n        labels:\n          severity: warning\n        annotations:\n          summary: \"Order service P99 latency is {{ $value }}s\"\n          dashboard: \"https://grafana/d/order-service\"\n\n      # Infrastructure alerts (lower priority):\n      - alert: HighDatabaseConnections\n        expr: hikaricp_connections_active / hikaricp_connections_max \u003e 0.9\n        for: 3m\n        labels:\n          severity: warning\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e\u003cstrong\u003eWhat NOT to alert on:\u003c/strong\u003e\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eCPU utilization (symptom: latency or errors, not CPU itself)\u003c/li\u003e\n\u003cli\u003eMemory usage below limit (only alert near OOM)\u003c/li\u003e\n\u003cli\u003eIndividual host metrics (alert on aggregate service behavior)\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2\u003eDistributed Trace Analysis During Incidents\u003c/h2\u003e\n\u003cp\u003eWhen P99 latency is high, use Jaeger/Tempo to find the slow spans:\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003eIncident investigation workflow:\n\n1. Grafana alerts: P99 \u003e 2s on order-service\n2. Open Tempo trace search:\n   service=order-service, duration\u003e2000ms, last 15 minutes\n3. Sort by duration, examine top 5 slow traces\n4. Identify common slow span:\n   → PostgreSQL.query on orders table: 1.8s\n   → SELECT * FROM orders WHERE user_id=? ORDER BY created_at DESC\n5. Open query in pg_stat_statements:\n   → Missing index on (user_id, created_at)\n6. Create index CONCURRENTLY (online, no table lock)\n7. P99 drops to 180ms within 2 minutes\n\nTotal time from alert to fix: 15 minutes.\nWithout traces: hours of grep-based log analysis.\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch2\u003eSampling Strategy\u003c/h2\u003e\n\u003cp\u003e100% trace sampling at high throughput is expensive. Use tail-based sampling:\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-yaml\"\u003e# OpenTelemetry Collector config with tail-based sampling:\nprocessors:\n  tail_sampling:\n    decision_wait: 10s\n    num_traces: 100000\n    expected_new_traces_per_sec: 10000\n    policies:\n      - name: errors-policy\n        type: status_code\n        status_code: {status_codes: [ERROR]}\n        # Always sample errors\n      - name: slow-traces-policy\n        type: latency\n        latency: {threshold_ms: 1000}\n        # Sample traces \u003e 1 second\n      - name: probabilistic-policy\n        type: probabilistic\n        probabilistic: {sampling_percentage: 1}\n        # Sample 1% of everything else\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eThis captures 100% of errors and slow requests (the ones you care about) while sampling only 1% of healthy fast requests (the ones you don't need to analyze).\u003c/p\u003e\n\u003cp\u003eObservability is an investment with compounding returns. Every hour spent on instrumentation now saves 10 hours of incident investigation later. The teams that build it in from day one navigate incidents in minutes. The teams that add it after a major outage spend the outage blind.\u003c/p\u003e\n","tableOfContents":[{"id":"the-three-pillars-and-how-they-relate","text":"The Three Pillars and How They Relate","level":2},{"id":"opentelemetry-java-sdk-setup","text":"OpenTelemetry Java SDK Setup","level":2},{"id":"prometheus-metrics-design","text":"Prometheus Metrics Design","level":2},{"id":"structured-logging-with-loki","text":"Structured Logging with Loki","level":2},{"id":"grafana-dashboard-the-incident-response-dashboard","text":"Grafana Dashboard: The Incident Response Dashboard","level":2},{"id":"alerting-that-doesnt-create-alert-fatigue","text":"Alerting That Doesn't Create Alert Fatigue","level":2},{"id":"distributed-trace-analysis-during-incidents","text":"Distributed Trace Analysis During Incidents","level":2},{"id":"sampling-strategy","text":"Sampling Strategy","level":2}]},"relatedPosts":[{"title":"Event Sourcing and CQRS in Production: Beyond the Theory","description":"What event sourcing actually looks like in production Java systems: event store design, snapshot strategies, projection rebuilding, CQRS read model synchronization, and the operational challenges nobody talks about.","date":"2025-06-23","category":"System Design","tags":["event sourcing","cqrs","system design","java","distributed systems","kafka","spring boot"],"featured":false,"affiliateSection":"distributed-systems-books","slug":"event-sourcing-cqrs-production","readingTime":"7 min read","excerpt":"Event sourcing is one of those patterns that looks elegant in conference talks and becomes surprisingly complex in production systems. The theory — store events instead of state, derive state by replaying events — is sou…"},{"title":"gRPC vs REST vs GraphQL: Choosing the Right API Protocol","description":"A technical comparison of REST, gRPC, and GraphQL across performance, developer experience, schema evolution, streaming, and real production use cases. When each protocol wins and where each falls short.","date":"2025-06-18","category":"System Design","tags":["grpc","rest","graphql","api design","system design","microservices","protocol buffers"],"featured":false,"affiliateSection":"system-design-courses","slug":"grpc-vs-rest-vs-graphql","readingTime":"7 min read","excerpt":"API protocol selection has a longer lifespan than almost any other technical decision. REST APIs from 2010 are still running in production. gRPC services chosen for internal communication in 2018 are tightly coupled to t…"},{"title":"Multi-Tenancy Architecture: Database, Application, and Infrastructure Patterns","description":"Production multi-tenancy: database isolation models (shared schema, shared database, separate database), tenant routing, data partitioning strategies, cross-tenant query prevention, Spring Boot tenant context propagation, and the trade-offs at each isolation level.","date":"2025-05-24","category":"System Design","tags":["multi-tenancy","saas","system design","database","spring boot","architecture","isolation"],"featured":false,"affiliateSection":"system-design-courses","slug":"multi-tenancy-architecture","readingTime":"8 min read","excerpt":"Multi-tenancy is the architecture pattern where a single deployed instance of a software system serves multiple customers (tenants), with each tenant's data logically or physically isolated from others. It's the foundati…"}]},"__N_SSG":true},"page":"/blog/[slug]","query":{"slug":"observability-opentelemetry-production"},"buildId":"rpFn_jslWZ9qPkJwor7RD","isFallback":false,"gsp":true,"scriptLoader":[]}</script></body></html>

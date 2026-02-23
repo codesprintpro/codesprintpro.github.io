@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://codesprintpro.com
+
+# Sitemaps
+Sitemap: https://codesprintpro.com/sitemap.xml

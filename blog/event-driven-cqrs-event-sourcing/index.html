@@ -1,0 +1,424 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8" data-next-head=""/><meta name="viewport" content="width=device-width" data-next-head=""/><title data-next-head="">Event-Driven Architecture: CQRS and Event Sourcing in Practice<!-- --> | CodeSprintPro</title><meta name="description" content="Master CQRS (Command Query Responsibility Segregation) and Event Sourcing patterns for scalable, auditable systems. Includes Spring Boot + Axon Framework implementation with Kafka event store." data-next-head=""/><meta name="author" content="Sachin Sarawgi" data-next-head=""/><link rel="canonical" href="https://codesprintpro.com/blog/event-driven-cqrs-event-sourcing/" data-next-head=""/><meta property="og:type" content="article" data-next-head=""/><meta property="og:title" content="Event-Driven Architecture: CQRS and Event Sourcing in Practice" data-next-head=""/><meta property="og:description" content="Master CQRS (Command Query Responsibility Segregation) and Event Sourcing patterns for scalable, auditable systems. Includes Spring Boot + Axon Framework implementation with Kafka event store." data-next-head=""/><meta property="og:url" content="https://codesprintpro.com/blog/event-driven-cqrs-event-sourcing/" data-next-head=""/><meta property="og:image" content="https://codesprintpro.com/images/og-default.jpg" data-next-head=""/><meta property="og:site_name" content="CodeSprintPro" data-next-head=""/><meta property="article:published_time" content="2025-03-03" data-next-head=""/><meta property="article:author" content="Sachin Sarawgi" data-next-head=""/><meta property="article:section" content="System Design" data-next-head=""/><meta property="article:tag" content="event sourcing" data-next-head=""/><meta property="article:tag" content="cqrs" data-next-head=""/><meta property="article:tag" content="event-driven" data-next-head=""/><meta property="article:tag" content="kafka" data-next-head=""/><meta property="article:tag" content="spring boot" data-next-head=""/><meta property="article:tag" content="axon" data-next-head=""/><meta name="twitter:card" content="summary_large_image" data-next-head=""/><meta name="twitter:title" content="Event-Driven Architecture: CQRS and Event Sourcing in Practice" data-next-head=""/><meta name="twitter:description" content="Master CQRS (Command Query Responsibility Segregation) and Event Sourcing patterns for scalable, auditable systems. Includes Spring Boot + Axon Framework implementation with Kafka event store." data-next-head=""/><meta name="twitter:image" content="https://codesprintpro.com/images/og-default.jpg" data-next-head=""/><script type="application/ld+json" data-next-head="">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Event-Driven Architecture: CQRS and Event Sourcing in Practice","description":"Master CQRS (Command Query Responsibility Segregation) and Event Sourcing patterns for scalable, auditable systems. Includes Spring Boot + Axon Framework implementation with Kafka event store.","image":"https://codesprintpro.com/images/og-default.jpg","datePublished":"2025-03-03","dateModified":"2025-03-03","author":{"@type":"Person","name":"Sachin Sarawgi","url":"https://codesprintpro.com","sameAs":["https://www.linkedin.com/in/sachin-sarawgi/","https://github.com/codesprintpro","https://medium.com/@codesprintpro"]},"publisher":{"@type":"Organization","name":"CodeSprintPro","url":"https://codesprintpro.com","logo":{"@type":"ImageObject","url":"https://codesprintpro.com/favicon/favicon-96x96.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codesprintpro.com/blog/event-driven-cqrs-event-sourcing/"},"keywords":"event sourcing, cqrs, event-driven, kafka, spring boot, axon","articleSection":"System Design"}</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerPolicy="no-referrer"/><script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script><link rel="preload" href="/_next/static/media/e4af272ccee01ff0-s.p.woff2" as="font" type="font/woff2" crossorigin="anonymous" data-next-font="size-adjust"/><link rel="preload" href="/_next/static/css/735d4373f93910ca.css" as="style"/><link rel="stylesheet" href="/_next/static/css/735d4373f93910ca.css" data-n-g=""/><noscript data-n-css=""></noscript><script defer="" nomodule="" src="/_next/static/chunks/polyfills-42372ed130431b0a.js"></script><script src="/_next/static/chunks/webpack-11a4a2dad04962bb.js" defer=""></script><script src="/_next/static/chunks/framework-1ce91eb6f9ecda85.js" defer=""></script><script src="/_next/static/chunks/main-c7f4109f032d7b6e.js" defer=""></script><script src="/_next/static/chunks/pages/_app-1a852bd9e38c70ab.js" defer=""></script><script src="/_next/static/chunks/730-db7827467817f501.js" defer=""></script><script src="/_next/static/chunks/90-1cd4611704c3dbe0.js" defer=""></script><script src="/_next/static/chunks/440-29f4b99a44e744b5.js" defer=""></script><script src="/_next/static/chunks/pages/blog/%5Bslug%5D-0c1b14a33d5e05ee.js" defer=""></script><script src="/_next/static/rpFn_jslWZ9qPkJwor7RD/_buildManifest.js" defer=""></script><script src="/_next/static/rpFn_jslWZ9qPkJwor7RD/_ssgManifest.js" defer=""></script></head><body><div id="__next"><main class="__className_f367f3"><div class="min-h-screen bg-white"><nav class="fixed w-full z-50 transition-all duration-300 bg-white shadow-md" style="transform:translateY(-100px) translateZ(0)"><div class="container mx-auto px-4 sm:px-6 lg:px-8"><div class="flex items-center justify-between h-16"><a class="text-xl font-bold transition-colors text-blue-600" href="/">CodeSprintPro</a><div class="hidden md:flex items-center space-x-8"><a class="text-sm font-medium transition-colors text-blue-600" href="/blog/">Blog</a><a class="text-sm font-medium transition-colors text-gray-600 hover:text-blue-600" href="/#about">About</a><a class="text-sm font-medium transition-colors text-gray-600 hover:text-blue-600" href="/#portfolio">Portfolio</a><a class="text-sm font-medium transition-colors text-gray-600 hover:text-blue-600" href="/#contact">Contact</a></div><button class="md:hidden p-2 rounded-lg transition-colors hover:bg-gray-100 text-gray-600" aria-label="Toggle mobile menu"><svg class="w-6 h-6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor"><path d="M4 6h16M4 12h16M4 18h16"></path></svg></button></div></div></nav><div class="pt-20"><div class="bg-gradient-to-br from-gray-900 to-blue-950 py-16"><div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl"><nav class="flex items-center gap-2 text-sm text-gray-400 mb-6"><a class="hover:text-white transition-colors" href="/">Home</a><span>/</span><a class="hover:text-white transition-colors" href="/blog/">Blog</a><span>/</span><span class="text-gray-300 truncate max-w-xs">Event-Driven Architecture: CQRS and Event Sourcing in Practice</span></nav><span class="inline-block text-xs font-semibold px-3 py-1 rounded-full bg-blue-100 text-blue-700 mb-4">System Design</span><h1 class="text-3xl md:text-5xl font-bold text-white mb-4 leading-tight">Event-Driven Architecture: CQRS and Event Sourcing in Practice</h1><p class="text-gray-300 text-lg mb-6 max-w-3xl">Master CQRS (Command Query Responsibility Segregation) and Event Sourcing patterns for scalable, auditable systems. Includes Spring Boot + Axon Framework implementation with Kafka event store.</p><div class="flex flex-wrap items-center gap-4 text-gray-400 text-sm"><span class="flex items-center gap-1.5"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>Sachin Sarawgi</span><span>·</span><span>March 3, 2025</span><span>·</span><span class="flex items-center gap-1"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>14 min read</span></div><div class="flex flex-wrap gap-2 mt-4"><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->event sourcing</span><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->cqrs</span><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->event-driven</span><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->kafka</span><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->spring boot</span><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->axon</span></div></div></div><div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl py-12"><div class="flex gap-12"><div class="flex-1 min-w-0"><article class="prose prose-lg max-w-none prose-headings:text-gray-900 prose-headings:font-bold prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-4 prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3 prose-p:text-gray-700 prose-p:leading-relaxed prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline prose-strong:text-gray-900 prose-blockquote:border-blue-600 prose-blockquote:text-gray-600 prose-code:text-blue-700 prose-code:bg-blue-50 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-sm prose-code:before:content-none prose-code:after:content-none prose-pre:rounded-xl prose-img:rounded-xl prose-img:shadow-md prose-table:text-sm prose-th:bg-gray-100 prose-th:text-gray-700"><p>Traditional CRUD systems store <strong>current state</strong>. Event-driven systems store the <strong>history of state changes</strong>. This single difference is more profound than it first appears: instead of asking "what is the current status of order #123?", you ask "what sequence of events happened to order #123?" — and you can derive the current status from that sequence at any point in time.</p>
+<p>The trade-off is real: event sourcing introduces complexity that a simple CRUD app doesn't need. But for systems where audit trails matter (finance, healthcare, e-commerce), where you need to replay history to fix bugs, or where you want to scale reads and writes independently, the pattern pays for itself over time. This article shows you when it's worth it and how to implement it right.</p>
+<h2>The Problem CQRS and Event Sourcing Solve</h2>
+<p>Consider what happens in a traditional system when an order is shipped. You run a single UPDATE statement and the previous state — when it was confirmed, who approved it, what the original items were — is gone forever. This is fine for many applications. It becomes a serious problem when:</p>
+<ul>
+<li>A compliance team asks: "Show me every change made to this order and who made it."</li>
+<li>A bug caused incorrect state and you need to reconstruct what actually happened.</li>
+<li>Your dashboard query locks the table that your order creation query also needs.</li>
+</ul>
+<pre><code>Traditional CRUD:
+  UPDATE orders SET status = 'SHIPPED', updated_at = NOW() WHERE id = 123
+
+  Problems:
+  1. History lost — you can't answer "when did this order become CONFIRMED?"
+  2. Read and write load couple — slow reporting queries block order creation
+  3. No audit trail — compliance asks "who changed this?" and you have nothing
+  4. Temporal queries impossible — "what was the state on Jan 1?" = mystery
+
+Event Sourcing:
+  INSERT INTO events (aggregate_id, type, data, timestamp) VALUES
+    (123, 'OrderCreated', {...}, T1),
+    (123, 'PaymentProcessed', {...}, T2),
+    (123, 'OrderShipped', {...}, T3)
+
+  Benefits:
+  1. Full history — every state change recorded
+  2. Rebuild any past state by replaying events to point-in-time
+  3. Natural audit log (SOX, GDPR, financial compliance)
+  4. Events drive downstream projections, notifications, analytics
+</code></pre>
+<p>Notice that in the event-sourced version, you never update a row — you only ever append new events. The current state of an order is derived by replaying those events from the beginning. This immutability is what gives you the time-machine capability.</p>
+<h2>CQRS: Separate Read and Write Models</h2>
+<p>CQRS (Command Query Responsibility Segregation) is a natural companion to event sourcing. The core idea is that the model you use to change data (the write model) doesn't have to be the same model you use to read data (the read model).</p>
+<ul>
+<li><strong>Command side</strong>: Handles writes. Validates business rules. Emits events. Optimised for correctness, not query flexibility.</li>
+<li><strong>Query side</strong>: Handles reads. Denormalized. Shaped to answer specific queries fast. Can have as many different read models as you need.</li>
+</ul>
+<pre><code>                    ┌─────────────────────┐
+                    │   Command Handler   │
+Command ──────────► │ (validate + execute)│──► Event Store ──► Events
+                    └─────────────────────┘         │
+                                                     │ Event Bus
+                                                     │
+                    ┌─────────────────────┐          ▼
+Query  ──────────► │   Query Handler     │◄── Read Model (Projections)
+Result ◄────────── │  (read-optimized)   │    (denormalized views)
+                    └─────────────────────┘
+</code></pre>
+<p>The write side emits events. Those events flow to one or more <strong>projections</strong> — read-optimized views of the data. You can have a projection for the customer dashboard, a different one for admin reporting, and another one for analytics — all built from the same stream of events. This is the real power: one source of truth, many tailored views.</p>
+<h2>Implementation: Order System with Axon Framework</h2>
+<h3>Commands and Events</h3>
+<p>The most important conceptual distinction in this pattern is the difference between <strong>commands</strong> and <strong>events</strong>. They sound similar but serve opposite purposes:</p>
+<ul>
+<li>A <strong>command</strong> is an <strong>intent</strong> — "Please create this order." It's imperative and can be rejected. If business validation fails (e.g., the cart is empty), the command is rejected and no event is produced.</li>
+<li>An <strong>event</strong> is a <strong>fact</strong> — "An order was created." It's past tense and immutable. Once emitted, it cannot be undone.</li>
+</ul>
+<p>This separation enforces a clean boundary: all validation happens before the event is produced. By the time an event exists, it represents something that definitively happened.</p>
+<pre><code class="language-java">// Commands represent intent ("do this") — can be rejected
+public record CreateOrderCommand(
+    @TargetAggregateIdentifier String orderId,
+    String customerId,
+    List&#x3C;OrderItem> items
+) {}
+
+public record ConfirmOrderCommand(
+    @TargetAggregateIdentifier String orderId
+) {}
+
+public record ShipOrderCommand(
+    @TargetAggregateIdentifier String orderId,
+    String trackingNumber
+) {}
+
+// Events represent facts ("this happened") — immutable, past tense
+public record OrderCreatedEvent(
+    String orderId,
+    String customerId,
+    List&#x3C;OrderItem> items,
+    Instant createdAt
+) {}
+
+public record OrderConfirmedEvent(
+    String orderId,
+    Instant confirmedAt
+) {}
+
+public record OrderShippedEvent(
+    String orderId,
+    String trackingNumber,
+    Instant shippedAt
+) {}
+</code></pre>
+<p>Notice that commands are named imperatively (<code>CreateOrderCommand</code>) while events are named in past tense (<code>OrderCreatedEvent</code>). This naming convention isn't cosmetic — it reflects whether something is a request that could fail or a historical fact that already happened.</p>
+<h3>The Aggregate: Command Side</h3>
+<p>An <strong>aggregate</strong> is the consistency boundary in your domain model. It's the gatekeeper: all business rules live here, and it's the only thing that decides whether a command is valid and what events it produces.</p>
+<p>The crucial rule in event sourcing: <strong>state is never set directly in command handlers</strong>. Instead, a command handler validates the request and applies an event. The <code>@EventSourcingHandler</code> methods then update the internal state. This indirection exists because the same event sourcing handlers are called both when processing new commands <em>and</em> when replaying historical events to rebuild state. The state-change logic must live in one place.</p>
+<pre><code class="language-java">@Aggregate
+public class OrderAggregate {
+
+    @AggregateIdentifier
+    private String orderId;
+    private String customerId;
+    private OrderStatus status;
+    private List&#x3C;OrderItem> items;
+
+    // Constructor command handler: validates, then emits an event
+    @CommandHandler
+    public OrderAggregate(CreateOrderCommand command) {
+        // Step 1: Validate the business rule
+        if (command.items().isEmpty()) {
+            throw new IllegalArgumentException("Order must have at least one item");
+        }
+
+        // Step 2: Apply an event — NEVER set fields directly here
+        // AggregateLifecycle.apply() calls the @EventSourcingHandler below
+        AggregateLifecycle.apply(new OrderCreatedEvent(
+            command.orderId(),
+            command.customerId(),
+            command.items(),
+            Instant.now()
+        ));
+    }
+
+    @CommandHandler
+    public void handle(ConfirmOrderCommand command) {
+        // Guard: only valid state transitions are allowed
+        if (status != OrderStatus.PENDING) {
+            throw new IllegalStateException("Can only confirm PENDING orders, current: " + status);
+        }
+        AggregateLifecycle.apply(new OrderConfirmedEvent(orderId, Instant.now()));
+    }
+
+    @CommandHandler
+    public void handle(ShipOrderCommand command) {
+        if (status != OrderStatus.CONFIRMED) {
+            throw new IllegalStateException("Can only ship CONFIRMED orders");
+        }
+        AggregateLifecycle.apply(new OrderShippedEvent(orderId, command.trackingNumber(), Instant.now()));
+    }
+
+    // @EventSourcingHandler: updates internal state from events.
+    // Called for NEW events (after apply()) AND when REPLAYING historical events.
+    // This is the only place where fields are assigned.
+    @EventSourcingHandler
+    public void on(OrderCreatedEvent event) {
+        this.orderId = event.orderId();
+        this.customerId = event.customerId();
+        this.items = event.items();
+        this.status = OrderStatus.PENDING;
+    }
+
+    @EventSourcingHandler
+    public void on(OrderConfirmedEvent event) {
+        this.status = OrderStatus.CONFIRMED;
+    }
+
+    @EventSourcingHandler
+    public void on(OrderShippedEvent event) {
+        this.status = OrderStatus.SHIPPED;
+    }
+}
+</code></pre>
+<p>The lifecycle when <code>ShipOrder</code> is received on a new request: Axon loads all past events for that order from the event store, replays them through the <code>@EventSourcingHandler</code> methods to reconstruct the current state, then calls the <code>@CommandHandler</code> with that state available. If validation passes, the new event is appended to the store. If it fails, nothing is written.</p>
+<h3>Query Side: Projections</h3>
+<p>A <strong>projection</strong> is a read-optimized view of your data, built by listening to events. Think of it as a continuously-updated materialized view. Unlike the command side (which is normalized and focused on correctness), projections are denormalized and shaped to answer specific queries as fast as possible.</p>
+<p>The key insight is that you can have as many projections as you want, each serving a different use case. A customer-facing dashboard projection might join order + customer data and cache it in Redis. An admin reporting projection might aggregate order totals by region and store them in a reporting database. Both are built from the same events — you're not duplicating writes, you're building tailored read models.</p>
+<pre><code class="language-java">// Projection: listens to events and maintains a denormalized read model
+@Component
+@ProcessingGroup("order-projections")
+public class OrderProjection {
+
+    @Autowired
+    private OrderViewRepository repository;  // Simple JPA repository — plain SQL table
+
+    // When an order is created, build the initial read-model row
+    @EventHandler
+    public void on(OrderCreatedEvent event) {
+        OrderView view = new OrderView();
+        view.setOrderId(event.orderId());
+        view.setCustomerId(event.customerId());
+        view.setStatus("PENDING");
+        view.setItemCount(event.items().size());
+        view.setTotalAmount(calculateTotal(event.items()));
+        view.setCreatedAt(event.createdAt());
+        repository.save(view);
+    }
+
+    // When an order is confirmed, update just the fields that changed
+    @EventHandler
+    public void on(OrderConfirmedEvent event) {
+        repository.findById(event.orderId()).ifPresent(view -> {
+            view.setStatus("CONFIRMED");
+            view.setConfirmedAt(event.confirmedAt());
+            repository.save(view);
+        });
+    }
+
+    @EventHandler
+    public void on(OrderShippedEvent event) {
+        repository.findById(event.orderId()).ifPresent(view -> {
+            view.setStatus("SHIPPED");
+            view.setTrackingNumber(event.trackingNumber());
+            view.setShippedAt(event.shippedAt());
+            repository.save(view);
+        });
+    }
+}
+
+// Query handlers serve the read model directly — no joins, no aggregation at query time
+@Component
+public class OrderQueryHandler {
+
+    @Autowired
+    private OrderViewRepository repository;
+
+    @QueryHandler
+    public OrderView handle(GetOrderQuery query) {
+        return repository.findById(query.orderId())
+            .orElseThrow(() -> new OrderNotFoundException(query.orderId()));
+    }
+
+    @QueryHandler
+    public List&#x3C;OrderView> handle(GetCustomerOrdersQuery query) {
+        return repository.findByCustomerIdOrderByCreatedAtDesc(query.customerId());
+    }
+
+    @QueryHandler
+    public Page&#x3C;OrderView> handle(GetOrdersByStatusQuery query) {
+        return repository.findByStatus(query.status(), query.pageable());
+    }
+}
+</code></pre>
+<p>Notice that <code>GetCustomerOrdersQuery</code> is a simple <code>findByCustomerIdOrderByCreatedAtDesc</code> call — no complex joins, no aggregation, just a fast indexed lookup. The read model was pre-shaped at event time, so queries are cheap regardless of how complex the business logic is.</p>
+<h3>API Layer</h3>
+<p>The controller is deliberately thin. It delegates write operations to the <code>CommandGateway</code> (which routes to the aggregate) and read operations to the <code>QueryGateway</code> (which routes to the projections). The controller doesn't contain any business logic — it just translates HTTP into commands and queries.</p>
+<pre><code class="language-java">@RestController
+@RequestMapping("/api/v1/orders")
+public class OrderController {
+
+    @Autowired
+    private CommandGateway commandGateway;  // Routes to @CommandHandler methods
+
+    @Autowired
+    private QueryGateway queryGateway;      // Routes to @QueryHandler methods
+
+    // WRITE side: send a command and get back the result asynchronously
+    // Returns 202 Accepted (not 201 Created) because events are processed async
+    @PostMapping
+    public CompletableFuture&#x3C;ResponseEntity&#x3C;String>> createOrder(
+            @RequestBody CreateOrderRequest request) {
+        String orderId = UUID.randomUUID().toString();
+        return commandGateway
+            .send(new CreateOrderCommand(orderId, request.customerId(), request.items()))
+            .thenApply(result -> ResponseEntity.accepted()
+                .header("Location", "/api/v1/orders/" + orderId)
+                .body(orderId));
+    }
+
+    @PostMapping("/{id}/confirm")
+    public CompletableFuture&#x3C;Void> confirmOrder(@PathVariable String id) {
+        return commandGateway.send(new ConfirmOrderCommand(id));
+    }
+
+    // READ side: query the denormalized projection, not the event store
+    @GetMapping("/{id}")
+    public CompletableFuture&#x3C;OrderView> getOrder(@PathVariable String id) {
+        return queryGateway.query(new GetOrderQuery(id), OrderView.class);
+    }
+
+    @GetMapping
+    public CompletableFuture&#x3C;List&#x3C;OrderView>> getOrdersByStatus(
+            @RequestParam String status) {
+        return queryGateway.query(new GetOrdersByStatusQuery(status),
+            ResponseTypes.multipleInstancesOf(OrderView.class));
+    }
+}
+</code></pre>
+<p>Why <code>202 Accepted</code> instead of <code>201 Created</code>? Because CQRS systems are often eventually consistent — the command is processed and the event is stored, but the projection (which feeds the read model) updates asynchronously. Returning the orderId in the <code>Location</code> header lets the client poll for the created resource.</p>
+<h2>Event Sourcing Without a Framework</h2>
+<p>Axon is powerful but heavyweight. For teams that want the event sourcing concept without adopting a full framework, the pattern translates directly into plain Spring + JDBC.</p>
+<p>The essence of a DIY event store is simple: every state-changing operation appends a row to the <code>domain_events</code> table. To load an aggregate, you read all its events ordered by version and replay them — calling <code>aggregate.apply(event)</code> for each one — until the aggregate's internal state reflects the current reality.</p>
+<pre><code class="language-java">@Service
+public class OrderEventStore {
+
+    @Autowired
+    private JdbcTemplate jdbc;
+
+    @Autowired
+    private ObjectMapper mapper;
+
+    public void appendEvent(String aggregateId, DomainEvent event) {
+        long expectedVersion = getCurrentVersion(aggregateId);
+        // Each event gets the next version number — this is how ordering is guaranteed
+        jdbc.update("""
+            INSERT INTO domain_events (aggregate_id, version, event_type, event_data, occurred_at)
+            VALUES (?, ?, ?, ?::jsonb, ?)
+            """,
+            aggregateId,
+            expectedVersion + 1,
+            event.getClass().getSimpleName(),
+            mapper.writeValueAsString(event),
+            event.getOccurredAt()
+        );
+    }
+
+    public List&#x3C;DomainEvent> loadEvents(String aggregateId) {
+        // Always load in ascending version order — replay must be chronological
+        return jdbc.query("""
+            SELECT event_type, event_data
+            FROM domain_events
+            WHERE aggregate_id = ?
+            ORDER BY version ASC
+            """,
+            (rs, row) -> deserializeEvent(rs.getString("event_type"), rs.getString("event_data")),
+            aggregateId
+        );
+    }
+
+    // Load aggregate by replaying its entire event history
+    public OrderAggregate load(String orderId) {
+        List&#x3C;DomainEvent> events = loadEvents(orderId);
+        if (events.isEmpty()) throw new AggregateNotFoundException(orderId);
+
+        OrderAggregate aggregate = new OrderAggregate();
+        // Each call to apply() mutates the aggregate's internal state
+        // After the loop, aggregate reflects the current state
+        events.forEach(aggregate::apply);
+        return aggregate;
+    }
+}
+</code></pre>
+<p>The <code>load()</code> method is the core of event sourcing: start with an empty aggregate, replay every event from version 1 to the latest, and you have the current state. This is conceptually simple but has a performance implication for long-lived aggregates — which is why snapshots exist.</p>
+<h2>Event Store Schema</h2>
+<p>The schema design for an event store is deceptively simple but has important details worth understanding.</p>
+<pre><code class="language-sql">CREATE TABLE domain_events (
+    id          BIGSERIAL PRIMARY KEY,
+    aggregate_id VARCHAR(36) NOT NULL,
+    version     INTEGER NOT NULL,
+    event_type  VARCHAR(100) NOT NULL,
+    event_data  JSONB NOT NULL,
+    occurred_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    metadata    JSONB DEFAULT '{}',
+
+    -- This UNIQUE constraint is doing important work: it prevents two concurrent
+    -- transactions from both writing version=5 for the same aggregate.
+    -- The second one will get a DB constraint violation, not a silent overwrite.
+    -- This is "optimistic concurrency control" without explicit locking.
+    UNIQUE (aggregate_id, version)
+);
+
+CREATE INDEX idx_domain_events_aggregate_id ON domain_events (aggregate_id, version);
+CREATE INDEX idx_domain_events_type_time ON domain_events (event_type, occurred_at);
+
+-- Snapshot table (for aggregates with thousands of events)
+CREATE TABLE aggregate_snapshots (
+    aggregate_id  VARCHAR(36) PRIMARY KEY,
+    version       INTEGER NOT NULL,
+    snapshot_data JSONB NOT NULL,
+    created_at    TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+</code></pre>
+<p>The <code>UNIQUE (aggregate_id, version)</code> constraint is the most important line. Without it, two concurrent requests processing the same aggregate could both read version 7, both decide to write version 8, and you'd have a conflict or data corruption. With the constraint, only one succeeds — the other gets a <code>UniqueConstraintViolationException</code> and must retry. This is optimistic concurrency control using the database's own integrity checks.</p>
+<h2>Snapshots: Avoiding Replay at Scale</h2>
+<p>Replaying 10 events to reconstruct an aggregate is trivial. Replaying 10,000 events every time an order is loaded is not. This is the snapshot problem — and it's real for long-running aggregates like user accounts or multi-year subscription records.</p>
+<p>The solution is to periodically save a complete snapshot of the aggregate's state. On the next load, instead of replaying from event 1, you restore from the snapshot and only replay events that occurred after the snapshot was taken.</p>
+<pre><code class="language-java">@Service
+public class SnapshotService {
+
+    private static final int SNAPSHOT_THRESHOLD = 100;
+
+    public OrderAggregate loadWithSnapshot(String orderId) {
+        Optional&#x3C;Snapshot> snapshot = snapshotRepo.findLatest(orderId);
+
+        OrderAggregate aggregate;
+        int fromVersion;
+
+        if (snapshot.isPresent()) {
+            // Fast path: restore from snapshot (O(1)), then replay only recent events
+            aggregate = mapper.convertValue(snapshot.get().getData(), OrderAggregate.class);
+            fromVersion = snapshot.get().getVersion();
+        } else {
+            // Slow path: no snapshot yet, replay from the beginning
+            aggregate = new OrderAggregate();
+            fromVersion = 0;
+        }
+
+        // Only load events AFTER the snapshot version — much smaller set
+        List&#x3C;DomainEvent> events = eventStore.loadEventsAfter(orderId, fromVersion);
+        events.forEach(aggregate::apply);
+
+        // If we've accumulated enough new events since last snapshot, take a new one
+        // This keeps the "replay gap" bounded at SNAPSHOT_THRESHOLD events maximum
+        if (aggregate.getVersion() - fromVersion >= SNAPSHOT_THRESHOLD) {
+            snapshotRepo.save(new Snapshot(orderId, aggregate.getVersion(), aggregate));
+        }
+
+        return aggregate;
+    }
+}
+</code></pre>
+<p>With snapshots, the worst-case replay is always bounded at <code>SNAPSHOT_THRESHOLD</code> events — in this case, 100. An aggregate that has processed 50,000 events over its lifetime loads in the same time as one that has processed 150, because the snapshot absorbs the bulk of the history.</p>
+<h2>When to Use Event Sourcing</h2>
+<p>Before adopting this pattern, be honest about whether your problem actually requires it.</p>
+<pre><code>✓ Use Event Sourcing when:
+  - Audit trail is required (finance, healthcare, legal)
+  - Temporal queries needed ("what was state on date X?")
+  - Event replay for debugging or what-if analysis
+  - Multiple read models from same data (CQRS works naturally)
+  - Event-driven integrations (events drive downstream services)
+
+✗ Avoid Event Sourcing when:
+  - Simple CRUD with no audit requirements
+  - Small team — complexity cost exceeds benefit
+  - Read-heavy workload with simple data shapes (just use a good DB)
+  - You need strong consistency across multiple aggregates
+    (sagas required for cross-aggregate transactions)
+
+The complexity tax:
+  Traditional CRUD: 200 lines of Spring code
+  Event Sourcing equivalent: 500+ lines
+  Worth it if you have compliance/audit requirements or complex business domains
+</code></pre>
+<p>The real power of event sourcing appears months after deployment. A bug introduced data corruption in March? Replay events from February, apply a fix, and rebuild the projection from clean history — without losing anything. A product manager asks "what did our order data look like before the pricing change in December?" Query the event store with a timestamp filter. A new team wants a different reporting view? Build a new projection by replaying historical events. That capability — the time machine — is what makes the upfront complexity worthwhile for systems where history matters.</p>
+</article><div class="my-10 rounded-xl border border-yellow-200 bg-yellow-50 p-6"><div class="flex items-center gap-2 mb-1"><span class="text-lg">📚</span><h3 class="text-base font-bold text-gray-900">Recommended Resources</h3></div><div class="space-y-4"><div class="flex items-start gap-3 bg-white rounded-lg p-4 border border-yellow-100"><div class="flex-1 min-w-0"><div class="flex items-center gap-2 flex-wrap mb-1"><span class="font-semibold text-gray-900 text-sm">System Design Interview — Alex Xu</span><span class="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-medium">Best Seller</span></div><p class="text-xs text-gray-600">Step-by-step guide to ace system design interviews with real-world examples.</p></div><a href="https://amzn.to/3TqsPRp" target="_blank" rel="noopener noreferrer" class="flex-shrink-0 text-xs bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium whitespace-nowrap">View on Amazon<!-- --> →</a></div><div class="flex items-start gap-3 bg-white rounded-lg p-4 border border-yellow-100"><div class="flex-1 min-w-0"><div class="flex items-center gap-2 flex-wrap mb-1"><span class="font-semibold text-gray-900 text-sm">Grokking System Design on Educative</span></div><p class="text-xs text-gray-600">Interactive course teaching system design with visual diagrams and practice problems.</p></div><a href="https://www.educative.io/courses/grokking-the-system-design-interview" target="_blank" rel="noopener noreferrer" class="flex-shrink-0 text-xs bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium whitespace-nowrap">View Course<!-- --> →</a></div><div class="flex items-start gap-3 bg-white rounded-lg p-4 border border-yellow-100"><div class="flex-1 min-w-0"><div class="flex items-center gap-2 flex-wrap mb-1"><span class="font-semibold text-gray-900 text-sm">Designing Data-Intensive Applications</span></div><p class="text-xs text-gray-600">Martin Kleppmann&#x27;s book is essential reading for any system design role.</p></div><a href="https://amzn.to/3RyKzOA" target="_blank" rel="noopener noreferrer" class="flex-shrink-0 text-xs bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium whitespace-nowrap">View on Amazon<!-- --> →</a></div></div></div><div class="mt-10 pt-8 border-t border-gray-100"><p class="text-sm text-gray-500 mb-3">Found this useful? Share it:</p><div class="flex gap-3"><a href="https://twitter.com/intent/tweet?text=Event-Driven%20Architecture%3A%20CQRS%20and%20Event%20Sourcing%20in%20Practice&amp;url=https%3A%2F%2Fcodesprintpro.com%2Fblog%2Fevent-driven-cqrs-event-sourcing%2F" target="_blank" rel="noopener noreferrer" class="text-xs bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors">Share on X/Twitter</a><a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fcodesprintpro.com%2Fblog%2Fevent-driven-cqrs-event-sourcing%2F" target="_blank" rel="noopener noreferrer" class="text-xs bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">Share on LinkedIn</a></div></div></div><aside class="hidden lg:block w-64 flex-shrink-0"><nav class="hidden lg:block sticky top-24"><h4 class="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-3">On This Page</h4><ul class="space-y-1"><li class=""><a href="#the-problem-cqrs-and-event-sourcing-solve" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">The Problem CQRS and Event Sourcing Solve</a></li><li class=""><a href="#cqrs-separate-read-and-write-models" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">CQRS: Separate Read and Write Models</a></li><li class=""><a href="#implementation-order-system-with-axon-framework" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Implementation: Order System with Axon Framework</a></li><li class="ml-4"><a href="#commands-and-events" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 text-xs">Commands and Events</a></li><li class="ml-4"><a href="#the-aggregate-command-side" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 text-xs">The Aggregate: Command Side</a></li><li class="ml-4"><a href="#query-side-projections" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 text-xs">Query Side: Projections</a></li><li class="ml-4"><a href="#api-layer" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 text-xs">API Layer</a></li><li class=""><a href="#event-sourcing-without-a-framework" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Event Sourcing Without a Framework</a></li><li class=""><a href="#event-store-schema" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Event Store Schema</a></li><li class=""><a href="#snapshots-avoiding-replay-at-scale" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Snapshots: Avoiding Replay at Scale</a></li><li class=""><a href="#when-to-use-event-sourcing" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">When to Use Event Sourcing</a></li></ul></nav></aside></div><div class="mt-16 pt-10 border-t border-gray-100"><h2 class="text-2xl font-bold text-gray-900 mb-6">Related Articles</h2><div class="grid grid-cols-1 md:grid-cols-3 gap-6"><a href="/blog/observability-opentelemetry-production/"><article class="group bg-white rounded-xl border border-gray-200 p-6 h-full cursor-pointer hover:border-blue-300 hover:shadow-lg transition-all"><span class="inline-block text-xs font-semibold px-3 py-1 rounded-full mb-3 bg-blue-100 text-blue-700">System Design</span><h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors leading-snug">Building Production Observability with OpenTelemetry and Grafana Stack</h3><p class="text-gray-600 text-sm mb-4 line-clamp-3">Observability is not the same as monitoring. Monitoring tells you something is wrong. Observability lets you understand why — by exploring system state through metrics, traces, and logs without needing to know in advance…</p><div class="flex items-center justify-between text-xs text-gray-400"><span>Jul 3, 2025</span><span class="flex items-center gap-1"><svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>6 min read</span></div><div class="mt-3 flex flex-wrap gap-1"><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->observability</span><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->opentelemetry</span><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->prometheus</span></div></article></a><a href="/blog/event-sourcing-cqrs-production/"><article class="group bg-white rounded-xl border border-gray-200 p-6 h-full cursor-pointer hover:border-blue-300 hover:shadow-lg transition-all"><span class="inline-block text-xs font-semibold px-3 py-1 rounded-full mb-3 bg-blue-100 text-blue-700">System Design</span><h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors leading-snug">Event Sourcing and CQRS in Production: Beyond the Theory</h3><p class="text-gray-600 text-sm mb-4 line-clamp-3">Event sourcing is one of those patterns that looks elegant in conference talks and becomes surprisingly complex in production systems. The theory — store events instead of state, derive state by replaying events — is sou…</p><div class="flex items-center justify-between text-xs text-gray-400"><span>Jun 23, 2025</span><span class="flex items-center gap-1"><svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>7 min read</span></div><div class="mt-3 flex flex-wrap gap-1"><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->event sourcing</span><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->cqrs</span><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->system design</span></div></article></a><a href="/blog/grpc-vs-rest-vs-graphql/"><article class="group bg-white rounded-xl border border-gray-200 p-6 h-full cursor-pointer hover:border-blue-300 hover:shadow-lg transition-all"><span class="inline-block text-xs font-semibold px-3 py-1 rounded-full mb-3 bg-blue-100 text-blue-700">System Design</span><h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors leading-snug">gRPC vs REST vs GraphQL: Choosing the Right API Protocol</h3><p class="text-gray-600 text-sm mb-4 line-clamp-3">API protocol selection has a longer lifespan than almost any other technical decision. REST APIs from 2010 are still running in production. gRPC services chosen for internal communication in 2018 are tightly coupled to t…</p><div class="flex items-center justify-between text-xs text-gray-400"><span>Jun 18, 2025</span><span class="flex items-center gap-1"><svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>7 min read</span></div><div class="mt-3 flex flex-wrap gap-1"><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->grpc</span><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->rest</span><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->graphql</span></div></article></a></div></div><div class="mt-12 text-center"><a class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium transition-colors" href="/blog/">← Back to all articles</a></div></div></div><footer class="bg-gray-900 text-white py-12"><div class="container mx-auto px-4 sm:px-6 lg:px-8"><div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8"><div class="col-span-1 md:col-span-1"><div><a class="text-xl font-bold block mb-3 text-white hover:text-blue-400 transition-colors" href="/">CodeSprintPro</a></div><p class="text-gray-400 text-sm mb-4 leading-relaxed">Deep-dive technical content on System Design, Java, Databases, AI/ML, and AWS — by Sachin Sarawgi.</p><div class="flex space-x-4"><a href="https://github.com/codesprintpro" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors" aria-label="Visit GitHub profile"><i class="fab fa-github text-xl"></i></a><a href="https://www.linkedin.com/in/sachin-sarawgi/" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors" aria-label="Visit LinkedIn profile"><i class="fab fa-linkedin text-xl"></i></a><a href="https://medium.com/@codesprintpro" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors" aria-label="Visit Medium profile"><i class="fab fa-medium text-xl"></i></a></div></div><div><h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 mb-4">Quick Links</h3><ul class="space-y-2"><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">Blog</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/#about">About</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/#portfolio">Portfolio</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/#contact">Contact</a></div></li></ul></div><div><h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 mb-4">Categories</h3><ul class="space-y-2"><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">System Design</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">Java</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">Databases</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">AI/ML</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">AWS</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">Messaging</a></div></li></ul></div><div><h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 mb-4">Contact</h3><ul class="space-y-2 text-gray-400 text-sm"><li><a href="mailto:sachinsarawgi201143@gmail.com" class="hover:text-white transition-colors flex items-center gap-2"><i class="fas fa-envelope"></i> Email</a></li><li><a href="https://www.linkedin.com/in/sachin-sarawgi/" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors flex items-center gap-2"><i class="fab fa-linkedin"></i> LinkedIn</a></li><li><a href="https://github.com/codesprintpro" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors flex items-center gap-2"><i class="fab fa-github"></i> GitHub</a></li></ul></div></div><div class="border-t border-gray-800 pt-6 flex flex-col md:flex-row justify-between items-center gap-2"><p class="text-gray-500 text-sm">© <!-- -->2026<!-- --> CodeSprintPro · Sachin Sarawgi. All rights reserved.</p><p class="text-gray-600 text-xs">Built with Next.js · TailwindCSS · Deployed on GitHub Pages</p></div></div></footer></div></main></div><script id="__NEXT_DATA__" type="application/json">{"props":{"pageProps":{"post":{"title":"Event-Driven Architecture: CQRS and Event Sourcing in Practice","description":"Master CQRS (Command Query Responsibility Segregation) and Event Sourcing patterns for scalable, auditable systems. Includes Spring Boot + Axon Framework implementation with Kafka event store.","date":"2025-03-03","category":"System Design","tags":["event sourcing","cqrs","event-driven","kafka","spring boot","axon"],"featured":false,"affiliateSection":"system-design-courses","slug":"event-driven-cqrs-event-sourcing","readingTime":"14 min read","excerpt":"Traditional CRUD systems store current state. Event-driven systems store the history of state changes. This single difference is more profound than it first appears: instead of asking \"what is the current status of order…","contentHtml":"\u003cp\u003eTraditional CRUD systems store \u003cstrong\u003ecurrent state\u003c/strong\u003e. Event-driven systems store the \u003cstrong\u003ehistory of state changes\u003c/strong\u003e. This single difference is more profound than it first appears: instead of asking \"what is the current status of order #123?\", you ask \"what sequence of events happened to order #123?\" — and you can derive the current status from that sequence at any point in time.\u003c/p\u003e\n\u003cp\u003eThe trade-off is real: event sourcing introduces complexity that a simple CRUD app doesn't need. But for systems where audit trails matter (finance, healthcare, e-commerce), where you need to replay history to fix bugs, or where you want to scale reads and writes independently, the pattern pays for itself over time. This article shows you when it's worth it and how to implement it right.\u003c/p\u003e\n\u003ch2\u003eThe Problem CQRS and Event Sourcing Solve\u003c/h2\u003e\n\u003cp\u003eConsider what happens in a traditional system when an order is shipped. You run a single UPDATE statement and the previous state — when it was confirmed, who approved it, what the original items were — is gone forever. This is fine for many applications. It becomes a serious problem when:\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eA compliance team asks: \"Show me every change made to this order and who made it.\"\u003c/li\u003e\n\u003cli\u003eA bug caused incorrect state and you need to reconstruct what actually happened.\u003c/li\u003e\n\u003cli\u003eYour dashboard query locks the table that your order creation query also needs.\u003c/li\u003e\n\u003c/ul\u003e\n\u003cpre\u003e\u003ccode\u003eTraditional CRUD:\n  UPDATE orders SET status = 'SHIPPED', updated_at = NOW() WHERE id = 123\n\n  Problems:\n  1. History lost — you can't answer \"when did this order become CONFIRMED?\"\n  2. Read and write load couple — slow reporting queries block order creation\n  3. No audit trail — compliance asks \"who changed this?\" and you have nothing\n  4. Temporal queries impossible — \"what was the state on Jan 1?\" = mystery\n\nEvent Sourcing:\n  INSERT INTO events (aggregate_id, type, data, timestamp) VALUES\n    (123, 'OrderCreated', {...}, T1),\n    (123, 'PaymentProcessed', {...}, T2),\n    (123, 'OrderShipped', {...}, T3)\n\n  Benefits:\n  1. Full history — every state change recorded\n  2. Rebuild any past state by replaying events to point-in-time\n  3. Natural audit log (SOX, GDPR, financial compliance)\n  4. Events drive downstream projections, notifications, analytics\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eNotice that in the event-sourced version, you never update a row — you only ever append new events. The current state of an order is derived by replaying those events from the beginning. This immutability is what gives you the time-machine capability.\u003c/p\u003e\n\u003ch2\u003eCQRS: Separate Read and Write Models\u003c/h2\u003e\n\u003cp\u003eCQRS (Command Query Responsibility Segregation) is a natural companion to event sourcing. The core idea is that the model you use to change data (the write model) doesn't have to be the same model you use to read data (the read model).\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003e\u003cstrong\u003eCommand side\u003c/strong\u003e: Handles writes. Validates business rules. Emits events. Optimised for correctness, not query flexibility.\u003c/li\u003e\n\u003cli\u003e\u003cstrong\u003eQuery side\u003c/strong\u003e: Handles reads. Denormalized. Shaped to answer specific queries fast. Can have as many different read models as you need.\u003c/li\u003e\n\u003c/ul\u003e\n\u003cpre\u003e\u003ccode\u003e                    ┌─────────────────────┐\n                    │   Command Handler   │\nCommand ──────────► │ (validate + execute)│──► Event Store ──► Events\n                    └─────────────────────┘         │\n                                                     │ Event Bus\n                                                     │\n                    ┌─────────────────────┐          ▼\nQuery  ──────────► │   Query Handler     │◄── Read Model (Projections)\nResult ◄────────── │  (read-optimized)   │    (denormalized views)\n                    └─────────────────────┘\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eThe write side emits events. Those events flow to one or more \u003cstrong\u003eprojections\u003c/strong\u003e — read-optimized views of the data. You can have a projection for the customer dashboard, a different one for admin reporting, and another one for analytics — all built from the same stream of events. This is the real power: one source of truth, many tailored views.\u003c/p\u003e\n\u003ch2\u003eImplementation: Order System with Axon Framework\u003c/h2\u003e\n\u003ch3\u003eCommands and Events\u003c/h3\u003e\n\u003cp\u003eThe most important conceptual distinction in this pattern is the difference between \u003cstrong\u003ecommands\u003c/strong\u003e and \u003cstrong\u003eevents\u003c/strong\u003e. They sound similar but serve opposite purposes:\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eA \u003cstrong\u003ecommand\u003c/strong\u003e is an \u003cstrong\u003eintent\u003c/strong\u003e — \"Please create this order.\" It's imperative and can be rejected. If business validation fails (e.g., the cart is empty), the command is rejected and no event is produced.\u003c/li\u003e\n\u003cli\u003eAn \u003cstrong\u003eevent\u003c/strong\u003e is a \u003cstrong\u003efact\u003c/strong\u003e — \"An order was created.\" It's past tense and immutable. Once emitted, it cannot be undone.\u003c/li\u003e\n\u003c/ul\u003e\n\u003cp\u003eThis separation enforces a clean boundary: all validation happens before the event is produced. By the time an event exists, it represents something that definitively happened.\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-java\"\u003e// Commands represent intent (\"do this\") — can be rejected\npublic record CreateOrderCommand(\n    @TargetAggregateIdentifier String orderId,\n    String customerId,\n    List\u0026#x3C;OrderItem\u003e items\n) {}\n\npublic record ConfirmOrderCommand(\n    @TargetAggregateIdentifier String orderId\n) {}\n\npublic record ShipOrderCommand(\n    @TargetAggregateIdentifier String orderId,\n    String trackingNumber\n) {}\n\n// Events represent facts (\"this happened\") — immutable, past tense\npublic record OrderCreatedEvent(\n    String orderId,\n    String customerId,\n    List\u0026#x3C;OrderItem\u003e items,\n    Instant createdAt\n) {}\n\npublic record OrderConfirmedEvent(\n    String orderId,\n    Instant confirmedAt\n) {}\n\npublic record OrderShippedEvent(\n    String orderId,\n    String trackingNumber,\n    Instant shippedAt\n) {}\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eNotice that commands are named imperatively (\u003ccode\u003eCreateOrderCommand\u003c/code\u003e) while events are named in past tense (\u003ccode\u003eOrderCreatedEvent\u003c/code\u003e). This naming convention isn't cosmetic — it reflects whether something is a request that could fail or a historical fact that already happened.\u003c/p\u003e\n\u003ch3\u003eThe Aggregate: Command Side\u003c/h3\u003e\n\u003cp\u003eAn \u003cstrong\u003eaggregate\u003c/strong\u003e is the consistency boundary in your domain model. It's the gatekeeper: all business rules live here, and it's the only thing that decides whether a command is valid and what events it produces.\u003c/p\u003e\n\u003cp\u003eThe crucial rule in event sourcing: \u003cstrong\u003estate is never set directly in command handlers\u003c/strong\u003e. Instead, a command handler validates the request and applies an event. The \u003ccode\u003e@EventSourcingHandler\u003c/code\u003e methods then update the internal state. This indirection exists because the same event sourcing handlers are called both when processing new commands \u003cem\u003eand\u003c/em\u003e when replaying historical events to rebuild state. The state-change logic must live in one place.\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-java\"\u003e@Aggregate\npublic class OrderAggregate {\n\n    @AggregateIdentifier\n    private String orderId;\n    private String customerId;\n    private OrderStatus status;\n    private List\u0026#x3C;OrderItem\u003e items;\n\n    // Constructor command handler: validates, then emits an event\n    @CommandHandler\n    public OrderAggregate(CreateOrderCommand command) {\n        // Step 1: Validate the business rule\n        if (command.items().isEmpty()) {\n            throw new IllegalArgumentException(\"Order must have at least one item\");\n        }\n\n        // Step 2: Apply an event — NEVER set fields directly here\n        // AggregateLifecycle.apply() calls the @EventSourcingHandler below\n        AggregateLifecycle.apply(new OrderCreatedEvent(\n            command.orderId(),\n            command.customerId(),\n            command.items(),\n            Instant.now()\n        ));\n    }\n\n    @CommandHandler\n    public void handle(ConfirmOrderCommand command) {\n        // Guard: only valid state transitions are allowed\n        if (status != OrderStatus.PENDING) {\n            throw new IllegalStateException(\"Can only confirm PENDING orders, current: \" + status);\n        }\n        AggregateLifecycle.apply(new OrderConfirmedEvent(orderId, Instant.now()));\n    }\n\n    @CommandHandler\n    public void handle(ShipOrderCommand command) {\n        if (status != OrderStatus.CONFIRMED) {\n            throw new IllegalStateException(\"Can only ship CONFIRMED orders\");\n        }\n        AggregateLifecycle.apply(new OrderShippedEvent(orderId, command.trackingNumber(), Instant.now()));\n    }\n\n    // @EventSourcingHandler: updates internal state from events.\n    // Called for NEW events (after apply()) AND when REPLAYING historical events.\n    // This is the only place where fields are assigned.\n    @EventSourcingHandler\n    public void on(OrderCreatedEvent event) {\n        this.orderId = event.orderId();\n        this.customerId = event.customerId();\n        this.items = event.items();\n        this.status = OrderStatus.PENDING;\n    }\n\n    @EventSourcingHandler\n    public void on(OrderConfirmedEvent event) {\n        this.status = OrderStatus.CONFIRMED;\n    }\n\n    @EventSourcingHandler\n    public void on(OrderShippedEvent event) {\n        this.status = OrderStatus.SHIPPED;\n    }\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eThe lifecycle when \u003ccode\u003eShipOrder\u003c/code\u003e is received on a new request: Axon loads all past events for that order from the event store, replays them through the \u003ccode\u003e@EventSourcingHandler\u003c/code\u003e methods to reconstruct the current state, then calls the \u003ccode\u003e@CommandHandler\u003c/code\u003e with that state available. If validation passes, the new event is appended to the store. If it fails, nothing is written.\u003c/p\u003e\n\u003ch3\u003eQuery Side: Projections\u003c/h3\u003e\n\u003cp\u003eA \u003cstrong\u003eprojection\u003c/strong\u003e is a read-optimized view of your data, built by listening to events. Think of it as a continuously-updated materialized view. Unlike the command side (which is normalized and focused on correctness), projections are denormalized and shaped to answer specific queries as fast as possible.\u003c/p\u003e\n\u003cp\u003eThe key insight is that you can have as many projections as you want, each serving a different use case. A customer-facing dashboard projection might join order + customer data and cache it in Redis. An admin reporting projection might aggregate order totals by region and store them in a reporting database. Both are built from the same events — you're not duplicating writes, you're building tailored read models.\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-java\"\u003e// Projection: listens to events and maintains a denormalized read model\n@Component\n@ProcessingGroup(\"order-projections\")\npublic class OrderProjection {\n\n    @Autowired\n    private OrderViewRepository repository;  // Simple JPA repository — plain SQL table\n\n    // When an order is created, build the initial read-model row\n    @EventHandler\n    public void on(OrderCreatedEvent event) {\n        OrderView view = new OrderView();\n        view.setOrderId(event.orderId());\n        view.setCustomerId(event.customerId());\n        view.setStatus(\"PENDING\");\n        view.setItemCount(event.items().size());\n        view.setTotalAmount(calculateTotal(event.items()));\n        view.setCreatedAt(event.createdAt());\n        repository.save(view);\n    }\n\n    // When an order is confirmed, update just the fields that changed\n    @EventHandler\n    public void on(OrderConfirmedEvent event) {\n        repository.findById(event.orderId()).ifPresent(view -\u003e {\n            view.setStatus(\"CONFIRMED\");\n            view.setConfirmedAt(event.confirmedAt());\n            repository.save(view);\n        });\n    }\n\n    @EventHandler\n    public void on(OrderShippedEvent event) {\n        repository.findById(event.orderId()).ifPresent(view -\u003e {\n            view.setStatus(\"SHIPPED\");\n            view.setTrackingNumber(event.trackingNumber());\n            view.setShippedAt(event.shippedAt());\n            repository.save(view);\n        });\n    }\n}\n\n// Query handlers serve the read model directly — no joins, no aggregation at query time\n@Component\npublic class OrderQueryHandler {\n\n    @Autowired\n    private OrderViewRepository repository;\n\n    @QueryHandler\n    public OrderView handle(GetOrderQuery query) {\n        return repository.findById(query.orderId())\n            .orElseThrow(() -\u003e new OrderNotFoundException(query.orderId()));\n    }\n\n    @QueryHandler\n    public List\u0026#x3C;OrderView\u003e handle(GetCustomerOrdersQuery query) {\n        return repository.findByCustomerIdOrderByCreatedAtDesc(query.customerId());\n    }\n\n    @QueryHandler\n    public Page\u0026#x3C;OrderView\u003e handle(GetOrdersByStatusQuery query) {\n        return repository.findByStatus(query.status(), query.pageable());\n    }\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eNotice that \u003ccode\u003eGetCustomerOrdersQuery\u003c/code\u003e is a simple \u003ccode\u003efindByCustomerIdOrderByCreatedAtDesc\u003c/code\u003e call — no complex joins, no aggregation, just a fast indexed lookup. The read model was pre-shaped at event time, so queries are cheap regardless of how complex the business logic is.\u003c/p\u003e\n\u003ch3\u003eAPI Layer\u003c/h3\u003e\n\u003cp\u003eThe controller is deliberately thin. It delegates write operations to the \u003ccode\u003eCommandGateway\u003c/code\u003e (which routes to the aggregate) and read operations to the \u003ccode\u003eQueryGateway\u003c/code\u003e (which routes to the projections). The controller doesn't contain any business logic — it just translates HTTP into commands and queries.\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-java\"\u003e@RestController\n@RequestMapping(\"/api/v1/orders\")\npublic class OrderController {\n\n    @Autowired\n    private CommandGateway commandGateway;  // Routes to @CommandHandler methods\n\n    @Autowired\n    private QueryGateway queryGateway;      // Routes to @QueryHandler methods\n\n    // WRITE side: send a command and get back the result asynchronously\n    // Returns 202 Accepted (not 201 Created) because events are processed async\n    @PostMapping\n    public CompletableFuture\u0026#x3C;ResponseEntity\u0026#x3C;String\u003e\u003e createOrder(\n            @RequestBody CreateOrderRequest request) {\n        String orderId = UUID.randomUUID().toString();\n        return commandGateway\n            .send(new CreateOrderCommand(orderId, request.customerId(), request.items()))\n            .thenApply(result -\u003e ResponseEntity.accepted()\n                .header(\"Location\", \"/api/v1/orders/\" + orderId)\n                .body(orderId));\n    }\n\n    @PostMapping(\"/{id}/confirm\")\n    public CompletableFuture\u0026#x3C;Void\u003e confirmOrder(@PathVariable String id) {\n        return commandGateway.send(new ConfirmOrderCommand(id));\n    }\n\n    // READ side: query the denormalized projection, not the event store\n    @GetMapping(\"/{id}\")\n    public CompletableFuture\u0026#x3C;OrderView\u003e getOrder(@PathVariable String id) {\n        return queryGateway.query(new GetOrderQuery(id), OrderView.class);\n    }\n\n    @GetMapping\n    public CompletableFuture\u0026#x3C;List\u0026#x3C;OrderView\u003e\u003e getOrdersByStatus(\n            @RequestParam String status) {\n        return queryGateway.query(new GetOrdersByStatusQuery(status),\n            ResponseTypes.multipleInstancesOf(OrderView.class));\n    }\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eWhy \u003ccode\u003e202 Accepted\u003c/code\u003e instead of \u003ccode\u003e201 Created\u003c/code\u003e? Because CQRS systems are often eventually consistent — the command is processed and the event is stored, but the projection (which feeds the read model) updates asynchronously. Returning the orderId in the \u003ccode\u003eLocation\u003c/code\u003e header lets the client poll for the created resource.\u003c/p\u003e\n\u003ch2\u003eEvent Sourcing Without a Framework\u003c/h2\u003e\n\u003cp\u003eAxon is powerful but heavyweight. For teams that want the event sourcing concept without adopting a full framework, the pattern translates directly into plain Spring + JDBC.\u003c/p\u003e\n\u003cp\u003eThe essence of a DIY event store is simple: every state-changing operation appends a row to the \u003ccode\u003edomain_events\u003c/code\u003e table. To load an aggregate, you read all its events ordered by version and replay them — calling \u003ccode\u003eaggregate.apply(event)\u003c/code\u003e for each one — until the aggregate's internal state reflects the current reality.\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-java\"\u003e@Service\npublic class OrderEventStore {\n\n    @Autowired\n    private JdbcTemplate jdbc;\n\n    @Autowired\n    private ObjectMapper mapper;\n\n    public void appendEvent(String aggregateId, DomainEvent event) {\n        long expectedVersion = getCurrentVersion(aggregateId);\n        // Each event gets the next version number — this is how ordering is guaranteed\n        jdbc.update(\"\"\"\n            INSERT INTO domain_events (aggregate_id, version, event_type, event_data, occurred_at)\n            VALUES (?, ?, ?, ?::jsonb, ?)\n            \"\"\",\n            aggregateId,\n            expectedVersion + 1,\n            event.getClass().getSimpleName(),\n            mapper.writeValueAsString(event),\n            event.getOccurredAt()\n        );\n    }\n\n    public List\u0026#x3C;DomainEvent\u003e loadEvents(String aggregateId) {\n        // Always load in ascending version order — replay must be chronological\n        return jdbc.query(\"\"\"\n            SELECT event_type, event_data\n            FROM domain_events\n            WHERE aggregate_id = ?\n            ORDER BY version ASC\n            \"\"\",\n            (rs, row) -\u003e deserializeEvent(rs.getString(\"event_type\"), rs.getString(\"event_data\")),\n            aggregateId\n        );\n    }\n\n    // Load aggregate by replaying its entire event history\n    public OrderAggregate load(String orderId) {\n        List\u0026#x3C;DomainEvent\u003e events = loadEvents(orderId);\n        if (events.isEmpty()) throw new AggregateNotFoundException(orderId);\n\n        OrderAggregate aggregate = new OrderAggregate();\n        // Each call to apply() mutates the aggregate's internal state\n        // After the loop, aggregate reflects the current state\n        events.forEach(aggregate::apply);\n        return aggregate;\n    }\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eThe \u003ccode\u003eload()\u003c/code\u003e method is the core of event sourcing: start with an empty aggregate, replay every event from version 1 to the latest, and you have the current state. This is conceptually simple but has a performance implication for long-lived aggregates — which is why snapshots exist.\u003c/p\u003e\n\u003ch2\u003eEvent Store Schema\u003c/h2\u003e\n\u003cp\u003eThe schema design for an event store is deceptively simple but has important details worth understanding.\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-sql\"\u003eCREATE TABLE domain_events (\n    id          BIGSERIAL PRIMARY KEY,\n    aggregate_id VARCHAR(36) NOT NULL,\n    version     INTEGER NOT NULL,\n    event_type  VARCHAR(100) NOT NULL,\n    event_data  JSONB NOT NULL,\n    occurred_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),\n    metadata    JSONB DEFAULT '{}',\n\n    -- This UNIQUE constraint is doing important work: it prevents two concurrent\n    -- transactions from both writing version=5 for the same aggregate.\n    -- The second one will get a DB constraint violation, not a silent overwrite.\n    -- This is \"optimistic concurrency control\" without explicit locking.\n    UNIQUE (aggregate_id, version)\n);\n\nCREATE INDEX idx_domain_events_aggregate_id ON domain_events (aggregate_id, version);\nCREATE INDEX idx_domain_events_type_time ON domain_events (event_type, occurred_at);\n\n-- Snapshot table (for aggregates with thousands of events)\nCREATE TABLE aggregate_snapshots (\n    aggregate_id  VARCHAR(36) PRIMARY KEY,\n    version       INTEGER NOT NULL,\n    snapshot_data JSONB NOT NULL,\n    created_at    TIMESTAMPTZ NOT NULL DEFAULT NOW()\n);\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eThe \u003ccode\u003eUNIQUE (aggregate_id, version)\u003c/code\u003e constraint is the most important line. Without it, two concurrent requests processing the same aggregate could both read version 7, both decide to write version 8, and you'd have a conflict or data corruption. With the constraint, only one succeeds — the other gets a \u003ccode\u003eUniqueConstraintViolationException\u003c/code\u003e and must retry. This is optimistic concurrency control using the database's own integrity checks.\u003c/p\u003e\n\u003ch2\u003eSnapshots: Avoiding Replay at Scale\u003c/h2\u003e\n\u003cp\u003eReplaying 10 events to reconstruct an aggregate is trivial. Replaying 10,000 events every time an order is loaded is not. This is the snapshot problem — and it's real for long-running aggregates like user accounts or multi-year subscription records.\u003c/p\u003e\n\u003cp\u003eThe solution is to periodically save a complete snapshot of the aggregate's state. On the next load, instead of replaying from event 1, you restore from the snapshot and only replay events that occurred after the snapshot was taken.\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-java\"\u003e@Service\npublic class SnapshotService {\n\n    private static final int SNAPSHOT_THRESHOLD = 100;\n\n    public OrderAggregate loadWithSnapshot(String orderId) {\n        Optional\u0026#x3C;Snapshot\u003e snapshot = snapshotRepo.findLatest(orderId);\n\n        OrderAggregate aggregate;\n        int fromVersion;\n\n        if (snapshot.isPresent()) {\n            // Fast path: restore from snapshot (O(1)), then replay only recent events\n            aggregate = mapper.convertValue(snapshot.get().getData(), OrderAggregate.class);\n            fromVersion = snapshot.get().getVersion();\n        } else {\n            // Slow path: no snapshot yet, replay from the beginning\n            aggregate = new OrderAggregate();\n            fromVersion = 0;\n        }\n\n        // Only load events AFTER the snapshot version — much smaller set\n        List\u0026#x3C;DomainEvent\u003e events = eventStore.loadEventsAfter(orderId, fromVersion);\n        events.forEach(aggregate::apply);\n\n        // If we've accumulated enough new events since last snapshot, take a new one\n        // This keeps the \"replay gap\" bounded at SNAPSHOT_THRESHOLD events maximum\n        if (aggregate.getVersion() - fromVersion \u003e= SNAPSHOT_THRESHOLD) {\n            snapshotRepo.save(new Snapshot(orderId, aggregate.getVersion(), aggregate));\n        }\n\n        return aggregate;\n    }\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eWith snapshots, the worst-case replay is always bounded at \u003ccode\u003eSNAPSHOT_THRESHOLD\u003c/code\u003e events — in this case, 100. An aggregate that has processed 50,000 events over its lifetime loads in the same time as one that has processed 150, because the snapshot absorbs the bulk of the history.\u003c/p\u003e\n\u003ch2\u003eWhen to Use Event Sourcing\u003c/h2\u003e\n\u003cp\u003eBefore adopting this pattern, be honest about whether your problem actually requires it.\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003e✓ Use Event Sourcing when:\n  - Audit trail is required (finance, healthcare, legal)\n  - Temporal queries needed (\"what was state on date X?\")\n  - Event replay for debugging or what-if analysis\n  - Multiple read models from same data (CQRS works naturally)\n  - Event-driven integrations (events drive downstream services)\n\n✗ Avoid Event Sourcing when:\n  - Simple CRUD with no audit requirements\n  - Small team — complexity cost exceeds benefit\n  - Read-heavy workload with simple data shapes (just use a good DB)\n  - You need strong consistency across multiple aggregates\n    (sagas required for cross-aggregate transactions)\n\nThe complexity tax:\n  Traditional CRUD: 200 lines of Spring code\n  Event Sourcing equivalent: 500+ lines\n  Worth it if you have compliance/audit requirements or complex business domains\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eThe real power of event sourcing appears months after deployment. A bug introduced data corruption in March? Replay events from February, apply a fix, and rebuild the projection from clean history — without losing anything. A product manager asks \"what did our order data look like before the pricing change in December?\" Query the event store with a timestamp filter. A new team wants a different reporting view? Build a new projection by replaying historical events. That capability — the time machine — is what makes the upfront complexity worthwhile for systems where history matters.\u003c/p\u003e\n","tableOfContents":[{"id":"the-problem-cqrs-and-event-sourcing-solve","text":"The Problem CQRS and Event Sourcing Solve","level":2},{"id":"cqrs-separate-read-and-write-models","text":"CQRS: Separate Read and Write Models","level":2},{"id":"implementation-order-system-with-axon-framework","text":"Implementation: Order System with Axon Framework","level":2},{"id":"commands-and-events","text":"Commands and Events","level":3},{"id":"the-aggregate-command-side","text":"The Aggregate: Command Side","level":3},{"id":"query-side-projections","text":"Query Side: Projections","level":3},{"id":"api-layer","text":"API Layer","level":3},{"id":"event-sourcing-without-a-framework","text":"Event Sourcing Without a Framework","level":2},{"id":"event-store-schema","text":"Event Store Schema","level":2},{"id":"snapshots-avoiding-replay-at-scale","text":"Snapshots: Avoiding Replay at Scale","level":2},{"id":"when-to-use-event-sourcing","text":"When to Use Event Sourcing","level":2}]},"relatedPosts":[{"title":"Building Production Observability with OpenTelemetry and Grafana Stack","description":"End-to-end observability implementation: distributed tracing with OpenTelemetry, metrics with Prometheus, structured logging with Loki, and the dashboards and alerts that actually help during incidents.","date":"2025-07-03","category":"System Design","tags":["observability","opentelemetry","prometheus","grafana","loki","tracing","spring boot","monitoring"],"featured":false,"affiliateSection":"system-design-courses","slug":"observability-opentelemetry-production","readingTime":"6 min read","excerpt":"Observability is not the same as monitoring. Monitoring tells you something is wrong. Observability lets you understand why — by exploring system state through metrics, traces, and logs without needing to know in advance…"},{"title":"Event Sourcing and CQRS in Production: Beyond the Theory","description":"What event sourcing actually looks like in production Java systems: event store design, snapshot strategies, projection rebuilding, CQRS read model synchronization, and the operational challenges nobody talks about.","date":"2025-06-23","category":"System Design","tags":["event sourcing","cqrs","system design","java","distributed systems","kafka","spring boot"],"featured":false,"affiliateSection":"distributed-systems-books","slug":"event-sourcing-cqrs-production","readingTime":"7 min read","excerpt":"Event sourcing is one of those patterns that looks elegant in conference talks and becomes surprisingly complex in production systems. The theory — store events instead of state, derive state by replaying events — is sou…"},{"title":"gRPC vs REST vs GraphQL: Choosing the Right API Protocol","description":"A technical comparison of REST, gRPC, and GraphQL across performance, developer experience, schema evolution, streaming, and real production use cases. When each protocol wins and where each falls short.","date":"2025-06-18","category":"System Design","tags":["grpc","rest","graphql","api design","system design","microservices","protocol buffers"],"featured":false,"affiliateSection":"system-design-courses","slug":"grpc-vs-rest-vs-graphql","readingTime":"7 min read","excerpt":"API protocol selection has a longer lifespan than almost any other technical decision. REST APIs from 2010 are still running in production. gRPC services chosen for internal communication in 2018 are tightly coupled to t…"}]},"__N_SSG":true},"page":"/blog/[slug]","query":{"slug":"event-driven-cqrs-event-sourcing"},"buildId":"rpFn_jslWZ9qPkJwor7RD","isFallback":false,"gsp":true,"scriptLoader":[]}</script></body></html>

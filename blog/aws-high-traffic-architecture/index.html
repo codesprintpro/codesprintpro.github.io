@@ -1,0 +1,419 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8" data-next-head=""/><meta name="viewport" content="width=device-width" data-next-head=""/><title data-next-head="">AWS Architecture Patterns for High-Traffic Applications<!-- --> | CodeSprintPro</title><meta name="description" content="Learn how to architect systems that handle millions of requests on AWS — covering load balancing, auto-scaling, RDS with read replicas, ElastiCache, SQS decoupling, and CloudFront CDN." data-next-head=""/><meta name="author" content="Sachin Sarawgi" data-next-head=""/><link rel="canonical" href="https://codesprintpro.com/blog/aws-high-traffic-architecture/" data-next-head=""/><meta property="og:type" content="article" data-next-head=""/><meta property="og:title" content="AWS Architecture Patterns for High-Traffic Applications" data-next-head=""/><meta property="og:description" content="Learn how to architect systems that handle millions of requests on AWS — covering load balancing, auto-scaling, RDS with read replicas, ElastiCache, SQS decoupling, and CloudFront CDN." data-next-head=""/><meta property="og:url" content="https://codesprintpro.com/blog/aws-high-traffic-architecture/" data-next-head=""/><meta property="og:image" content="https://codesprintpro.com/images/og-default.jpg" data-next-head=""/><meta property="og:site_name" content="CodeSprintPro" data-next-head=""/><meta property="article:published_time" content="2025-01-19" data-next-head=""/><meta property="article:author" content="Sachin Sarawgi" data-next-head=""/><meta property="article:section" content="AWS" data-next-head=""/><meta property="article:tag" content="aws" data-next-head=""/><meta property="article:tag" content="architecture" data-next-head=""/><meta property="article:tag" content="high availability" data-next-head=""/><meta property="article:tag" content="scalability" data-next-head=""/><meta property="article:tag" content="cloud" data-next-head=""/><meta name="twitter:card" content="summary_large_image" data-next-head=""/><meta name="twitter:title" content="AWS Architecture Patterns for High-Traffic Applications" data-next-head=""/><meta name="twitter:description" content="Learn how to architect systems that handle millions of requests on AWS — covering load balancing, auto-scaling, RDS with read replicas, ElastiCache, SQS decoupling, and CloudFront CDN." data-next-head=""/><meta name="twitter:image" content="https://codesprintpro.com/images/og-default.jpg" data-next-head=""/><script type="application/ld+json" data-next-head="">{"@context":"https://schema.org","@type":"BlogPosting","headline":"AWS Architecture Patterns for High-Traffic Applications","description":"Learn how to architect systems that handle millions of requests on AWS — covering load balancing, auto-scaling, RDS with read replicas, ElastiCache, SQS decoupling, and CloudFront CDN.","image":"https://codesprintpro.com/images/og-default.jpg","datePublished":"2025-01-19","dateModified":"2025-01-19","author":{"@type":"Person","name":"Sachin Sarawgi","url":"https://codesprintpro.com","sameAs":["https://www.linkedin.com/in/sachin-sarawgi/","https://github.com/codesprintpro","https://medium.com/@codesprintpro"]},"publisher":{"@type":"Organization","name":"CodeSprintPro","url":"https://codesprintpro.com","logo":{"@type":"ImageObject","url":"https://codesprintpro.com/favicon/favicon-96x96.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codesprintpro.com/blog/aws-high-traffic-architecture/"},"keywords":"aws, architecture, high availability, scalability, cloud","articleSection":"AWS"}</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerPolicy="no-referrer"/><script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script><link rel="preload" href="/_next/static/media/e4af272ccee01ff0-s.p.woff2" as="font" type="font/woff2" crossorigin="anonymous" data-next-font="size-adjust"/><link rel="preload" href="/_next/static/css/735d4373f93910ca.css" as="style"/><link rel="stylesheet" href="/_next/static/css/735d4373f93910ca.css" data-n-g=""/><noscript data-n-css=""></noscript><script defer="" nomodule="" src="/_next/static/chunks/polyfills-42372ed130431b0a.js"></script><script src="/_next/static/chunks/webpack-11a4a2dad04962bb.js" defer=""></script><script src="/_next/static/chunks/framework-1ce91eb6f9ecda85.js" defer=""></script><script src="/_next/static/chunks/main-c7f4109f032d7b6e.js" defer=""></script><script src="/_next/static/chunks/pages/_app-1a852bd9e38c70ab.js" defer=""></script><script src="/_next/static/chunks/730-db7827467817f501.js" defer=""></script><script src="/_next/static/chunks/90-1cd4611704c3dbe0.js" defer=""></script><script src="/_next/static/chunks/440-29f4b99a44e744b5.js" defer=""></script><script src="/_next/static/chunks/pages/blog/%5Bslug%5D-0c1b14a33d5e05ee.js" defer=""></script><script src="/_next/static/rpFn_jslWZ9qPkJwor7RD/_buildManifest.js" defer=""></script><script src="/_next/static/rpFn_jslWZ9qPkJwor7RD/_ssgManifest.js" defer=""></script></head><body><div id="__next"><main class="__className_f367f3"><div class="min-h-screen bg-white"><nav class="fixed w-full z-50 transition-all duration-300 bg-white shadow-md" style="transform:translateY(-100px) translateZ(0)"><div class="container mx-auto px-4 sm:px-6 lg:px-8"><div class="flex items-center justify-between h-16"><a class="text-xl font-bold transition-colors text-blue-600" href="/">CodeSprintPro</a><div class="hidden md:flex items-center space-x-8"><a class="text-sm font-medium transition-colors text-blue-600" href="/blog/">Blog</a><a class="text-sm font-medium transition-colors text-gray-600 hover:text-blue-600" href="/#about">About</a><a class="text-sm font-medium transition-colors text-gray-600 hover:text-blue-600" href="/#portfolio">Portfolio</a><a class="text-sm font-medium transition-colors text-gray-600 hover:text-blue-600" href="/#contact">Contact</a></div><button class="md:hidden p-2 rounded-lg transition-colors hover:bg-gray-100 text-gray-600" aria-label="Toggle mobile menu"><svg class="w-6 h-6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor"><path d="M4 6h16M4 12h16M4 18h16"></path></svg></button></div></div></nav><div class="pt-20"><div class="bg-gradient-to-br from-gray-900 to-blue-950 py-16"><div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl"><nav class="flex items-center gap-2 text-sm text-gray-400 mb-6"><a class="hover:text-white transition-colors" href="/">Home</a><span>/</span><a class="hover:text-white transition-colors" href="/blog/">Blog</a><span>/</span><span class="text-gray-300 truncate max-w-xs">AWS Architecture Patterns for High-Traffic Applications</span></nav><span class="inline-block text-xs font-semibold px-3 py-1 rounded-full bg-blue-100 text-blue-700 mb-4">AWS</span><h1 class="text-3xl md:text-5xl font-bold text-white mb-4 leading-tight">AWS Architecture Patterns for High-Traffic Applications</h1><p class="text-gray-300 text-lg mb-6 max-w-3xl">Learn how to architect systems that handle millions of requests on AWS — covering load balancing, auto-scaling, RDS with read replicas, ElastiCache, SQS decoupling, and CloudFront CDN.</p><div class="flex flex-wrap items-center gap-4 text-gray-400 text-sm"><span class="flex items-center gap-1.5"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>Sachin Sarawgi</span><span>·</span><span>January 19, 2025</span><span>·</span><span class="flex items-center gap-1"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>14 min read</span></div><div class="flex flex-wrap gap-2 mt-4"><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->aws</span><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->architecture</span><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->high availability</span><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->scalability</span><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->cloud</span></div></div></div><div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl py-12"><div class="flex gap-12"><div class="flex-1 min-w-0"><article class="prose prose-lg max-w-none prose-headings:text-gray-900 prose-headings:font-bold prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-4 prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3 prose-p:text-gray-700 prose-p:leading-relaxed prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline prose-strong:text-gray-900 prose-blockquote:border-blue-600 prose-blockquote:text-gray-600 prose-code:text-blue-700 prose-code:bg-blue-50 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-sm prose-code:before:content-none prose-code:after:content-none prose-pre:rounded-xl prose-img:rounded-xl prose-img:shadow-md prose-table:text-sm prose-th:bg-gray-100 prose-th:text-gray-700"><p>Architecting on AWS is not about using every service in the catalog — it's about choosing the right services for your scale, stitching them together correctly, and understanding the failure modes of each. This article walks through a production-grade, high-traffic architecture with the reasoning behind each decision.</p>
+<h2>The Reference Architecture</h2>
+<p>Before diving into each layer, it helps to see how all the pieces fit together. The diagram below shows the full request path — from a user's browser through DNS, CDN, load balancer, compute, caching, and into the database, with async job processing on the side. Understanding this end-to-end flow will make each layer's purpose clearer as you build it.</p>
+<pre><code>Internet
+    │
+    ▼
+┌───────────────────────────────────────────┐
+│           Route 53 (DNS)                  │
+│    Latency-based routing to nearest region│
+└─────────────────┬─────────────────────────┘
+                  │
+    ┌─────────────▼──────────────┐
+    │    CloudFront CDN           │
+    │    Static assets + API cache│
+    │    WAF + Shield protection  │
+    └─────────────┬──────────────┘
+                  │
+    ┌─────────────▼──────────────┐
+    │  Application Load Balancer  │
+    │  (ALB) — path-based routing │
+    └──┬──────────┬──────────────┘
+       │          │
+  ┌────▼──┐  ┌────▼──────────┐
+  │ ECS   │  │  ECS Fargate  │
+  │Fargate│  │  (API service)│
+  │(web)  │  │  Auto-scaling │
+  └────┬──┘  └────┬──────────┘
+       │          │
+       └────┬─────┘
+            │
+  ┌─────────▼──────────────────────────┐
+  │           ElastiCache Redis         │
+  │     (session, hot data, rate limit) │
+  └─────────────────┬──────────────────┘
+                    │ cache miss
+  ┌─────────────────▼──────────────────┐
+  │        RDS Aurora PostgreSQL        │
+  │   Primary (writes) + Reader x2      │
+  │   Multi-AZ, automatic failover      │
+  └─────────────────┬──────────────────┘
+                    │
+  ┌─────────────────▼──────────────────┐
+  │              SQS                    │
+  │    (async job decoupling)           │
+  └─────────────────┬──────────────────┘
+                    │
+  ┌─────────────────▼──────────────────┐
+  │         Lambda / ECS Workers        │
+  │    (email, notifications, reports)  │
+  └────────────────────────────────────┘
+</code></pre>
+<p>Notice that no single component handles the entire request — each layer offloads work to the next. This separation of concerns is what lets the system scale each component independently without rebuilding the whole stack.</p>
+<h2>Layer 1: Traffic Entry — CloudFront + WAF</h2>
+<p>CloudFront is your first line of defense and performance optimization. Deploy it in front of everything — not just static assets.</p>
+<p>Before writing any Terraform, it is worth understanding how CloudFront decides what to cache and for how long. The cache behavior table below maps URL path patterns to caching policies — this is the design decision that determines how much traffic ever reaches your origin servers. Without this differentiation, you either cache user-specific data incorrectly or miss the opportunity to cache public data entirely.</p>
+<pre><code>CloudFront use cases:
+1. Static assets (S3): JS, CSS, images → cached at 600+ edge locations globally
+2. API responses: Cache GET endpoints with low volatility (product catalog, pricing)
+3. DDoS mitigation: CloudFront + AWS Shield Standard absorbs L3/L4 attacks for free
+
+CloudFront cache behaviors:
+  Path: /static/*           → Cache: 1 year, compress: gzip/brotli
+  Path: /api/products/*     → Cache: 5 minutes (TTL), invalidate on update
+  Path: /api/user/*         → No cache (personalized)
+  Path: /api/checkout/*     → No cache, forward all headers
+</code></pre>
+<p>The following Terraform resource creates the CloudFront distribution with two cache behaviors: a default behavior with no caching (safe for dynamic API responses) and an ordered behavior for static assets with a one-year TTL. The <code>web_acl_id</code> attachment is what connects WAF rules — without it, your CDN layer has no protection against malicious traffic patterns.</p>
+<pre><code class="language-terraform">resource "aws_cloudfront_distribution" "main" {
+  origin {
+    domain_name = aws_lb.main.dns_name
+    origin_id   = "alb-origin"
+
+    custom_origin_config {
+      http_port              = 80
+      https_port             = 443
+      origin_protocol_policy = "https-only"
+      origin_ssl_protocols   = ["TLSv1.2"]
+    }
+  }
+
+  default_cache_behavior {
+    allowed_methods        = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
+    cached_methods         = ["GET", "HEAD"]
+    target_origin_id       = "alb-origin"
+    viewer_protocol_policy = "redirect-to-https"
+    compress               = true
+
+    forwarded_values {
+      query_string = true
+      headers      = ["Authorization", "Origin"]
+      cookies { forward = "none" }
+    }
+
+    min_ttl     = 0
+    default_ttl = 0   # No caching for dynamic content by default
+    max_ttl     = 86400
+  }
+
+  # Static assets: long cache
+  ordered_cache_behavior {
+    path_pattern     = "/static/*"
+    min_ttl          = 86400
+    default_ttl      = 31536000  # 1 year
+    max_ttl          = 31536000
+    compress         = true
+    # ... same methods and origin
+  }
+
+  web_acl_id = aws_wafv2_web_acl.main.arn
+  price_class = "PriceClass_100"  # US + Europe edge locations only (cost optimization)
+}
+</code></pre>
+<p>The <code>price_class = "PriceClass_100"</code> setting limits edge locations to the US and Europe — a deliberate cost tradeoff. If your users are global, bump this to <code>PriceClass_All</code>. Every cache hit here means one fewer request hitting your ALB and compute layer, which is where real money and latency accumulates at scale.</p>
+<h2>Layer 2: Load Balancing — ALB vs NLB</h2>
+<p>Requests that miss the CDN cache arrive at your load balancer. The choice between ALB and NLB matters because they operate at different OSI layers and have very different cost and feature profiles.</p>
+<p><strong>ALB (Application Load Balancer)</strong> for HTTP/HTTPS:</p>
+<ul>
+<li>Path-based routing: <code>/api/*</code> → API service, <code>/admin/*</code> → admin service</li>
+<li>Host-based routing: <code>api.example.com</code> → API target group</li>
+<li>Request tracing (X-Amzn-Trace-Id headers)</li>
+<li>Native gRPC support</li>
+<li>Cost: ~$16/month base + per LCU</li>
+</ul>
+<p><strong>NLB (Network Load Balancer)</strong> for TCP/UDP:</p>
+<ul>
+<li>Ultra-low latency (&#x3C; 1ms) for TCP-based protocols</li>
+<li>Static IP per AZ (needed for IP whitelisting)</li>
+<li>Handles millions of connections per second</li>
+<li>Use for: gaming servers, WebSockets at extreme scale, Kafka MSK clusters</li>
+</ul>
+<p>For standard web APIs, ALB is the right choice.</p>
+<p>The target group health check configuration below is where most teams make silent mistakes. The <code>DeregistrationDelay</code> setting is especially important — without a drain period, the ALB will send requests to containers that have already started shutting down, producing mysterious 502 errors during deployments.</p>
+<pre><code class="language-yaml"># ALB target group settings for containerized services
+TargetGroup:
+  HealthCheck:
+    Path: /health
+    HealthyThresholdCount: 2     # 2 consecutive successes = healthy
+    UnhealthyThresholdCount: 3   # 3 consecutive failures = unhealthy
+    Interval: 15                 # Check every 15s
+    Timeout: 5
+  DeregistrationDelay: 30        # Drain connections for 30s before removing instance
+  Protocol: HTTP
+  Port: 8080
+</code></pre>
+<h2>Layer 3: Compute — ECS Fargate with Auto-Scaling</h2>
+<p>ECS Fargate eliminates EC2 management while providing container orchestration. With the traffic entry layer handling caching and routing, your Fargate tasks only need to handle requests that actually require compute — but they need to scale efficiently when traffic spikes.</p>
+<p>The auto-scaling policy below uses three metrics simultaneously. Relying on CPU alone is a common mistake — a memory-bound service or a queue-driven spike will not show CPU pressure until it is already too late. Using all three signals means the system reacts correctly regardless of the bottleneck type.</p>
+<pre><code class="language-yaml"># ECS Service auto-scaling configuration
+AutoScaling:
+  MinCapacity: 2                 # Never scale below 2 (for HA across AZs)
+  MaxCapacity: 50
+
+  ScalingPolicy:
+    Type: TargetTrackingScaling
+    Metrics:
+      - ECSServiceAverageCPUUtilization: 70%  # Scale out when CPU > 70%
+      - ECSServiceAverageMemoryUtilization: 80%
+      - ALBRequestCountPerTarget: 1000         # Scale out at 1000 req/target
+
+  # Scale-in protection: don't kill instances handling long requests
+  ScaleInCooldown: 300           # Wait 5 minutes after scale-in
+  ScaleOutCooldown: 60           # Scale out quickly
+</code></pre>
+<p>Note the asymmetric cooldowns: scale out fast (60 seconds) to absorb traffic spikes, but scale in slowly (300 seconds) to avoid terminating containers mid-request. If your containers handle long-running operations, increase the scale-in cooldown to match your p99 request duration.</p>
+<p><strong>Container configuration for production:</strong></p>
+<p>The container definition below wires together all the details ECS needs to run your service safely. Pay particular attention to the <code>startPeriod</code> in the health check — this gives the JVM or application framework time to initialize before ECS starts counting health check failures. Set it too low and ECS will kill healthy containers before they finish starting up.</p>
+<pre><code class="language-json">{
+  "name": "api-service",
+  "image": "123456789.dkr.ecr.us-east-1.amazonaws.com/api:latest",
+  "cpu": 512,
+  "memory": 1024,
+  "environment": [
+    {"name": "SPRING_PROFILES_ACTIVE", "value": "prod"},
+    {"name": "DB_URL", "valueFrom": "arn:aws:ssm:us-east-1::parameter/prod/db-url"}
+  ],
+  "healthCheck": {
+    "command": ["CMD-SHELL", "curl -f http://localhost:8080/health || exit 1"],
+    "interval": 15,
+    "timeout": 5,
+    "retries": 3,
+    "startPeriod": 60
+  },
+  "logConfiguration": {
+    "logDriver": "awslogs",
+    "options": {
+      "awslogs-group": "/ecs/api-service",
+      "awslogs-region": "us-east-1",
+      "awslogs-stream-prefix": "ecs"
+    }
+  }
+}
+</code></pre>
+<h2>Layer 4: Caching — ElastiCache Redis</h2>
+<p>ElastiCache Redis reduces database load by 80-95% for read-heavy workloads. Before choosing a caching pattern, you need to understand the tradeoffs — each pattern has different consistency guarantees and failure behavior, and picking the wrong one is a common source of bugs in high-traffic systems.</p>
+<pre><code>Cache patterns:
+
+1. Cache-aside (most common):
+   Read: Check cache → miss → read DB → write cache → return
+   Write: Update DB → invalidate cache (or write-through)
+
+2. Write-through:
+   Write: Update DB + update cache (synchronously)
+   Read: Always from cache (never a miss)
+   Downside: Cache is never stale; write latency increases
+
+3. Write-behind (write-back):
+   Write: Update cache → queue DB write asynchronously
+   Risk: Cache failure = data loss
+   Use for: Click counters, view counts (high-write, low-loss-risk)
+</code></pre>
+<p>Cache-aside is the default for most API workloads because it tolerates cache failures gracefully — a cache miss just falls through to the database. Write-through is the right choice when staleness is unacceptable (e.g., financial balances). Write-behind is only appropriate when you can accept losing writes in a cache failure scenario.</p>
+<p>The Terraform configuration below provisions a Redis replication group with automatic failover and Multi-AZ enabled. The <code>num_cache_clusters: 3</code> setting gives you one primary and two replicas — if the primary fails, AWS automatically promotes a replica within seconds. Without <code>automatic_failover_enabled</code>, your application would be writing to a dead primary until you manually intervened.</p>
+<pre><code class="language-terraform">resource "aws_elasticache_replication_group" "redis" {
+  replication_group_id       = "prod-redis"
+  description                = "Production Redis cluster"
+  node_type                  = "cache.r7g.large"  # 13.07 GB RAM
+  num_cache_clusters         = 3                  # 1 primary + 2 replicas
+  automatic_failover_enabled = true               # Auto-promote replica on primary failure
+  multi_az_enabled           = true               # Spread across AZs
+  at_rest_encryption_enabled = true
+  transit_encryption_enabled = true
+  auth_token                 = var.redis_auth_token
+
+  # Maintenance window during low traffic
+  maintenance_window = "sun:05:00-sun:06:00"
+  snapshot_window    = "04:00-05:00"
+  snapshot_retention_limit = 7  # Keep 7 days of snapshots
+}
+</code></pre>
+<h2>Layer 5: Database — RDS Aurora PostgreSQL</h2>
+<p>With caching handling the majority of reads, your database primarily needs to handle writes and cache misses. Aurora PostgreSQL is the right choice here because it gives you PostgreSQL compatibility with a distributed storage engine built for high availability.</p>
+<p>Aurora is PostgreSQL-compatible but with a distributed storage engine that provides:</p>
+<ul>
+<li><strong>6-way replication</strong> across 3 AZs automatically (no configuration needed)</li>
+<li><strong>15 read replicas</strong> per cluster (vs 5 for standard RDS)</li>
+<li><strong>Aurora Serverless v2</strong> for variable workloads (scales instantly from 0.5 to 128 ACUs)</li>
+<li><strong>Sub-second failover</strong> (vs 60-120s for standard RDS Multi-AZ)</li>
+</ul>
+<p>At scale, a single database connection pool pointed at the writer endpoint becomes a bottleneck. The Java configuration below implements read/write splitting — writes always go to the primary Aurora writer, and reads tagged with <code>@Transactional(readOnly=true)</code> are routed to the reader endpoint, which Aurora load-balances across your replicas. This pattern alone can offload 70-90% of your database traffic off the primary.</p>
+<pre><code class="language-java">// Java connection configuration with read/write splitting
+@Configuration
+public class DataSourceConfig {
+
+    @Bean
+    @Primary
+    public DataSource writeDataSource() {
+        HikariConfig config = new HikariConfig();
+        config.setJdbcUrl(System.getenv("AURORA_WRITER_ENDPOINT")); // cluster endpoint
+        config.setMaximumPoolSize(20);
+        config.setMinimumIdle(5);
+        config.setConnectionTimeout(3000);
+        config.setIdleTimeout(600000);
+        return new HikariDataSource(config);
+    }
+
+    @Bean
+    public DataSource readDataSource() {
+        HikariConfig config = new HikariConfig();
+        config.setJdbcUrl(System.getenv("AURORA_READER_ENDPOINT")); // reader endpoint = load balanced across replicas
+        config.setMaximumPoolSize(50); // Readers can handle more connections
+        config.setReadOnly(true);
+        return new HikariDataSource(config);
+    }
+
+    // Route @Transactional(readOnly=true) to reader, writes to primary
+    @Bean
+    public DataSource routingDataSource(
+            @Qualifier("writeDataSource") DataSource write,
+            @Qualifier("readDataSource") DataSource read) {
+        Map&#x3C;Object, Object> dataSources = new HashMap&#x3C;>();
+        dataSources.put("write", write);
+        dataSources.put("read", read);
+
+        AbstractRoutingDataSource routing = new AbstractRoutingDataSource() {
+            @Override
+            protected Object determineCurrentLookupKey() {
+                return TransactionSynchronizationManager.isCurrentTransactionReadOnly()
+                    ? "read" : "write";
+            }
+        };
+        routing.setTargetDataSources(dataSources);
+        routing.setDefaultTargetDataSource(write);
+        return routing;
+    }
+}
+</code></pre>
+<p>The key takeaway: the <code>AbstractRoutingDataSource</code> inspects Spring's <code>TransactionSynchronizationManager</code> at runtime to choose the datasource — no application code needs to know which database it is talking to. Your existing <code>@Transactional(readOnly=true)</code> annotations on service methods are the only signal needed to route traffic correctly.</p>
+<h2>Layer 6: Async Decoupling — SQS + Lambda</h2>
+<p>Synchronous calls to slow operations (email, PDF generation, third-party APIs) increase latency and reduce availability. Decouple them with SQS.</p>
+<p>The problem this solves is straightforward: if sending an order confirmation email takes 800ms and Mailgun is down, your <code>/checkout</code> endpoint fails with a 503. By publishing to SQS instead, the order creation succeeds in under 50ms and the email delivery retries independently — a failure in the downstream system no longer propagates back to your user.</p>
+<pre><code class="language-java">// Publish to SQS (non-blocking, returns immediately)
+@Service
+public class OrderService {
+
+    @Autowired
+    private SqsAsyncClient sqsClient;
+
+    @Value("${sqs.order-events.url}")
+    private String queueUrl;
+
+    public Order createOrder(OrderRequest request) {
+        Order order = orderRepository.save(buildOrder(request));
+
+        // Async: don't wait for these — they'll process in background
+        sqsClient.sendMessage(SendMessageRequest.builder()
+            .queueUrl(queueUrl)
+            .messageBody(objectMapper.writeValueAsString(new OrderCreatedEvent(order)))
+            .messageGroupId(order.getUserId())         // FIFO: preserve per-user order
+            .messageDeduplicationId(order.getId())     // Idempotent
+            .build());
+
+        return order; // Return immediately — don't wait for email/notification
+    }
+}
+
+// Lambda consumer: processes SQS messages
+@Component
+public class OrderEventHandler {
+
+    @SqsListener("${sqs.order-events.url}")
+    public void handleOrderCreated(OrderCreatedEvent event) {
+        emailService.sendOrderConfirmation(event);
+        inventoryService.reserve(event.getItems());
+        analyticsService.trackConversion(event);
+    }
+}
+</code></pre>
+<p><strong>SQS Configuration for reliability:</strong></p>
+<p>The Terraform configuration below is where the resilience is actually built. The dead letter queue with <code>maxReceiveCount: 3</code> ensures that a message that consistently fails processing (a malformed payload, a bug in your handler) does not loop forever and block other messages. The <code>visibility_timeout_seconds</code> must be longer than your Lambda's maximum execution time — if it is not, SQS will make the message visible again while your function is still processing it, causing duplicate processing.</p>
+<pre><code class="language-terraform">resource "aws_sqs_queue" "order_events" {
+  name                        = "order-events.fifo"
+  fifo_queue                  = true
+  content_based_deduplication = false
+
+  # Dead Letter Queue: move unprocessable messages after 3 attempts
+  redrive_policy = jsonencode({
+    deadLetterTargetArn = aws_sqs_queue.order_events_dlq.arn
+    maxReceiveCount     = 3
+  })
+
+  # Visibility timeout > Lambda function max execution time
+  visibility_timeout_seconds = 120  # 2 minutes
+  message_retention_seconds  = 86400 * 7  # 7 days
+}
+</code></pre>
+<h2>Observability: CloudWatch + X-Ray</h2>
+<p>With the core architecture in place, you need to see what is happening inside it. Structured logging is the foundation — CloudWatch Logs Insights can run SQL-like queries against JSON logs, letting you find all errors for a specific user or calculate p99 latency across a time window in seconds.</p>
+<p>The Spring AOP aspect below intercepts every request handler without modifying individual controllers. Emitting structured JSON for both success and error paths means every request is queryable in CloudWatch without string parsing — you can query <code>status="error"</code> and immediately see error rates by method.</p>
+<pre><code class="language-java">// Structured logging (CloudWatch Insights can query JSON logs)
+@Aspect
+@Component
+public class RequestLoggingAspect {
+
+    @Around("@annotation(org.springframework.web.bind.annotation.RequestMapping)")
+    public Object logRequest(ProceedingJoinPoint pjp) throws Throwable {
+        long start = System.currentTimeMillis();
+        try {
+            Object result = pjp.proceed();
+            log.info("{\"event\":\"request\",\"method\":\"{}\",\"duration_ms\":{},\"status\":\"success\"}",
+                pjp.getSignature().getName(), System.currentTimeMillis() - start);
+            return result;
+        } catch (Exception e) {
+            log.error("{\"event\":\"request\",\"method\":\"{}\",\"duration_ms\":{},\"status\":\"error\",\"error\":\"{}\"}",
+                pjp.getSignature().getName(), System.currentTimeMillis() - start, e.getMessage());
+            throw e;
+        }
+    }
+}
+</code></pre>
+<p><strong>Key CloudWatch alarms to set:</strong></p>
+<p>Alarms are your early warning system — they tell you something is wrong before your customers do. The two alarms below cover the most critical signals: error rate at the load balancer (the first place you will see cascading failures) and database CPU (the most common database bottleneck under sustained load). Set these before you go live, not after the first incident.</p>
+<pre><code class="language-terraform"># ALB error rate alarm
+resource "aws_cloudwatch_metric_alarm" "alb_5xx" {
+  alarm_name          = "prod-alb-5xx-rate"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = 2
+  metric_name         = "HTTPCode_ELB_5XX_Count"
+  namespace           = "AWS/ApplicationELB"
+  period              = 60
+  statistic           = "Sum"
+  threshold           = 50       # Alert if >50 5xx errors per minute
+  alarm_actions       = [aws_sns_topic.alerts.arn]
+}
+
+# RDS CPU alarm
+resource "aws_cloudwatch_metric_alarm" "rds_cpu" {
+  alarm_name          = "prod-aurora-cpu"
+  metric_name         = "CPUUtilization"
+  namespace           = "AWS/RDS"
+  threshold           = 80       # Alert at 80% CPU
+  period              = 300      # 5-minute average
+}
+</code></pre>
+<h2>Cost Optimization</h2>
+<p>Once your architecture is functional and observable, cost optimization is about choosing the right purchasing model for each layer's usage pattern. The six levers below apply to every production AWS architecture — each one saves money without changing your application code.</p>
+<pre><code>Architecture cost levers:
+
+1. Reserved Instances for predictable baseline (1-year RI = 30-40% savings)
+   → ECS Fargate Compute Savings Plans, RDS Reserved Instances
+
+2. Spot Instances for fault-tolerant batch workloads
+   → Lambda@Edge, ECS Spot (with Spot interruption handling)
+
+3. S3 Intelligent-Tiering for infrequently accessed objects
+   → Automatically moves to cheaper storage tiers
+
+4. CloudFront reduces origin (ALB + compute) costs by serving cache
+   → Every cache hit saves an ALB request + compute + DB query
+
+5. Aurora Serverless v2 for dev/staging environments
+   → Scales to zero when idle → pay only when in use
+
+6. DynamoDB on-demand vs provisioned
+   → On-demand for unpredictable workloads (pay per request)
+   → Provisioned + auto-scaling for predictable traffic (cheaper)
+</code></pre>
+<p>This architecture handles 100K+ RPS with sub-100ms p99 latency. The key architectural principles: cache aggressively at every layer, decouple async work from the request path, use managed services to reduce operational overhead, and design for failure at every layer.</p>
+<p>The AWS Well-Architected Framework labels these as the Reliability, Performance, and Cost pillars. In practice, they're just good engineering — the same principles that worked before cloud, applied to managed services.</p>
+</article><div class="my-10 rounded-xl border border-yellow-200 bg-yellow-50 p-6"><div class="flex items-center gap-2 mb-1"><span class="text-lg">📚</span><h3 class="text-base font-bold text-gray-900">Recommended Resources</h3></div><div class="space-y-4"><div class="flex items-start gap-3 bg-white rounded-lg p-4 border border-yellow-100"><div class="flex-1 min-w-0"><div class="flex items-center gap-2 flex-wrap mb-1"><span class="font-semibold text-gray-900 text-sm">AWS Solutions Architect Associate — Udemy</span><span class="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-medium">Best Seller</span></div><p class="text-xs text-gray-600">Most popular AWS certification course by Stephane Maarek.</p></div><a href="https://www.udemy.com/course/aws-certified-solutions-architect-associate-saa-c03/" target="_blank" rel="noopener noreferrer" class="flex-shrink-0 text-xs bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium whitespace-nowrap">View Course<!-- --> →</a></div><div class="flex items-start gap-3 bg-white rounded-lg p-4 border border-yellow-100"><div class="flex-1 min-w-0"><div class="flex items-center gap-2 flex-wrap mb-1"><span class="font-semibold text-gray-900 text-sm">AWS in Action, 3rd Edition</span></div><p class="text-xs text-gray-600">Hands-on guide to building cloud applications on AWS.</p></div><a href="https://amzn.to/3Vmf49E" target="_blank" rel="noopener noreferrer" class="flex-shrink-0 text-xs bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium whitespace-nowrap">View on Amazon<!-- --> →</a></div></div></div><div class="mt-10 pt-8 border-t border-gray-100"><p class="text-sm text-gray-500 mb-3">Found this useful? Share it:</p><div class="flex gap-3"><a href="https://twitter.com/intent/tweet?text=AWS%20Architecture%20Patterns%20for%20High-Traffic%20Applications&amp;url=https%3A%2F%2Fcodesprintpro.com%2Fblog%2Faws-high-traffic-architecture%2F" target="_blank" rel="noopener noreferrer" class="text-xs bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors">Share on X/Twitter</a><a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fcodesprintpro.com%2Fblog%2Faws-high-traffic-architecture%2F" target="_blank" rel="noopener noreferrer" class="text-xs bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">Share on LinkedIn</a></div></div></div><aside class="hidden lg:block w-64 flex-shrink-0"><nav class="hidden lg:block sticky top-24"><h4 class="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-3">On This Page</h4><ul class="space-y-1"><li class=""><a href="#the-reference-architecture" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">The Reference Architecture</a></li><li class=""><a href="#layer-1-traffic-entry-cloudfront-waf" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Layer 1: Traffic Entry — CloudFront + WAF</a></li><li class=""><a href="#layer-2-load-balancing-alb-vs-nlb" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Layer 2: Load Balancing — ALB vs NLB</a></li><li class=""><a href="#layer-3-compute-ecs-fargate-with-auto-scaling" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Layer 3: Compute — ECS Fargate with Auto-Scaling</a></li><li class=""><a href="#layer-4-caching-elasticache-redis" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Layer 4: Caching — ElastiCache Redis</a></li><li class=""><a href="#layer-5-database-rds-aurora-postgresql" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Layer 5: Database — RDS Aurora PostgreSQL</a></li><li class=""><a href="#layer-6-async-decoupling-sqs-lambda" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Layer 6: Async Decoupling — SQS + Lambda</a></li><li class=""><a href="#observability-cloudwatch-x-ray" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Observability: CloudWatch + X-Ray</a></li><li class=""><a href="#cost-optimization" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Cost Optimization</a></li></ul></nav></aside></div><div class="mt-16 pt-10 border-t border-gray-100"><h2 class="text-2xl font-bold text-gray-900 mb-6">Related Articles</h2><div class="grid grid-cols-1 md:grid-cols-3 gap-6"><a href="/blog/aws-lambda-production-patterns/"><article class="group bg-white rounded-xl border border-gray-200 p-6 h-full cursor-pointer hover:border-blue-300 hover:shadow-lg transition-all"><span class="inline-block text-xs font-semibold px-3 py-1 rounded-full mb-3 bg-yellow-100 text-yellow-700">AWS</span><h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors leading-snug">AWS Lambda in Production: Cold Starts, Concurrency, and Cost Optimization</h3><p class="text-gray-600 text-sm mb-4 line-clamp-3">Lambda&#x27;s value proposition is compelling: run code without managing servers, pay per invocation, scale from zero to 10,000 concurrent executions without configuration. The reality is a set of execution model nuances that…</p><div class="flex items-center justify-between text-xs text-gray-400"><span>Jun 28, 2025</span><span class="flex items-center gap-1"><svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>7 min read</span></div><div class="mt-3 flex flex-wrap gap-1"><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->aws</span><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->lambda</span><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->serverless</span></div></article></a><a href="/blog/kubernetes-production-best-practices/"><article class="group bg-white rounded-xl border border-gray-200 p-6 h-full cursor-pointer hover:border-blue-300 hover:shadow-lg transition-all"><span class="inline-block text-xs font-semibold px-3 py-1 rounded-full mb-3 bg-yellow-100 text-yellow-700">AWS</span><h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors leading-snug">Kubernetes in Production: Patterns Every Backend Engineer Must Know</h3><p class="text-gray-600 text-sm mb-4 line-clamp-3">Running a container in Kubernetes and running a production workload in Kubernetes are different disciplines. The gap between  and a service that survives node failures, deployment rollouts, and traffic spikes without use…</p><div class="flex items-center justify-between text-xs text-gray-400"><span>Jun 8, 2025</span><span class="flex items-center gap-1"><svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>6 min read</span></div><div class="mt-3 flex flex-wrap gap-1"><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->kubernetes</span><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->k8s</span><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->devops</span></div></article></a><a href="/blog/terraform-infrastructure-as-code/"><article class="group bg-white rounded-xl border border-gray-200 p-6 h-full cursor-pointer hover:border-blue-300 hover:shadow-lg transition-all"><span class="inline-block text-xs font-semibold px-3 py-1 rounded-full mb-3 bg-yellow-100 text-yellow-700">AWS</span><h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors leading-snug">Terraform Infrastructure as Code: Production Patterns and Pitfalls</h3><p class="text-gray-600 text-sm mb-4 line-clamp-3">Terraform is the industry-standard tool for Infrastructure as Code (IaC) — defining cloud infrastructure as declarative HCL configuration that can be version-controlled, reviewed, and applied reproducibly. The value prop…</p><div class="flex items-center justify-between text-xs text-gray-400"><span>May 14, 2025</span><span class="flex items-center gap-1"><svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>7 min read</span></div><div class="mt-3 flex flex-wrap gap-1"><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->terraform</span><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->infrastructure as code</span><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->aws</span></div></article></a></div></div><div class="mt-12 text-center"><a class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium transition-colors" href="/blog/">← Back to all articles</a></div></div></div><footer class="bg-gray-900 text-white py-12"><div class="container mx-auto px-4 sm:px-6 lg:px-8"><div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8"><div class="col-span-1 md:col-span-1"><div><a class="text-xl font-bold block mb-3 text-white hover:text-blue-400 transition-colors" href="/">CodeSprintPro</a></div><p class="text-gray-400 text-sm mb-4 leading-relaxed">Deep-dive technical content on System Design, Java, Databases, AI/ML, and AWS — by Sachin Sarawgi.</p><div class="flex space-x-4"><a href="https://github.com/codesprintpro" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors" aria-label="Visit GitHub profile"><i class="fab fa-github text-xl"></i></a><a href="https://www.linkedin.com/in/sachin-sarawgi/" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors" aria-label="Visit LinkedIn profile"><i class="fab fa-linkedin text-xl"></i></a><a href="https://medium.com/@codesprintpro" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors" aria-label="Visit Medium profile"><i class="fab fa-medium text-xl"></i></a></div></div><div><h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 mb-4">Quick Links</h3><ul class="space-y-2"><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">Blog</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/#about">About</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/#portfolio">Portfolio</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/#contact">Contact</a></div></li></ul></div><div><h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 mb-4">Categories</h3><ul class="space-y-2"><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">System Design</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">Java</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">Databases</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">AI/ML</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">AWS</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">Messaging</a></div></li></ul></div><div><h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 mb-4">Contact</h3><ul class="space-y-2 text-gray-400 text-sm"><li><a href="mailto:sachinsarawgi201143@gmail.com" class="hover:text-white transition-colors flex items-center gap-2"><i class="fas fa-envelope"></i> Email</a></li><li><a href="https://www.linkedin.com/in/sachin-sarawgi/" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors flex items-center gap-2"><i class="fab fa-linkedin"></i> LinkedIn</a></li><li><a href="https://github.com/codesprintpro" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors flex items-center gap-2"><i class="fab fa-github"></i> GitHub</a></li></ul></div></div><div class="border-t border-gray-800 pt-6 flex flex-col md:flex-row justify-between items-center gap-2"><p class="text-gray-500 text-sm">© <!-- -->2026<!-- --> CodeSprintPro · Sachin Sarawgi. All rights reserved.</p><p class="text-gray-600 text-xs">Built with Next.js · TailwindCSS · Deployed on GitHub Pages</p></div></div></footer></div></main></div><script id="__NEXT_DATA__" type="application/json">{"props":{"pageProps":{"post":{"title":"AWS Architecture Patterns for High-Traffic Applications","description":"Learn how to architect systems that handle millions of requests on AWS — covering load balancing, auto-scaling, RDS with read replicas, ElastiCache, SQS decoupling, and CloudFront CDN.","date":"2025-01-19","category":"AWS","tags":["aws","architecture","high availability","scalability","cloud"],"featured":false,"affiliateSection":"aws-resources","slug":"aws-high-traffic-architecture","readingTime":"14 min read","excerpt":"Architecting on AWS is not about using every service in the catalog — it's about choosing the right services for your scale, stitching them together correctly, and understanding the failure modes of each. This article wa…","contentHtml":"\u003cp\u003eArchitecting on AWS is not about using every service in the catalog — it's about choosing the right services for your scale, stitching them together correctly, and understanding the failure modes of each. This article walks through a production-grade, high-traffic architecture with the reasoning behind each decision.\u003c/p\u003e\n\u003ch2\u003eThe Reference Architecture\u003c/h2\u003e\n\u003cp\u003eBefore diving into each layer, it helps to see how all the pieces fit together. The diagram below shows the full request path — from a user's browser through DNS, CDN, load balancer, compute, caching, and into the database, with async job processing on the side. Understanding this end-to-end flow will make each layer's purpose clearer as you build it.\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003eInternet\n    │\n    ▼\n┌───────────────────────────────────────────┐\n│           Route 53 (DNS)                  │\n│    Latency-based routing to nearest region│\n└─────────────────┬─────────────────────────┘\n                  │\n    ┌─────────────▼──────────────┐\n    │    CloudFront CDN           │\n    │    Static assets + API cache│\n    │    WAF + Shield protection  │\n    └─────────────┬──────────────┘\n                  │\n    ┌─────────────▼──────────────┐\n    │  Application Load Balancer  │\n    │  (ALB) — path-based routing │\n    └──┬──────────┬──────────────┘\n       │          │\n  ┌────▼──┐  ┌────▼──────────┐\n  │ ECS   │  │  ECS Fargate  │\n  │Fargate│  │  (API service)│\n  │(web)  │  │  Auto-scaling │\n  └────┬──┘  └────┬──────────┘\n       │          │\n       └────┬─────┘\n            │\n  ┌─────────▼──────────────────────────┐\n  │           ElastiCache Redis         │\n  │     (session, hot data, rate limit) │\n  └─────────────────┬──────────────────┘\n                    │ cache miss\n  ┌─────────────────▼──────────────────┐\n  │        RDS Aurora PostgreSQL        │\n  │   Primary (writes) + Reader x2      │\n  │   Multi-AZ, automatic failover      │\n  └─────────────────┬──────────────────┘\n                    │\n  ┌─────────────────▼──────────────────┐\n  │              SQS                    │\n  │    (async job decoupling)           │\n  └─────────────────┬──────────────────┘\n                    │\n  ┌─────────────────▼──────────────────┐\n  │         Lambda / ECS Workers        │\n  │    (email, notifications, reports)  │\n  └────────────────────────────────────┘\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eNotice that no single component handles the entire request — each layer offloads work to the next. This separation of concerns is what lets the system scale each component independently without rebuilding the whole stack.\u003c/p\u003e\n\u003ch2\u003eLayer 1: Traffic Entry — CloudFront + WAF\u003c/h2\u003e\n\u003cp\u003eCloudFront is your first line of defense and performance optimization. Deploy it in front of everything — not just static assets.\u003c/p\u003e\n\u003cp\u003eBefore writing any Terraform, it is worth understanding how CloudFront decides what to cache and for how long. The cache behavior table below maps URL path patterns to caching policies — this is the design decision that determines how much traffic ever reaches your origin servers. Without this differentiation, you either cache user-specific data incorrectly or miss the opportunity to cache public data entirely.\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003eCloudFront use cases:\n1. Static assets (S3): JS, CSS, images → cached at 600+ edge locations globally\n2. API responses: Cache GET endpoints with low volatility (product catalog, pricing)\n3. DDoS mitigation: CloudFront + AWS Shield Standard absorbs L3/L4 attacks for free\n\nCloudFront cache behaviors:\n  Path: /static/*           → Cache: 1 year, compress: gzip/brotli\n  Path: /api/products/*     → Cache: 5 minutes (TTL), invalidate on update\n  Path: /api/user/*         → No cache (personalized)\n  Path: /api/checkout/*     → No cache, forward all headers\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eThe following Terraform resource creates the CloudFront distribution with two cache behaviors: a default behavior with no caching (safe for dynamic API responses) and an ordered behavior for static assets with a one-year TTL. The \u003ccode\u003eweb_acl_id\u003c/code\u003e attachment is what connects WAF rules — without it, your CDN layer has no protection against malicious traffic patterns.\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-terraform\"\u003eresource \"aws_cloudfront_distribution\" \"main\" {\n  origin {\n    domain_name = aws_lb.main.dns_name\n    origin_id   = \"alb-origin\"\n\n    custom_origin_config {\n      http_port              = 80\n      https_port             = 443\n      origin_protocol_policy = \"https-only\"\n      origin_ssl_protocols   = [\"TLSv1.2\"]\n    }\n  }\n\n  default_cache_behavior {\n    allowed_methods        = [\"DELETE\", \"GET\", \"HEAD\", \"OPTIONS\", \"PATCH\", \"POST\", \"PUT\"]\n    cached_methods         = [\"GET\", \"HEAD\"]\n    target_origin_id       = \"alb-origin\"\n    viewer_protocol_policy = \"redirect-to-https\"\n    compress               = true\n\n    forwarded_values {\n      query_string = true\n      headers      = [\"Authorization\", \"Origin\"]\n      cookies { forward = \"none\" }\n    }\n\n    min_ttl     = 0\n    default_ttl = 0   # No caching for dynamic content by default\n    max_ttl     = 86400\n  }\n\n  # Static assets: long cache\n  ordered_cache_behavior {\n    path_pattern     = \"/static/*\"\n    min_ttl          = 86400\n    default_ttl      = 31536000  # 1 year\n    max_ttl          = 31536000\n    compress         = true\n    # ... same methods and origin\n  }\n\n  web_acl_id = aws_wafv2_web_acl.main.arn\n  price_class = \"PriceClass_100\"  # US + Europe edge locations only (cost optimization)\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eThe \u003ccode\u003eprice_class = \"PriceClass_100\"\u003c/code\u003e setting limits edge locations to the US and Europe — a deliberate cost tradeoff. If your users are global, bump this to \u003ccode\u003ePriceClass_All\u003c/code\u003e. Every cache hit here means one fewer request hitting your ALB and compute layer, which is where real money and latency accumulates at scale.\u003c/p\u003e\n\u003ch2\u003eLayer 2: Load Balancing — ALB vs NLB\u003c/h2\u003e\n\u003cp\u003eRequests that miss the CDN cache arrive at your load balancer. The choice between ALB and NLB matters because they operate at different OSI layers and have very different cost and feature profiles.\u003c/p\u003e\n\u003cp\u003e\u003cstrong\u003eALB (Application Load Balancer)\u003c/strong\u003e for HTTP/HTTPS:\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003ePath-based routing: \u003ccode\u003e/api/*\u003c/code\u003e → API service, \u003ccode\u003e/admin/*\u003c/code\u003e → admin service\u003c/li\u003e\n\u003cli\u003eHost-based routing: \u003ccode\u003eapi.example.com\u003c/code\u003e → API target group\u003c/li\u003e\n\u003cli\u003eRequest tracing (X-Amzn-Trace-Id headers)\u003c/li\u003e\n\u003cli\u003eNative gRPC support\u003c/li\u003e\n\u003cli\u003eCost: ~$16/month base + per LCU\u003c/li\u003e\n\u003c/ul\u003e\n\u003cp\u003e\u003cstrong\u003eNLB (Network Load Balancer)\u003c/strong\u003e for TCP/UDP:\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eUltra-low latency (\u0026#x3C; 1ms) for TCP-based protocols\u003c/li\u003e\n\u003cli\u003eStatic IP per AZ (needed for IP whitelisting)\u003c/li\u003e\n\u003cli\u003eHandles millions of connections per second\u003c/li\u003e\n\u003cli\u003eUse for: gaming servers, WebSockets at extreme scale, Kafka MSK clusters\u003c/li\u003e\n\u003c/ul\u003e\n\u003cp\u003eFor standard web APIs, ALB is the right choice.\u003c/p\u003e\n\u003cp\u003eThe target group health check configuration below is where most teams make silent mistakes. The \u003ccode\u003eDeregistrationDelay\u003c/code\u003e setting is especially important — without a drain period, the ALB will send requests to containers that have already started shutting down, producing mysterious 502 errors during deployments.\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-yaml\"\u003e# ALB target group settings for containerized services\nTargetGroup:\n  HealthCheck:\n    Path: /health\n    HealthyThresholdCount: 2     # 2 consecutive successes = healthy\n    UnhealthyThresholdCount: 3   # 3 consecutive failures = unhealthy\n    Interval: 15                 # Check every 15s\n    Timeout: 5\n  DeregistrationDelay: 30        # Drain connections for 30s before removing instance\n  Protocol: HTTP\n  Port: 8080\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch2\u003eLayer 3: Compute — ECS Fargate with Auto-Scaling\u003c/h2\u003e\n\u003cp\u003eECS Fargate eliminates EC2 management while providing container orchestration. With the traffic entry layer handling caching and routing, your Fargate tasks only need to handle requests that actually require compute — but they need to scale efficiently when traffic spikes.\u003c/p\u003e\n\u003cp\u003eThe auto-scaling policy below uses three metrics simultaneously. Relying on CPU alone is a common mistake — a memory-bound service or a queue-driven spike will not show CPU pressure until it is already too late. Using all three signals means the system reacts correctly regardless of the bottleneck type.\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-yaml\"\u003e# ECS Service auto-scaling configuration\nAutoScaling:\n  MinCapacity: 2                 # Never scale below 2 (for HA across AZs)\n  MaxCapacity: 50\n\n  ScalingPolicy:\n    Type: TargetTrackingScaling\n    Metrics:\n      - ECSServiceAverageCPUUtilization: 70%  # Scale out when CPU \u003e 70%\n      - ECSServiceAverageMemoryUtilization: 80%\n      - ALBRequestCountPerTarget: 1000         # Scale out at 1000 req/target\n\n  # Scale-in protection: don't kill instances handling long requests\n  ScaleInCooldown: 300           # Wait 5 minutes after scale-in\n  ScaleOutCooldown: 60           # Scale out quickly\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eNote the asymmetric cooldowns: scale out fast (60 seconds) to absorb traffic spikes, but scale in slowly (300 seconds) to avoid terminating containers mid-request. If your containers handle long-running operations, increase the scale-in cooldown to match your p99 request duration.\u003c/p\u003e\n\u003cp\u003e\u003cstrong\u003eContainer configuration for production:\u003c/strong\u003e\u003c/p\u003e\n\u003cp\u003eThe container definition below wires together all the details ECS needs to run your service safely. Pay particular attention to the \u003ccode\u003estartPeriod\u003c/code\u003e in the health check — this gives the JVM or application framework time to initialize before ECS starts counting health check failures. Set it too low and ECS will kill healthy containers before they finish starting up.\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-json\"\u003e{\n  \"name\": \"api-service\",\n  \"image\": \"123456789.dkr.ecr.us-east-1.amazonaws.com/api:latest\",\n  \"cpu\": 512,\n  \"memory\": 1024,\n  \"environment\": [\n    {\"name\": \"SPRING_PROFILES_ACTIVE\", \"value\": \"prod\"},\n    {\"name\": \"DB_URL\", \"valueFrom\": \"arn:aws:ssm:us-east-1::parameter/prod/db-url\"}\n  ],\n  \"healthCheck\": {\n    \"command\": [\"CMD-SHELL\", \"curl -f http://localhost:8080/health || exit 1\"],\n    \"interval\": 15,\n    \"timeout\": 5,\n    \"retries\": 3,\n    \"startPeriod\": 60\n  },\n  \"logConfiguration\": {\n    \"logDriver\": \"awslogs\",\n    \"options\": {\n      \"awslogs-group\": \"/ecs/api-service\",\n      \"awslogs-region\": \"us-east-1\",\n      \"awslogs-stream-prefix\": \"ecs\"\n    }\n  }\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch2\u003eLayer 4: Caching — ElastiCache Redis\u003c/h2\u003e\n\u003cp\u003eElastiCache Redis reduces database load by 80-95% for read-heavy workloads. Before choosing a caching pattern, you need to understand the tradeoffs — each pattern has different consistency guarantees and failure behavior, and picking the wrong one is a common source of bugs in high-traffic systems.\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003eCache patterns:\n\n1. Cache-aside (most common):\n   Read: Check cache → miss → read DB → write cache → return\n   Write: Update DB → invalidate cache (or write-through)\n\n2. Write-through:\n   Write: Update DB + update cache (synchronously)\n   Read: Always from cache (never a miss)\n   Downside: Cache is never stale; write latency increases\n\n3. Write-behind (write-back):\n   Write: Update cache → queue DB write asynchronously\n   Risk: Cache failure = data loss\n   Use for: Click counters, view counts (high-write, low-loss-risk)\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eCache-aside is the default for most API workloads because it tolerates cache failures gracefully — a cache miss just falls through to the database. Write-through is the right choice when staleness is unacceptable (e.g., financial balances). Write-behind is only appropriate when you can accept losing writes in a cache failure scenario.\u003c/p\u003e\n\u003cp\u003eThe Terraform configuration below provisions a Redis replication group with automatic failover and Multi-AZ enabled. The \u003ccode\u003enum_cache_clusters: 3\u003c/code\u003e setting gives you one primary and two replicas — if the primary fails, AWS automatically promotes a replica within seconds. Without \u003ccode\u003eautomatic_failover_enabled\u003c/code\u003e, your application would be writing to a dead primary until you manually intervened.\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-terraform\"\u003eresource \"aws_elasticache_replication_group\" \"redis\" {\n  replication_group_id       = \"prod-redis\"\n  description                = \"Production Redis cluster\"\n  node_type                  = \"cache.r7g.large\"  # 13.07 GB RAM\n  num_cache_clusters         = 3                  # 1 primary + 2 replicas\n  automatic_failover_enabled = true               # Auto-promote replica on primary failure\n  multi_az_enabled           = true               # Spread across AZs\n  at_rest_encryption_enabled = true\n  transit_encryption_enabled = true\n  auth_token                 = var.redis_auth_token\n\n  # Maintenance window during low traffic\n  maintenance_window = \"sun:05:00-sun:06:00\"\n  snapshot_window    = \"04:00-05:00\"\n  snapshot_retention_limit = 7  # Keep 7 days of snapshots\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch2\u003eLayer 5: Database — RDS Aurora PostgreSQL\u003c/h2\u003e\n\u003cp\u003eWith caching handling the majority of reads, your database primarily needs to handle writes and cache misses. Aurora PostgreSQL is the right choice here because it gives you PostgreSQL compatibility with a distributed storage engine built for high availability.\u003c/p\u003e\n\u003cp\u003eAurora is PostgreSQL-compatible but with a distributed storage engine that provides:\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003e\u003cstrong\u003e6-way replication\u003c/strong\u003e across 3 AZs automatically (no configuration needed)\u003c/li\u003e\n\u003cli\u003e\u003cstrong\u003e15 read replicas\u003c/strong\u003e per cluster (vs 5 for standard RDS)\u003c/li\u003e\n\u003cli\u003e\u003cstrong\u003eAurora Serverless v2\u003c/strong\u003e for variable workloads (scales instantly from 0.5 to 128 ACUs)\u003c/li\u003e\n\u003cli\u003e\u003cstrong\u003eSub-second failover\u003c/strong\u003e (vs 60-120s for standard RDS Multi-AZ)\u003c/li\u003e\n\u003c/ul\u003e\n\u003cp\u003eAt scale, a single database connection pool pointed at the writer endpoint becomes a bottleneck. The Java configuration below implements read/write splitting — writes always go to the primary Aurora writer, and reads tagged with \u003ccode\u003e@Transactional(readOnly=true)\u003c/code\u003e are routed to the reader endpoint, which Aurora load-balances across your replicas. This pattern alone can offload 70-90% of your database traffic off the primary.\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-java\"\u003e// Java connection configuration with read/write splitting\n@Configuration\npublic class DataSourceConfig {\n\n    @Bean\n    @Primary\n    public DataSource writeDataSource() {\n        HikariConfig config = new HikariConfig();\n        config.setJdbcUrl(System.getenv(\"AURORA_WRITER_ENDPOINT\")); // cluster endpoint\n        config.setMaximumPoolSize(20);\n        config.setMinimumIdle(5);\n        config.setConnectionTimeout(3000);\n        config.setIdleTimeout(600000);\n        return new HikariDataSource(config);\n    }\n\n    @Bean\n    public DataSource readDataSource() {\n        HikariConfig config = new HikariConfig();\n        config.setJdbcUrl(System.getenv(\"AURORA_READER_ENDPOINT\")); // reader endpoint = load balanced across replicas\n        config.setMaximumPoolSize(50); // Readers can handle more connections\n        config.setReadOnly(true);\n        return new HikariDataSource(config);\n    }\n\n    // Route @Transactional(readOnly=true) to reader, writes to primary\n    @Bean\n    public DataSource routingDataSource(\n            @Qualifier(\"writeDataSource\") DataSource write,\n            @Qualifier(\"readDataSource\") DataSource read) {\n        Map\u0026#x3C;Object, Object\u003e dataSources = new HashMap\u0026#x3C;\u003e();\n        dataSources.put(\"write\", write);\n        dataSources.put(\"read\", read);\n\n        AbstractRoutingDataSource routing = new AbstractRoutingDataSource() {\n            @Override\n            protected Object determineCurrentLookupKey() {\n                return TransactionSynchronizationManager.isCurrentTransactionReadOnly()\n                    ? \"read\" : \"write\";\n            }\n        };\n        routing.setTargetDataSources(dataSources);\n        routing.setDefaultTargetDataSource(write);\n        return routing;\n    }\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eThe key takeaway: the \u003ccode\u003eAbstractRoutingDataSource\u003c/code\u003e inspects Spring's \u003ccode\u003eTransactionSynchronizationManager\u003c/code\u003e at runtime to choose the datasource — no application code needs to know which database it is talking to. Your existing \u003ccode\u003e@Transactional(readOnly=true)\u003c/code\u003e annotations on service methods are the only signal needed to route traffic correctly.\u003c/p\u003e\n\u003ch2\u003eLayer 6: Async Decoupling — SQS + Lambda\u003c/h2\u003e\n\u003cp\u003eSynchronous calls to slow operations (email, PDF generation, third-party APIs) increase latency and reduce availability. Decouple them with SQS.\u003c/p\u003e\n\u003cp\u003eThe problem this solves is straightforward: if sending an order confirmation email takes 800ms and Mailgun is down, your \u003ccode\u003e/checkout\u003c/code\u003e endpoint fails with a 503. By publishing to SQS instead, the order creation succeeds in under 50ms and the email delivery retries independently — a failure in the downstream system no longer propagates back to your user.\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-java\"\u003e// Publish to SQS (non-blocking, returns immediately)\n@Service\npublic class OrderService {\n\n    @Autowired\n    private SqsAsyncClient sqsClient;\n\n    @Value(\"${sqs.order-events.url}\")\n    private String queueUrl;\n\n    public Order createOrder(OrderRequest request) {\n        Order order = orderRepository.save(buildOrder(request));\n\n        // Async: don't wait for these — they'll process in background\n        sqsClient.sendMessage(SendMessageRequest.builder()\n            .queueUrl(queueUrl)\n            .messageBody(objectMapper.writeValueAsString(new OrderCreatedEvent(order)))\n            .messageGroupId(order.getUserId())         // FIFO: preserve per-user order\n            .messageDeduplicationId(order.getId())     // Idempotent\n            .build());\n\n        return order; // Return immediately — don't wait for email/notification\n    }\n}\n\n// Lambda consumer: processes SQS messages\n@Component\npublic class OrderEventHandler {\n\n    @SqsListener(\"${sqs.order-events.url}\")\n    public void handleOrderCreated(OrderCreatedEvent event) {\n        emailService.sendOrderConfirmation(event);\n        inventoryService.reserve(event.getItems());\n        analyticsService.trackConversion(event);\n    }\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e\u003cstrong\u003eSQS Configuration for reliability:\u003c/strong\u003e\u003c/p\u003e\n\u003cp\u003eThe Terraform configuration below is where the resilience is actually built. The dead letter queue with \u003ccode\u003emaxReceiveCount: 3\u003c/code\u003e ensures that a message that consistently fails processing (a malformed payload, a bug in your handler) does not loop forever and block other messages. The \u003ccode\u003evisibility_timeout_seconds\u003c/code\u003e must be longer than your Lambda's maximum execution time — if it is not, SQS will make the message visible again while your function is still processing it, causing duplicate processing.\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-terraform\"\u003eresource \"aws_sqs_queue\" \"order_events\" {\n  name                        = \"order-events.fifo\"\n  fifo_queue                  = true\n  content_based_deduplication = false\n\n  # Dead Letter Queue: move unprocessable messages after 3 attempts\n  redrive_policy = jsonencode({\n    deadLetterTargetArn = aws_sqs_queue.order_events_dlq.arn\n    maxReceiveCount     = 3\n  })\n\n  # Visibility timeout \u003e Lambda function max execution time\n  visibility_timeout_seconds = 120  # 2 minutes\n  message_retention_seconds  = 86400 * 7  # 7 days\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch2\u003eObservability: CloudWatch + X-Ray\u003c/h2\u003e\n\u003cp\u003eWith the core architecture in place, you need to see what is happening inside it. Structured logging is the foundation — CloudWatch Logs Insights can run SQL-like queries against JSON logs, letting you find all errors for a specific user or calculate p99 latency across a time window in seconds.\u003c/p\u003e\n\u003cp\u003eThe Spring AOP aspect below intercepts every request handler without modifying individual controllers. Emitting structured JSON for both success and error paths means every request is queryable in CloudWatch without string parsing — you can query \u003ccode\u003estatus=\"error\"\u003c/code\u003e and immediately see error rates by method.\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-java\"\u003e// Structured logging (CloudWatch Insights can query JSON logs)\n@Aspect\n@Component\npublic class RequestLoggingAspect {\n\n    @Around(\"@annotation(org.springframework.web.bind.annotation.RequestMapping)\")\n    public Object logRequest(ProceedingJoinPoint pjp) throws Throwable {\n        long start = System.currentTimeMillis();\n        try {\n            Object result = pjp.proceed();\n            log.info(\"{\\\"event\\\":\\\"request\\\",\\\"method\\\":\\\"{}\\\",\\\"duration_ms\\\":{},\\\"status\\\":\\\"success\\\"}\",\n                pjp.getSignature().getName(), System.currentTimeMillis() - start);\n            return result;\n        } catch (Exception e) {\n            log.error(\"{\\\"event\\\":\\\"request\\\",\\\"method\\\":\\\"{}\\\",\\\"duration_ms\\\":{},\\\"status\\\":\\\"error\\\",\\\"error\\\":\\\"{}\\\"}\",\n                pjp.getSignature().getName(), System.currentTimeMillis() - start, e.getMessage());\n            throw e;\n        }\n    }\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e\u003cstrong\u003eKey CloudWatch alarms to set:\u003c/strong\u003e\u003c/p\u003e\n\u003cp\u003eAlarms are your early warning system — they tell you something is wrong before your customers do. The two alarms below cover the most critical signals: error rate at the load balancer (the first place you will see cascading failures) and database CPU (the most common database bottleneck under sustained load). Set these before you go live, not after the first incident.\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-terraform\"\u003e# ALB error rate alarm\nresource \"aws_cloudwatch_metric_alarm\" \"alb_5xx\" {\n  alarm_name          = \"prod-alb-5xx-rate\"\n  comparison_operator = \"GreaterThanThreshold\"\n  evaluation_periods  = 2\n  metric_name         = \"HTTPCode_ELB_5XX_Count\"\n  namespace           = \"AWS/ApplicationELB\"\n  period              = 60\n  statistic           = \"Sum\"\n  threshold           = 50       # Alert if \u003e50 5xx errors per minute\n  alarm_actions       = [aws_sns_topic.alerts.arn]\n}\n\n# RDS CPU alarm\nresource \"aws_cloudwatch_metric_alarm\" \"rds_cpu\" {\n  alarm_name          = \"prod-aurora-cpu\"\n  metric_name         = \"CPUUtilization\"\n  namespace           = \"AWS/RDS\"\n  threshold           = 80       # Alert at 80% CPU\n  period              = 300      # 5-minute average\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch2\u003eCost Optimization\u003c/h2\u003e\n\u003cp\u003eOnce your architecture is functional and observable, cost optimization is about choosing the right purchasing model for each layer's usage pattern. The six levers below apply to every production AWS architecture — each one saves money without changing your application code.\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003eArchitecture cost levers:\n\n1. Reserved Instances for predictable baseline (1-year RI = 30-40% savings)\n   → ECS Fargate Compute Savings Plans, RDS Reserved Instances\n\n2. Spot Instances for fault-tolerant batch workloads\n   → Lambda@Edge, ECS Spot (with Spot interruption handling)\n\n3. S3 Intelligent-Tiering for infrequently accessed objects\n   → Automatically moves to cheaper storage tiers\n\n4. CloudFront reduces origin (ALB + compute) costs by serving cache\n   → Every cache hit saves an ALB request + compute + DB query\n\n5. Aurora Serverless v2 for dev/staging environments\n   → Scales to zero when idle → pay only when in use\n\n6. DynamoDB on-demand vs provisioned\n   → On-demand for unpredictable workloads (pay per request)\n   → Provisioned + auto-scaling for predictable traffic (cheaper)\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eThis architecture handles 100K+ RPS with sub-100ms p99 latency. The key architectural principles: cache aggressively at every layer, decouple async work from the request path, use managed services to reduce operational overhead, and design for failure at every layer.\u003c/p\u003e\n\u003cp\u003eThe AWS Well-Architected Framework labels these as the Reliability, Performance, and Cost pillars. In practice, they're just good engineering — the same principles that worked before cloud, applied to managed services.\u003c/p\u003e\n","tableOfContents":[{"id":"the-reference-architecture","text":"The Reference Architecture","level":2},{"id":"layer-1-traffic-entry-cloudfront-waf","text":"Layer 1: Traffic Entry — CloudFront + WAF","level":2},{"id":"layer-2-load-balancing-alb-vs-nlb","text":"Layer 2: Load Balancing — ALB vs NLB","level":2},{"id":"layer-3-compute-ecs-fargate-with-auto-scaling","text":"Layer 3: Compute — ECS Fargate with Auto-Scaling","level":2},{"id":"layer-4-caching-elasticache-redis","text":"Layer 4: Caching — ElastiCache Redis","level":2},{"id":"layer-5-database-rds-aurora-postgresql","text":"Layer 5: Database — RDS Aurora PostgreSQL","level":2},{"id":"layer-6-async-decoupling-sqs-lambda","text":"Layer 6: Async Decoupling — SQS + Lambda","level":2},{"id":"observability-cloudwatch-x-ray","text":"Observability: CloudWatch + X-Ray","level":2},{"id":"cost-optimization","text":"Cost Optimization","level":2}]},"relatedPosts":[{"title":"AWS Lambda in Production: Cold Starts, Concurrency, and Cost Optimization","description":"How Lambda execution environments work, cold start mitigation strategies, concurrency limits and throttling, Lambda power tuning, VPC networking costs, and when Lambda is the wrong tool.","date":"2025-06-28","category":"AWS","tags":["aws","lambda","serverless","java","cold start","performance","cost optimization"],"featured":false,"affiliateSection":"aws-resources","slug":"aws-lambda-production-patterns","readingTime":"7 min read","excerpt":"Lambda's value proposition is compelling: run code without managing servers, pay per invocation, scale from zero to 10,000 concurrent executions without configuration. The reality is a set of execution model nuances that…"},{"title":"Kubernetes in Production: Patterns Every Backend Engineer Must Know","description":"Resource requests and limits, liveness vs readiness probes, rolling deployments, HPA configuration, pod disruption budgets, and the mistakes that cause production outages in Kubernetes.","date":"2025-06-08","category":"AWS","tags":["kubernetes","k8s","devops","containers","deployment","aws","eks"],"featured":false,"affiliateSection":"aws-resources","slug":"kubernetes-production-best-practices","readingTime":"6 min read","excerpt":"Running a container in Kubernetes and running a production workload in Kubernetes are different disciplines. The gap between  and a service that survives node failures, deployment rollouts, and traffic spikes without use…"},{"title":"Terraform Infrastructure as Code: Production Patterns and Pitfalls","description":"Production Terraform: module design, state management with S3 and DynamoDB locking, workspace strategies for multi-environment deployments, sensitive variable handling, drift detection, and the Terraform anti-patterns that cause outages.","date":"2025-05-14","category":"AWS","tags":["terraform","infrastructure as code","aws","devops","s3","modules","ci/cd"],"featured":false,"affiliateSection":"aws-resources","slug":"terraform-infrastructure-as-code","readingTime":"7 min read","excerpt":"Terraform is the industry-standard tool for Infrastructure as Code (IaC) — defining cloud infrastructure as declarative HCL configuration that can be version-controlled, reviewed, and applied reproducibly. The value prop…"}]},"__N_SSG":true},"page":"/blog/[slug]","query":{"slug":"aws-high-traffic-architecture"},"buildId":"rpFn_jslWZ9qPkJwor7RD","isFallback":false,"gsp":true,"scriptLoader":[]}</script></body></html>

@@ -1,0 +1,289 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8" data-next-head=""/><meta name="viewport" content="width=device-width" data-next-head=""/><title data-next-head="">Feature Flags and Progressive Delivery: Safe Releases at Scale<!-- --> | CodeSprintPro</title><meta name="description" content="Production feature flag implementation: flag evaluation architecture, percentage rollouts, user targeting, kill switches, flag lifecycle management, OpenFeature SDK, LaunchDarkly patterns, and how progressive delivery eliminates release fear." data-next-head=""/><meta name="author" content="Sachin Sarawgi" data-next-head=""/><link rel="canonical" href="https://codesprintpro.com/blog/feature-flags-progressive-delivery/" data-next-head=""/><meta property="og:type" content="article" data-next-head=""/><meta property="og:title" content="Feature Flags and Progressive Delivery: Safe Releases at Scale" data-next-head=""/><meta property="og:description" content="Production feature flag implementation: flag evaluation architecture, percentage rollouts, user targeting, kill switches, flag lifecycle management, OpenFeature SDK, LaunchDarkly patterns, and how progressive delivery eliminates release fear." data-next-head=""/><meta property="og:url" content="https://codesprintpro.com/blog/feature-flags-progressive-delivery/" data-next-head=""/><meta property="og:image" content="https://codesprintpro.com/images/og-default.jpg" data-next-head=""/><meta property="og:site_name" content="CodeSprintPro" data-next-head=""/><meta property="article:published_time" content="2025-05-19" data-next-head=""/><meta property="article:author" content="Sachin Sarawgi" data-next-head=""/><meta property="article:section" content="System Design" data-next-head=""/><meta property="article:tag" content="feature flags" data-next-head=""/><meta property="article:tag" content="progressive delivery" data-next-head=""/><meta property="article:tag" content="deployment" data-next-head=""/><meta property="article:tag" content="system design" data-next-head=""/><meta property="article:tag" content="spring boot" data-next-head=""/><meta property="article:tag" content="launchdarkly" data-next-head=""/><meta property="article:tag" content="openfeature" data-next-head=""/><meta name="twitter:card" content="summary_large_image" data-next-head=""/><meta name="twitter:title" content="Feature Flags and Progressive Delivery: Safe Releases at Scale" data-next-head=""/><meta name="twitter:description" content="Production feature flag implementation: flag evaluation architecture, percentage rollouts, user targeting, kill switches, flag lifecycle management, OpenFeature SDK, LaunchDarkly patterns, and how progressive delivery eliminates release fear." data-next-head=""/><meta name="twitter:image" content="https://codesprintpro.com/images/og-default.jpg" data-next-head=""/><script type="application/ld+json" data-next-head="">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Feature Flags and Progressive Delivery: Safe Releases at Scale","description":"Production feature flag implementation: flag evaluation architecture, percentage rollouts, user targeting, kill switches, flag lifecycle management, OpenFeature SDK, LaunchDarkly patterns, and how progressive delivery eliminates release fear.","image":"https://codesprintpro.com/images/og-default.jpg","datePublished":"2025-05-19","dateModified":"2025-05-19","author":{"@type":"Person","name":"Sachin Sarawgi","url":"https://codesprintpro.com","sameAs":["https://www.linkedin.com/in/sachin-sarawgi/","https://github.com/codesprintpro","https://medium.com/@codesprintpro"]},"publisher":{"@type":"Organization","name":"CodeSprintPro","url":"https://codesprintpro.com","logo":{"@type":"ImageObject","url":"https://codesprintpro.com/favicon/favicon-96x96.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codesprintpro.com/blog/feature-flags-progressive-delivery/"},"keywords":"feature flags, progressive delivery, deployment, system design, spring boot, launchdarkly, openfeature","articleSection":"System Design"}</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerPolicy="no-referrer"/><script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script><link rel="preload" href="/_next/static/media/e4af272ccee01ff0-s.p.woff2" as="font" type="font/woff2" crossorigin="anonymous" data-next-font="size-adjust"/><link rel="preload" href="/_next/static/css/735d4373f93910ca.css" as="style"/><link rel="stylesheet" href="/_next/static/css/735d4373f93910ca.css" data-n-g=""/><noscript data-n-css=""></noscript><script defer="" nomodule="" src="/_next/static/chunks/polyfills-42372ed130431b0a.js"></script><script src="/_next/static/chunks/webpack-11a4a2dad04962bb.js" defer=""></script><script src="/_next/static/chunks/framework-1ce91eb6f9ecda85.js" defer=""></script><script src="/_next/static/chunks/main-c7f4109f032d7b6e.js" defer=""></script><script src="/_next/static/chunks/pages/_app-1a852bd9e38c70ab.js" defer=""></script><script src="/_next/static/chunks/730-db7827467817f501.js" defer=""></script><script src="/_next/static/chunks/90-1cd4611704c3dbe0.js" defer=""></script><script src="/_next/static/chunks/440-29f4b99a44e744b5.js" defer=""></script><script src="/_next/static/chunks/pages/blog/%5Bslug%5D-0c1b14a33d5e05ee.js" defer=""></script><script src="/_next/static/rpFn_jslWZ9qPkJwor7RD/_buildManifest.js" defer=""></script><script src="/_next/static/rpFn_jslWZ9qPkJwor7RD/_ssgManifest.js" defer=""></script></head><body><div id="__next"><main class="__className_f367f3"><div class="min-h-screen bg-white"><nav class="fixed w-full z-50 transition-all duration-300 bg-white shadow-md" style="transform:translateY(-100px) translateZ(0)"><div class="container mx-auto px-4 sm:px-6 lg:px-8"><div class="flex items-center justify-between h-16"><a class="text-xl font-bold transition-colors text-blue-600" href="/">CodeSprintPro</a><div class="hidden md:flex items-center space-x-8"><a class="text-sm font-medium transition-colors text-blue-600" href="/blog/">Blog</a><a class="text-sm font-medium transition-colors text-gray-600 hover:text-blue-600" href="/#about">About</a><a class="text-sm font-medium transition-colors text-gray-600 hover:text-blue-600" href="/#portfolio">Portfolio</a><a class="text-sm font-medium transition-colors text-gray-600 hover:text-blue-600" href="/#contact">Contact</a></div><button class="md:hidden p-2 rounded-lg transition-colors hover:bg-gray-100 text-gray-600" aria-label="Toggle mobile menu"><svg class="w-6 h-6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor"><path d="M4 6h16M4 12h16M4 18h16"></path></svg></button></div></div></nav><div class="pt-20"><div class="bg-gradient-to-br from-gray-900 to-blue-950 py-16"><div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl"><nav class="flex items-center gap-2 text-sm text-gray-400 mb-6"><a class="hover:text-white transition-colors" href="/">Home</a><span>/</span><a class="hover:text-white transition-colors" href="/blog/">Blog</a><span>/</span><span class="text-gray-300 truncate max-w-xs">Feature Flags and Progressive Delivery: Safe Releases at Scale</span></nav><span class="inline-block text-xs font-semibold px-3 py-1 rounded-full bg-blue-100 text-blue-700 mb-4">System Design</span><h1 class="text-3xl md:text-5xl font-bold text-white mb-4 leading-tight">Feature Flags and Progressive Delivery: Safe Releases at Scale</h1><p class="text-gray-300 text-lg mb-6 max-w-3xl">Production feature flag implementation: flag evaluation architecture, percentage rollouts, user targeting, kill switches, flag lifecycle management, OpenFeature SDK, LaunchDarkly patterns, and how progressive delivery eliminates release fear.</p><div class="flex flex-wrap items-center gap-4 text-gray-400 text-sm"><span class="flex items-center gap-1.5"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>Sachin Sarawgi</span><span>·</span><span>May 19, 2025</span><span>·</span><span class="flex items-center gap-1"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>7 min read</span></div><div class="flex flex-wrap gap-2 mt-4"><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->feature flags</span><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->progressive delivery</span><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->deployment</span><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->system design</span><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->spring boot</span><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->launchdarkly</span><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->openfeature</span></div></div></div><div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl py-12"><div class="flex gap-12"><div class="flex-1 min-w-0"><article class="prose prose-lg max-w-none prose-headings:text-gray-900 prose-headings:font-bold prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-4 prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3 prose-p:text-gray-700 prose-p:leading-relaxed prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline prose-strong:text-gray-900 prose-blockquote:border-blue-600 prose-blockquote:text-gray-600 prose-code:text-blue-700 prose-code:bg-blue-50 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-sm prose-code:before:content-none prose-code:after:content-none prose-pre:rounded-xl prose-img:rounded-xl prose-img:shadow-md prose-table:text-sm prose-th:bg-gray-100 prose-th:text-gray-700"><p>Feature flags — also called feature toggles or feature switches — decouple code deployment from feature release. You deploy code to production with the new feature disabled. When you're ready, you enable it for 1% of users, watch metrics, enable for 10%, verify, then 100%. If something goes wrong, you flip a switch and it's gone — no rollback deploy, no database migration, no 2am deployment.</p>
+<p>At scale, feature flags become a core part of your deployment infrastructure. Companies like Facebook, LinkedIn, and Spotify deploy dozens of times per day, with every significant change behind a feature flag. This article covers the implementation patterns, not the philosophy.</p>
+<h2>Flag Types and Use Cases</h2>
+<pre><code>Release flags:
+  → Hide incomplete features in production (trunk-based development)
+  → "newCheckoutFlow": false in production, code exists but inaccessible
+
+Kill switches:
+  → Emergency disablement of a feature causing incidents
+  → "paymentService": false → fallback to manual processing
+
+Ops flags:
+  → Control infrastructure behavior (circuit breakers, cache TTLs)
+  → "enableRedisCaching": true/false
+
+Experiment flags:
+  → A/B testing: 50% users see variant A, 50% see variant B
+  → "checkoutButtonColor": { "control": "blue", "treatment": "green" }
+
+Permission flags:
+  → Enable features for specific users (beta, premium, internal)
+  → "advancedAnalytics": enabled for { tier: "enterprise" }
+</code></pre>
+<h2>Architecture: Evaluation and Storage</h2>
+<pre><code>Flag evaluation architecture:
+
+SDK (in application) → Local cache (in-memory)
+                              ↑
+                    Background polling/streaming
+                              ↑
+                    Flag service (LaunchDarkly / Flagsmith / internal)
+                              ↑
+                    Flag storage (database / config service)
+
+Critical design constraint: Flag evaluation must be SYNCHRONOUS and LOCAL.
+Calling a remote API for each flag evaluation adds latency to every request.
+The SDK maintains a local in-memory copy of all flags, refreshed every 30s
+or via streaming (Server-Sent Events). Evaluation is a local lookup — &#x3C; 1ms.
+</code></pre>
+<h2>OpenFeature: Vendor-Neutral Flag SDK</h2>
+<p><a href="https://openfeature.dev">OpenFeature</a> is a CNCF standard for feature flag evaluation. Use it to avoid vendor lock-in:</p>
+<pre><code class="language-java">// Maven:
+// openfeature-java-sdk + provider (LaunchDarkly, Flagsmith, etc.)
+
+@Configuration
+public class FeatureFlagConfig {
+
+    @Bean
+    public OpenFeatureAPI openFeatureAPI() {
+        // Provider can be swapped without changing application code:
+        FeatureProvider provider = new LaunchDarklyProvider(
+            new LDConfig.Builder()
+                .offline(false)
+                .build(),
+            new LDClient(System.getenv("LAUNCHDARKLY_SDK_KEY"))
+        );
+
+        OpenFeatureAPI api = OpenFeatureAPI.getInstance();
+        api.setProvider(provider);
+        return api;
+    }
+
+    @Bean
+    public Client featureFlagClient(OpenFeatureAPI api) {
+        return api.getClient("order-service");
+    }
+}
+
+// Flag evaluation in services:
+@Service
+public class CheckoutService {
+
+    @Autowired
+    private Client featureFlags;
+
+    public CheckoutResult checkout(CartRequest cart, User user) {
+        // Create evaluation context from the user:
+        EvaluationContext context = new ImmutableContext(user.getId(), Map.of(
+            "email", Value.objectToValue(user.getEmail()),
+            "tier", Value.objectToValue(user.getTier()),
+            "region", Value.objectToValue(user.getRegion()),
+            "betaUser", Value.objectToValue(user.isBetaOptIn())
+        ));
+
+        // Boolean flag evaluation (with default):
+        boolean useNewCheckoutFlow = featureFlags.getBooleanValue(
+            "new-checkout-flow",
+            false,  // Default: old flow (fail-safe)
+            context
+        );
+
+        if (useNewCheckoutFlow) {
+            return newCheckoutService.process(cart);
+        } else {
+            return legacyCheckoutService.process(cart);
+        }
+    }
+
+    // Multivariate flag (A/B/C testing):
+    public String getRecommendationAlgorithm(User user) {
+        EvaluationContext ctx = buildContext(user);
+        return featureFlags.getStringValue(
+            "recommendation-algorithm",
+            "collaborative-filtering",  // Default
+            ctx
+        );
+        // Returns: "collaborative-filtering", "content-based", or "hybrid"
+        // based on targeting rules configured in the flag service
+    }
+}
+</code></pre>
+<h2>Percentage Rollouts</h2>
+<pre><code>Percentage rollout implementation:
+
+User ID: "user-12345"
+Flag name: "new-checkout-flow"
+Target percentage: 10%
+
+Hash: SHA256("user-12345" + "new-checkout-flow")
+    = a1b2c3d4e5... (deterministic)
+
+Bucket: parseInt(hash[0:4], 16) % 10000 = 6521
+
+6521 / 10000 = 65.21% → User is NOT in 10% rollout (65% > 10%)
+
+Properties:
+- Same user always gets same result (consistent experience)
+- Increasing percentage from 10% → 20% adds new users, keeps existing 10% in
+- No server-side state needed — pure function of userId + flagName + percentage
+</code></pre>
+<pre><code class="language-java">// Simple percentage rollout without external flag service:
+@Component
+public class FeatureFlagEvaluator {
+
+    public boolean isEnabled(String flagName, String userId, int targetPercent) {
+        String input = userId + ":" + flagName;
+        int hash = Math.abs(MurmurHash3.hash32(input.getBytes())) % 10000;
+        return hash &#x3C; targetPercent * 100;
+    }
+}
+
+// Usage:
+boolean showNewUI = flagEvaluator.isEnabled("new-ui", user.getId(), 15);
+// 15% of users deterministically get the new UI
+</code></pre>
+<h2>Flag Lifecycle: Avoiding "Flag Debt"</h2>
+<p>Feature flags accumulate. A codebase with 200 flags — half of which are fully rolled out and forgotten — becomes unmaintainable. Each flag adds a branch in your code; 200 flags means thousands of untested combinations.</p>
+<pre><code>Flag lifecycle stages:
+1. Created     → default false, no targeting
+2. Testing     → enabled for QA/internal users only
+3. Canary      → 1-5% production users
+4. Rollout     → gradual increase: 10% → 25% → 50% → 100%
+5. Cleanup     → flag removed from code, flag config deleted
+</code></pre>
+<p><strong>When a flag reaches 100% rollout (or 0% = permanently disabled), it must be cleaned up.</strong> This means:</p>
+<ol>
+<li>Delete the flag from the flag service</li>
+<li>Remove the flag evaluation from code</li>
+<li>Delete the unused code path</li>
+</ol>
+<pre><code class="language-java">// Code BEFORE cleanup (flag at 100%):
+if (featureFlags.getBooleanValue("new-checkout-flow", false, context)) {
+    return newCheckoutService.process(cart);
+} else {
+    return legacyCheckoutService.process(cart);  // Dead code
+}
+
+// Code AFTER cleanup:
+return newCheckoutService.process(cart);  // Permanent — no flag check
+</code></pre>
+<p>Track flag cleanup as a first-class engineering task. Some teams use automatic expiry dates — flags that aren't cleaned up by their expiry date trigger alerts.</p>
+<h2>Kill Switches: Emergency Degradation</h2>
+<p>Kill switches are flags designed for emergency use — they should be evaluated extremely quickly and fail safe:</p>
+<pre><code class="language-java">@Service
+public class PaymentService {
+
+    @Autowired
+    private Client featureFlags;
+
+    @Autowired
+    private ManualPaymentService manualPaymentService;
+
+    public PaymentResult processPayment(PaymentRequest request) {
+        // Kill switch: if payment service is having issues, use manual fallback
+        boolean paymentServiceEnabled = featureFlags.getBooleanValue(
+            "payment-service-enabled",
+            true,   // Default TRUE — service is enabled by default
+            EvaluationContext.EMPTY  // No user context needed for kill switches
+        );
+
+        if (!paymentServiceEnabled) {
+            log.warn("Payment service kill switch active — using manual fallback");
+            return manualPaymentService.queue(request);
+        }
+
+        return stripeService.charge(request);
+    }
+}
+</code></pre>
+<p>Kill switch defaults must be <strong>safe state</strong> (what behavior is acceptable during an incident):</p>
+<ul>
+<li><code>payment-service-enabled</code>: default <code>true</code> (payments work normally)</li>
+<li><code>new-search-algorithm</code>: default <code>false</code> (new algorithm is disabled by default)</li>
+</ul>
+<p>If the flag service itself is unavailable (network partition, outage), the SDK uses cached values. If no cache exists, it uses the SDK default. Design your defaults for the worst case.</p>
+<h2>Metrics and Flag Evaluation Tracking</h2>
+<pre><code class="language-java">// Track flag evaluations for analysis:
+@Aspect
+@Component
+public class FeatureFlagMetricsAspect {
+
+    @Autowired
+    private MeterRegistry meterRegistry;
+
+    @Around("@annotation(featureFlagCheck)")
+    public Object trackFlagEvaluation(ProceedingJoinPoint joinPoint,
+                                       FeatureFlagCheck featureFlagCheck) throws Throwable {
+        String flagName = featureFlagCheck.flag();
+        Object result = joinPoint.proceed();
+
+        meterRegistry.counter("feature_flag.evaluation",
+            "flag", flagName,
+            "value", result.toString()
+        ).increment();
+
+        return result;
+    }
+}
+
+// Use in OpenFeature hooks:
+public class MetricsHook implements Hook {
+    @Override
+    public void after(HookContext ctx, FlagEvaluationDetails details, Map&#x3C;String, Object> hints) {
+        // Record every flag evaluation with its result and variant
+        metrics.record("feature_flag.evaluation", 1,
+            "flag", details.getFlagKey(),
+            "value", details.getValue().toString(),
+            "reason", details.getReason()
+        );
+    }
+}
+</code></pre>
+<p>Track flag evaluations in Grafana/Datadog, correlated with:</p>
+<ul>
+<li>Error rate (did enabling this flag increase errors?)</li>
+<li>Latency (did the new code path change P99?)</li>
+<li>Business metrics (did the A/B test variant convert better?)</li>
+</ul>
+<p>This telemetry turns flag evaluation into a decision-making tool, not just a deployment switch.</p>
+<h2>Self-Hosted vs. Managed Flag Service</h2>
+<table>
+<thead>
+<tr>
+<th>Factor</th>
+<th>Self-Hosted (Flagsmith, Unleash)</th>
+<th>Managed (LaunchDarkly, Split.io)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cost</td>
+<td>Infrastructure only ($0-$200/mo)</td>
+<td>$0-$50k/year depending on tier</td>
+</tr>
+<tr>
+<td>Setup</td>
+<td>Moderate (deploy + maintain)</td>
+<td>None (SaaS)</td>
+</tr>
+<tr>
+<td>Data privacy</td>
+<td>All data stays in your infra</td>
+<td>Data sent to vendor</td>
+</tr>
+<tr>
+<td>Reliability</td>
+<td>Your responsibility</td>
+<td>Vendor SLA (99.99%+)</td>
+</tr>
+<tr>
+<td>Features</td>
+<td>Core + open source ecosystem</td>
+<td>Full-featured (A/B stats, etc.)</td>
+</tr>
+</tbody>
+</table>
+<p>Self-host Flagsmith or Unleash if: data residency requirements, budget constraints, or &#x3C; 50 flags. Use LaunchDarkly if: large A/B testing programs, many flags, and the engineering time cost of maintaining self-hosted outweighs the subscription cost.</p>
+<p>Feature flags are an investment in deployment safety. The teams that implement them stop having "all hands on deck" deployment nights. When something goes wrong, they turn a flag off instead of rolling back a deployment. The operational maturity that comes with progressive delivery — canary deployments, A/B testing, kill switches — is only possible when code changes can be separated from feature releases.</p>
+</article><div class="my-10 rounded-xl border border-yellow-200 bg-yellow-50 p-6"><div class="flex items-center gap-2 mb-1"><span class="text-lg">📚</span><h3 class="text-base font-bold text-gray-900">Recommended Resources</h3></div><div class="space-y-4"><div class="flex items-start gap-3 bg-white rounded-lg p-4 border border-yellow-100"><div class="flex-1 min-w-0"><div class="flex items-center gap-2 flex-wrap mb-1"><span class="font-semibold text-gray-900 text-sm">System Design Interview — Alex Xu</span><span class="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-medium">Best Seller</span></div><p class="text-xs text-gray-600">Step-by-step guide to ace system design interviews with real-world examples.</p></div><a href="https://amzn.to/3TqsPRp" target="_blank" rel="noopener noreferrer" class="flex-shrink-0 text-xs bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium whitespace-nowrap">View on Amazon<!-- --> →</a></div><div class="flex items-start gap-3 bg-white rounded-lg p-4 border border-yellow-100"><div class="flex-1 min-w-0"><div class="flex items-center gap-2 flex-wrap mb-1"><span class="font-semibold text-gray-900 text-sm">Grokking System Design on Educative</span></div><p class="text-xs text-gray-600">Interactive course teaching system design with visual diagrams and practice problems.</p></div><a href="https://www.educative.io/courses/grokking-the-system-design-interview" target="_blank" rel="noopener noreferrer" class="flex-shrink-0 text-xs bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium whitespace-nowrap">View Course<!-- --> →</a></div><div class="flex items-start gap-3 bg-white rounded-lg p-4 border border-yellow-100"><div class="flex-1 min-w-0"><div class="flex items-center gap-2 flex-wrap mb-1"><span class="font-semibold text-gray-900 text-sm">Designing Data-Intensive Applications</span></div><p class="text-xs text-gray-600">Martin Kleppmann&#x27;s book is essential reading for any system design role.</p></div><a href="https://amzn.to/3RyKzOA" target="_blank" rel="noopener noreferrer" class="flex-shrink-0 text-xs bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium whitespace-nowrap">View on Amazon<!-- --> →</a></div></div></div><div class="mt-10 pt-8 border-t border-gray-100"><p class="text-sm text-gray-500 mb-3">Found this useful? Share it:</p><div class="flex gap-3"><a href="https://twitter.com/intent/tweet?text=Feature%20Flags%20and%20Progressive%20Delivery%3A%20Safe%20Releases%20at%20Scale&amp;url=https%3A%2F%2Fcodesprintpro.com%2Fblog%2Ffeature-flags-progressive-delivery%2F" target="_blank" rel="noopener noreferrer" class="text-xs bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors">Share on X/Twitter</a><a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fcodesprintpro.com%2Fblog%2Ffeature-flags-progressive-delivery%2F" target="_blank" rel="noopener noreferrer" class="text-xs bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">Share on LinkedIn</a></div></div></div><aside class="hidden lg:block w-64 flex-shrink-0"><nav class="hidden lg:block sticky top-24"><h4 class="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-3">On This Page</h4><ul class="space-y-1"><li class=""><a href="#flag-types-and-use-cases" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Flag Types and Use Cases</a></li><li class=""><a href="#architecture-evaluation-and-storage" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Architecture: Evaluation and Storage</a></li><li class=""><a href="#openfeature-vendor-neutral-flag-sdk" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">OpenFeature: Vendor-Neutral Flag SDK</a></li><li class=""><a href="#percentage-rollouts" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Percentage Rollouts</a></li><li class=""><a href="#flag-lifecycle-avoiding-flag-debt" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Flag Lifecycle: Avoiding &quot;Flag Debt&quot;</a></li><li class=""><a href="#kill-switches-emergency-degradation" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Kill Switches: Emergency Degradation</a></li><li class=""><a href="#metrics-and-flag-evaluation-tracking" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Metrics and Flag Evaluation Tracking</a></li><li class=""><a href="#self-hosted-vs-managed-flag-service" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Self-Hosted vs. Managed Flag Service</a></li></ul></nav></aside></div><div class="mt-16 pt-10 border-t border-gray-100"><h2 class="text-2xl font-bold text-gray-900 mb-6">Related Articles</h2><div class="grid grid-cols-1 md:grid-cols-3 gap-6"><a href="/blog/observability-opentelemetry-production/"><article class="group bg-white rounded-xl border border-gray-200 p-6 h-full cursor-pointer hover:border-blue-300 hover:shadow-lg transition-all"><span class="inline-block text-xs font-semibold px-3 py-1 rounded-full mb-3 bg-blue-100 text-blue-700">System Design</span><h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors leading-snug">Building Production Observability with OpenTelemetry and Grafana Stack</h3><p class="text-gray-600 text-sm mb-4 line-clamp-3">Observability is not the same as monitoring. Monitoring tells you something is wrong. Observability lets you understand why — by exploring system state through metrics, traces, and logs without needing to know in advance…</p><div class="flex items-center justify-between text-xs text-gray-400"><span>Jul 3, 2025</span><span class="flex items-center gap-1"><svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>6 min read</span></div><div class="mt-3 flex flex-wrap gap-1"><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->observability</span><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->opentelemetry</span><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->prometheus</span></div></article></a><a href="/blog/event-sourcing-cqrs-production/"><article class="group bg-white rounded-xl border border-gray-200 p-6 h-full cursor-pointer hover:border-blue-300 hover:shadow-lg transition-all"><span class="inline-block text-xs font-semibold px-3 py-1 rounded-full mb-3 bg-blue-100 text-blue-700">System Design</span><h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors leading-snug">Event Sourcing and CQRS in Production: Beyond the Theory</h3><p class="text-gray-600 text-sm mb-4 line-clamp-3">Event sourcing is one of those patterns that looks elegant in conference talks and becomes surprisingly complex in production systems. The theory — store events instead of state, derive state by replaying events — is sou…</p><div class="flex items-center justify-between text-xs text-gray-400"><span>Jun 23, 2025</span><span class="flex items-center gap-1"><svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>7 min read</span></div><div class="mt-3 flex flex-wrap gap-1"><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->event sourcing</span><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->cqrs</span><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->system design</span></div></article></a><a href="/blog/grpc-vs-rest-vs-graphql/"><article class="group bg-white rounded-xl border border-gray-200 p-6 h-full cursor-pointer hover:border-blue-300 hover:shadow-lg transition-all"><span class="inline-block text-xs font-semibold px-3 py-1 rounded-full mb-3 bg-blue-100 text-blue-700">System Design</span><h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors leading-snug">gRPC vs REST vs GraphQL: Choosing the Right API Protocol</h3><p class="text-gray-600 text-sm mb-4 line-clamp-3">API protocol selection has a longer lifespan than almost any other technical decision. REST APIs from 2010 are still running in production. gRPC services chosen for internal communication in 2018 are tightly coupled to t…</p><div class="flex items-center justify-between text-xs text-gray-400"><span>Jun 18, 2025</span><span class="flex items-center gap-1"><svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>7 min read</span></div><div class="mt-3 flex flex-wrap gap-1"><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->grpc</span><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->rest</span><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->graphql</span></div></article></a></div></div><div class="mt-12 text-center"><a class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium transition-colors" href="/blog/">← Back to all articles</a></div></div></div><footer class="bg-gray-900 text-white py-12"><div class="container mx-auto px-4 sm:px-6 lg:px-8"><div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8"><div class="col-span-1 md:col-span-1"><div><a class="text-xl font-bold block mb-3 text-white hover:text-blue-400 transition-colors" href="/">CodeSprintPro</a></div><p class="text-gray-400 text-sm mb-4 leading-relaxed">Deep-dive technical content on System Design, Java, Databases, AI/ML, and AWS — by Sachin Sarawgi.</p><div class="flex space-x-4"><a href="https://github.com/codesprintpro" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors" aria-label="Visit GitHub profile"><i class="fab fa-github text-xl"></i></a><a href="https://www.linkedin.com/in/sachin-sarawgi/" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors" aria-label="Visit LinkedIn profile"><i class="fab fa-linkedin text-xl"></i></a><a href="https://medium.com/@codesprintpro" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors" aria-label="Visit Medium profile"><i class="fab fa-medium text-xl"></i></a></div></div><div><h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 mb-4">Quick Links</h3><ul class="space-y-2"><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">Blog</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/#about">About</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/#portfolio">Portfolio</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/#contact">Contact</a></div></li></ul></div><div><h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 mb-4">Categories</h3><ul class="space-y-2"><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">System Design</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">Java</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">Databases</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">AI/ML</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">AWS</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">Messaging</a></div></li></ul></div><div><h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 mb-4">Contact</h3><ul class="space-y-2 text-gray-400 text-sm"><li><a href="mailto:sachinsarawgi201143@gmail.com" class="hover:text-white transition-colors flex items-center gap-2"><i class="fas fa-envelope"></i> Email</a></li><li><a href="https://www.linkedin.com/in/sachin-sarawgi/" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors flex items-center gap-2"><i class="fab fa-linkedin"></i> LinkedIn</a></li><li><a href="https://github.com/codesprintpro" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors flex items-center gap-2"><i class="fab fa-github"></i> GitHub</a></li></ul></div></div><div class="border-t border-gray-800 pt-6 flex flex-col md:flex-row justify-between items-center gap-2"><p class="text-gray-500 text-sm">© <!-- -->2026<!-- --> CodeSprintPro · Sachin Sarawgi. All rights reserved.</p><p class="text-gray-600 text-xs">Built with Next.js · TailwindCSS · Deployed on GitHub Pages</p></div></div></footer></div></main></div><script id="__NEXT_DATA__" type="application/json">{"props":{"pageProps":{"post":{"title":"Feature Flags and Progressive Delivery: Safe Releases at Scale","description":"Production feature flag implementation: flag evaluation architecture, percentage rollouts, user targeting, kill switches, flag lifecycle management, OpenFeature SDK, LaunchDarkly patterns, and how progressive delivery eliminates release fear.","date":"2025-05-19","category":"System Design","tags":["feature flags","progressive delivery","deployment","system design","spring boot","launchdarkly","openfeature"],"featured":false,"affiliateSection":"system-design-courses","slug":"feature-flags-progressive-delivery","readingTime":"7 min read","excerpt":"Feature flags — also called feature toggles or feature switches — decouple code deployment from feature release. You deploy code to production with the new feature disabled. When you're ready, you enable it for 1% of use…","contentHtml":"\u003cp\u003eFeature flags — also called feature toggles or feature switches — decouple code deployment from feature release. You deploy code to production with the new feature disabled. When you're ready, you enable it for 1% of users, watch metrics, enable for 10%, verify, then 100%. If something goes wrong, you flip a switch and it's gone — no rollback deploy, no database migration, no 2am deployment.\u003c/p\u003e\n\u003cp\u003eAt scale, feature flags become a core part of your deployment infrastructure. Companies like Facebook, LinkedIn, and Spotify deploy dozens of times per day, with every significant change behind a feature flag. This article covers the implementation patterns, not the philosophy.\u003c/p\u003e\n\u003ch2\u003eFlag Types and Use Cases\u003c/h2\u003e\n\u003cpre\u003e\u003ccode\u003eRelease flags:\n  → Hide incomplete features in production (trunk-based development)\n  → \"newCheckoutFlow\": false in production, code exists but inaccessible\n\nKill switches:\n  → Emergency disablement of a feature causing incidents\n  → \"paymentService\": false → fallback to manual processing\n\nOps flags:\n  → Control infrastructure behavior (circuit breakers, cache TTLs)\n  → \"enableRedisCaching\": true/false\n\nExperiment flags:\n  → A/B testing: 50% users see variant A, 50% see variant B\n  → \"checkoutButtonColor\": { \"control\": \"blue\", \"treatment\": \"green\" }\n\nPermission flags:\n  → Enable features for specific users (beta, premium, internal)\n  → \"advancedAnalytics\": enabled for { tier: \"enterprise\" }\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch2\u003eArchitecture: Evaluation and Storage\u003c/h2\u003e\n\u003cpre\u003e\u003ccode\u003eFlag evaluation architecture:\n\nSDK (in application) → Local cache (in-memory)\n                              ↑\n                    Background polling/streaming\n                              ↑\n                    Flag service (LaunchDarkly / Flagsmith / internal)\n                              ↑\n                    Flag storage (database / config service)\n\nCritical design constraint: Flag evaluation must be SYNCHRONOUS and LOCAL.\nCalling a remote API for each flag evaluation adds latency to every request.\nThe SDK maintains a local in-memory copy of all flags, refreshed every 30s\nor via streaming (Server-Sent Events). Evaluation is a local lookup — \u0026#x3C; 1ms.\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch2\u003eOpenFeature: Vendor-Neutral Flag SDK\u003c/h2\u003e\n\u003cp\u003e\u003ca href=\"https://openfeature.dev\"\u003eOpenFeature\u003c/a\u003e is a CNCF standard for feature flag evaluation. Use it to avoid vendor lock-in:\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-java\"\u003e// Maven:\n// openfeature-java-sdk + provider (LaunchDarkly, Flagsmith, etc.)\n\n@Configuration\npublic class FeatureFlagConfig {\n\n    @Bean\n    public OpenFeatureAPI openFeatureAPI() {\n        // Provider can be swapped without changing application code:\n        FeatureProvider provider = new LaunchDarklyProvider(\n            new LDConfig.Builder()\n                .offline(false)\n                .build(),\n            new LDClient(System.getenv(\"LAUNCHDARKLY_SDK_KEY\"))\n        );\n\n        OpenFeatureAPI api = OpenFeatureAPI.getInstance();\n        api.setProvider(provider);\n        return api;\n    }\n\n    @Bean\n    public Client featureFlagClient(OpenFeatureAPI api) {\n        return api.getClient(\"order-service\");\n    }\n}\n\n// Flag evaluation in services:\n@Service\npublic class CheckoutService {\n\n    @Autowired\n    private Client featureFlags;\n\n    public CheckoutResult checkout(CartRequest cart, User user) {\n        // Create evaluation context from the user:\n        EvaluationContext context = new ImmutableContext(user.getId(), Map.of(\n            \"email\", Value.objectToValue(user.getEmail()),\n            \"tier\", Value.objectToValue(user.getTier()),\n            \"region\", Value.objectToValue(user.getRegion()),\n            \"betaUser\", Value.objectToValue(user.isBetaOptIn())\n        ));\n\n        // Boolean flag evaluation (with default):\n        boolean useNewCheckoutFlow = featureFlags.getBooleanValue(\n            \"new-checkout-flow\",\n            false,  // Default: old flow (fail-safe)\n            context\n        );\n\n        if (useNewCheckoutFlow) {\n            return newCheckoutService.process(cart);\n        } else {\n            return legacyCheckoutService.process(cart);\n        }\n    }\n\n    // Multivariate flag (A/B/C testing):\n    public String getRecommendationAlgorithm(User user) {\n        EvaluationContext ctx = buildContext(user);\n        return featureFlags.getStringValue(\n            \"recommendation-algorithm\",\n            \"collaborative-filtering\",  // Default\n            ctx\n        );\n        // Returns: \"collaborative-filtering\", \"content-based\", or \"hybrid\"\n        // based on targeting rules configured in the flag service\n    }\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch2\u003ePercentage Rollouts\u003c/h2\u003e\n\u003cpre\u003e\u003ccode\u003ePercentage rollout implementation:\n\nUser ID: \"user-12345\"\nFlag name: \"new-checkout-flow\"\nTarget percentage: 10%\n\nHash: SHA256(\"user-12345\" + \"new-checkout-flow\")\n    = a1b2c3d4e5... (deterministic)\n\nBucket: parseInt(hash[0:4], 16) % 10000 = 6521\n\n6521 / 10000 = 65.21% → User is NOT in 10% rollout (65% \u003e 10%)\n\nProperties:\n- Same user always gets same result (consistent experience)\n- Increasing percentage from 10% → 20% adds new users, keeps existing 10% in\n- No server-side state needed — pure function of userId + flagName + percentage\n\u003c/code\u003e\u003c/pre\u003e\n\u003cpre\u003e\u003ccode class=\"language-java\"\u003e// Simple percentage rollout without external flag service:\n@Component\npublic class FeatureFlagEvaluator {\n\n    public boolean isEnabled(String flagName, String userId, int targetPercent) {\n        String input = userId + \":\" + flagName;\n        int hash = Math.abs(MurmurHash3.hash32(input.getBytes())) % 10000;\n        return hash \u0026#x3C; targetPercent * 100;\n    }\n}\n\n// Usage:\nboolean showNewUI = flagEvaluator.isEnabled(\"new-ui\", user.getId(), 15);\n// 15% of users deterministically get the new UI\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch2\u003eFlag Lifecycle: Avoiding \"Flag Debt\"\u003c/h2\u003e\n\u003cp\u003eFeature flags accumulate. A codebase with 200 flags — half of which are fully rolled out and forgotten — becomes unmaintainable. Each flag adds a branch in your code; 200 flags means thousands of untested combinations.\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003eFlag lifecycle stages:\n1. Created     → default false, no targeting\n2. Testing     → enabled for QA/internal users only\n3. Canary      → 1-5% production users\n4. Rollout     → gradual increase: 10% → 25% → 50% → 100%\n5. Cleanup     → flag removed from code, flag config deleted\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e\u003cstrong\u003eWhen a flag reaches 100% rollout (or 0% = permanently disabled), it must be cleaned up.\u003c/strong\u003e This means:\u003c/p\u003e\n\u003col\u003e\n\u003cli\u003eDelete the flag from the flag service\u003c/li\u003e\n\u003cli\u003eRemove the flag evaluation from code\u003c/li\u003e\n\u003cli\u003eDelete the unused code path\u003c/li\u003e\n\u003c/ol\u003e\n\u003cpre\u003e\u003ccode class=\"language-java\"\u003e// Code BEFORE cleanup (flag at 100%):\nif (featureFlags.getBooleanValue(\"new-checkout-flow\", false, context)) {\n    return newCheckoutService.process(cart);\n} else {\n    return legacyCheckoutService.process(cart);  // Dead code\n}\n\n// Code AFTER cleanup:\nreturn newCheckoutService.process(cart);  // Permanent — no flag check\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eTrack flag cleanup as a first-class engineering task. Some teams use automatic expiry dates — flags that aren't cleaned up by their expiry date trigger alerts.\u003c/p\u003e\n\u003ch2\u003eKill Switches: Emergency Degradation\u003c/h2\u003e\n\u003cp\u003eKill switches are flags designed for emergency use — they should be evaluated extremely quickly and fail safe:\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-java\"\u003e@Service\npublic class PaymentService {\n\n    @Autowired\n    private Client featureFlags;\n\n    @Autowired\n    private ManualPaymentService manualPaymentService;\n\n    public PaymentResult processPayment(PaymentRequest request) {\n        // Kill switch: if payment service is having issues, use manual fallback\n        boolean paymentServiceEnabled = featureFlags.getBooleanValue(\n            \"payment-service-enabled\",\n            true,   // Default TRUE — service is enabled by default\n            EvaluationContext.EMPTY  // No user context needed for kill switches\n        );\n\n        if (!paymentServiceEnabled) {\n            log.warn(\"Payment service kill switch active — using manual fallback\");\n            return manualPaymentService.queue(request);\n        }\n\n        return stripeService.charge(request);\n    }\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eKill switch defaults must be \u003cstrong\u003esafe state\u003c/strong\u003e (what behavior is acceptable during an incident):\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ccode\u003epayment-service-enabled\u003c/code\u003e: default \u003ccode\u003etrue\u003c/code\u003e (payments work normally)\u003c/li\u003e\n\u003cli\u003e\u003ccode\u003enew-search-algorithm\u003c/code\u003e: default \u003ccode\u003efalse\u003c/code\u003e (new algorithm is disabled by default)\u003c/li\u003e\n\u003c/ul\u003e\n\u003cp\u003eIf the flag service itself is unavailable (network partition, outage), the SDK uses cached values. If no cache exists, it uses the SDK default. Design your defaults for the worst case.\u003c/p\u003e\n\u003ch2\u003eMetrics and Flag Evaluation Tracking\u003c/h2\u003e\n\u003cpre\u003e\u003ccode class=\"language-java\"\u003e// Track flag evaluations for analysis:\n@Aspect\n@Component\npublic class FeatureFlagMetricsAspect {\n\n    @Autowired\n    private MeterRegistry meterRegistry;\n\n    @Around(\"@annotation(featureFlagCheck)\")\n    public Object trackFlagEvaluation(ProceedingJoinPoint joinPoint,\n                                       FeatureFlagCheck featureFlagCheck) throws Throwable {\n        String flagName = featureFlagCheck.flag();\n        Object result = joinPoint.proceed();\n\n        meterRegistry.counter(\"feature_flag.evaluation\",\n            \"flag\", flagName,\n            \"value\", result.toString()\n        ).increment();\n\n        return result;\n    }\n}\n\n// Use in OpenFeature hooks:\npublic class MetricsHook implements Hook {\n    @Override\n    public void after(HookContext ctx, FlagEvaluationDetails details, Map\u0026#x3C;String, Object\u003e hints) {\n        // Record every flag evaluation with its result and variant\n        metrics.record(\"feature_flag.evaluation\", 1,\n            \"flag\", details.getFlagKey(),\n            \"value\", details.getValue().toString(),\n            \"reason\", details.getReason()\n        );\n    }\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eTrack flag evaluations in Grafana/Datadog, correlated with:\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eError rate (did enabling this flag increase errors?)\u003c/li\u003e\n\u003cli\u003eLatency (did the new code path change P99?)\u003c/li\u003e\n\u003cli\u003eBusiness metrics (did the A/B test variant convert better?)\u003c/li\u003e\n\u003c/ul\u003e\n\u003cp\u003eThis telemetry turns flag evaluation into a decision-making tool, not just a deployment switch.\u003c/p\u003e\n\u003ch2\u003eSelf-Hosted vs. Managed Flag Service\u003c/h2\u003e\n\u003ctable\u003e\n\u003cthead\u003e\n\u003ctr\u003e\n\u003cth\u003eFactor\u003c/th\u003e\n\u003cth\u003eSelf-Hosted (Flagsmith, Unleash)\u003c/th\u003e\n\u003cth\u003eManaged (LaunchDarkly, Split.io)\u003c/th\u003e\n\u003c/tr\u003e\n\u003c/thead\u003e\n\u003ctbody\u003e\n\u003ctr\u003e\n\u003ctd\u003eCost\u003c/td\u003e\n\u003ctd\u003eInfrastructure only ($0-$200/mo)\u003c/td\u003e\n\u003ctd\u003e$0-$50k/year depending on tier\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003eSetup\u003c/td\u003e\n\u003ctd\u003eModerate (deploy + maintain)\u003c/td\u003e\n\u003ctd\u003eNone (SaaS)\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003eData privacy\u003c/td\u003e\n\u003ctd\u003eAll data stays in your infra\u003c/td\u003e\n\u003ctd\u003eData sent to vendor\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003eReliability\u003c/td\u003e\n\u003ctd\u003eYour responsibility\u003c/td\u003e\n\u003ctd\u003eVendor SLA (99.99%+)\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003eFeatures\u003c/td\u003e\n\u003ctd\u003eCore + open source ecosystem\u003c/td\u003e\n\u003ctd\u003eFull-featured (A/B stats, etc.)\u003c/td\u003e\n\u003c/tr\u003e\n\u003c/tbody\u003e\n\u003c/table\u003e\n\u003cp\u003eSelf-host Flagsmith or Unleash if: data residency requirements, budget constraints, or \u0026#x3C; 50 flags. Use LaunchDarkly if: large A/B testing programs, many flags, and the engineering time cost of maintaining self-hosted outweighs the subscription cost.\u003c/p\u003e\n\u003cp\u003eFeature flags are an investment in deployment safety. The teams that implement them stop having \"all hands on deck\" deployment nights. When something goes wrong, they turn a flag off instead of rolling back a deployment. The operational maturity that comes with progressive delivery — canary deployments, A/B testing, kill switches — is only possible when code changes can be separated from feature releases.\u003c/p\u003e\n","tableOfContents":[{"id":"flag-types-and-use-cases","text":"Flag Types and Use Cases","level":2},{"id":"architecture-evaluation-and-storage","text":"Architecture: Evaluation and Storage","level":2},{"id":"openfeature-vendor-neutral-flag-sdk","text":"OpenFeature: Vendor-Neutral Flag SDK","level":2},{"id":"percentage-rollouts","text":"Percentage Rollouts","level":2},{"id":"flag-lifecycle-avoiding-flag-debt","text":"Flag Lifecycle: Avoiding \"Flag Debt\"","level":2},{"id":"kill-switches-emergency-degradation","text":"Kill Switches: Emergency Degradation","level":2},{"id":"metrics-and-flag-evaluation-tracking","text":"Metrics and Flag Evaluation Tracking","level":2},{"id":"self-hosted-vs-managed-flag-service","text":"Self-Hosted vs. Managed Flag Service","level":2}]},"relatedPosts":[{"title":"Building Production Observability with OpenTelemetry and Grafana Stack","description":"End-to-end observability implementation: distributed tracing with OpenTelemetry, metrics with Prometheus, structured logging with Loki, and the dashboards and alerts that actually help during incidents.","date":"2025-07-03","category":"System Design","tags":["observability","opentelemetry","prometheus","grafana","loki","tracing","spring boot","monitoring"],"featured":false,"affiliateSection":"system-design-courses","slug":"observability-opentelemetry-production","readingTime":"6 min read","excerpt":"Observability is not the same as monitoring. Monitoring tells you something is wrong. Observability lets you understand why — by exploring system state through metrics, traces, and logs without needing to know in advance…"},{"title":"Event Sourcing and CQRS in Production: Beyond the Theory","description":"What event sourcing actually looks like in production Java systems: event store design, snapshot strategies, projection rebuilding, CQRS read model synchronization, and the operational challenges nobody talks about.","date":"2025-06-23","category":"System Design","tags":["event sourcing","cqrs","system design","java","distributed systems","kafka","spring boot"],"featured":false,"affiliateSection":"distributed-systems-books","slug":"event-sourcing-cqrs-production","readingTime":"7 min read","excerpt":"Event sourcing is one of those patterns that looks elegant in conference talks and becomes surprisingly complex in production systems. The theory — store events instead of state, derive state by replaying events — is sou…"},{"title":"gRPC vs REST vs GraphQL: Choosing the Right API Protocol","description":"A technical comparison of REST, gRPC, and GraphQL across performance, developer experience, schema evolution, streaming, and real production use cases. When each protocol wins and where each falls short.","date":"2025-06-18","category":"System Design","tags":["grpc","rest","graphql","api design","system design","microservices","protocol buffers"],"featured":false,"affiliateSection":"system-design-courses","slug":"grpc-vs-rest-vs-graphql","readingTime":"7 min read","excerpt":"API protocol selection has a longer lifespan than almost any other technical decision. REST APIs from 2010 are still running in production. gRPC services chosen for internal communication in 2018 are tightly coupled to t…"}]},"__N_SSG":true},"page":"/blog/[slug]","query":{"slug":"feature-flags-progressive-delivery"},"buildId":"rpFn_jslWZ9qPkJwor7RD","isFallback":false,"gsp":true,"scriptLoader":[]}</script></body></html>

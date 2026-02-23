@@ -1,0 +1,370 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8" data-next-head=""/><meta name="viewport" content="width=device-width" data-next-head=""/><title data-next-head="">Spring Security OAuth2 and JWT: Production Implementation Guide<!-- --> | CodeSprintPro</title><meta name="description" content="Complete Spring Security OAuth2 implementation: JWT token validation, Resource Server configuration, method-level security, custom UserDetailsService, refresh token rotation, and the security pitfalls that lead to authentication bypasses." data-next-head=""/><meta name="author" content="Sachin Sarawgi" data-next-head=""/><link rel="canonical" href="https://codesprintpro.com/blog/spring-security-oauth2-jwt/" data-next-head=""/><meta property="og:type" content="article" data-next-head=""/><meta property="og:title" content="Spring Security OAuth2 and JWT: Production Implementation Guide" data-next-head=""/><meta property="og:description" content="Complete Spring Security OAuth2 implementation: JWT token validation, Resource Server configuration, method-level security, custom UserDetailsService, refresh token rotation, and the security pitfalls that lead to authentication bypasses." data-next-head=""/><meta property="og:url" content="https://codesprintpro.com/blog/spring-security-oauth2-jwt/" data-next-head=""/><meta property="og:image" content="https://codesprintpro.com/images/og-default.jpg" data-next-head=""/><meta property="og:site_name" content="CodeSprintPro" data-next-head=""/><meta property="article:published_time" content="2025-06-03" data-next-head=""/><meta property="article:author" content="Sachin Sarawgi" data-next-head=""/><meta property="article:section" content="Java" data-next-head=""/><meta property="article:tag" content="spring security" data-next-head=""/><meta property="article:tag" content="oauth2" data-next-head=""/><meta property="article:tag" content="jwt" data-next-head=""/><meta property="article:tag" content="spring boot" data-next-head=""/><meta property="article:tag" content="authentication" data-next-head=""/><meta property="article:tag" content="authorization" data-next-head=""/><meta property="article:tag" content="java" data-next-head=""/><meta property="article:tag" content="security" data-next-head=""/><meta name="twitter:card" content="summary_large_image" data-next-head=""/><meta name="twitter:title" content="Spring Security OAuth2 and JWT: Production Implementation Guide" data-next-head=""/><meta name="twitter:description" content="Complete Spring Security OAuth2 implementation: JWT token validation, Resource Server configuration, method-level security, custom UserDetailsService, refresh token rotation, and the security pitfalls that lead to authentication bypasses." data-next-head=""/><meta name="twitter:image" content="https://codesprintpro.com/images/og-default.jpg" data-next-head=""/><script type="application/ld+json" data-next-head="">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Spring Security OAuth2 and JWT: Production Implementation Guide","description":"Complete Spring Security OAuth2 implementation: JWT token validation, Resource Server configuration, method-level security, custom UserDetailsService, refresh token rotation, and the security pitfalls that lead to authentication bypasses.","image":"https://codesprintpro.com/images/og-default.jpg","datePublished":"2025-06-03","dateModified":"2025-06-03","author":{"@type":"Person","name":"Sachin Sarawgi","url":"https://codesprintpro.com","sameAs":["https://www.linkedin.com/in/sachin-sarawgi/","https://github.com/codesprintpro","https://medium.com/@codesprintpro"]},"publisher":{"@type":"Organization","name":"CodeSprintPro","url":"https://codesprintpro.com","logo":{"@type":"ImageObject","url":"https://codesprintpro.com/favicon/favicon-96x96.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codesprintpro.com/blog/spring-security-oauth2-jwt/"},"keywords":"spring security, oauth2, jwt, spring boot, authentication, authorization, java, security","articleSection":"Java"}</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerPolicy="no-referrer"/><script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script><link rel="preload" href="/_next/static/media/e4af272ccee01ff0-s.p.woff2" as="font" type="font/woff2" crossorigin="anonymous" data-next-font="size-adjust"/><link rel="preload" href="/_next/static/css/735d4373f93910ca.css" as="style"/><link rel="stylesheet" href="/_next/static/css/735d4373f93910ca.css" data-n-g=""/><noscript data-n-css=""></noscript><script defer="" nomodule="" src="/_next/static/chunks/polyfills-42372ed130431b0a.js"></script><script src="/_next/static/chunks/webpack-11a4a2dad04962bb.js" defer=""></script><script src="/_next/static/chunks/framework-1ce91eb6f9ecda85.js" defer=""></script><script src="/_next/static/chunks/main-c7f4109f032d7b6e.js" defer=""></script><script src="/_next/static/chunks/pages/_app-1a852bd9e38c70ab.js" defer=""></script><script src="/_next/static/chunks/730-db7827467817f501.js" defer=""></script><script src="/_next/static/chunks/90-1cd4611704c3dbe0.js" defer=""></script><script src="/_next/static/chunks/440-29f4b99a44e744b5.js" defer=""></script><script src="/_next/static/chunks/pages/blog/%5Bslug%5D-0c1b14a33d5e05ee.js" defer=""></script><script src="/_next/static/rpFn_jslWZ9qPkJwor7RD/_buildManifest.js" defer=""></script><script src="/_next/static/rpFn_jslWZ9qPkJwor7RD/_ssgManifest.js" defer=""></script></head><body><div id="__next"><main class="__className_f367f3"><div class="min-h-screen bg-white"><nav class="fixed w-full z-50 transition-all duration-300 bg-white shadow-md" style="transform:translateY(-100px) translateZ(0)"><div class="container mx-auto px-4 sm:px-6 lg:px-8"><div class="flex items-center justify-between h-16"><a class="text-xl font-bold transition-colors text-blue-600" href="/">CodeSprintPro</a><div class="hidden md:flex items-center space-x-8"><a class="text-sm font-medium transition-colors text-blue-600" href="/blog/">Blog</a><a class="text-sm font-medium transition-colors text-gray-600 hover:text-blue-600" href="/#about">About</a><a class="text-sm font-medium transition-colors text-gray-600 hover:text-blue-600" href="/#portfolio">Portfolio</a><a class="text-sm font-medium transition-colors text-gray-600 hover:text-blue-600" href="/#contact">Contact</a></div><button class="md:hidden p-2 rounded-lg transition-colors hover:bg-gray-100 text-gray-600" aria-label="Toggle mobile menu"><svg class="w-6 h-6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor"><path d="M4 6h16M4 12h16M4 18h16"></path></svg></button></div></div></nav><div class="pt-20"><div class="bg-gradient-to-br from-gray-900 to-blue-950 py-16"><div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl"><nav class="flex items-center gap-2 text-sm text-gray-400 mb-6"><a class="hover:text-white transition-colors" href="/">Home</a><span>/</span><a class="hover:text-white transition-colors" href="/blog/">Blog</a><span>/</span><span class="text-gray-300 truncate max-w-xs">Spring Security OAuth2 and JWT: Production Implementation Guide</span></nav><span class="inline-block text-xs font-semibold px-3 py-1 rounded-full bg-blue-100 text-blue-700 mb-4">Java</span><h1 class="text-3xl md:text-5xl font-bold text-white mb-4 leading-tight">Spring Security OAuth2 and JWT: Production Implementation Guide</h1><p class="text-gray-300 text-lg mb-6 max-w-3xl">Complete Spring Security OAuth2 implementation: JWT token validation, Resource Server configuration, method-level security, custom UserDetailsService, refresh token rotation, and the security pitfalls that lead to authentication bypasses.</p><div class="flex flex-wrap items-center gap-4 text-gray-400 text-sm"><span class="flex items-center gap-1.5"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>Sachin Sarawgi</span><span>·</span><span>June 3, 2025</span><span>·</span><span class="flex items-center gap-1"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>7 min read</span></div><div class="flex flex-wrap gap-2 mt-4"><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->spring security</span><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->oauth2</span><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->jwt</span><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->spring boot</span><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->authentication</span><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->authorization</span><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->java</span><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->security</span></div></div></div><div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl py-12"><div class="flex gap-12"><div class="flex-1 min-w-0"><article class="prose prose-lg max-w-none prose-headings:text-gray-900 prose-headings:font-bold prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-4 prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3 prose-p:text-gray-700 prose-p:leading-relaxed prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline prose-strong:text-gray-900 prose-blockquote:border-blue-600 prose-blockquote:text-gray-600 prose-code:text-blue-700 prose-code:bg-blue-50 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-sm prose-code:before:content-none prose-code:after:content-none prose-pre:rounded-xl prose-img:rounded-xl prose-img:shadow-md prose-table:text-sm prose-th:bg-gray-100 prose-th:text-gray-700"><p>Spring Security is one of the most powerful and most misunderstood frameworks in the Java ecosystem. Its flexibility is its strength — and its complexity. Misconfigured security is worse than no security, because it gives false assurance. This article covers production-grade Spring Security OAuth2 implementation: token validation, authorization rules, and the attack vectors you must close.</p>
+<h2>The OAuth2 / JWT Architecture</h2>
+<p>Modern web applications use OAuth2 Bearer tokens — typically JWTs — for stateless authentication:</p>
+<pre><code>Client → POST /api/orders
+         Authorization: Bearer eyJhbGci...
+
+Spring Security filter chain:
+1. JwtAuthenticationFilter extracts token from Authorization header
+2. JwtDecoder validates signature, expiry, issuer, audience
+3. JwtAuthenticationConverter extracts roles from claims
+4. SecurityContextHolder stores Authentication
+5. @PreAuthorize or SecurityConfig.authorizeHttpRequests() checks roles
+6. Controller method executes with authenticated principal
+</code></pre>
+<p>The token is issued by an Authorization Server (Auth0, Keycloak, AWS Cognito, or your own Spring Authorization Server). The API (Resource Server) validates tokens without calling the Auth Server on each request — it uses the Auth Server's public key to verify the JWT signature locally.</p>
+<h2>Resource Server Configuration</h2>
+<pre><code class="language-java">@Configuration
+@EnableWebSecurity
+@EnableMethodSecurity  // Enables @PreAuthorize, @PostAuthorize, @Secured
+public class SecurityConfig {
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+            // Disable CSRF for stateless REST APIs (JWT carries CSRF protection implicitly):
+            .csrf(csrf -> csrf.disable())
+            // Stateless sessions — no HttpSession created:
+            .sessionManagement(session ->
+                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            // Authorization rules:
+            .authorizeHttpRequests(auth -> auth
+                // Public endpoints:
+                .requestMatchers("/actuator/health", "/actuator/info").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/auth/**").permitAll()
+                // All other endpoints require authentication:
+                .anyRequest().authenticated()
+            )
+            // Configure as OAuth2 Resource Server with JWT:
+            .oauth2ResourceServer(oauth2 -> oauth2
+                .jwt(jwt -> jwt
+                    .jwtAuthenticationConverter(jwtAuthenticationConverter())
+                )
+                // Custom 401 response (default is an empty 401):
+                .authenticationEntryPoint((request, response, ex) -> {
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+                    response.getWriter().write(
+                        "{\"error\":\"unauthorized\",\"message\":\"" + ex.getMessage() + "\"}"
+                    );
+                })
+            );
+
+        return http.build();
+    }
+
+    @Bean
+    public JwtAuthenticationConverter jwtAuthenticationConverter() {
+        JwtGrantedAuthoritiesConverter grantedAuthoritiesConverter =
+            new JwtGrantedAuthoritiesConverter();
+        // Read roles from 'roles' claim (not 'scope' — which is the default):
+        grantedAuthoritiesConverter.setAuthoritiesClaimName("roles");
+        // Prefix roles with ROLE_ for Spring Security's hasRole() to work:
+        grantedAuthoritiesConverter.setAuthorityPrefix("ROLE_");
+
+        JwtAuthenticationConverter jwtConverter = new JwtAuthenticationConverter();
+        jwtConverter.setJwtGrantedAuthoritiesConverter(grantedAuthoritiesConverter);
+        return jwtConverter;
+    }
+}
+</code></pre>
+<p><strong>JWT decoder configuration — critical security property:</strong></p>
+<pre><code class="language-java">@Bean
+public JwtDecoder jwtDecoder() {
+    // Option 1: JWKS (recommended for production — Auth Server rotates keys)
+    // Spring fetches public keys from the Auth Server's JWKS endpoint:
+    NimbusJwtDecoder decoder = NimbusJwtDecoder
+        .withJwkSetUri("https://auth.example.com/.well-known/jwks.json")
+        .build();
+
+    // Add custom validation (in addition to signature and expiry):
+    OAuth2TokenValidator&#x3C;Jwt> audienceValidator = token -> {
+        if (token.getAudience().contains("order-service")) {
+            return OAuth2TokenValidatorResult.success();
+        }
+        return OAuth2TokenValidatorResult.failure(
+            new OAuth2Error("invalid_token", "Wrong audience", null));
+    };
+
+    OAuth2TokenValidator&#x3C;Jwt> withIssuer = JwtValidators.createDefaultWithIssuer(
+        "https://auth.example.com"
+    );
+
+    decoder.setJwtValidator(new DelegatingOAuth2TokenValidator&#x3C;>(
+        withIssuer,
+        audienceValidator
+    ));
+
+    return decoder;
+}
+
+// Option 2: Symmetric secret (simpler, no key rotation — for internal services only):
+@Bean
+public JwtDecoder jwtDecoderSymmetric(@Value("${jwt.secret}") String secret) {
+    SecretKeySpec key = new SecretKeySpec(secret.getBytes(), "HmacSHA256");
+    return NimbusJwtDecoder.withSecretKey(key).build();
+}
+</code></pre>
+<p><strong>Always validate the <code>aud</code> (audience) claim.</strong> A JWT issued for <code>frontend-app</code> should not be valid for <code>order-service</code>. Without audience validation, any service that trusts the same Auth Server can use tokens issued for other services — a privilege escalation vulnerability.</p>
+<h2>Method-Level Security</h2>
+<pre><code class="language-java">@RestController
+@RequestMapping("/api/orders")
+public class OrderController {
+
+    // Anyone with ROLE_USER or ROLE_ADMIN can read:
+    @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    public ResponseEntity&#x3C;OrderDto> getOrder(@PathVariable Long id,
+                                              Authentication auth) {
+        return ResponseEntity.ok(orderService.findById(id));
+    }
+
+    // Only ADMIN can delete:
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity&#x3C;Void> deleteOrder(@PathVariable Long id) {
+        orderService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    // User can only see their own orders (SpEL expression):
+    @GetMapping("/my-orders")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity&#x3C;List&#x3C;OrderDto>> getMyOrders(Authentication auth) {
+        String userId = auth.getName();  // Subject from JWT
+        return ResponseEntity.ok(orderService.findByUserId(userId));
+    }
+
+    // Complex rule: Admin can view any order; user can view only their own:
+    @GetMapping("/{id}/details")
+    @PreAuthorize("hasRole('ADMIN') or @orderSecurity.isOwner(authentication, #id)")
+    public ResponseEntity&#x3C;OrderDetailsDto> getOrderDetails(@PathVariable Long id) {
+        return ResponseEntity.ok(orderService.getDetails(id));
+    }
+}
+
+// Custom security bean for complex rules:
+@Component("orderSecurity")
+public class OrderSecurityService {
+
+    @Autowired
+    private OrderRepository orderRepository;
+
+    public boolean isOwner(Authentication auth, Long orderId) {
+        String currentUserId = auth.getName();
+        return orderRepository.findById(orderId)
+            .map(order -> order.getUserId().equals(currentUserId))
+            .orElse(false);
+    }
+}
+</code></pre>
+<h2>Extracting the Authenticated User</h2>
+<pre><code class="language-java">// Method 1: Authentication parameter (Spring injects automatically):
+@GetMapping("/profile")
+public ResponseEntity&#x3C;UserProfile> getProfile(Authentication auth) {
+    Jwt jwt = (Jwt) auth.getPrincipal();
+    String userId = jwt.getSubject();           // 'sub' claim
+    String email = jwt.getClaimAsString("email");
+    List&#x3C;String> roles = jwt.getClaimAsStringList("roles");
+    return ResponseEntity.ok(userService.getProfile(userId));
+}
+
+// Method 2: @AuthenticationPrincipal annotation:
+@GetMapping("/profile")
+public ResponseEntity&#x3C;UserProfile> getProfile(@AuthenticationPrincipal Jwt jwt) {
+    String userId = jwt.getSubject();
+    // ... same as above, cleaner signature
+}
+
+// Method 3: SecurityContextHolder (for non-controller code):
+public String getCurrentUserId() {
+    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    if (auth instanceof JwtAuthenticationToken jwtAuth) {
+        return jwtAuth.getToken().getSubject();
+    }
+    throw new IllegalStateException("No authenticated user in context");
+}
+
+// Custom annotation for cleaner controller signatures:
+@Target(ElementType.PARAMETER)
+@Retention(RetentionPolicy.RUNTIME)
+@AuthenticationPrincipal(expression = "subject")  // Extract 'sub' directly
+public @interface CurrentUserId {}
+
+// Usage:
+@GetMapping("/profile")
+public ResponseEntity&#x3C;UserProfile> getProfile(@CurrentUserId String userId) {
+    return ResponseEntity.ok(userService.getProfile(userId));
+}
+</code></pre>
+<h2>Custom UserDetailsService with Database Lookup</h2>
+<p>When using username/password authentication (not OAuth2 external IdP):</p>
+<pre><code class="language-java">@Service
+public class CustomUserDetailsService implements UserDetailsService {
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Override
+    @Transactional(readOnly = true)
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        User user = userRepository.findByEmail(email)
+            .orElseThrow(() -> new UsernameNotFoundException("User not found: " + email));
+
+        if (!user.isEnabled()) {
+            throw new DisabledException("Account disabled");
+        }
+
+        return org.springframework.security.core.userdetails.User.builder()
+            .username(user.getId().toString())  // Use ID as username (avoids email exposure)
+            .password(user.getPasswordHash())
+            .authorities(user.getRoles().stream()
+                .map(role -> new SimpleGrantedAuthority("ROLE_" + role.name()))
+                .collect(Collectors.toList()))
+            .accountExpired(false)
+            .accountLocked(user.isLocked())
+            .credentialsExpired(false)
+            .disabled(!user.isEnabled())
+            .build();
+    }
+}
+
+@Configuration
+public class PasswordConfig {
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        // BCrypt with cost factor 12 (default is 10):
+        // Higher = more CPU per hash = harder to brute force
+        return new BCryptPasswordEncoder(12);
+    }
+}
+</code></pre>
+<h2>JWT Token Issuing (Authorization Server Side)</h2>
+<p>If you're building your own token endpoint (not using an external IdP):</p>
+<pre><code class="language-java">@RestController
+@RequestMapping("/api/auth")
+public class AuthController {
+
+    @Autowired private AuthenticationManager authenticationManager;
+    @Autowired private JwtService jwtService;
+    @Autowired private RefreshTokenService refreshTokenService;
+
+    @PostMapping("/login")
+    public ResponseEntity&#x3C;TokenResponse> login(@Valid @RequestBody LoginRequest request) {
+        Authentication auth = authenticationManager.authenticate(
+            new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
+        );
+
+        UserDetails user = (UserDetails) auth.getPrincipal();
+        String accessToken = jwtService.generateAccessToken(user);
+        String refreshToken = refreshTokenService.createRefreshToken(user.getUsername());
+
+        return ResponseEntity.ok(new TokenResponse(accessToken, refreshToken));
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity&#x3C;TokenResponse> refresh(@RequestBody RefreshRequest request) {
+        RefreshToken token = refreshTokenService.findByToken(request.getRefreshToken())
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid refresh token"));
+
+        if (token.isExpired()) {
+            refreshTokenService.delete(token);
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Refresh token expired");
+        }
+
+        // Rotation: invalidate old refresh token, issue new one:
+        refreshTokenService.delete(token);
+        String newRefreshToken = refreshTokenService.createRefreshToken(token.getUserId());
+        String newAccessToken = jwtService.generateAccessToken(token.getUserId());
+
+        return ResponseEntity.ok(new TokenResponse(newAccessToken, newRefreshToken));
+    }
+}
+
+@Service
+public class JwtService {
+
+    @Value("${jwt.secret}")
+    private String secret;
+
+    @Value("${jwt.expiry-seconds:900}")  // 15 minutes default
+    private long expirySeconds;
+
+    public String generateAccessToken(UserDetails user) {
+        Map&#x3C;String, Object> claims = new HashMap&#x3C;>();
+        claims.put("roles", user.getAuthorities().stream()
+            .map(GrantedAuthority::getAuthority)
+            .map(r -> r.replace("ROLE_", ""))
+            .collect(Collectors.toList()));
+
+        return Jwts.builder()
+            .setClaims(claims)
+            .setSubject(user.getUsername())
+            .setIssuedAt(new Date())
+            .setExpiration(new Date(System.currentTimeMillis() + expirySeconds * 1000))
+            .setIssuer("https://api.example.com")
+            .setAudience("order-service")
+            .signWith(Keys.hmacShaKeyFor(secret.getBytes()), SignatureAlgorithm.HS256)
+            .compact();
+    }
+}
+</code></pre>
+<h2>Security Pitfalls</h2>
+<p><strong>1. Algorithm confusion attack (alg=none)</strong></p>
+<pre><code class="language-java">// VULNERABLE: trusting the 'alg' header from the token itself
+// An attacker sets alg=none in the JWT header → no signature verification
+
+// SAFE: Use a typed decoder that enforces the algorithm:
+NimbusJwtDecoder decoder = NimbusJwtDecoder
+    .withJwkSetUri("...")
+    .jwsAlgorithm(SignatureAlgorithm.RS256)  // Enforce RS256 only
+    .build();
+</code></pre>
+<p><strong>2. Missing audience validation</strong></p>
+<pre><code class="language-java">// VULNERABLE: Any service trusting the same IdP accepts this token
+// SAFE: Validate 'aud' claim (shown above in jwtDecoder() configuration)
+</code></pre>
+<p><strong>3. Sensitive data in JWT payload</strong></p>
+<pre><code class="language-java">// JWT payload is Base64-encoded, NOT encrypted — anyone can decode it
+// Never put in JWT payload:
+// - Passwords (obviously)
+// - PII beyond user ID
+// - Internal system IDs that reveal architecture
+// - Anything you don't want logged when tokens are logged
+
+// JWT payload is visible to the client and any intermediate proxy:
+String payload = new String(Base64.getDecoder().decode(token.split("\\.")[1]));
+// → {"sub":"user123","roles":["USER"],"email":"alice@example.com"}
+</code></pre>
+<p><strong>4. Long-lived access tokens</strong></p>
+<pre><code>Access token lifetime: 15 minutes (recommended for sensitive operations)
+Refresh token lifetime: 7-30 days
+
+Short access tokens limit the window of exposure if stolen.
+Refresh tokens enable staying logged in without re-authentication.
+Refresh token rotation (issue new refresh token on each use) limits replay attacks.
+</code></pre>
+<p><strong>5. CORS misconfiguration allowing any origin</strong></p>
+<pre><code class="language-java">// VULNERABLE:
+.cors(cors -> cors.configurationSource(request -> {
+    CorsConfiguration config = new CorsConfiguration();
+    config.addAllowedOrigin("*");  // ANY origin — allows cross-site token theft
+    config.addAllowedHeader("*");
+    config.addAllowedMethod("*");
+    return config;
+}))
+
+// SAFE: Explicit allowed origins only:
+.cors(cors -> cors.configurationSource(request -> {
+    CorsConfiguration config = new CorsConfiguration();
+    config.setAllowedOrigins(List.of("https://app.example.com", "https://admin.example.com"));
+    config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+    config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+    config.setAllowCredentials(true);
+    config.setMaxAge(3600L);
+    return config;
+}))
+</code></pre>
+<p>Spring Security's layered defense — filter chain, method security, CORS configuration, JWT validation — is effective when each layer is properly configured. The common failure mode is not in individual configuration items but in the gaps: a misconfigured audience validator, a wildcard CORS origin, an overly long token lifetime. Review each configuration decision against the threat model for your specific application.</p>
+</article><div class="my-10 rounded-xl border border-yellow-200 bg-yellow-50 p-6"><div class="flex items-center gap-2 mb-1"><span class="text-lg">📚</span><h3 class="text-base font-bold text-gray-900">Recommended Resources</h3></div><div class="space-y-4"><div class="flex items-start gap-3 bg-white rounded-lg p-4 border border-yellow-100"><div class="flex-1 min-w-0"><div class="flex items-center gap-2 flex-wrap mb-1"><span class="font-semibold text-gray-900 text-sm">Java Masterclass — Udemy</span><span class="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-medium">Best Seller</span></div><p class="text-xs text-gray-600">Comprehensive Java course covering Java 17+, OOP, concurrency, and modern APIs.</p></div><a href="https://www.udemy.com/course/java-the-complete-java-developer-course/" target="_blank" rel="noopener noreferrer" class="flex-shrink-0 text-xs bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium whitespace-nowrap">View Course<!-- --> →</a></div><div class="flex items-start gap-3 bg-white rounded-lg p-4 border border-yellow-100"><div class="flex-1 min-w-0"><div class="flex items-center gap-2 flex-wrap mb-1"><span class="font-semibold text-gray-900 text-sm">Effective Java, 3rd Edition</span><span class="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-medium">Must Read</span></div><p class="text-xs text-gray-600">Joshua Bloch&#x27;s classic guide to writing clear, correct, and efficient Java code.</p></div><a href="https://amzn.to/3RxIpuB" target="_blank" rel="noopener noreferrer" class="flex-shrink-0 text-xs bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium whitespace-nowrap">View on Amazon<!-- --> →</a></div><div class="flex items-start gap-3 bg-white rounded-lg p-4 border border-yellow-100"><div class="flex-1 min-w-0"><div class="flex items-center gap-2 flex-wrap mb-1"><span class="font-semibold text-gray-900 text-sm">Java Concurrency in Practice</span></div><p class="text-xs text-gray-600">The authoritative book on writing thread-safe, concurrent Java programs.</p></div><a href="https://amzn.to/3Rx3xM4" target="_blank" rel="noopener noreferrer" class="flex-shrink-0 text-xs bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium whitespace-nowrap">View on Amazon<!-- --> →</a></div></div></div><div class="mt-10 pt-8 border-t border-gray-100"><p class="text-sm text-gray-500 mb-3">Found this useful? Share it:</p><div class="flex gap-3"><a href="https://twitter.com/intent/tweet?text=Spring%20Security%20OAuth2%20and%20JWT%3A%20Production%20Implementation%20Guide&amp;url=https%3A%2F%2Fcodesprintpro.com%2Fblog%2Fspring-security-oauth2-jwt%2F" target="_blank" rel="noopener noreferrer" class="text-xs bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors">Share on X/Twitter</a><a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fcodesprintpro.com%2Fblog%2Fspring-security-oauth2-jwt%2F" target="_blank" rel="noopener noreferrer" class="text-xs bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">Share on LinkedIn</a></div></div></div><aside class="hidden lg:block w-64 flex-shrink-0"><nav class="hidden lg:block sticky top-24"><h4 class="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-3">On This Page</h4><ul class="space-y-1"><li class=""><a href="#the-oauth2-jwt-architecture" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">The OAuth2 / JWT Architecture</a></li><li class=""><a href="#resource-server-configuration" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Resource Server Configuration</a></li><li class=""><a href="#method-level-security" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Method-Level Security</a></li><li class=""><a href="#extracting-the-authenticated-user" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Extracting the Authenticated User</a></li><li class=""><a href="#custom-userdetailsservice-with-database-lookup" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Custom UserDetailsService with Database Lookup</a></li><li class=""><a href="#jwt-token-issuing-authorization-server-side" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">JWT Token Issuing (Authorization Server Side)</a></li><li class=""><a href="#security-pitfalls" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Security Pitfalls</a></li></ul></nav></aside></div><div class="mt-16 pt-10 border-t border-gray-100"><h2 class="text-2xl font-bold text-gray-900 mb-6">Related Articles</h2><div class="grid grid-cols-1 md:grid-cols-3 gap-6"><a href="/blog/java-concurrency-patterns/"><article class="group bg-white rounded-xl border border-gray-200 p-6 h-full cursor-pointer hover:border-blue-300 hover:shadow-lg transition-all"><span class="inline-block text-xs font-semibold px-3 py-1 rounded-full mb-3 bg-orange-100 text-orange-700">Java</span><h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors leading-snug">Java Concurrency Patterns: CompletableFuture, Structured Concurrency, and Thread-Safe Design</h3><p class="text-gray-600 text-sm mb-4 line-clamp-3">Java concurrency has three eras: raw  and  (Java 1-4), the  framework (Java 5+), and the virtual thread/structured concurrency era (Java 21+). Each era&#x27;s patterns still exist in production codebases. Understanding all th…</p><div class="flex items-center justify-between text-xs text-gray-400"><span>Jul 8, 2025</span><span class="flex items-center gap-1"><svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>7 min read</span></div><div class="mt-3 flex flex-wrap gap-1"><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->java</span><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->concurrency</span><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->completablefuture</span></div></article></a><a href="/blog/java-memory-management-deep-dive/"><article class="group bg-white rounded-xl border border-gray-200 p-6 h-full cursor-pointer hover:border-blue-300 hover:shadow-lg transition-all"><span class="inline-block text-xs font-semibold px-3 py-1 rounded-full mb-3 bg-orange-100 text-orange-700">Java</span><h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors leading-snug">Java Memory Management Deep Dive: Heap, GC, and Production Tuning</h3><p class="text-gray-600 text-sm mb-4 line-clamp-3">Java&#x27;s garbage collector is the single biggest source of unexplained latency spikes in production services. A GC pause of 2 seconds is invisible in most logs but visible to every user who happened to make a request durin…</p><div class="flex items-center justify-between text-xs text-gray-400"><span>Jun 13, 2025</span><span class="flex items-center gap-1"><svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>7 min read</span></div><div class="mt-3 flex flex-wrap gap-1"><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->java</span><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->jvm</span><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->garbage collection</span></div></article></a><a href="/blog/scaling-spring-boot-10m-dau/"><article class="group bg-white rounded-xl border border-gray-200 p-6 h-full cursor-pointer hover:border-blue-300 hover:shadow-lg transition-all"><span class="inline-block text-xs font-semibold px-3 py-1 rounded-full mb-3 bg-orange-100 text-orange-700">Java</span><h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors leading-snug">Scaling Spring Boot Applications to Handle 10 Million Daily Active Users</h3><p class="text-gray-600 text-sm mb-4 line-clamp-3">10 million daily active users is not an exotic scale — it&#x27;s where a successful mid-stage startup or a growing enterprise service lands. At this scale, the things that worked for 100,000 users start breaking in interestin…</p><div class="flex items-center justify-between text-xs text-gray-400"><span>May 28, 2025</span><span class="flex items-center gap-1"><svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>10 min read</span></div><div class="mt-3 flex flex-wrap gap-1"><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->spring boot</span><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->java</span><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->scaling</span></div></article></a></div></div><div class="mt-12 text-center"><a class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium transition-colors" href="/blog/">← Back to all articles</a></div></div></div><footer class="bg-gray-900 text-white py-12"><div class="container mx-auto px-4 sm:px-6 lg:px-8"><div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8"><div class="col-span-1 md:col-span-1"><div><a class="text-xl font-bold block mb-3 text-white hover:text-blue-400 transition-colors" href="/">CodeSprintPro</a></div><p class="text-gray-400 text-sm mb-4 leading-relaxed">Deep-dive technical content on System Design, Java, Databases, AI/ML, and AWS — by Sachin Sarawgi.</p><div class="flex space-x-4"><a href="https://github.com/codesprintpro" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors" aria-label="Visit GitHub profile"><i class="fab fa-github text-xl"></i></a><a href="https://www.linkedin.com/in/sachin-sarawgi/" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors" aria-label="Visit LinkedIn profile"><i class="fab fa-linkedin text-xl"></i></a><a href="https://medium.com/@codesprintpro" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors" aria-label="Visit Medium profile"><i class="fab fa-medium text-xl"></i></a></div></div><div><h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 mb-4">Quick Links</h3><ul class="space-y-2"><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">Blog</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/#about">About</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/#portfolio">Portfolio</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/#contact">Contact</a></div></li></ul></div><div><h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 mb-4">Categories</h3><ul class="space-y-2"><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">System Design</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">Java</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">Databases</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">AI/ML</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">AWS</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">Messaging</a></div></li></ul></div><div><h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 mb-4">Contact</h3><ul class="space-y-2 text-gray-400 text-sm"><li><a href="mailto:sachinsarawgi201143@gmail.com" class="hover:text-white transition-colors flex items-center gap-2"><i class="fas fa-envelope"></i> Email</a></li><li><a href="https://www.linkedin.com/in/sachin-sarawgi/" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors flex items-center gap-2"><i class="fab fa-linkedin"></i> LinkedIn</a></li><li><a href="https://github.com/codesprintpro" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors flex items-center gap-2"><i class="fab fa-github"></i> GitHub</a></li></ul></div></div><div class="border-t border-gray-800 pt-6 flex flex-col md:flex-row justify-between items-center gap-2"><p class="text-gray-500 text-sm">© <!-- -->2026<!-- --> CodeSprintPro · Sachin Sarawgi. All rights reserved.</p><p class="text-gray-600 text-xs">Built with Next.js · TailwindCSS · Deployed on GitHub Pages</p></div></div></footer></div></main></div><script id="__NEXT_DATA__" type="application/json">{"props":{"pageProps":{"post":{"title":"Spring Security OAuth2 and JWT: Production Implementation Guide","description":"Complete Spring Security OAuth2 implementation: JWT token validation, Resource Server configuration, method-level security, custom UserDetailsService, refresh token rotation, and the security pitfalls that lead to authentication bypasses.","date":"2025-06-03","category":"Java","tags":["spring security","oauth2","jwt","spring boot","authentication","authorization","java","security"],"featured":false,"affiliateSection":"java-courses","slug":"spring-security-oauth2-jwt","readingTime":"7 min read","excerpt":"Spring Security is one of the most powerful and most misunderstood frameworks in the Java ecosystem. Its flexibility is its strength — and its complexity. Misconfigured security is worse than no security, because it give…","contentHtml":"\u003cp\u003eSpring Security is one of the most powerful and most misunderstood frameworks in the Java ecosystem. Its flexibility is its strength — and its complexity. Misconfigured security is worse than no security, because it gives false assurance. This article covers production-grade Spring Security OAuth2 implementation: token validation, authorization rules, and the attack vectors you must close.\u003c/p\u003e\n\u003ch2\u003eThe OAuth2 / JWT Architecture\u003c/h2\u003e\n\u003cp\u003eModern web applications use OAuth2 Bearer tokens — typically JWTs — for stateless authentication:\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003eClient → POST /api/orders\n         Authorization: Bearer eyJhbGci...\n\nSpring Security filter chain:\n1. JwtAuthenticationFilter extracts token from Authorization header\n2. JwtDecoder validates signature, expiry, issuer, audience\n3. JwtAuthenticationConverter extracts roles from claims\n4. SecurityContextHolder stores Authentication\n5. @PreAuthorize or SecurityConfig.authorizeHttpRequests() checks roles\n6. Controller method executes with authenticated principal\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eThe token is issued by an Authorization Server (Auth0, Keycloak, AWS Cognito, or your own Spring Authorization Server). The API (Resource Server) validates tokens without calling the Auth Server on each request — it uses the Auth Server's public key to verify the JWT signature locally.\u003c/p\u003e\n\u003ch2\u003eResource Server Configuration\u003c/h2\u003e\n\u003cpre\u003e\u003ccode class=\"language-java\"\u003e@Configuration\n@EnableWebSecurity\n@EnableMethodSecurity  // Enables @PreAuthorize, @PostAuthorize, @Secured\npublic class SecurityConfig {\n\n    @Bean\n    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {\n        http\n            // Disable CSRF for stateless REST APIs (JWT carries CSRF protection implicitly):\n            .csrf(csrf -\u003e csrf.disable())\n            // Stateless sessions — no HttpSession created:\n            .sessionManagement(session -\u003e\n                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))\n            // Authorization rules:\n            .authorizeHttpRequests(auth -\u003e auth\n                // Public endpoints:\n                .requestMatchers(\"/actuator/health\", \"/actuator/info\").permitAll()\n                .requestMatchers(HttpMethod.POST, \"/api/auth/**\").permitAll()\n                // All other endpoints require authentication:\n                .anyRequest().authenticated()\n            )\n            // Configure as OAuth2 Resource Server with JWT:\n            .oauth2ResourceServer(oauth2 -\u003e oauth2\n                .jwt(jwt -\u003e jwt\n                    .jwtAuthenticationConverter(jwtAuthenticationConverter())\n                )\n                // Custom 401 response (default is an empty 401):\n                .authenticationEntryPoint((request, response, ex) -\u003e {\n                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);\n                    response.setContentType(MediaType.APPLICATION_JSON_VALUE);\n                    response.getWriter().write(\n                        \"{\\\"error\\\":\\\"unauthorized\\\",\\\"message\\\":\\\"\" + ex.getMessage() + \"\\\"}\"\n                    );\n                })\n            );\n\n        return http.build();\n    }\n\n    @Bean\n    public JwtAuthenticationConverter jwtAuthenticationConverter() {\n        JwtGrantedAuthoritiesConverter grantedAuthoritiesConverter =\n            new JwtGrantedAuthoritiesConverter();\n        // Read roles from 'roles' claim (not 'scope' — which is the default):\n        grantedAuthoritiesConverter.setAuthoritiesClaimName(\"roles\");\n        // Prefix roles with ROLE_ for Spring Security's hasRole() to work:\n        grantedAuthoritiesConverter.setAuthorityPrefix(\"ROLE_\");\n\n        JwtAuthenticationConverter jwtConverter = new JwtAuthenticationConverter();\n        jwtConverter.setJwtGrantedAuthoritiesConverter(grantedAuthoritiesConverter);\n        return jwtConverter;\n    }\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e\u003cstrong\u003eJWT decoder configuration — critical security property:\u003c/strong\u003e\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-java\"\u003e@Bean\npublic JwtDecoder jwtDecoder() {\n    // Option 1: JWKS (recommended for production — Auth Server rotates keys)\n    // Spring fetches public keys from the Auth Server's JWKS endpoint:\n    NimbusJwtDecoder decoder = NimbusJwtDecoder\n        .withJwkSetUri(\"https://auth.example.com/.well-known/jwks.json\")\n        .build();\n\n    // Add custom validation (in addition to signature and expiry):\n    OAuth2TokenValidator\u0026#x3C;Jwt\u003e audienceValidator = token -\u003e {\n        if (token.getAudience().contains(\"order-service\")) {\n            return OAuth2TokenValidatorResult.success();\n        }\n        return OAuth2TokenValidatorResult.failure(\n            new OAuth2Error(\"invalid_token\", \"Wrong audience\", null));\n    };\n\n    OAuth2TokenValidator\u0026#x3C;Jwt\u003e withIssuer = JwtValidators.createDefaultWithIssuer(\n        \"https://auth.example.com\"\n    );\n\n    decoder.setJwtValidator(new DelegatingOAuth2TokenValidator\u0026#x3C;\u003e(\n        withIssuer,\n        audienceValidator\n    ));\n\n    return decoder;\n}\n\n// Option 2: Symmetric secret (simpler, no key rotation — for internal services only):\n@Bean\npublic JwtDecoder jwtDecoderSymmetric(@Value(\"${jwt.secret}\") String secret) {\n    SecretKeySpec key = new SecretKeySpec(secret.getBytes(), \"HmacSHA256\");\n    return NimbusJwtDecoder.withSecretKey(key).build();\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e\u003cstrong\u003eAlways validate the \u003ccode\u003eaud\u003c/code\u003e (audience) claim.\u003c/strong\u003e A JWT issued for \u003ccode\u003efrontend-app\u003c/code\u003e should not be valid for \u003ccode\u003eorder-service\u003c/code\u003e. Without audience validation, any service that trusts the same Auth Server can use tokens issued for other services — a privilege escalation vulnerability.\u003c/p\u003e\n\u003ch2\u003eMethod-Level Security\u003c/h2\u003e\n\u003cpre\u003e\u003ccode class=\"language-java\"\u003e@RestController\n@RequestMapping(\"/api/orders\")\npublic class OrderController {\n\n    // Anyone with ROLE_USER or ROLE_ADMIN can read:\n    @GetMapping(\"/{id}\")\n    @PreAuthorize(\"hasAnyRole('USER', 'ADMIN')\")\n    public ResponseEntity\u0026#x3C;OrderDto\u003e getOrder(@PathVariable Long id,\n                                              Authentication auth) {\n        return ResponseEntity.ok(orderService.findById(id));\n    }\n\n    // Only ADMIN can delete:\n    @DeleteMapping(\"/{id}\")\n    @PreAuthorize(\"hasRole('ADMIN')\")\n    public ResponseEntity\u0026#x3C;Void\u003e deleteOrder(@PathVariable Long id) {\n        orderService.delete(id);\n        return ResponseEntity.noContent().build();\n    }\n\n    // User can only see their own orders (SpEL expression):\n    @GetMapping(\"/my-orders\")\n    @PreAuthorize(\"isAuthenticated()\")\n    public ResponseEntity\u0026#x3C;List\u0026#x3C;OrderDto\u003e\u003e getMyOrders(Authentication auth) {\n        String userId = auth.getName();  // Subject from JWT\n        return ResponseEntity.ok(orderService.findByUserId(userId));\n    }\n\n    // Complex rule: Admin can view any order; user can view only their own:\n    @GetMapping(\"/{id}/details\")\n    @PreAuthorize(\"hasRole('ADMIN') or @orderSecurity.isOwner(authentication, #id)\")\n    public ResponseEntity\u0026#x3C;OrderDetailsDto\u003e getOrderDetails(@PathVariable Long id) {\n        return ResponseEntity.ok(orderService.getDetails(id));\n    }\n}\n\n// Custom security bean for complex rules:\n@Component(\"orderSecurity\")\npublic class OrderSecurityService {\n\n    @Autowired\n    private OrderRepository orderRepository;\n\n    public boolean isOwner(Authentication auth, Long orderId) {\n        String currentUserId = auth.getName();\n        return orderRepository.findById(orderId)\n            .map(order -\u003e order.getUserId().equals(currentUserId))\n            .orElse(false);\n    }\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch2\u003eExtracting the Authenticated User\u003c/h2\u003e\n\u003cpre\u003e\u003ccode class=\"language-java\"\u003e// Method 1: Authentication parameter (Spring injects automatically):\n@GetMapping(\"/profile\")\npublic ResponseEntity\u0026#x3C;UserProfile\u003e getProfile(Authentication auth) {\n    Jwt jwt = (Jwt) auth.getPrincipal();\n    String userId = jwt.getSubject();           // 'sub' claim\n    String email = jwt.getClaimAsString(\"email\");\n    List\u0026#x3C;String\u003e roles = jwt.getClaimAsStringList(\"roles\");\n    return ResponseEntity.ok(userService.getProfile(userId));\n}\n\n// Method 2: @AuthenticationPrincipal annotation:\n@GetMapping(\"/profile\")\npublic ResponseEntity\u0026#x3C;UserProfile\u003e getProfile(@AuthenticationPrincipal Jwt jwt) {\n    String userId = jwt.getSubject();\n    // ... same as above, cleaner signature\n}\n\n// Method 3: SecurityContextHolder (for non-controller code):\npublic String getCurrentUserId() {\n    Authentication auth = SecurityContextHolder.getContext().getAuthentication();\n    if (auth instanceof JwtAuthenticationToken jwtAuth) {\n        return jwtAuth.getToken().getSubject();\n    }\n    throw new IllegalStateException(\"No authenticated user in context\");\n}\n\n// Custom annotation for cleaner controller signatures:\n@Target(ElementType.PARAMETER)\n@Retention(RetentionPolicy.RUNTIME)\n@AuthenticationPrincipal(expression = \"subject\")  // Extract 'sub' directly\npublic @interface CurrentUserId {}\n\n// Usage:\n@GetMapping(\"/profile\")\npublic ResponseEntity\u0026#x3C;UserProfile\u003e getProfile(@CurrentUserId String userId) {\n    return ResponseEntity.ok(userService.getProfile(userId));\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch2\u003eCustom UserDetailsService with Database Lookup\u003c/h2\u003e\n\u003cp\u003eWhen using username/password authentication (not OAuth2 external IdP):\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-java\"\u003e@Service\npublic class CustomUserDetailsService implements UserDetailsService {\n\n    @Autowired\n    private UserRepository userRepository;\n\n    @Override\n    @Transactional(readOnly = true)\n    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {\n        User user = userRepository.findByEmail(email)\n            .orElseThrow(() -\u003e new UsernameNotFoundException(\"User not found: \" + email));\n\n        if (!user.isEnabled()) {\n            throw new DisabledException(\"Account disabled\");\n        }\n\n        return org.springframework.security.core.userdetails.User.builder()\n            .username(user.getId().toString())  // Use ID as username (avoids email exposure)\n            .password(user.getPasswordHash())\n            .authorities(user.getRoles().stream()\n                .map(role -\u003e new SimpleGrantedAuthority(\"ROLE_\" + role.name()))\n                .collect(Collectors.toList()))\n            .accountExpired(false)\n            .accountLocked(user.isLocked())\n            .credentialsExpired(false)\n            .disabled(!user.isEnabled())\n            .build();\n    }\n}\n\n@Configuration\npublic class PasswordConfig {\n\n    @Bean\n    public PasswordEncoder passwordEncoder() {\n        // BCrypt with cost factor 12 (default is 10):\n        // Higher = more CPU per hash = harder to brute force\n        return new BCryptPasswordEncoder(12);\n    }\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch2\u003eJWT Token Issuing (Authorization Server Side)\u003c/h2\u003e\n\u003cp\u003eIf you're building your own token endpoint (not using an external IdP):\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-java\"\u003e@RestController\n@RequestMapping(\"/api/auth\")\npublic class AuthController {\n\n    @Autowired private AuthenticationManager authenticationManager;\n    @Autowired private JwtService jwtService;\n    @Autowired private RefreshTokenService refreshTokenService;\n\n    @PostMapping(\"/login\")\n    public ResponseEntity\u0026#x3C;TokenResponse\u003e login(@Valid @RequestBody LoginRequest request) {\n        Authentication auth = authenticationManager.authenticate(\n            new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())\n        );\n\n        UserDetails user = (UserDetails) auth.getPrincipal();\n        String accessToken = jwtService.generateAccessToken(user);\n        String refreshToken = refreshTokenService.createRefreshToken(user.getUsername());\n\n        return ResponseEntity.ok(new TokenResponse(accessToken, refreshToken));\n    }\n\n    @PostMapping(\"/refresh\")\n    public ResponseEntity\u0026#x3C;TokenResponse\u003e refresh(@RequestBody RefreshRequest request) {\n        RefreshToken token = refreshTokenService.findByToken(request.getRefreshToken())\n            .orElseThrow(() -\u003e new ResponseStatusException(HttpStatus.UNAUTHORIZED, \"Invalid refresh token\"));\n\n        if (token.isExpired()) {\n            refreshTokenService.delete(token);\n            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, \"Refresh token expired\");\n        }\n\n        // Rotation: invalidate old refresh token, issue new one:\n        refreshTokenService.delete(token);\n        String newRefreshToken = refreshTokenService.createRefreshToken(token.getUserId());\n        String newAccessToken = jwtService.generateAccessToken(token.getUserId());\n\n        return ResponseEntity.ok(new TokenResponse(newAccessToken, newRefreshToken));\n    }\n}\n\n@Service\npublic class JwtService {\n\n    @Value(\"${jwt.secret}\")\n    private String secret;\n\n    @Value(\"${jwt.expiry-seconds:900}\")  // 15 minutes default\n    private long expirySeconds;\n\n    public String generateAccessToken(UserDetails user) {\n        Map\u0026#x3C;String, Object\u003e claims = new HashMap\u0026#x3C;\u003e();\n        claims.put(\"roles\", user.getAuthorities().stream()\n            .map(GrantedAuthority::getAuthority)\n            .map(r -\u003e r.replace(\"ROLE_\", \"\"))\n            .collect(Collectors.toList()));\n\n        return Jwts.builder()\n            .setClaims(claims)\n            .setSubject(user.getUsername())\n            .setIssuedAt(new Date())\n            .setExpiration(new Date(System.currentTimeMillis() + expirySeconds * 1000))\n            .setIssuer(\"https://api.example.com\")\n            .setAudience(\"order-service\")\n            .signWith(Keys.hmacShaKeyFor(secret.getBytes()), SignatureAlgorithm.HS256)\n            .compact();\n    }\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch2\u003eSecurity Pitfalls\u003c/h2\u003e\n\u003cp\u003e\u003cstrong\u003e1. Algorithm confusion attack (alg=none)\u003c/strong\u003e\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-java\"\u003e// VULNERABLE: trusting the 'alg' header from the token itself\n// An attacker sets alg=none in the JWT header → no signature verification\n\n// SAFE: Use a typed decoder that enforces the algorithm:\nNimbusJwtDecoder decoder = NimbusJwtDecoder\n    .withJwkSetUri(\"...\")\n    .jwsAlgorithm(SignatureAlgorithm.RS256)  // Enforce RS256 only\n    .build();\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e\u003cstrong\u003e2. Missing audience validation\u003c/strong\u003e\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-java\"\u003e// VULNERABLE: Any service trusting the same IdP accepts this token\n// SAFE: Validate 'aud' claim (shown above in jwtDecoder() configuration)\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e\u003cstrong\u003e3. Sensitive data in JWT payload\u003c/strong\u003e\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-java\"\u003e// JWT payload is Base64-encoded, NOT encrypted — anyone can decode it\n// Never put in JWT payload:\n// - Passwords (obviously)\n// - PII beyond user ID\n// - Internal system IDs that reveal architecture\n// - Anything you don't want logged when tokens are logged\n\n// JWT payload is visible to the client and any intermediate proxy:\nString payload = new String(Base64.getDecoder().decode(token.split(\"\\\\.\")[1]));\n// → {\"sub\":\"user123\",\"roles\":[\"USER\"],\"email\":\"alice@example.com\"}\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e\u003cstrong\u003e4. Long-lived access tokens\u003c/strong\u003e\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003eAccess token lifetime: 15 minutes (recommended for sensitive operations)\nRefresh token lifetime: 7-30 days\n\nShort access tokens limit the window of exposure if stolen.\nRefresh tokens enable staying logged in without re-authentication.\nRefresh token rotation (issue new refresh token on each use) limits replay attacks.\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e\u003cstrong\u003e5. CORS misconfiguration allowing any origin\u003c/strong\u003e\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-java\"\u003e// VULNERABLE:\n.cors(cors -\u003e cors.configurationSource(request -\u003e {\n    CorsConfiguration config = new CorsConfiguration();\n    config.addAllowedOrigin(\"*\");  // ANY origin — allows cross-site token theft\n    config.addAllowedHeader(\"*\");\n    config.addAllowedMethod(\"*\");\n    return config;\n}))\n\n// SAFE: Explicit allowed origins only:\n.cors(cors -\u003e cors.configurationSource(request -\u003e {\n    CorsConfiguration config = new CorsConfiguration();\n    config.setAllowedOrigins(List.of(\"https://app.example.com\", \"https://admin.example.com\"));\n    config.setAllowedMethods(List.of(\"GET\", \"POST\", \"PUT\", \"DELETE\", \"OPTIONS\"));\n    config.setAllowedHeaders(List.of(\"Authorization\", \"Content-Type\"));\n    config.setAllowCredentials(true);\n    config.setMaxAge(3600L);\n    return config;\n}))\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eSpring Security's layered defense — filter chain, method security, CORS configuration, JWT validation — is effective when each layer is properly configured. The common failure mode is not in individual configuration items but in the gaps: a misconfigured audience validator, a wildcard CORS origin, an overly long token lifetime. Review each configuration decision against the threat model for your specific application.\u003c/p\u003e\n","tableOfContents":[{"id":"the-oauth2-jwt-architecture","text":"The OAuth2 / JWT Architecture","level":2},{"id":"resource-server-configuration","text":"Resource Server Configuration","level":2},{"id":"method-level-security","text":"Method-Level Security","level":2},{"id":"extracting-the-authenticated-user","text":"Extracting the Authenticated User","level":2},{"id":"custom-userdetailsservice-with-database-lookup","text":"Custom UserDetailsService with Database Lookup","level":2},{"id":"jwt-token-issuing-authorization-server-side","text":"JWT Token Issuing (Authorization Server Side)","level":2},{"id":"security-pitfalls","text":"Security Pitfalls","level":2}]},"relatedPosts":[{"title":"Java Concurrency Patterns: CompletableFuture, Structured Concurrency, and Thread-Safe Design","description":"Production Java concurrency: CompletableFuture pipelines, handling exceptions in async chains, Java 21 structured concurrency, thread-safe collection patterns, and the concurrency bugs that cause data corruption.","date":"2025-07-08","category":"Java","tags":["java","concurrency","completablefuture","virtual threads","java21","thread-safe","async"],"featured":false,"affiliateSection":"java-courses","slug":"java-concurrency-patterns","readingTime":"7 min read","excerpt":"Java concurrency has three eras: raw  and  (Java 1-4), the  framework (Java 5+), and the virtual thread/structured concurrency era (Java 21+). Each era's patterns still exist in production codebases. Understanding all th…"},{"title":"Java Memory Management Deep Dive: Heap, GC, and Production Tuning","description":"How the JVM allocates memory, how G1GC and ZGC work under the hood, heap analysis with JVM tools, and the GC tuning decisions that eliminate latency spikes in production Java services.","date":"2025-06-13","category":"Java","tags":["java","jvm","garbage collection","g1gc","zgc","heap","memory management","performance"],"featured":false,"affiliateSection":"java-courses","slug":"java-memory-management-deep-dive","readingTime":"7 min read","excerpt":"Java's garbage collector is the single biggest source of unexplained latency spikes in production services. A GC pause of 2 seconds is invisible in most logs but visible to every user who happened to make a request durin…"},{"title":"Scaling Spring Boot Applications to Handle 10 Million Daily Active Users","description":"A practical performance engineering guide: load balancing, horizontal scaling, database tuning, JVM optimization, autoscaling, and the observability stack to find and fix bottlenecks before they page you.","date":"2025-05-28","category":"Java","tags":["spring boot","java","scaling","performance","jvm","kubernetes","prometheus","grafana"],"featured":false,"affiliateSection":"java-courses","slug":"scaling-spring-boot-10m-dau","readingTime":"10 min read","excerpt":"10 million daily active users is not an exotic scale — it's where a successful mid-stage startup or a growing enterprise service lands. At this scale, the things that worked for 100,000 users start breaking in interestin…"}]},"__N_SSG":true},"page":"/blog/[slug]","query":{"slug":"spring-security-oauth2-jwt"},"buildId":"rpFn_jslWZ9qPkJwor7RD","isFallback":false,"gsp":true,"scriptLoader":[]}</script></body></html>

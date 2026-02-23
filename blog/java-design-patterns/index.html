@@ -1,0 +1,385 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8" data-next-head=""/><meta name="viewport" content="width=device-width" data-next-head=""/><title data-next-head="">Java Design Patterns: When to Use Them, When to Avoid Them<!-- --> | CodeSprintPro</title><meta name="description" content="Practical guide to Java design patterns with production examples. Covers Builder, Factory, Strategy, Observer, Decorator, and Command patterns with Spring Boot integration." data-next-head=""/><meta name="author" content="Sachin Sarawgi" data-next-head=""/><link rel="canonical" href="https://codesprintpro.com/blog/java-design-patterns/" data-next-head=""/><meta property="og:type" content="article" data-next-head=""/><meta property="og:title" content="Java Design Patterns: When to Use Them, When to Avoid Them" data-next-head=""/><meta property="og:description" content="Practical guide to Java design patterns with production examples. Covers Builder, Factory, Strategy, Observer, Decorator, and Command patterns with Spring Boot integration." data-next-head=""/><meta property="og:url" content="https://codesprintpro.com/blog/java-design-patterns/" data-next-head=""/><meta property="og:image" content="https://codesprintpro.com/images/og-default.jpg" data-next-head=""/><meta property="og:site_name" content="CodeSprintPro" data-next-head=""/><meta property="article:published_time" content="2025-03-15" data-next-head=""/><meta property="article:author" content="Sachin Sarawgi" data-next-head=""/><meta property="article:section" content="Java" data-next-head=""/><meta property="article:tag" content="java" data-next-head=""/><meta property="article:tag" content="design patterns" data-next-head=""/><meta property="article:tag" content="spring boot" data-next-head=""/><meta property="article:tag" content="solid" data-next-head=""/><meta property="article:tag" content="clean code" data-next-head=""/><meta name="twitter:card" content="summary_large_image" data-next-head=""/><meta name="twitter:title" content="Java Design Patterns: When to Use Them, When to Avoid Them" data-next-head=""/><meta name="twitter:description" content="Practical guide to Java design patterns with production examples. Covers Builder, Factory, Strategy, Observer, Decorator, and Command patterns with Spring Boot integration." data-next-head=""/><meta name="twitter:image" content="https://codesprintpro.com/images/og-default.jpg" data-next-head=""/><script type="application/ld+json" data-next-head="">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Java Design Patterns: When to Use Them, When to Avoid Them","description":"Practical guide to Java design patterns with production examples. Covers Builder, Factory, Strategy, Observer, Decorator, and Command patterns with Spring Boot integration.","image":"https://codesprintpro.com/images/og-default.jpg","datePublished":"2025-03-15","dateModified":"2025-03-15","author":{"@type":"Person","name":"Sachin Sarawgi","url":"https://codesprintpro.com","sameAs":["https://www.linkedin.com/in/sachin-sarawgi/","https://github.com/codesprintpro","https://medium.com/@codesprintpro"]},"publisher":{"@type":"Organization","name":"CodeSprintPro","url":"https://codesprintpro.com","logo":{"@type":"ImageObject","url":"https://codesprintpro.com/favicon/favicon-96x96.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codesprintpro.com/blog/java-design-patterns/"},"keywords":"java, design patterns, spring boot, solid, clean code","articleSection":"Java"}</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerPolicy="no-referrer"/><script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script><link rel="preload" href="/_next/static/media/e4af272ccee01ff0-s.p.woff2" as="font" type="font/woff2" crossorigin="anonymous" data-next-font="size-adjust"/><link rel="preload" href="/_next/static/css/735d4373f93910ca.css" as="style"/><link rel="stylesheet" href="/_next/static/css/735d4373f93910ca.css" data-n-g=""/><noscript data-n-css=""></noscript><script defer="" nomodule="" src="/_next/static/chunks/polyfills-42372ed130431b0a.js"></script><script src="/_next/static/chunks/webpack-11a4a2dad04962bb.js" defer=""></script><script src="/_next/static/chunks/framework-1ce91eb6f9ecda85.js" defer=""></script><script src="/_next/static/chunks/main-c7f4109f032d7b6e.js" defer=""></script><script src="/_next/static/chunks/pages/_app-1a852bd9e38c70ab.js" defer=""></script><script src="/_next/static/chunks/730-db7827467817f501.js" defer=""></script><script src="/_next/static/chunks/90-1cd4611704c3dbe0.js" defer=""></script><script src="/_next/static/chunks/440-29f4b99a44e744b5.js" defer=""></script><script src="/_next/static/chunks/pages/blog/%5Bslug%5D-0c1b14a33d5e05ee.js" defer=""></script><script src="/_next/static/rpFn_jslWZ9qPkJwor7RD/_buildManifest.js" defer=""></script><script src="/_next/static/rpFn_jslWZ9qPkJwor7RD/_ssgManifest.js" defer=""></script></head><body><div id="__next"><main class="__className_f367f3"><div class="min-h-screen bg-white"><nav class="fixed w-full z-50 transition-all duration-300 bg-white shadow-md" style="transform:translateY(-100px) translateZ(0)"><div class="container mx-auto px-4 sm:px-6 lg:px-8"><div class="flex items-center justify-between h-16"><a class="text-xl font-bold transition-colors text-blue-600" href="/">CodeSprintPro</a><div class="hidden md:flex items-center space-x-8"><a class="text-sm font-medium transition-colors text-blue-600" href="/blog/">Blog</a><a class="text-sm font-medium transition-colors text-gray-600 hover:text-blue-600" href="/#about">About</a><a class="text-sm font-medium transition-colors text-gray-600 hover:text-blue-600" href="/#portfolio">Portfolio</a><a class="text-sm font-medium transition-colors text-gray-600 hover:text-blue-600" href="/#contact">Contact</a></div><button class="md:hidden p-2 rounded-lg transition-colors hover:bg-gray-100 text-gray-600" aria-label="Toggle mobile menu"><svg class="w-6 h-6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor"><path d="M4 6h16M4 12h16M4 18h16"></path></svg></button></div></div></nav><div class="pt-20"><div class="bg-gradient-to-br from-gray-900 to-blue-950 py-16"><div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl"><nav class="flex items-center gap-2 text-sm text-gray-400 mb-6"><a class="hover:text-white transition-colors" href="/">Home</a><span>/</span><a class="hover:text-white transition-colors" href="/blog/">Blog</a><span>/</span><span class="text-gray-300 truncate max-w-xs">Java Design Patterns: When to Use Them, When to Avoid Them</span></nav><span class="inline-block text-xs font-semibold px-3 py-1 rounded-full bg-blue-100 text-blue-700 mb-4">Java</span><h1 class="text-3xl md:text-5xl font-bold text-white mb-4 leading-tight">Java Design Patterns: When to Use Them, When to Avoid Them</h1><p class="text-gray-300 text-lg mb-6 max-w-3xl">Practical guide to Java design patterns with production examples. Covers Builder, Factory, Strategy, Observer, Decorator, and Command patterns with Spring Boot integration.</p><div class="flex flex-wrap items-center gap-4 text-gray-400 text-sm"><span class="flex items-center gap-1.5"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>Sachin Sarawgi</span><span>·</span><span>March 15, 2025</span><span>·</span><span class="flex items-center gap-1"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>10 min read</span></div><div class="flex flex-wrap gap-2 mt-4"><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->java</span><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->design patterns</span><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->spring boot</span><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->solid</span><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->clean code</span></div></div></div><div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl py-12"><div class="flex gap-12"><div class="flex-1 min-w-0"><article class="prose prose-lg max-w-none prose-headings:text-gray-900 prose-headings:font-bold prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-4 prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3 prose-p:text-gray-700 prose-p:leading-relaxed prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline prose-strong:text-gray-900 prose-blockquote:border-blue-600 prose-blockquote:text-gray-600 prose-code:text-blue-700 prose-code:bg-blue-50 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-sm prose-code:before:content-none prose-code:after:content-none prose-pre:rounded-xl prose-img:rounded-xl prose-img:shadow-md prose-table:text-sm prose-th:bg-gray-100 prose-th:text-gray-700"><p>Design patterns are solutions to recurring design problems. The mistake most engineers make is pattern-matching: "this code has a factory-like structure, let me add a Factory pattern." The right question is: "what problem am I solving?" Most of the time, a well-named class and a clean interface are better than a named pattern. This article shows when patterns genuinely improve code.</p>
+<h2>Builder: Complex Object Construction</h2>
+<p>Use when constructing an object requires many parameters, especially optional ones. The classic symptom that Builder is the right choice is what is often called the "telescoping constructor" anti-pattern — a constructor call where you cannot tell what each argument means without looking up the signature. The following comparison makes this concrete:</p>
+<pre><code class="language-java">// Without Builder: telescoping constructors (anti-pattern)
+new Order("cust-123", "NEW", BigDecimal.valueOf(99.99), "USD", null, null, true, false);
+// Which field is which? What are those booleans?
+
+// With Builder: readable, validated, immutable
+@Builder
+@Value  // Lombok: all fields final, getters, no setters
+public class Order {
+    String orderId;
+    String customerId;
+    OrderStatus status;
+    BigDecimal totalAmount;
+    String currency;
+    String shippingAddressId;
+    boolean expressShipping;
+    boolean giftWrapped;
+    Instant createdAt;
+
+    // Custom validation in the builder
+    public static class OrderBuilder {
+        public Order build() {
+            if (totalAmount == null || totalAmount.compareTo(BigDecimal.ZERO) &#x3C;= 0) {
+                throw new IllegalArgumentException("Total must be positive");
+            }
+            if (currency == null) currency = "USD";
+            if (createdAt == null) createdAt = Instant.now();
+            return new Order(orderId, customerId, status, totalAmount,
+                           currency, shippingAddressId, expressShipping, giftWrapped, createdAt);
+        }
+    }
+}
+
+// Usage: self-documenting, compile-time checked
+Order order = Order.builder()
+    .orderId(UUID.randomUUID().toString())
+    .customerId("cust-123")
+    .status(OrderStatus.PENDING)
+    .totalAmount(BigDecimal.valueOf(99.99))
+    .expressShipping(true)
+    .build();
+</code></pre>
+<p>Notice that the custom <code>build()</code> method centralizes validation and applies sensible defaults — logic that would otherwise be scattered across multiple constructors. By overriding the Lombok-generated <code>build()</code>, you get both the convenience of generated code and the safety of explicit invariant checks.</p>
+<h2>Strategy: Swappable Algorithms</h2>
+<p>Use when you have multiple implementations of the same behavior and need to choose at runtime. The Strategy pattern is essentially a way to encode a decision that would otherwise live in a <code>switch</code> or <code>if-else</code> chain directly into the type system, making it easy to add new cases without touching existing code. Payment processing is a natural example — each payment provider has completely different API calls, but from the perspective of the service that processes payments, the interface is the same:</p>
+<pre><code class="language-java">// Payment processing: different strategies for different payment methods
+public interface PaymentStrategy {
+    PaymentResult process(PaymentRequest request);
+    boolean supports(PaymentMethod method);
+}
+
+@Component
+public class StripePaymentStrategy implements PaymentStrategy {
+
+    @Override
+    public PaymentResult process(PaymentRequest request) {
+        // Stripe-specific implementation
+        StripeCharge charge = stripeClient.charges().create(
+            ChargeCreateParams.builder()
+                .setAmount(request.getAmountCents())
+                .setCurrency(request.getCurrency())
+                .setSource(request.getToken())
+                .build()
+        );
+        return PaymentResult.success(charge.getId());
+    }
+
+    @Override
+    public boolean supports(PaymentMethod method) {
+        return method == PaymentMethod.CREDIT_CARD || method == PaymentMethod.DEBIT_CARD;
+    }
+}
+
+@Component
+public class PayPalPaymentStrategy implements PaymentStrategy {
+
+    @Override
+    public PaymentResult process(PaymentRequest request) {
+        // PayPal-specific implementation
+        return payPalClient.execute(request);
+    }
+
+    @Override
+    public boolean supports(PaymentMethod method) {
+        return method == PaymentMethod.PAYPAL;
+    }
+}
+
+// Context: selects and executes the right strategy
+@Service
+public class PaymentService {
+
+    private final List&#x3C;PaymentStrategy> strategies;  // Spring injects all implementations
+
+    public PaymentService(List&#x3C;PaymentStrategy> strategies) {
+        this.strategies = strategies;
+    }
+
+    public PaymentResult processPayment(PaymentRequest request) {
+        return strategies.stream()
+            .filter(s -> s.supports(request.getPaymentMethod()))
+            .findFirst()
+            .orElseThrow(() -> new UnsupportedPaymentMethodException(request.getPaymentMethod()))
+            .process(request);
+    }
+}
+// Adding a new payment method = add a new @Component class. Zero changes to PaymentService.
+</code></pre>
+<p>The key insight here is how Spring's dependency injection and the Strategy pattern work together: by injecting <code>List&#x3C;PaymentStrategy></code>, Spring automatically collects every <code>@Component</code> that implements the interface. Adding a new payment method means writing a new class and annotating it — <code>PaymentService</code> never needs to know it exists.</p>
+<h2>Factory / Factory Method: Controlled Object Creation</h2>
+<p>Use when the creation logic is complex, when clients shouldn't know the concrete type, or when object creation has side effects. The Factory pattern is appropriate when the act of creating an object requires knowledge that the caller should not need to have — like which dependencies to inject, what normalization to apply to inputs, or how to map a type enum to a concrete class:</p>
+<pre><code class="language-java">// Problem: NotificationService needs to create different notification types
+// with different initialization requirements
+
+public sealed interface Notification permits EmailNotification, SmsNotification, PushNotification {}
+
+@Factory
+public class NotificationFactory {
+
+    @Autowired
+    private EmailClient emailClient;
+
+    @Autowired
+    private SmsProvider smsProvider;
+
+    @Autowired
+    private PushNotificationService pushService;
+
+    public Notification create(NotificationRequest request) {
+        return switch (request.getType()) {
+            case EMAIL -> new EmailNotification(
+                emailClient,
+                request.getRecipient(),
+                request.getTemplate(),
+                request.getVariables()
+            );
+            case SMS -> new SmsNotification(
+                smsProvider,
+                normalizePhoneNumber(request.getRecipient()),
+                request.getMessage()
+            );
+            case PUSH -> new PushNotification(
+                pushService,
+                request.getDeviceToken(),
+                request.getTitle(),
+                request.getBody()
+            );
+        };
+    }
+
+    private String normalizePhoneNumber(String phone) {
+        // E.164 format
+        return phone.replaceAll("[^0-9+]", "");
+    }
+}
+</code></pre>
+<p>Using a <code>sealed interface</code> here is deliberate: it forces the <code>switch</code> expression to be exhaustive, so if you add a new <code>NotificationType</code> in the future the compiler will tell you that <code>NotificationFactory</code> needs to handle it — the type system enforces completeness.</p>
+<h2>Observer (Event-Driven): Decoupled Reactions</h2>
+<p>Use when one event should trigger multiple independent reactions without coupling them. Think of it like a newspaper subscription: the publisher prints the paper without knowing who subscribes, and each subscriber reads it independently. Spring's <code>ApplicationEvent</code> mechanism is the idiomatic way to implement this in a Spring Boot application, and it integrates naturally with transactions through <code>@TransactionalEventListener</code>:</p>
+<pre><code class="language-java">// Spring's ApplicationEvent is the cleanest Observer implementation in Spring Boot
+
+// The event
+public record OrderCreatedEvent(Order order) implements ApplicationEvent {
+    public OrderCreatedEvent(Order order) {
+        this.order = order;
+    }
+}
+
+// Publishers just fire events — they don't know about listeners
+@Service
+public class OrderService {
+
+    @Autowired
+    private ApplicationEventPublisher eventPublisher;
+
+    public Order createOrder(OrderRequest request) {
+        Order order = orderRepository.save(buildOrder(request));
+        // Publish — OrderService has ZERO knowledge of what happens next
+        eventPublisher.publishEvent(new OrderCreatedEvent(order));
+        return order;
+    }
+}
+
+// Listeners react independently
+@Component
+public class OrderEmailListener {
+
+    @Async  // Don't block the request thread
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    public void handleOrderCreated(OrderCreatedEvent event) {
+        emailService.sendOrderConfirmation(event.order());
+    }
+}
+
+@Component
+public class InventoryReservationListener {
+
+    @Async
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    public void handleOrderCreated(OrderCreatedEvent event) {
+        inventoryService.reserve(event.order().getItems());
+    }
+}
+
+@Component
+public class AnalyticsListener {
+
+    @Async
+    @EventListener  // @EventListener fires even on transaction rollback
+    public void handleOrderCreated(OrderCreatedEvent event) {
+        analyticsService.track("order_created", event.order());
+    }
+}
+// Adding a new reaction = add a new @Component. Zero changes to OrderService.
+</code></pre>
+<p>Notice the difference between <code>@TransactionalEventListener</code> (used by email and inventory) and <code>@EventListener</code> (used by analytics). Email and inventory reservation must only happen if the order transaction commits successfully — <code>AFTER_COMMIT</code> guarantees this. Analytics, by contrast, wants to track even failed orders, so it uses plain <code>@EventListener</code> which fires regardless of transaction outcome.</p>
+<h2>Decorator: Composable Behavior</h2>
+<p>Use when you need to add behavior to an object dynamically without inheritance. Inheritance is a rigid relationship — once you make <code>CachingOrderRepository</code> extend <code>JpaOrderRepository</code>, you cannot swap the base implementation. The Decorator pattern solves this by wrapping the interface rather than extending the class, so each decorator only depends on the abstraction and can be composed in any order:</p>
+<pre><code class="language-java">// Repository with optional caching, audit logging, retry
+public interface UserRepository {
+    Optional&#x3C;User> findById(String id);
+    User save(User user);
+}
+
+@Repository
+public class JpaUserRepository implements UserRepository {
+    // Base implementation
+    @Override
+    public Optional&#x3C;User> findById(String id) {
+        return jpaRepo.findById(id);
+    }
+}
+
+// Caching decorator
+public class CachingUserRepository implements UserRepository {
+
+    private final UserRepository delegate;
+    private final Cache&#x3C;String, User> cache;
+
+    public CachingUserRepository(UserRepository delegate, Cache&#x3C;String, User> cache) {
+        this.delegate = delegate;
+        this.cache = cache;
+    }
+
+    @Override
+    public Optional&#x3C;User> findById(String id) {
+        User cached = cache.getIfPresent(id);
+        if (cached != null) return Optional.of(cached);
+
+        Optional&#x3C;User> user = delegate.findById(id);
+        user.ifPresent(u -> cache.put(id, u));
+        return user;
+    }
+
+    @Override
+    public User save(User user) {
+        User saved = delegate.save(user);
+        cache.put(saved.getId(), saved);  // Update cache on write
+        return saved;
+    }
+}
+
+// Audit logging decorator
+public class AuditingUserRepository implements UserRepository {
+
+    private final UserRepository delegate;
+    private final AuditLog auditLog;
+
+    @Override
+    public User save(User user) {
+        User saved = delegate.save(user);
+        auditLog.record(AuditEntry.builder()
+            .entityType("User").entityId(saved.getId())
+            .action("SAVE").performedBy(SecurityContext.currentUser())
+            .build());
+        return saved;
+    }
+}
+
+// Wire them together in Spring
+@Configuration
+public class RepositoryConfig {
+
+    @Bean
+    public UserRepository userRepository(JpaUserRepository base) {
+        Cache&#x3C;String, User> cache = Caffeine.newBuilder()
+            .maximumSize(10_000).expireAfterWrite(5, TimeUnit.MINUTES).build();
+
+        return new AuditingUserRepository(
+            new CachingUserRepository(base, cache),
+            auditLog
+        );
+    }
+}
+</code></pre>
+<p>The <code>@Configuration</code> class at the end is where the power of this pattern becomes visible: you are composing three independent behaviors (JPA persistence, caching, and auditing) with no modification to any of the three classes. If you need to add retry logic tomorrow, you write a <code>RetryingUserRepository</code> decorator and add one more wrapper in <code>RepositoryConfig</code>.</p>
+<h2>Command Pattern: Encapsulated Operations</h2>
+<p>Use for undo/redo, queuing operations, or transactional scripts. The Command pattern turns an operation into an object — which means you can store it, queue it, log it, and most importantly, reverse it. This is especially valuable in financial or administrative contexts where operations need to be reversible:</p>
+<pre><code class="language-java">// Command interface
+public interface Command&#x3C;T> {
+    T execute();
+    void undo();
+}
+
+// Commands are self-contained, reversible operations
+public class TransferMoneyCommand implements Command&#x3C;TransferResult> {
+
+    private final Account fromAccount;
+    private final Account toAccount;
+    private final BigDecimal amount;
+    private boolean executed = false;
+
+    @Override
+    public TransferResult execute() {
+        if (fromAccount.getBalance().compareTo(amount) &#x3C; 0) {
+            throw new InsufficientFundsException(fromAccount.getId());
+        }
+        fromAccount.debit(amount);
+        toAccount.credit(amount);
+        executed = true;
+        return TransferResult.success(fromAccount.getId(), toAccount.getId(), amount);
+    }
+
+    @Override
+    public void undo() {
+        if (!executed) return;
+        toAccount.debit(amount);
+        fromAccount.credit(amount);
+        executed = false;
+    }
+}
+
+// Command executor with undo history
+@Service
+public class CommandExecutor {
+
+    private final Deque&#x3C;Command&#x3C;?>> history = new ArrayDeque&#x3C;>();
+
+    public &#x3C;T> T execute(Command&#x3C;T> command) {
+        T result = command.execute();
+        history.push(command);
+        return result;
+    }
+
+    public void undoLast() {
+        if (!history.isEmpty()) {
+            history.pop().undo();
+        }
+    }
+}
+</code></pre>
+<p>The <code>executed</code> flag in <code>TransferMoneyCommand</code> is a subtle but important guard: it prevents <code>undo()</code> from reversing a transfer that was never successfully applied, protecting against double-reversal bugs when error handling calls <code>undo()</code> on a command that threw during <code>execute()</code>.</p>
+<h2>When NOT to Use Patterns</h2>
+<p>With several patterns now in your toolkit, the most important skill to develop is restraint. Every pattern adds indirection, which adds cognitive overhead for anyone reading the code. Apply a pattern only when the problem it solves is actually present, not when the code structure merely resembles a scenario where the pattern could apply:</p>
+<pre><code>Pattern overuse is more common than underuse:
+
+Don't create a Factory when:
+  new OrderService() is perfectly readable
+  → Builder or constructor are clearer
+
+Don't create a Strategy when:
+  You only have one algorithm now (YAGNI)
+  → Add it when the second strategy arrives
+
+Don't create an Observer when:
+  Only one listener will ever exist
+  → Direct method call is simpler
+
+Don't create a Decorator when:
+  You own both the base class and the extension
+  → Just modify the base class
+
+The design principle behind patterns: SOLID
+  S: Single Responsibility (Strategy, Command)
+  O: Open/Closed (Strategy, Decorator, Observer)
+  L: Liskov Substitution (all well-implemented patterns)
+  I: Interface Segregation (narrow interfaces)
+  D: Dependency Inversion (inject abstractions, not concretions)
+
+Apply SOLID principles first. Patterns emerge naturally.
+</code></pre>
+<p>The most dangerous design pattern is the one you apply to feel like you're doing "proper engineering." Good code is readable code. A <code>UserRepository</code> with caching and auditing composed via Decorator is elegant. A <code>UserServiceFactoryImpl</code> with a <code>UserServiceFactoryImplFactory</code> is a joke. Patterns serve the code; the code doesn't serve the patterns.</p>
+</article><div class="my-10 rounded-xl border border-yellow-200 bg-yellow-50 p-6"><div class="flex items-center gap-2 mb-1"><span class="text-lg">📚</span><h3 class="text-base font-bold text-gray-900">Recommended Resources</h3></div><div class="space-y-4"><div class="flex items-start gap-3 bg-white rounded-lg p-4 border border-yellow-100"><div class="flex-1 min-w-0"><div class="flex items-center gap-2 flex-wrap mb-1"><span class="font-semibold text-gray-900 text-sm">Java Masterclass — Udemy</span><span class="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-medium">Best Seller</span></div><p class="text-xs text-gray-600">Comprehensive Java course covering Java 17+, OOP, concurrency, and modern APIs.</p></div><a href="https://www.udemy.com/course/java-the-complete-java-developer-course/" target="_blank" rel="noopener noreferrer" class="flex-shrink-0 text-xs bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium whitespace-nowrap">View Course<!-- --> →</a></div><div class="flex items-start gap-3 bg-white rounded-lg p-4 border border-yellow-100"><div class="flex-1 min-w-0"><div class="flex items-center gap-2 flex-wrap mb-1"><span class="font-semibold text-gray-900 text-sm">Effective Java, 3rd Edition</span><span class="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-medium">Must Read</span></div><p class="text-xs text-gray-600">Joshua Bloch&#x27;s classic guide to writing clear, correct, and efficient Java code.</p></div><a href="https://amzn.to/3RxIpuB" target="_blank" rel="noopener noreferrer" class="flex-shrink-0 text-xs bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium whitespace-nowrap">View on Amazon<!-- --> →</a></div><div class="flex items-start gap-3 bg-white rounded-lg p-4 border border-yellow-100"><div class="flex-1 min-w-0"><div class="flex items-center gap-2 flex-wrap mb-1"><span class="font-semibold text-gray-900 text-sm">Java Concurrency in Practice</span></div><p class="text-xs text-gray-600">The authoritative book on writing thread-safe, concurrent Java programs.</p></div><a href="https://amzn.to/3Rx3xM4" target="_blank" rel="noopener noreferrer" class="flex-shrink-0 text-xs bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium whitespace-nowrap">View on Amazon<!-- --> →</a></div></div></div><div class="mt-10 pt-8 border-t border-gray-100"><p class="text-sm text-gray-500 mb-3">Found this useful? Share it:</p><div class="flex gap-3"><a href="https://twitter.com/intent/tweet?text=Java%20Design%20Patterns%3A%20When%20to%20Use%20Them%2C%20When%20to%20Avoid%20Them&amp;url=https%3A%2F%2Fcodesprintpro.com%2Fblog%2Fjava-design-patterns%2F" target="_blank" rel="noopener noreferrer" class="text-xs bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors">Share on X/Twitter</a><a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fcodesprintpro.com%2Fblog%2Fjava-design-patterns%2F" target="_blank" rel="noopener noreferrer" class="text-xs bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">Share on LinkedIn</a></div></div></div><aside class="hidden lg:block w-64 flex-shrink-0"><nav class="hidden lg:block sticky top-24"><h4 class="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-3">On This Page</h4><ul class="space-y-1"><li class=""><a href="#builder-complex-object-construction" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Builder: Complex Object Construction</a></li><li class=""><a href="#strategy-swappable-algorithms" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Strategy: Swappable Algorithms</a></li><li class=""><a href="#factory-factory-method-controlled-object-creation" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Factory / Factory Method: Controlled Object Creation</a></li><li class=""><a href="#observer-event-driven-decoupled-reactions" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Observer (Event-Driven): Decoupled Reactions</a></li><li class=""><a href="#decorator-composable-behavior" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Decorator: Composable Behavior</a></li><li class=""><a href="#command-pattern-encapsulated-operations" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Command Pattern: Encapsulated Operations</a></li><li class=""><a href="#when-not-to-use-patterns" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">When NOT to Use Patterns</a></li></ul></nav></aside></div><div class="mt-16 pt-10 border-t border-gray-100"><h2 class="text-2xl font-bold text-gray-900 mb-6">Related Articles</h2><div class="grid grid-cols-1 md:grid-cols-3 gap-6"><a href="/blog/java-concurrency-patterns/"><article class="group bg-white rounded-xl border border-gray-200 p-6 h-full cursor-pointer hover:border-blue-300 hover:shadow-lg transition-all"><span class="inline-block text-xs font-semibold px-3 py-1 rounded-full mb-3 bg-orange-100 text-orange-700">Java</span><h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors leading-snug">Java Concurrency Patterns: CompletableFuture, Structured Concurrency, and Thread-Safe Design</h3><p class="text-gray-600 text-sm mb-4 line-clamp-3">Java concurrency has three eras: raw  and  (Java 1-4), the  framework (Java 5+), and the virtual thread/structured concurrency era (Java 21+). Each era&#x27;s patterns still exist in production codebases. Understanding all th…</p><div class="flex items-center justify-between text-xs text-gray-400"><span>Jul 8, 2025</span><span class="flex items-center gap-1"><svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>7 min read</span></div><div class="mt-3 flex flex-wrap gap-1"><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->java</span><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->concurrency</span><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->completablefuture</span></div></article></a><a href="/blog/java-memory-management-deep-dive/"><article class="group bg-white rounded-xl border border-gray-200 p-6 h-full cursor-pointer hover:border-blue-300 hover:shadow-lg transition-all"><span class="inline-block text-xs font-semibold px-3 py-1 rounded-full mb-3 bg-orange-100 text-orange-700">Java</span><h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors leading-snug">Java Memory Management Deep Dive: Heap, GC, and Production Tuning</h3><p class="text-gray-600 text-sm mb-4 line-clamp-3">Java&#x27;s garbage collector is the single biggest source of unexplained latency spikes in production services. A GC pause of 2 seconds is invisible in most logs but visible to every user who happened to make a request durin…</p><div class="flex items-center justify-between text-xs text-gray-400"><span>Jun 13, 2025</span><span class="flex items-center gap-1"><svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>7 min read</span></div><div class="mt-3 flex flex-wrap gap-1"><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->java</span><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->jvm</span><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->garbage collection</span></div></article></a><a href="/blog/spring-security-oauth2-jwt/"><article class="group bg-white rounded-xl border border-gray-200 p-6 h-full cursor-pointer hover:border-blue-300 hover:shadow-lg transition-all"><span class="inline-block text-xs font-semibold px-3 py-1 rounded-full mb-3 bg-orange-100 text-orange-700">Java</span><h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors leading-snug">Spring Security OAuth2 and JWT: Production Implementation Guide</h3><p class="text-gray-600 text-sm mb-4 line-clamp-3">Spring Security is one of the most powerful and most misunderstood frameworks in the Java ecosystem. Its flexibility is its strength — and its complexity. Misconfigured security is worse than no security, because it give…</p><div class="flex items-center justify-between text-xs text-gray-400"><span>Jun 3, 2025</span><span class="flex items-center gap-1"><svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>7 min read</span></div><div class="mt-3 flex flex-wrap gap-1"><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->spring security</span><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->oauth2</span><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->jwt</span></div></article></a></div></div><div class="mt-12 text-center"><a class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium transition-colors" href="/blog/">← Back to all articles</a></div></div></div><footer class="bg-gray-900 text-white py-12"><div class="container mx-auto px-4 sm:px-6 lg:px-8"><div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8"><div class="col-span-1 md:col-span-1"><div><a class="text-xl font-bold block mb-3 text-white hover:text-blue-400 transition-colors" href="/">CodeSprintPro</a></div><p class="text-gray-400 text-sm mb-4 leading-relaxed">Deep-dive technical content on System Design, Java, Databases, AI/ML, and AWS — by Sachin Sarawgi.</p><div class="flex space-x-4"><a href="https://github.com/codesprintpro" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors" aria-label="Visit GitHub profile"><i class="fab fa-github text-xl"></i></a><a href="https://www.linkedin.com/in/sachin-sarawgi/" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors" aria-label="Visit LinkedIn profile"><i class="fab fa-linkedin text-xl"></i></a><a href="https://medium.com/@codesprintpro" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors" aria-label="Visit Medium profile"><i class="fab fa-medium text-xl"></i></a></div></div><div><h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 mb-4">Quick Links</h3><ul class="space-y-2"><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">Blog</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/#about">About</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/#portfolio">Portfolio</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/#contact">Contact</a></div></li></ul></div><div><h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 mb-4">Categories</h3><ul class="space-y-2"><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">System Design</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">Java</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">Databases</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">AI/ML</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">AWS</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">Messaging</a></div></li></ul></div><div><h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 mb-4">Contact</h3><ul class="space-y-2 text-gray-400 text-sm"><li><a href="mailto:sachinsarawgi201143@gmail.com" class="hover:text-white transition-colors flex items-center gap-2"><i class="fas fa-envelope"></i> Email</a></li><li><a href="https://www.linkedin.com/in/sachin-sarawgi/" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors flex items-center gap-2"><i class="fab fa-linkedin"></i> LinkedIn</a></li><li><a href="https://github.com/codesprintpro" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors flex items-center gap-2"><i class="fab fa-github"></i> GitHub</a></li></ul></div></div><div class="border-t border-gray-800 pt-6 flex flex-col md:flex-row justify-between items-center gap-2"><p class="text-gray-500 text-sm">© <!-- -->2026<!-- --> CodeSprintPro · Sachin Sarawgi. All rights reserved.</p><p class="text-gray-600 text-xs">Built with Next.js · TailwindCSS · Deployed on GitHub Pages</p></div></div></footer></div></main></div><script id="__NEXT_DATA__" type="application/json">{"props":{"pageProps":{"post":{"title":"Java Design Patterns: When to Use Them, When to Avoid Them","description":"Practical guide to Java design patterns with production examples. Covers Builder, Factory, Strategy, Observer, Decorator, and Command patterns with Spring Boot integration.","date":"2025-03-15","category":"Java","tags":["java","design patterns","spring boot","solid","clean code"],"featured":false,"affiliateSection":"java-courses","slug":"java-design-patterns","readingTime":"10 min read","excerpt":"Design patterns are solutions to recurring design problems. The mistake most engineers make is pattern-matching: \"this code has a factory-like structure, let me add a Factory pattern.\" The right question is: \"what proble…","contentHtml":"\u003cp\u003eDesign patterns are solutions to recurring design problems. The mistake most engineers make is pattern-matching: \"this code has a factory-like structure, let me add a Factory pattern.\" The right question is: \"what problem am I solving?\" Most of the time, a well-named class and a clean interface are better than a named pattern. This article shows when patterns genuinely improve code.\u003c/p\u003e\n\u003ch2\u003eBuilder: Complex Object Construction\u003c/h2\u003e\n\u003cp\u003eUse when constructing an object requires many parameters, especially optional ones. The classic symptom that Builder is the right choice is what is often called the \"telescoping constructor\" anti-pattern — a constructor call where you cannot tell what each argument means without looking up the signature. The following comparison makes this concrete:\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-java\"\u003e// Without Builder: telescoping constructors (anti-pattern)\nnew Order(\"cust-123\", \"NEW\", BigDecimal.valueOf(99.99), \"USD\", null, null, true, false);\n// Which field is which? What are those booleans?\n\n// With Builder: readable, validated, immutable\n@Builder\n@Value  // Lombok: all fields final, getters, no setters\npublic class Order {\n    String orderId;\n    String customerId;\n    OrderStatus status;\n    BigDecimal totalAmount;\n    String currency;\n    String shippingAddressId;\n    boolean expressShipping;\n    boolean giftWrapped;\n    Instant createdAt;\n\n    // Custom validation in the builder\n    public static class OrderBuilder {\n        public Order build() {\n            if (totalAmount == null || totalAmount.compareTo(BigDecimal.ZERO) \u0026#x3C;= 0) {\n                throw new IllegalArgumentException(\"Total must be positive\");\n            }\n            if (currency == null) currency = \"USD\";\n            if (createdAt == null) createdAt = Instant.now();\n            return new Order(orderId, customerId, status, totalAmount,\n                           currency, shippingAddressId, expressShipping, giftWrapped, createdAt);\n        }\n    }\n}\n\n// Usage: self-documenting, compile-time checked\nOrder order = Order.builder()\n    .orderId(UUID.randomUUID().toString())\n    .customerId(\"cust-123\")\n    .status(OrderStatus.PENDING)\n    .totalAmount(BigDecimal.valueOf(99.99))\n    .expressShipping(true)\n    .build();\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eNotice that the custom \u003ccode\u003ebuild()\u003c/code\u003e method centralizes validation and applies sensible defaults — logic that would otherwise be scattered across multiple constructors. By overriding the Lombok-generated \u003ccode\u003ebuild()\u003c/code\u003e, you get both the convenience of generated code and the safety of explicit invariant checks.\u003c/p\u003e\n\u003ch2\u003eStrategy: Swappable Algorithms\u003c/h2\u003e\n\u003cp\u003eUse when you have multiple implementations of the same behavior and need to choose at runtime. The Strategy pattern is essentially a way to encode a decision that would otherwise live in a \u003ccode\u003eswitch\u003c/code\u003e or \u003ccode\u003eif-else\u003c/code\u003e chain directly into the type system, making it easy to add new cases without touching existing code. Payment processing is a natural example — each payment provider has completely different API calls, but from the perspective of the service that processes payments, the interface is the same:\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-java\"\u003e// Payment processing: different strategies for different payment methods\npublic interface PaymentStrategy {\n    PaymentResult process(PaymentRequest request);\n    boolean supports(PaymentMethod method);\n}\n\n@Component\npublic class StripePaymentStrategy implements PaymentStrategy {\n\n    @Override\n    public PaymentResult process(PaymentRequest request) {\n        // Stripe-specific implementation\n        StripeCharge charge = stripeClient.charges().create(\n            ChargeCreateParams.builder()\n                .setAmount(request.getAmountCents())\n                .setCurrency(request.getCurrency())\n                .setSource(request.getToken())\n                .build()\n        );\n        return PaymentResult.success(charge.getId());\n    }\n\n    @Override\n    public boolean supports(PaymentMethod method) {\n        return method == PaymentMethod.CREDIT_CARD || method == PaymentMethod.DEBIT_CARD;\n    }\n}\n\n@Component\npublic class PayPalPaymentStrategy implements PaymentStrategy {\n\n    @Override\n    public PaymentResult process(PaymentRequest request) {\n        // PayPal-specific implementation\n        return payPalClient.execute(request);\n    }\n\n    @Override\n    public boolean supports(PaymentMethod method) {\n        return method == PaymentMethod.PAYPAL;\n    }\n}\n\n// Context: selects and executes the right strategy\n@Service\npublic class PaymentService {\n\n    private final List\u0026#x3C;PaymentStrategy\u003e strategies;  // Spring injects all implementations\n\n    public PaymentService(List\u0026#x3C;PaymentStrategy\u003e strategies) {\n        this.strategies = strategies;\n    }\n\n    public PaymentResult processPayment(PaymentRequest request) {\n        return strategies.stream()\n            .filter(s -\u003e s.supports(request.getPaymentMethod()))\n            .findFirst()\n            .orElseThrow(() -\u003e new UnsupportedPaymentMethodException(request.getPaymentMethod()))\n            .process(request);\n    }\n}\n// Adding a new payment method = add a new @Component class. Zero changes to PaymentService.\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eThe key insight here is how Spring's dependency injection and the Strategy pattern work together: by injecting \u003ccode\u003eList\u0026#x3C;PaymentStrategy\u003e\u003c/code\u003e, Spring automatically collects every \u003ccode\u003e@Component\u003c/code\u003e that implements the interface. Adding a new payment method means writing a new class and annotating it — \u003ccode\u003ePaymentService\u003c/code\u003e never needs to know it exists.\u003c/p\u003e\n\u003ch2\u003eFactory / Factory Method: Controlled Object Creation\u003c/h2\u003e\n\u003cp\u003eUse when the creation logic is complex, when clients shouldn't know the concrete type, or when object creation has side effects. The Factory pattern is appropriate when the act of creating an object requires knowledge that the caller should not need to have — like which dependencies to inject, what normalization to apply to inputs, or how to map a type enum to a concrete class:\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-java\"\u003e// Problem: NotificationService needs to create different notification types\n// with different initialization requirements\n\npublic sealed interface Notification permits EmailNotification, SmsNotification, PushNotification {}\n\n@Factory\npublic class NotificationFactory {\n\n    @Autowired\n    private EmailClient emailClient;\n\n    @Autowired\n    private SmsProvider smsProvider;\n\n    @Autowired\n    private PushNotificationService pushService;\n\n    public Notification create(NotificationRequest request) {\n        return switch (request.getType()) {\n            case EMAIL -\u003e new EmailNotification(\n                emailClient,\n                request.getRecipient(),\n                request.getTemplate(),\n                request.getVariables()\n            );\n            case SMS -\u003e new SmsNotification(\n                smsProvider,\n                normalizePhoneNumber(request.getRecipient()),\n                request.getMessage()\n            );\n            case PUSH -\u003e new PushNotification(\n                pushService,\n                request.getDeviceToken(),\n                request.getTitle(),\n                request.getBody()\n            );\n        };\n    }\n\n    private String normalizePhoneNumber(String phone) {\n        // E.164 format\n        return phone.replaceAll(\"[^0-9+]\", \"\");\n    }\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eUsing a \u003ccode\u003esealed interface\u003c/code\u003e here is deliberate: it forces the \u003ccode\u003eswitch\u003c/code\u003e expression to be exhaustive, so if you add a new \u003ccode\u003eNotificationType\u003c/code\u003e in the future the compiler will tell you that \u003ccode\u003eNotificationFactory\u003c/code\u003e needs to handle it — the type system enforces completeness.\u003c/p\u003e\n\u003ch2\u003eObserver (Event-Driven): Decoupled Reactions\u003c/h2\u003e\n\u003cp\u003eUse when one event should trigger multiple independent reactions without coupling them. Think of it like a newspaper subscription: the publisher prints the paper without knowing who subscribes, and each subscriber reads it independently. Spring's \u003ccode\u003eApplicationEvent\u003c/code\u003e mechanism is the idiomatic way to implement this in a Spring Boot application, and it integrates naturally with transactions through \u003ccode\u003e@TransactionalEventListener\u003c/code\u003e:\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-java\"\u003e// Spring's ApplicationEvent is the cleanest Observer implementation in Spring Boot\n\n// The event\npublic record OrderCreatedEvent(Order order) implements ApplicationEvent {\n    public OrderCreatedEvent(Order order) {\n        this.order = order;\n    }\n}\n\n// Publishers just fire events — they don't know about listeners\n@Service\npublic class OrderService {\n\n    @Autowired\n    private ApplicationEventPublisher eventPublisher;\n\n    public Order createOrder(OrderRequest request) {\n        Order order = orderRepository.save(buildOrder(request));\n        // Publish — OrderService has ZERO knowledge of what happens next\n        eventPublisher.publishEvent(new OrderCreatedEvent(order));\n        return order;\n    }\n}\n\n// Listeners react independently\n@Component\npublic class OrderEmailListener {\n\n    @Async  // Don't block the request thread\n    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)\n    public void handleOrderCreated(OrderCreatedEvent event) {\n        emailService.sendOrderConfirmation(event.order());\n    }\n}\n\n@Component\npublic class InventoryReservationListener {\n\n    @Async\n    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)\n    public void handleOrderCreated(OrderCreatedEvent event) {\n        inventoryService.reserve(event.order().getItems());\n    }\n}\n\n@Component\npublic class AnalyticsListener {\n\n    @Async\n    @EventListener  // @EventListener fires even on transaction rollback\n    public void handleOrderCreated(OrderCreatedEvent event) {\n        analyticsService.track(\"order_created\", event.order());\n    }\n}\n// Adding a new reaction = add a new @Component. Zero changes to OrderService.\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eNotice the difference between \u003ccode\u003e@TransactionalEventListener\u003c/code\u003e (used by email and inventory) and \u003ccode\u003e@EventListener\u003c/code\u003e (used by analytics). Email and inventory reservation must only happen if the order transaction commits successfully — \u003ccode\u003eAFTER_COMMIT\u003c/code\u003e guarantees this. Analytics, by contrast, wants to track even failed orders, so it uses plain \u003ccode\u003e@EventListener\u003c/code\u003e which fires regardless of transaction outcome.\u003c/p\u003e\n\u003ch2\u003eDecorator: Composable Behavior\u003c/h2\u003e\n\u003cp\u003eUse when you need to add behavior to an object dynamically without inheritance. Inheritance is a rigid relationship — once you make \u003ccode\u003eCachingOrderRepository\u003c/code\u003e extend \u003ccode\u003eJpaOrderRepository\u003c/code\u003e, you cannot swap the base implementation. The Decorator pattern solves this by wrapping the interface rather than extending the class, so each decorator only depends on the abstraction and can be composed in any order:\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-java\"\u003e// Repository with optional caching, audit logging, retry\npublic interface UserRepository {\n    Optional\u0026#x3C;User\u003e findById(String id);\n    User save(User user);\n}\n\n@Repository\npublic class JpaUserRepository implements UserRepository {\n    // Base implementation\n    @Override\n    public Optional\u0026#x3C;User\u003e findById(String id) {\n        return jpaRepo.findById(id);\n    }\n}\n\n// Caching decorator\npublic class CachingUserRepository implements UserRepository {\n\n    private final UserRepository delegate;\n    private final Cache\u0026#x3C;String, User\u003e cache;\n\n    public CachingUserRepository(UserRepository delegate, Cache\u0026#x3C;String, User\u003e cache) {\n        this.delegate = delegate;\n        this.cache = cache;\n    }\n\n    @Override\n    public Optional\u0026#x3C;User\u003e findById(String id) {\n        User cached = cache.getIfPresent(id);\n        if (cached != null) return Optional.of(cached);\n\n        Optional\u0026#x3C;User\u003e user = delegate.findById(id);\n        user.ifPresent(u -\u003e cache.put(id, u));\n        return user;\n    }\n\n    @Override\n    public User save(User user) {\n        User saved = delegate.save(user);\n        cache.put(saved.getId(), saved);  // Update cache on write\n        return saved;\n    }\n}\n\n// Audit logging decorator\npublic class AuditingUserRepository implements UserRepository {\n\n    private final UserRepository delegate;\n    private final AuditLog auditLog;\n\n    @Override\n    public User save(User user) {\n        User saved = delegate.save(user);\n        auditLog.record(AuditEntry.builder()\n            .entityType(\"User\").entityId(saved.getId())\n            .action(\"SAVE\").performedBy(SecurityContext.currentUser())\n            .build());\n        return saved;\n    }\n}\n\n// Wire them together in Spring\n@Configuration\npublic class RepositoryConfig {\n\n    @Bean\n    public UserRepository userRepository(JpaUserRepository base) {\n        Cache\u0026#x3C;String, User\u003e cache = Caffeine.newBuilder()\n            .maximumSize(10_000).expireAfterWrite(5, TimeUnit.MINUTES).build();\n\n        return new AuditingUserRepository(\n            new CachingUserRepository(base, cache),\n            auditLog\n        );\n    }\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eThe \u003ccode\u003e@Configuration\u003c/code\u003e class at the end is where the power of this pattern becomes visible: you are composing three independent behaviors (JPA persistence, caching, and auditing) with no modification to any of the three classes. If you need to add retry logic tomorrow, you write a \u003ccode\u003eRetryingUserRepository\u003c/code\u003e decorator and add one more wrapper in \u003ccode\u003eRepositoryConfig\u003c/code\u003e.\u003c/p\u003e\n\u003ch2\u003eCommand Pattern: Encapsulated Operations\u003c/h2\u003e\n\u003cp\u003eUse for undo/redo, queuing operations, or transactional scripts. The Command pattern turns an operation into an object — which means you can store it, queue it, log it, and most importantly, reverse it. This is especially valuable in financial or administrative contexts where operations need to be reversible:\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-java\"\u003e// Command interface\npublic interface Command\u0026#x3C;T\u003e {\n    T execute();\n    void undo();\n}\n\n// Commands are self-contained, reversible operations\npublic class TransferMoneyCommand implements Command\u0026#x3C;TransferResult\u003e {\n\n    private final Account fromAccount;\n    private final Account toAccount;\n    private final BigDecimal amount;\n    private boolean executed = false;\n\n    @Override\n    public TransferResult execute() {\n        if (fromAccount.getBalance().compareTo(amount) \u0026#x3C; 0) {\n            throw new InsufficientFundsException(fromAccount.getId());\n        }\n        fromAccount.debit(amount);\n        toAccount.credit(amount);\n        executed = true;\n        return TransferResult.success(fromAccount.getId(), toAccount.getId(), amount);\n    }\n\n    @Override\n    public void undo() {\n        if (!executed) return;\n        toAccount.debit(amount);\n        fromAccount.credit(amount);\n        executed = false;\n    }\n}\n\n// Command executor with undo history\n@Service\npublic class CommandExecutor {\n\n    private final Deque\u0026#x3C;Command\u0026#x3C;?\u003e\u003e history = new ArrayDeque\u0026#x3C;\u003e();\n\n    public \u0026#x3C;T\u003e T execute(Command\u0026#x3C;T\u003e command) {\n        T result = command.execute();\n        history.push(command);\n        return result;\n    }\n\n    public void undoLast() {\n        if (!history.isEmpty()) {\n            history.pop().undo();\n        }\n    }\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eThe \u003ccode\u003eexecuted\u003c/code\u003e flag in \u003ccode\u003eTransferMoneyCommand\u003c/code\u003e is a subtle but important guard: it prevents \u003ccode\u003eundo()\u003c/code\u003e from reversing a transfer that was never successfully applied, protecting against double-reversal bugs when error handling calls \u003ccode\u003eundo()\u003c/code\u003e on a command that threw during \u003ccode\u003eexecute()\u003c/code\u003e.\u003c/p\u003e\n\u003ch2\u003eWhen NOT to Use Patterns\u003c/h2\u003e\n\u003cp\u003eWith several patterns now in your toolkit, the most important skill to develop is restraint. Every pattern adds indirection, which adds cognitive overhead for anyone reading the code. Apply a pattern only when the problem it solves is actually present, not when the code structure merely resembles a scenario where the pattern could apply:\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003ePattern overuse is more common than underuse:\n\nDon't create a Factory when:\n  new OrderService() is perfectly readable\n  → Builder or constructor are clearer\n\nDon't create a Strategy when:\n  You only have one algorithm now (YAGNI)\n  → Add it when the second strategy arrives\n\nDon't create an Observer when:\n  Only one listener will ever exist\n  → Direct method call is simpler\n\nDon't create a Decorator when:\n  You own both the base class and the extension\n  → Just modify the base class\n\nThe design principle behind patterns: SOLID\n  S: Single Responsibility (Strategy, Command)\n  O: Open/Closed (Strategy, Decorator, Observer)\n  L: Liskov Substitution (all well-implemented patterns)\n  I: Interface Segregation (narrow interfaces)\n  D: Dependency Inversion (inject abstractions, not concretions)\n\nApply SOLID principles first. Patterns emerge naturally.\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eThe most dangerous design pattern is the one you apply to feel like you're doing \"proper engineering.\" Good code is readable code. A \u003ccode\u003eUserRepository\u003c/code\u003e with caching and auditing composed via Decorator is elegant. A \u003ccode\u003eUserServiceFactoryImpl\u003c/code\u003e with a \u003ccode\u003eUserServiceFactoryImplFactory\u003c/code\u003e is a joke. Patterns serve the code; the code doesn't serve the patterns.\u003c/p\u003e\n","tableOfContents":[{"id":"builder-complex-object-construction","text":"Builder: Complex Object Construction","level":2},{"id":"strategy-swappable-algorithms","text":"Strategy: Swappable Algorithms","level":2},{"id":"factory-factory-method-controlled-object-creation","text":"Factory / Factory Method: Controlled Object Creation","level":2},{"id":"observer-event-driven-decoupled-reactions","text":"Observer (Event-Driven): Decoupled Reactions","level":2},{"id":"decorator-composable-behavior","text":"Decorator: Composable Behavior","level":2},{"id":"command-pattern-encapsulated-operations","text":"Command Pattern: Encapsulated Operations","level":2},{"id":"when-not-to-use-patterns","text":"When NOT to Use Patterns","level":2}]},"relatedPosts":[{"title":"Java Concurrency Patterns: CompletableFuture, Structured Concurrency, and Thread-Safe Design","description":"Production Java concurrency: CompletableFuture pipelines, handling exceptions in async chains, Java 21 structured concurrency, thread-safe collection patterns, and the concurrency bugs that cause data corruption.","date":"2025-07-08","category":"Java","tags":["java","concurrency","completablefuture","virtual threads","java21","thread-safe","async"],"featured":false,"affiliateSection":"java-courses","slug":"java-concurrency-patterns","readingTime":"7 min read","excerpt":"Java concurrency has three eras: raw  and  (Java 1-4), the  framework (Java 5+), and the virtual thread/structured concurrency era (Java 21+). Each era's patterns still exist in production codebases. Understanding all th…"},{"title":"Java Memory Management Deep Dive: Heap, GC, and Production Tuning","description":"How the JVM allocates memory, how G1GC and ZGC work under the hood, heap analysis with JVM tools, and the GC tuning decisions that eliminate latency spikes in production Java services.","date":"2025-06-13","category":"Java","tags":["java","jvm","garbage collection","g1gc","zgc","heap","memory management","performance"],"featured":false,"affiliateSection":"java-courses","slug":"java-memory-management-deep-dive","readingTime":"7 min read","excerpt":"Java's garbage collector is the single biggest source of unexplained latency spikes in production services. A GC pause of 2 seconds is invisible in most logs but visible to every user who happened to make a request durin…"},{"title":"Spring Security OAuth2 and JWT: Production Implementation Guide","description":"Complete Spring Security OAuth2 implementation: JWT token validation, Resource Server configuration, method-level security, custom UserDetailsService, refresh token rotation, and the security pitfalls that lead to authentication bypasses.","date":"2025-06-03","category":"Java","tags":["spring security","oauth2","jwt","spring boot","authentication","authorization","java","security"],"featured":false,"affiliateSection":"java-courses","slug":"spring-security-oauth2-jwt","readingTime":"7 min read","excerpt":"Spring Security is one of the most powerful and most misunderstood frameworks in the Java ecosystem. Its flexibility is its strength — and its complexity. Misconfigured security is worse than no security, because it give…"}]},"__N_SSG":true},"page":"/blog/[slug]","query":{"slug":"java-design-patterns"},"buildId":"rpFn_jslWZ9qPkJwor7RD","isFallback":false,"gsp":true,"scriptLoader":[]}</script></body></html>

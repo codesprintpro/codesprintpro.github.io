@@ -1,0 +1,258 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8" data-next-head=""/><meta name="viewport" content="width=device-width" data-next-head=""/><title data-next-head="">Kafka Streams: Real-Time Stream Processing Without a Separate Cluster<!-- --> | CodeSprintPro</title><meta name="description" content="Production Kafka Streams: KStream vs KTable semantics, stateful transformations with RocksDB state stores, windowed aggregations, stream-table joins, topology design, changelog topics, and the operational patterns for running Kafka Streams in production." data-next-head=""/><meta name="author" content="Sachin Sarawgi" data-next-head=""/><link rel="canonical" href="https://codesprintpro.com/blog/kafka-streams-real-time-processing/" data-next-head=""/><meta property="og:type" content="article" data-next-head=""/><meta property="og:title" content="Kafka Streams: Real-Time Stream Processing Without a Separate Cluster" data-next-head=""/><meta property="og:description" content="Production Kafka Streams: KStream vs KTable semantics, stateful transformations with RocksDB state stores, windowed aggregations, stream-table joins, topology design, changelog topics, and the operational patterns for running Kafka Streams in production." data-next-head=""/><meta property="og:url" content="https://codesprintpro.com/blog/kafka-streams-real-time-processing/" data-next-head=""/><meta property="og:image" content="https://codesprintpro.com/images/og-default.jpg" data-next-head=""/><meta property="og:site_name" content="CodeSprintPro" data-next-head=""/><meta property="article:published_time" content="2025-04-24" data-next-head=""/><meta property="article:author" content="Sachin Sarawgi" data-next-head=""/><meta property="article:section" content="Data Engineering" data-next-head=""/><meta property="article:tag" content="kafka" data-next-head=""/><meta property="article:tag" content="kafka streams" data-next-head=""/><meta property="article:tag" content="stream processing" data-next-head=""/><meta property="article:tag" content="real-time" data-next-head=""/><meta property="article:tag" content="java" data-next-head=""/><meta property="article:tag" content="rocksdb" data-next-head=""/><meta property="article:tag" content="windowing" data-next-head=""/><meta property="article:tag" content="data engineering" data-next-head=""/><meta name="twitter:card" content="summary_large_image" data-next-head=""/><meta name="twitter:title" content="Kafka Streams: Real-Time Stream Processing Without a Separate Cluster" data-next-head=""/><meta name="twitter:description" content="Production Kafka Streams: KStream vs KTable semantics, stateful transformations with RocksDB state stores, windowed aggregations, stream-table joins, topology design, changelog topics, and the operational patterns for running Kafka Streams in production." data-next-head=""/><meta name="twitter:image" content="https://codesprintpro.com/images/og-default.jpg" data-next-head=""/><script type="application/ld+json" data-next-head="">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Kafka Streams: Real-Time Stream Processing Without a Separate Cluster","description":"Production Kafka Streams: KStream vs KTable semantics, stateful transformations with RocksDB state stores, windowed aggregations, stream-table joins, topology design, changelog topics, and the operational patterns for running Kafka Streams in production.","image":"https://codesprintpro.com/images/og-default.jpg","datePublished":"2025-04-24","dateModified":"2025-04-24","author":{"@type":"Person","name":"Sachin Sarawgi","url":"https://codesprintpro.com","sameAs":["https://www.linkedin.com/in/sachin-sarawgi/","https://github.com/codesprintpro","https://medium.com/@codesprintpro"]},"publisher":{"@type":"Organization","name":"CodeSprintPro","url":"https://codesprintpro.com","logo":{"@type":"ImageObject","url":"https://codesprintpro.com/favicon/favicon-96x96.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://codesprintpro.com/blog/kafka-streams-real-time-processing/"},"keywords":"kafka, kafka streams, stream processing, real-time, java, rocksdb, windowing, data engineering","articleSection":"Data Engineering"}</script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerPolicy="no-referrer"/><script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script><link rel="preload" href="/_next/static/media/e4af272ccee01ff0-s.p.woff2" as="font" type="font/woff2" crossorigin="anonymous" data-next-font="size-adjust"/><link rel="preload" href="/_next/static/css/735d4373f93910ca.css" as="style"/><link rel="stylesheet" href="/_next/static/css/735d4373f93910ca.css" data-n-g=""/><noscript data-n-css=""></noscript><script defer="" nomodule="" src="/_next/static/chunks/polyfills-42372ed130431b0a.js"></script><script src="/_next/static/chunks/webpack-11a4a2dad04962bb.js" defer=""></script><script src="/_next/static/chunks/framework-1ce91eb6f9ecda85.js" defer=""></script><script src="/_next/static/chunks/main-c7f4109f032d7b6e.js" defer=""></script><script src="/_next/static/chunks/pages/_app-1a852bd9e38c70ab.js" defer=""></script><script src="/_next/static/chunks/730-db7827467817f501.js" defer=""></script><script src="/_next/static/chunks/90-1cd4611704c3dbe0.js" defer=""></script><script src="/_next/static/chunks/440-29f4b99a44e744b5.js" defer=""></script><script src="/_next/static/chunks/pages/blog/%5Bslug%5D-0c1b14a33d5e05ee.js" defer=""></script><script src="/_next/static/rpFn_jslWZ9qPkJwor7RD/_buildManifest.js" defer=""></script><script src="/_next/static/rpFn_jslWZ9qPkJwor7RD/_ssgManifest.js" defer=""></script></head><body><div id="__next"><main class="__className_f367f3"><div class="min-h-screen bg-white"><nav class="fixed w-full z-50 transition-all duration-300 bg-white shadow-md" style="transform:translateY(-100px) translateZ(0)"><div class="container mx-auto px-4 sm:px-6 lg:px-8"><div class="flex items-center justify-between h-16"><a class="text-xl font-bold transition-colors text-blue-600" href="/">CodeSprintPro</a><div class="hidden md:flex items-center space-x-8"><a class="text-sm font-medium transition-colors text-blue-600" href="/blog/">Blog</a><a class="text-sm font-medium transition-colors text-gray-600 hover:text-blue-600" href="/#about">About</a><a class="text-sm font-medium transition-colors text-gray-600 hover:text-blue-600" href="/#portfolio">Portfolio</a><a class="text-sm font-medium transition-colors text-gray-600 hover:text-blue-600" href="/#contact">Contact</a></div><button class="md:hidden p-2 rounded-lg transition-colors hover:bg-gray-100 text-gray-600" aria-label="Toggle mobile menu"><svg class="w-6 h-6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor"><path d="M4 6h16M4 12h16M4 18h16"></path></svg></button></div></div></nav><div class="pt-20"><div class="bg-gradient-to-br from-gray-900 to-blue-950 py-16"><div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl"><nav class="flex items-center gap-2 text-sm text-gray-400 mb-6"><a class="hover:text-white transition-colors" href="/">Home</a><span>/</span><a class="hover:text-white transition-colors" href="/blog/">Blog</a><span>/</span><span class="text-gray-300 truncate max-w-xs">Kafka Streams: Real-Time Stream Processing Without a Separate Cluster</span></nav><span class="inline-block text-xs font-semibold px-3 py-1 rounded-full bg-blue-100 text-blue-700 mb-4">Data Engineering</span><h1 class="text-3xl md:text-5xl font-bold text-white mb-4 leading-tight">Kafka Streams: Real-Time Stream Processing Without a Separate Cluster</h1><p class="text-gray-300 text-lg mb-6 max-w-3xl">Production Kafka Streams: KStream vs KTable semantics, stateful transformations with RocksDB state stores, windowed aggregations, stream-table joins, topology design, changelog topics, and the operational patterns for running Kafka Streams in production.</p><div class="flex flex-wrap items-center gap-4 text-gray-400 text-sm"><span class="flex items-center gap-1.5"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>Sachin Sarawgi</span><span>·</span><span>April 24, 2025</span><span>·</span><span class="flex items-center gap-1"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>6 min read</span></div><div class="flex flex-wrap gap-2 mt-4"><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->kafka</span><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->kafka streams</span><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->stream processing</span><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->real-time</span><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->java</span><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->rocksdb</span><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->windowing</span><span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">#<!-- -->data engineering</span></div></div></div><div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl py-12"><div class="flex gap-12"><div class="flex-1 min-w-0"><article class="prose prose-lg max-w-none prose-headings:text-gray-900 prose-headings:font-bold prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-4 prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3 prose-p:text-gray-700 prose-p:leading-relaxed prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline prose-strong:text-gray-900 prose-blockquote:border-blue-600 prose-blockquote:text-gray-600 prose-code:text-blue-700 prose-code:bg-blue-50 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-sm prose-code:before:content-none prose-code:after:content-none prose-pre:rounded-xl prose-img:rounded-xl prose-img:shadow-md prose-table:text-sm prose-th:bg-gray-100 prose-th:text-gray-700"><p>Kafka Streams is a Java library for building real-time stream processing applications. Unlike Flink or Spark Streaming, it has no separate cluster — it runs as a library inside your Java application. Each instance of your application processes a subset of partitions. Scale by adding instances. It's operationally simple (just another Spring Boot application), yet powerful enough for complex stateful streaming computations.</p>
+<h2>KStream vs. KTable: The Core Abstraction</h2>
+<p>Understanding the difference between KStream and KTable is fundamental to Kafka Streams:</p>
+<pre><code>KStream: an unbounded sequence of events
+  → Each message represents an independent event
+  → "Order placed", "Payment received", "Item shipped"
+  → Records are APPENDED — every record matters
+  → Like a database transaction log
+
+KTable: a changelog stream representing state
+  → Each message represents the LATEST value for a key
+  → "Current inventory level for product X: 42"
+  → New record with same key REPLACES old record
+  → Like a database table with CDC (change data capture)
+
+GlobalKTable: like KTable, but ALL data is loaded into every instance
+  → Enables enrichment joins without repartitioning
+  → Use for small, read-heavy reference data (users, products, configs)
+</code></pre>
+<pre><code class="language-java">// Topology setup:
+@Configuration
+public class StreamTopologyConfig {
+
+    @Bean
+    public KafkaStreamsConfiguration kStreamsConfig(
+            @Value("${spring.kafka.bootstrap-servers}") String bootstrapServers) {
+        Map&#x3C;String, Object> props = new HashMap&#x3C;>();
+        props.put(StreamsConfig.APPLICATION_ID_CONFIG, "order-processing");  // Consumer group ID
+        props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
+        props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass());
+        props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass());
+        props.put(StreamsConfig.COMMIT_INTERVAL_MS_CONFIG, 1000);  // Checkpoint every 1s
+        // RocksDB state stores in persistent directory (survive restart):
+        props.put(StreamsConfig.STATE_DIR_CONFIG, "/var/lib/kafka-streams");
+        return new KafkaStreamsConfiguration(props);
+    }
+
+    @Bean
+    public StreamsBuilder streamsBuilder() {
+        return new StreamsBuilder();
+    }
+}
+</code></pre>
+<h2>Stateless Transformations</h2>
+<pre><code class="language-java">@Component
+public class OrderEnrichmentTopology {
+
+    @Autowired
+    private StreamsBuilder streamsBuilder;
+
+    @PostConstruct
+    public void buildTopology() {
+        // Input: raw order events (JSON string)
+        KStream&#x3C;String, String> rawOrders = streamsBuilder.stream("orders-raw");
+
+        // Stateless filter + map:
+        KStream&#x3C;String, Order> orders = rawOrders
+            .filter((key, value) -> value != null &#x26;&#x26; !value.isEmpty())
+            .mapValues(value -> deserialize(value, Order.class))
+            .filter((key, order) -> order.getTotalCents() > 0);  // Skip zero-value orders
+
+        // Branch: route high-value orders to separate topic:
+        Map&#x3C;String, KStream&#x3C;String, Order>> branches = orders.split(Named.as("branch-"))
+            .branch((key, order) -> order.getTotalCents() >= 100_000,
+                    Branched.as("high-value"))     // $1000+
+            .branch((key, order) -> order.getTotalCents() >= 10_000,
+                    Branched.as("medium-value"))   // $100-$999
+            .defaultBranch(Branched.as("standard"));
+
+        branches.get("branch-high-value")
+            .mapValues(order -> serialize(order))
+            .to("orders-high-value");
+
+        // Rekeying: change partition key (triggers repartitioning)
+        // Input: keyed by order_id → rekey by customer_id
+        KStream&#x3C;String, Order> byCustomer = orders
+            .selectKey((orderId, order) -> order.getCustomerId());
+        // After selectKey, data is repartitioned — a network shuffle happens
+
+        byCustomer
+            .mapValues(order -> serialize(order))
+            .to("orders-by-customer");
+    }
+}
+</code></pre>
+<h2>Stateful Aggregations with Windowing</h2>
+<pre><code class="language-java">@Component
+public class RevenueAggregationTopology {
+
+    @PostConstruct
+    public void buildTopology() {
+        KStream&#x3C;String, Order> orders = streamsBuilder
+            .stream("orders", Consumed.with(Serdes.String(), orderSerde));
+
+        // Tumbling window: non-overlapping, fixed-size time windows
+        // Count orders and sum revenue per customer per hour:
+        KTable&#x3C;Windowed&#x3C;String>, RevenueAggregate> hourlyRevenue = orders
+            .selectKey((k, order) -> order.getCustomerId())
+            .groupByKey(Grouped.with(Serdes.String(), orderSerde))
+            .windowedBy(TimeWindows.ofSizeWithNoGrace(Duration.ofHours(1)))
+            .aggregate(
+                RevenueAggregate::new,       // Initializer
+                (customerId, order, agg) -> { // Aggregator
+                    agg.addOrder(order);
+                    return agg;
+                },
+                Materialized.&#x3C;String, RevenueAggregate, WindowStore&#x3C;Bytes, byte[]>>as(
+                    "customer-hourly-revenue-store")  // Named state store
+                    .withKeySerde(Serdes.String())
+                    .withValueSerde(revenueAggregateSerde)
+            );
+
+        // Output aggregation results:
+        hourlyRevenue
+            .toStream()
+            .map((windowedKey, aggregate) -> KeyValue.pair(
+                windowedKey.key() + "@" + windowedKey.window().start(),
+                serialize(aggregate)
+            ))
+            .to("customer-hourly-revenue");
+
+        // Sliding window: overlapping windows for moving averages
+        // Session window: variable-length windows based on activity gaps
+        KTable&#x3C;Windowed&#x3C;String>, Long> sessionCounts = orders
+            .selectKey((k, order) -> order.getCustomerId())
+            .groupByKey()
+            .windowedBy(SessionWindows.ofInactivityGapWithNoGrace(Duration.ofMinutes(30)))
+            .count(Materialized.as("customer-sessions"));
+    }
+}
+</code></pre>
+<h2>Stream-Table Join: Enrichment Pattern</h2>
+<pre><code class="language-java">@Component
+public class OrderEnrichmentWithProducts {
+
+    @PostConstruct
+    public void buildTopology() {
+        // Stream: order events
+        KStream&#x3C;String, Order> orders = streamsBuilder.stream("orders");
+
+        // GlobalKTable: product catalog (small, reference data)
+        GlobalKTable&#x3C;String, Product> products = streamsBuilder.globalTable(
+            "products",
+            Materialized.as("products-store")  // Locally stored in RocksDB
+        );
+
+        // Enrich each order with product details (no repartitioning needed with GlobalKTable):
+        KStream&#x3C;String, EnrichedOrder> enriched = orders.join(
+            products,
+            (orderId, order) -> order.getProductId(),  // Key extractor (join key)
+            (order, product) -> new EnrichedOrder(order, product)  // Value joiner
+        );
+
+        enriched.to("orders-enriched");
+
+        // Regular KTable join (both sides can be large — requires co-partitioning):
+        KTable&#x3C;String, Customer> customers = streamsBuilder.table("customers");
+
+        // Co-partitioning requirement: orders and customers must have the same
+        // number of partitions and use the same key (customerId)
+        KStream&#x3C;String, Order> ordersByCustomer = orders
+            .selectKey((k, order) -> order.getCustomerId());
+
+        KStream&#x3C;String, EnrichedOrder> withCustomer = ordersByCustomer.join(
+            customers,
+            (order, customer) -> enrichWithCustomer(order, customer),
+            JoinWindows.ofTimeDifferenceWithNoGrace(Duration.ofMinutes(5))
+            // Stream-stream join: events within 5 minutes are matched
+        );
+    }
+}
+</code></pre>
+<h2>State Stores and Interactive Queries</h2>
+<p>Kafka Streams stores stateful computation results in local RocksDB instances. You can query these stores directly from your application:</p>
+<pre><code class="language-java">@RestController
+@RequestMapping("/api/analytics")
+public class StreamAnalyticsController {
+
+    @Autowired
+    private KafkaStreams kafkaStreams;
+
+    // Query the hourly revenue aggregation state store:
+    @GetMapping("/revenue/{customerId}")
+    public ResponseEntity&#x3C;List&#x3C;RevenueAggregate>> getCustomerRevenue(
+            @PathVariable String customerId) {
+
+        ReadOnlyWindowStore&#x3C;String, RevenueAggregate> store = kafkaStreams.store(
+            StoreQueryParameters.fromNameAndType(
+                "customer-hourly-revenue-store",
+                QueryableStoreTypes.windowStore()
+            )
+        );
+
+        long now = System.currentTimeMillis();
+        long oneDayAgo = now - Duration.ofDays(1).toMillis();
+
+        WindowStoreIterator&#x3C;RevenueAggregate> iterator =
+            store.fetch(customerId, oneDayAgo, now);
+
+        List&#x3C;RevenueAggregate> results = new ArrayList&#x3C;>();
+        while (iterator.hasNext()) {
+            KeyValue&#x3C;Long, RevenueAggregate> entry = iterator.next();
+            results.add(entry.value);
+        }
+        iterator.close();
+
+        return ResponseEntity.ok(results);
+    }
+}
+</code></pre>
+<p><strong>For queries across all instances (distributed state):</strong> Kafka Streams assigns partitions to instances. Customer X's state may be on instance 2, but the request hits instance 1. Use Kafka Streams' <code>queryMetadataForKey()</code> to find which instance owns the data, then make an HTTP call to that instance:</p>
+<pre><code class="language-java">KeyQueryMetadata metadata = kafkaStreams.queryMetadataForKey(
+    "customer-hourly-revenue-store",
+    customerId,
+    Serdes.String().serializer()
+);
+HostInfo activeHost = metadata.activeHost();
+// If activeHost is this instance: query local store
+// If not: HTTP call to activeHost.host():activeHost.port()
+</code></pre>
+<h2>Changelog Topics and Fault Tolerance</h2>
+<p>Every state store has a corresponding changelog topic in Kafka (e.g., <code>order-processing-customer-hourly-revenue-store-changelog</code>). On failure and restart, Kafka Streams replays the changelog to rebuild the state store:</p>
+<pre><code>State restoration on restart:
+1. Application starts, reads its partition assignments
+2. For each partition: find latest offset in changelog topic
+3. Replay changelog records from last checkpoint to latest offset
+4. State store is restored — then normal processing resumes
+
+Restoration time: proportional to changelog size since last checkpoint
+At 1000 records/second for 10 minutes = 600,000 records to replay
+At 100,000 records/second replay speed = ~6 seconds restoration
+
+Optimization: use standby replicas (process on 2 instances, 0 restoration time on failover)
+props.put(StreamsConfig.NUM_STANDBY_REPLICAS_CONFIG, 1);
+</code></pre>
+<h2>Production Configuration</h2>
+<pre><code class="language-java">// Essential production settings:
+props.put(StreamsConfig.APPLICATION_ID_CONFIG, "order-processing-v2");
+props.put(StreamsConfig.REPLICATION_FACTOR_CONFIG, 3);  // Changelog topic replication
+props.put(StreamsConfig.NUM_STANDBY_REPLICAS_CONFIG, 1);  // Standby for fast failover
+props.put(StreamsConfig.COMMIT_INTERVAL_MS_CONFIG, 1000);  // Checkpoint every 1s
+props.put(StreamsConfig.CACHE_MAX_BYTES_BUFFERING_CONFIG, 10 * 1024 * 1024L);  // 10MB in-memory buffer
+
+// Consumer settings:
+props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");  // Start from beginning
+props.put(ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG, 30000);  // 30s timeout
+
+// Producer settings (for output topics):
+props.put(ProducerConfig.ACKS_CONFIG, "all");  // All replicas must acknowledge
+props.put(ProducerConfig.RETRIES_CONFIG, Integer.MAX_VALUE);
+props.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, true);  // Exactly-once semantics
+
+// Exactly-once processing (requires Kafka >= 2.5):
+props.put(StreamsConfig.PROCESSING_GUARANTEE_CONFIG, StreamsConfig.EXACTLY_ONCE_V2);
+</code></pre>
+<p>Exactly-once semantics (<code>EXACTLY_ONCE_V2</code>) means state store updates and output topic writes are committed atomically — no duplicates even on failure. The cost: ~20% latency overhead from transactional producer coordination.</p>
+<p>Kafka Streams' architecture — library embedded in your application, state in local RocksDB, fault tolerance via changelog topics — is the right abstraction for stream processing when your team already runs Kafka and doesn't want to operate a separate cluster. The learning curve is the topology DSL and the KStream/KTable semantics. Once those click, building complex stateful streaming pipelines becomes straightforward Java development.</p>
+</article><div class="my-10 rounded-xl border border-yellow-200 bg-yellow-50 p-6"><div class="flex items-center gap-2 mb-1"><span class="text-lg">📚</span><h3 class="text-base font-bold text-gray-900">Recommended Resources</h3></div><div class="space-y-4"><div class="flex items-start gap-3 bg-white rounded-lg p-4 border border-yellow-100"><div class="flex-1 min-w-0"><div class="flex items-center gap-2 flex-wrap mb-1"><span class="font-semibold text-gray-900 text-sm">Fundamentals of Data Engineering</span><span class="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-medium">New</span></div><p class="text-xs text-gray-600">Joe Reis&#x27;s book on data pipelines, architectures, and the modern data stack.</p></div><a href="https://amzn.to/3Vmf5sX" target="_blank" rel="noopener noreferrer" class="flex-shrink-0 text-xs bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium whitespace-nowrap">View on Amazon<!-- --> →</a></div><div class="flex items-start gap-3 bg-white rounded-lg p-4 border border-yellow-100"><div class="flex-1 min-w-0"><div class="flex items-center gap-2 flex-wrap mb-1"><span class="font-semibold text-gray-900 text-sm">Apache Kafka for Data Engineers — Udemy</span></div><p class="text-xs text-gray-600">Learn Kafka Connect, Kafka Streams, and CDC with Debezium for data pipelines.</p></div><a href="https://www.udemy.com/course/kafka-streams-real-time-stream-processing-master-class/" target="_blank" rel="noopener noreferrer" class="flex-shrink-0 text-xs bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium whitespace-nowrap">View Course<!-- --> →</a></div></div></div><div class="mt-10 pt-8 border-t border-gray-100"><p class="text-sm text-gray-500 mb-3">Found this useful? Share it:</p><div class="flex gap-3"><a href="https://twitter.com/intent/tweet?text=Kafka%20Streams%3A%20Real-Time%20Stream%20Processing%20Without%20a%20Separate%20Cluster&amp;url=https%3A%2F%2Fcodesprintpro.com%2Fblog%2Fkafka-streams-real-time-processing%2F" target="_blank" rel="noopener noreferrer" class="text-xs bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors">Share on X/Twitter</a><a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fcodesprintpro.com%2Fblog%2Fkafka-streams-real-time-processing%2F" target="_blank" rel="noopener noreferrer" class="text-xs bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">Share on LinkedIn</a></div></div></div><aside class="hidden lg:block w-64 flex-shrink-0"><nav class="hidden lg:block sticky top-24"><h4 class="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-3">On This Page</h4><ul class="space-y-1"><li class=""><a href="#kstream-vs-ktable-the-core-abstraction" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">KStream vs. KTable: The Core Abstraction</a></li><li class=""><a href="#stateless-transformations" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Stateless Transformations</a></li><li class=""><a href="#stateful-aggregations-with-windowing" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Stateful Aggregations with Windowing</a></li><li class=""><a href="#stream-table-join-enrichment-pattern" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Stream-Table Join: Enrichment Pattern</a></li><li class=""><a href="#state-stores-and-interactive-queries" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">State Stores and Interactive Queries</a></li><li class=""><a href="#changelog-topics-and-fault-tolerance" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Changelog Topics and Fault Tolerance</a></li><li class=""><a href="#production-configuration" class="block text-sm py-1 border-l-2 pl-3 transition-all border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300 ">Production Configuration</a></li></ul></nav></aside></div><div class="mt-16 pt-10 border-t border-gray-100"><h2 class="text-2xl font-bold text-gray-900 mb-6">Related Articles</h2><div class="grid grid-cols-1 md:grid-cols-3 gap-6"><a href="/blog/cdc-debezium-kafka-patterns/"><article class="group bg-white rounded-xl border border-gray-200 p-6 h-full cursor-pointer hover:border-blue-300 hover:shadow-lg transition-all"><span class="inline-block text-xs font-semibold px-3 py-1 rounded-full mb-3 bg-teal-100 text-teal-700">Data Engineering</span><h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors leading-snug">Change Data Capture with Debezium: Real-Time Data Synchronization Patterns</h3><p class="text-gray-600 text-sm mb-4 line-clamp-3">Change Data Capture (CDC) is one of those techniques that, once you understand it, you see it everywhere. The pattern: instead of your application explicitly publishing events when data changes, let the database engine i…</p><div class="flex items-center justify-between text-xs text-gray-400"><span>Feb 1, 2025</span><span class="flex items-center gap-1"><svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>11 min read</span></div><div class="mt-3 flex flex-wrap gap-1"><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->cdc</span><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->debezium</span><span class="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">#<!-- -->kafka</span></div></article></a></div></div><div class="mt-12 text-center"><a class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium transition-colors" href="/blog/">← Back to all articles</a></div></div></div><footer class="bg-gray-900 text-white py-12"><div class="container mx-auto px-4 sm:px-6 lg:px-8"><div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8"><div class="col-span-1 md:col-span-1"><div><a class="text-xl font-bold block mb-3 text-white hover:text-blue-400 transition-colors" href="/">CodeSprintPro</a></div><p class="text-gray-400 text-sm mb-4 leading-relaxed">Deep-dive technical content on System Design, Java, Databases, AI/ML, and AWS — by Sachin Sarawgi.</p><div class="flex space-x-4"><a href="https://github.com/codesprintpro" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors" aria-label="Visit GitHub profile"><i class="fab fa-github text-xl"></i></a><a href="https://www.linkedin.com/in/sachin-sarawgi/" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors" aria-label="Visit LinkedIn profile"><i class="fab fa-linkedin text-xl"></i></a><a href="https://medium.com/@codesprintpro" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors" aria-label="Visit Medium profile"><i class="fab fa-medium text-xl"></i></a></div></div><div><h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 mb-4">Quick Links</h3><ul class="space-y-2"><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">Blog</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/#about">About</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/#portfolio">Portfolio</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/#contact">Contact</a></div></li></ul></div><div><h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 mb-4">Categories</h3><ul class="space-y-2"><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">System Design</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">Java</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">Databases</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">AI/ML</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">AWS</a></div></li><li><div><a class="text-gray-400 hover:text-white transition-colors text-sm" href="/blog/">Messaging</a></div></li></ul></div><div><h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 mb-4">Contact</h3><ul class="space-y-2 text-gray-400 text-sm"><li><a href="mailto:sachinsarawgi201143@gmail.com" class="hover:text-white transition-colors flex items-center gap-2"><i class="fas fa-envelope"></i> Email</a></li><li><a href="https://www.linkedin.com/in/sachin-sarawgi/" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors flex items-center gap-2"><i class="fab fa-linkedin"></i> LinkedIn</a></li><li><a href="https://github.com/codesprintpro" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors flex items-center gap-2"><i class="fab fa-github"></i> GitHub</a></li></ul></div></div><div class="border-t border-gray-800 pt-6 flex flex-col md:flex-row justify-between items-center gap-2"><p class="text-gray-500 text-sm">© <!-- -->2026<!-- --> CodeSprintPro · Sachin Sarawgi. All rights reserved.</p><p class="text-gray-600 text-xs">Built with Next.js · TailwindCSS · Deployed on GitHub Pages</p></div></div></footer></div></main></div><script id="__NEXT_DATA__" type="application/json">{"props":{"pageProps":{"post":{"title":"Kafka Streams: Real-Time Stream Processing Without a Separate Cluster","description":"Production Kafka Streams: KStream vs KTable semantics, stateful transformations with RocksDB state stores, windowed aggregations, stream-table joins, topology design, changelog topics, and the operational patterns for running Kafka Streams in production.","date":"2025-04-24","category":"Data Engineering","tags":["kafka","kafka streams","stream processing","real-time","java","rocksdb","windowing","data engineering"],"featured":false,"affiliateSection":"data-engineering-resources","slug":"kafka-streams-real-time-processing","readingTime":"6 min read","excerpt":"Kafka Streams is a Java library for building real-time stream processing applications. Unlike Flink or Spark Streaming, it has no separate cluster — it runs as a library inside your Java application. Each instance of you…","contentHtml":"\u003cp\u003eKafka Streams is a Java library for building real-time stream processing applications. Unlike Flink or Spark Streaming, it has no separate cluster — it runs as a library inside your Java application. Each instance of your application processes a subset of partitions. Scale by adding instances. It's operationally simple (just another Spring Boot application), yet powerful enough for complex stateful streaming computations.\u003c/p\u003e\n\u003ch2\u003eKStream vs. KTable: The Core Abstraction\u003c/h2\u003e\n\u003cp\u003eUnderstanding the difference between KStream and KTable is fundamental to Kafka Streams:\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003eKStream: an unbounded sequence of events\n  → Each message represents an independent event\n  → \"Order placed\", \"Payment received\", \"Item shipped\"\n  → Records are APPENDED — every record matters\n  → Like a database transaction log\n\nKTable: a changelog stream representing state\n  → Each message represents the LATEST value for a key\n  → \"Current inventory level for product X: 42\"\n  → New record with same key REPLACES old record\n  → Like a database table with CDC (change data capture)\n\nGlobalKTable: like KTable, but ALL data is loaded into every instance\n  → Enables enrichment joins without repartitioning\n  → Use for small, read-heavy reference data (users, products, configs)\n\u003c/code\u003e\u003c/pre\u003e\n\u003cpre\u003e\u003ccode class=\"language-java\"\u003e// Topology setup:\n@Configuration\npublic class StreamTopologyConfig {\n\n    @Bean\n    public KafkaStreamsConfiguration kStreamsConfig(\n            @Value(\"${spring.kafka.bootstrap-servers}\") String bootstrapServers) {\n        Map\u0026#x3C;String, Object\u003e props = new HashMap\u0026#x3C;\u003e();\n        props.put(StreamsConfig.APPLICATION_ID_CONFIG, \"order-processing\");  // Consumer group ID\n        props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);\n        props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass());\n        props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass());\n        props.put(StreamsConfig.COMMIT_INTERVAL_MS_CONFIG, 1000);  // Checkpoint every 1s\n        // RocksDB state stores in persistent directory (survive restart):\n        props.put(StreamsConfig.STATE_DIR_CONFIG, \"/var/lib/kafka-streams\");\n        return new KafkaStreamsConfiguration(props);\n    }\n\n    @Bean\n    public StreamsBuilder streamsBuilder() {\n        return new StreamsBuilder();\n    }\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch2\u003eStateless Transformations\u003c/h2\u003e\n\u003cpre\u003e\u003ccode class=\"language-java\"\u003e@Component\npublic class OrderEnrichmentTopology {\n\n    @Autowired\n    private StreamsBuilder streamsBuilder;\n\n    @PostConstruct\n    public void buildTopology() {\n        // Input: raw order events (JSON string)\n        KStream\u0026#x3C;String, String\u003e rawOrders = streamsBuilder.stream(\"orders-raw\");\n\n        // Stateless filter + map:\n        KStream\u0026#x3C;String, Order\u003e orders = rawOrders\n            .filter((key, value) -\u003e value != null \u0026#x26;\u0026#x26; !value.isEmpty())\n            .mapValues(value -\u003e deserialize(value, Order.class))\n            .filter((key, order) -\u003e order.getTotalCents() \u003e 0);  // Skip zero-value orders\n\n        // Branch: route high-value orders to separate topic:\n        Map\u0026#x3C;String, KStream\u0026#x3C;String, Order\u003e\u003e branches = orders.split(Named.as(\"branch-\"))\n            .branch((key, order) -\u003e order.getTotalCents() \u003e= 100_000,\n                    Branched.as(\"high-value\"))     // $1000+\n            .branch((key, order) -\u003e order.getTotalCents() \u003e= 10_000,\n                    Branched.as(\"medium-value\"))   // $100-$999\n            .defaultBranch(Branched.as(\"standard\"));\n\n        branches.get(\"branch-high-value\")\n            .mapValues(order -\u003e serialize(order))\n            .to(\"orders-high-value\");\n\n        // Rekeying: change partition key (triggers repartitioning)\n        // Input: keyed by order_id → rekey by customer_id\n        KStream\u0026#x3C;String, Order\u003e byCustomer = orders\n            .selectKey((orderId, order) -\u003e order.getCustomerId());\n        // After selectKey, data is repartitioned — a network shuffle happens\n\n        byCustomer\n            .mapValues(order -\u003e serialize(order))\n            .to(\"orders-by-customer\");\n    }\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch2\u003eStateful Aggregations with Windowing\u003c/h2\u003e\n\u003cpre\u003e\u003ccode class=\"language-java\"\u003e@Component\npublic class RevenueAggregationTopology {\n\n    @PostConstruct\n    public void buildTopology() {\n        KStream\u0026#x3C;String, Order\u003e orders = streamsBuilder\n            .stream(\"orders\", Consumed.with(Serdes.String(), orderSerde));\n\n        // Tumbling window: non-overlapping, fixed-size time windows\n        // Count orders and sum revenue per customer per hour:\n        KTable\u0026#x3C;Windowed\u0026#x3C;String\u003e, RevenueAggregate\u003e hourlyRevenue = orders\n            .selectKey((k, order) -\u003e order.getCustomerId())\n            .groupByKey(Grouped.with(Serdes.String(), orderSerde))\n            .windowedBy(TimeWindows.ofSizeWithNoGrace(Duration.ofHours(1)))\n            .aggregate(\n                RevenueAggregate::new,       // Initializer\n                (customerId, order, agg) -\u003e { // Aggregator\n                    agg.addOrder(order);\n                    return agg;\n                },\n                Materialized.\u0026#x3C;String, RevenueAggregate, WindowStore\u0026#x3C;Bytes, byte[]\u003e\u003eas(\n                    \"customer-hourly-revenue-store\")  // Named state store\n                    .withKeySerde(Serdes.String())\n                    .withValueSerde(revenueAggregateSerde)\n            );\n\n        // Output aggregation results:\n        hourlyRevenue\n            .toStream()\n            .map((windowedKey, aggregate) -\u003e KeyValue.pair(\n                windowedKey.key() + \"@\" + windowedKey.window().start(),\n                serialize(aggregate)\n            ))\n            .to(\"customer-hourly-revenue\");\n\n        // Sliding window: overlapping windows for moving averages\n        // Session window: variable-length windows based on activity gaps\n        KTable\u0026#x3C;Windowed\u0026#x3C;String\u003e, Long\u003e sessionCounts = orders\n            .selectKey((k, order) -\u003e order.getCustomerId())\n            .groupByKey()\n            .windowedBy(SessionWindows.ofInactivityGapWithNoGrace(Duration.ofMinutes(30)))\n            .count(Materialized.as(\"customer-sessions\"));\n    }\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch2\u003eStream-Table Join: Enrichment Pattern\u003c/h2\u003e\n\u003cpre\u003e\u003ccode class=\"language-java\"\u003e@Component\npublic class OrderEnrichmentWithProducts {\n\n    @PostConstruct\n    public void buildTopology() {\n        // Stream: order events\n        KStream\u0026#x3C;String, Order\u003e orders = streamsBuilder.stream(\"orders\");\n\n        // GlobalKTable: product catalog (small, reference data)\n        GlobalKTable\u0026#x3C;String, Product\u003e products = streamsBuilder.globalTable(\n            \"products\",\n            Materialized.as(\"products-store\")  // Locally stored in RocksDB\n        );\n\n        // Enrich each order with product details (no repartitioning needed with GlobalKTable):\n        KStream\u0026#x3C;String, EnrichedOrder\u003e enriched = orders.join(\n            products,\n            (orderId, order) -\u003e order.getProductId(),  // Key extractor (join key)\n            (order, product) -\u003e new EnrichedOrder(order, product)  // Value joiner\n        );\n\n        enriched.to(\"orders-enriched\");\n\n        // Regular KTable join (both sides can be large — requires co-partitioning):\n        KTable\u0026#x3C;String, Customer\u003e customers = streamsBuilder.table(\"customers\");\n\n        // Co-partitioning requirement: orders and customers must have the same\n        // number of partitions and use the same key (customerId)\n        KStream\u0026#x3C;String, Order\u003e ordersByCustomer = orders\n            .selectKey((k, order) -\u003e order.getCustomerId());\n\n        KStream\u0026#x3C;String, EnrichedOrder\u003e withCustomer = ordersByCustomer.join(\n            customers,\n            (order, customer) -\u003e enrichWithCustomer(order, customer),\n            JoinWindows.ofTimeDifferenceWithNoGrace(Duration.ofMinutes(5))\n            // Stream-stream join: events within 5 minutes are matched\n        );\n    }\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch2\u003eState Stores and Interactive Queries\u003c/h2\u003e\n\u003cp\u003eKafka Streams stores stateful computation results in local RocksDB instances. You can query these stores directly from your application:\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-java\"\u003e@RestController\n@RequestMapping(\"/api/analytics\")\npublic class StreamAnalyticsController {\n\n    @Autowired\n    private KafkaStreams kafkaStreams;\n\n    // Query the hourly revenue aggregation state store:\n    @GetMapping(\"/revenue/{customerId}\")\n    public ResponseEntity\u0026#x3C;List\u0026#x3C;RevenueAggregate\u003e\u003e getCustomerRevenue(\n            @PathVariable String customerId) {\n\n        ReadOnlyWindowStore\u0026#x3C;String, RevenueAggregate\u003e store = kafkaStreams.store(\n            StoreQueryParameters.fromNameAndType(\n                \"customer-hourly-revenue-store\",\n                QueryableStoreTypes.windowStore()\n            )\n        );\n\n        long now = System.currentTimeMillis();\n        long oneDayAgo = now - Duration.ofDays(1).toMillis();\n\n        WindowStoreIterator\u0026#x3C;RevenueAggregate\u003e iterator =\n            store.fetch(customerId, oneDayAgo, now);\n\n        List\u0026#x3C;RevenueAggregate\u003e results = new ArrayList\u0026#x3C;\u003e();\n        while (iterator.hasNext()) {\n            KeyValue\u0026#x3C;Long, RevenueAggregate\u003e entry = iterator.next();\n            results.add(entry.value);\n        }\n        iterator.close();\n\n        return ResponseEntity.ok(results);\n    }\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e\u003cstrong\u003eFor queries across all instances (distributed state):\u003c/strong\u003e Kafka Streams assigns partitions to instances. Customer X's state may be on instance 2, but the request hits instance 1. Use Kafka Streams' \u003ccode\u003equeryMetadataForKey()\u003c/code\u003e to find which instance owns the data, then make an HTTP call to that instance:\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-java\"\u003eKeyQueryMetadata metadata = kafkaStreams.queryMetadataForKey(\n    \"customer-hourly-revenue-store\",\n    customerId,\n    Serdes.String().serializer()\n);\nHostInfo activeHost = metadata.activeHost();\n// If activeHost is this instance: query local store\n// If not: HTTP call to activeHost.host():activeHost.port()\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch2\u003eChangelog Topics and Fault Tolerance\u003c/h2\u003e\n\u003cp\u003eEvery state store has a corresponding changelog topic in Kafka (e.g., \u003ccode\u003eorder-processing-customer-hourly-revenue-store-changelog\u003c/code\u003e). On failure and restart, Kafka Streams replays the changelog to rebuild the state store:\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003eState restoration on restart:\n1. Application starts, reads its partition assignments\n2. For each partition: find latest offset in changelog topic\n3. Replay changelog records from last checkpoint to latest offset\n4. State store is restored — then normal processing resumes\n\nRestoration time: proportional to changelog size since last checkpoint\nAt 1000 records/second for 10 minutes = 600,000 records to replay\nAt 100,000 records/second replay speed = ~6 seconds restoration\n\nOptimization: use standby replicas (process on 2 instances, 0 restoration time on failover)\nprops.put(StreamsConfig.NUM_STANDBY_REPLICAS_CONFIG, 1);\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch2\u003eProduction Configuration\u003c/h2\u003e\n\u003cpre\u003e\u003ccode class=\"language-java\"\u003e// Essential production settings:\nprops.put(StreamsConfig.APPLICATION_ID_CONFIG, \"order-processing-v2\");\nprops.put(StreamsConfig.REPLICATION_FACTOR_CONFIG, 3);  // Changelog topic replication\nprops.put(StreamsConfig.NUM_STANDBY_REPLICAS_CONFIG, 1);  // Standby for fast failover\nprops.put(StreamsConfig.COMMIT_INTERVAL_MS_CONFIG, 1000);  // Checkpoint every 1s\nprops.put(StreamsConfig.CACHE_MAX_BYTES_BUFFERING_CONFIG, 10 * 1024 * 1024L);  // 10MB in-memory buffer\n\n// Consumer settings:\nprops.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, \"earliest\");  // Start from beginning\nprops.put(ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG, 30000);  // 30s timeout\n\n// Producer settings (for output topics):\nprops.put(ProducerConfig.ACKS_CONFIG, \"all\");  // All replicas must acknowledge\nprops.put(ProducerConfig.RETRIES_CONFIG, Integer.MAX_VALUE);\nprops.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, true);  // Exactly-once semantics\n\n// Exactly-once processing (requires Kafka \u003e= 2.5):\nprops.put(StreamsConfig.PROCESSING_GUARANTEE_CONFIG, StreamsConfig.EXACTLY_ONCE_V2);\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eExactly-once semantics (\u003ccode\u003eEXACTLY_ONCE_V2\u003c/code\u003e) means state store updates and output topic writes are committed atomically — no duplicates even on failure. The cost: ~20% latency overhead from transactional producer coordination.\u003c/p\u003e\n\u003cp\u003eKafka Streams' architecture — library embedded in your application, state in local RocksDB, fault tolerance via changelog topics — is the right abstraction for stream processing when your team already runs Kafka and doesn't want to operate a separate cluster. The learning curve is the topology DSL and the KStream/KTable semantics. Once those click, building complex stateful streaming pipelines becomes straightforward Java development.\u003c/p\u003e\n","tableOfContents":[{"id":"kstream-vs-ktable-the-core-abstraction","text":"KStream vs. KTable: The Core Abstraction","level":2},{"id":"stateless-transformations","text":"Stateless Transformations","level":2},{"id":"stateful-aggregations-with-windowing","text":"Stateful Aggregations with Windowing","level":2},{"id":"stream-table-join-enrichment-pattern","text":"Stream-Table Join: Enrichment Pattern","level":2},{"id":"state-stores-and-interactive-queries","text":"State Stores and Interactive Queries","level":2},{"id":"changelog-topics-and-fault-tolerance","text":"Changelog Topics and Fault Tolerance","level":2},{"id":"production-configuration","text":"Production Configuration","level":2}]},"relatedPosts":[{"title":"Change Data Capture with Debezium: Real-Time Data Synchronization Patterns","description":"CDC lets you stream every database change as an event. Learn how Debezium captures PostgreSQL WAL logs, publishes to Kafka, and powers cache invalidation, search indexing, and microservice sync.","date":"2025-02-01","category":"Data Engineering","tags":["cdc","debezium","kafka","data engineering","postgresql","microservices"],"featured":false,"affiliateSection":"data-engineering-resources","slug":"cdc-debezium-kafka-patterns","readingTime":"11 min read","excerpt":"Change Data Capture (CDC) is one of those techniques that, once you understand it, you see it everywhere. The pattern: instead of your application explicitly publishing events when data changes, let the database engine i…"}]},"__N_SSG":true},"page":"/blog/[slug]","query":{"slug":"kafka-streams-real-time-processing"},"buildId":"rpFn_jslWZ9qPkJwor7RD","isFallback":false,"gsp":true,"scriptLoader":[]}</script></body></html>
