@@ -15,6 +15,7 @@ import { BlogCard } from '@/components/blog/BlogCard'
 import { TableOfContents } from '@/components/blog/TableOfContents'
 import { AffiliateSection } from '@/components/blog/AffiliateSection'
 import { AuthorBio } from '@/components/blog/AuthorBio'
+import { getCategoryHref } from '@/lib/blogCategories'
 
 // Load Prism language components for client-side syntax highlighting
 const loadPrism = () => {
@@ -37,6 +38,17 @@ interface ArticlePageProps {
   relatedPosts: BlogPostMeta[]
 }
 
+const SITE_URL = 'https://codesprintpro.com'
+const AUTHOR_URL = `${SITE_URL}/#sachin-sarawgi`
+const ORGANIZATION_URL = `${SITE_URL}/#organization`
+const WEBSITE_URL = `${SITE_URL}/#website`
+const BLOG_URL = `${SITE_URL}/blog/`
+
+function readingTimeToDuration(readingTime: string): string | undefined {
+  const minutes = Number.parseInt(readingTime, 10)
+  return Number.isFinite(minutes) ? `PT${minutes}M` : undefined
+}
+
 export const getStaticPaths: GetStaticPaths = async () => {
   const paths = getAllPostSlugs()
   return { paths, fallback: false }
@@ -51,16 +63,142 @@ export const getStaticProps: GetStaticProps<ArticlePageProps> = async ({ params 
 
 export default function ArticlePage({ post, relatedPosts }: ArticlePageProps) {
   const [activeHeadingId, setActiveHeadingId] = useState<string>('')
-  const canonicalUrl = `https://codesprintpro.com/blog/${post.slug}/`
+  const canonicalUrl = `${SITE_URL}/blog/${post.slug}/`
+  const categoryUrl = `${SITE_URL}${getCategoryHref(post.category)}`
   const ogImage = post.coverImage
-    ? `https://codesprintpro.com${post.coverImage}`
-    : 'https://codesprintpro.com/images/profile.jpg'
+    ? `${SITE_URL}${post.coverImage}`
+    : `${SITE_URL}/images/profile.jpg`
+  const articleId = `${canonicalUrl}#article`
+  const webpageId = `${canonicalUrl}#webpage`
+  const imageId = `${canonicalUrl}#primaryimage`
+  const breadcrumbId = `${canonicalUrl}#breadcrumb`
+  const timeRequired = readingTimeToDuration(post.readingTime)
 
   const formattedDate = new Date(post.date).toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
   })
+
+  const structuredData = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'WebSite',
+        '@id': WEBSITE_URL,
+        url: SITE_URL,
+        name: 'CodeSprintPro',
+        description: 'Practical guides on backend engineering, system design, Java, databases, AWS, messaging, and AI infrastructure.',
+        publisher: { '@id': ORGANIZATION_URL },
+      },
+      {
+        '@type': 'Organization',
+        '@id': ORGANIZATION_URL,
+        name: 'CodeSprintPro',
+        url: SITE_URL,
+        logo: {
+          '@type': 'ImageObject',
+          url: `${SITE_URL}/favicon/favicon-96x96.png`,
+        },
+        sameAs: [
+          'https://github.com/codesprintpro',
+          'https://medium.com/@codesprintpro',
+          'https://www.linkedin.com/in/sachin-sarawgi/',
+        ],
+      },
+      {
+        '@type': 'Person',
+        '@id': AUTHOR_URL,
+        name: 'Sachin Sarawgi',
+        url: SITE_URL,
+        image: `${SITE_URL}/images/profile.jpg`,
+        jobTitle: 'Engineering Manager',
+        sameAs: [
+          'https://www.linkedin.com/in/sachin-sarawgi/',
+          'https://github.com/codesprintpro',
+          'https://medium.com/@codesprintpro',
+        ],
+        knowsAbout: [
+          'Backend Engineering',
+          'System Design',
+          'Java',
+          'Databases',
+          'Kafka',
+          'AWS',
+          'AI Infrastructure',
+        ],
+      },
+      {
+        '@type': 'ImageObject',
+        '@id': imageId,
+        url: ogImage,
+        contentUrl: ogImage,
+        caption: post.title,
+      },
+      {
+        '@type': 'BreadcrumbList',
+        '@id': breadcrumbId,
+        itemListElement: [
+          {
+            '@type': 'ListItem',
+            position: 1,
+            name: 'Home',
+            item: `${SITE_URL}/`,
+          },
+          {
+            '@type': 'ListItem',
+            position: 2,
+            name: 'Blog',
+            item: BLOG_URL,
+          },
+          {
+            '@type': 'ListItem',
+            position: 3,
+            name: post.category,
+            item: categoryUrl,
+          },
+          {
+            '@type': 'ListItem',
+            position: 4,
+            name: post.title,
+            item: canonicalUrl,
+          },
+        ],
+      },
+      {
+        '@type': 'WebPage',
+        '@id': webpageId,
+        url: canonicalUrl,
+        name: post.title,
+        description: post.description,
+        isPartOf: { '@id': WEBSITE_URL },
+        breadcrumb: { '@id': breadcrumbId },
+        primaryImageOfPage: { '@id': imageId },
+        datePublished: post.date,
+        dateModified: post.date,
+        inLanguage: 'en-US',
+      },
+      {
+        '@type': 'BlogPosting',
+        '@id': articleId,
+        mainEntityOfPage: { '@id': webpageId },
+        url: canonicalUrl,
+        headline: post.title,
+        description: post.description,
+        image: { '@id': imageId },
+        thumbnailUrl: ogImage,
+        datePublished: post.date,
+        dateModified: post.date,
+        author: { '@id': AUTHOR_URL },
+        publisher: { '@id': ORGANIZATION_URL },
+        articleSection: post.category,
+        keywords: post.tags.join(', '),
+        about: post.tags.map((tag) => ({ '@type': 'Thing', name: tag })),
+        timeRequired,
+        inLanguage: 'en-US',
+      },
+    ].filter(Boolean),
+  }
 
   // Track active heading for ToC
   useEffect(() => {
@@ -115,6 +253,7 @@ export default function ArticlePage({ post, relatedPosts }: ArticlePageProps) {
         <meta property="og:image" content={ogImage} />
         <meta property="og:site_name" content="CodeSprintPro" />
         <meta property="article:published_time" content={post.date} />
+        <meta property="article:modified_time" content={post.date} />
         <meta property="article:author" content="Sachin Sarawgi" />
         <meta property="article:section" content={post.category} />
         {post.tags.map((tag) => (
@@ -131,40 +270,7 @@ export default function ArticlePage({ post, relatedPosts }: ArticlePageProps) {
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              '@context': 'https://schema.org',
-              '@type': 'BlogPosting',
-              headline: post.title,
-              description: post.description,
-              image: ogImage,
-              datePublished: post.date,
-              dateModified: post.date,
-              author: {
-                '@type': 'Person',
-                name: 'Sachin Sarawgi',
-                url: 'https://codesprintpro.com',
-                sameAs: [
-                  'https://www.linkedin.com/in/sachin-sarawgi/',
-                  'https://github.com/codesprintpro',
-                  'https://medium.com/@codesprintpro',
-                ],
-              },
-              publisher: {
-                '@type': 'Organization',
-                name: 'CodeSprintPro',
-                url: 'https://codesprintpro.com',
-                logo: {
-                  '@type': 'ImageObject',
-                  url: 'https://codesprintpro.com/favicon/favicon-96x96.png',
-                },
-              },
-              mainEntityOfPage: {
-                '@type': 'WebPage',
-                '@id': canonicalUrl,
-              },
-              keywords: post.tags.join(', '),
-              articleSection: post.category,
-            }),
+            __html: JSON.stringify(structuredData),
           }}
         />
       </Head>
