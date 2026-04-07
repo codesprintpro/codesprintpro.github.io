@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import Head from 'next/head'
 import { GetStaticProps } from 'next'
 import { motion } from 'framer-motion'
@@ -21,10 +21,30 @@ export const getStaticProps: GetStaticProps<BlogIndexProps> = async () => {
 
 export default function BlogIndex({ posts, categories }: BlogIndexProps) {
   const [activeCategory, setActiveCategory] = useState<BlogCategory | null>(null)
+  const [searchQuery, setSearchQuery] = useState('')
 
-  const filteredPosts = activeCategory
-    ? posts.filter((p) => p.category === activeCategory)
-    : posts
+  const filteredPosts = useMemo(() => {
+    const query = searchQuery.trim().toLowerCase()
+    return posts.filter((post) => {
+      const matchesCategory = activeCategory ? post.category === activeCategory : true
+      if (!matchesCategory) return false
+
+      if (!query) return true
+
+      const searchableText = [
+        post.title,
+        post.description,
+        post.excerpt,
+        post.category,
+        post.readingTime,
+        ...post.tags,
+      ]
+        .join(' ')
+        .toLowerCase()
+
+      return searchableText.includes(query)
+    })
+  }, [activeCategory, posts, searchQuery])
 
   return (
     <>
@@ -116,6 +136,36 @@ export default function BlogIndex({ posts, categories }: BlogIndexProps) {
 
         {/* Content */}
         <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          {/* Search */}
+          <div className="bg-white rounded-xl border border-gray-200 p-4 md:p-5 mb-6 shadow-sm">
+            <label htmlFor="blog-search" className="block text-sm font-semibold text-gray-900 mb-2">
+              Search articles
+            </label>
+            <div className="relative">
+              <input
+                id="blog-search"
+                type="search"
+                value={searchQuery}
+                onChange={(event) => setSearchQuery(event.target.value)}
+                placeholder="Try Kafka, Spring Boot, Redis, system design..."
+                className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 pr-12 text-sm text-gray-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery('')}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-sm font-medium text-gray-400 hover:text-gray-700"
+                  aria-label="Clear search"
+                >
+                  Clear
+                </button>
+              )}
+            </div>
+            <p className="mt-2 text-xs text-gray-500">
+              Search by title, tag, category, topic, or short summary.
+            </p>
+          </div>
+
           {/* Category Filter */}
           <CategoryFilter
             categories={categories}
@@ -127,21 +177,40 @@ export default function BlogIndex({ posts, categories }: BlogIndexProps) {
           {/* Posts Grid */}
           {filteredPosts.length === 0 ? (
             <div className="text-center py-20 text-gray-400">
-              No articles in this category yet. Check back soon.
+              No articles matched your filters. Try another keyword or category.
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredPosts.map((post, index) => (
-                <motion.div
-                  key={post.slug}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: index * 0.05 }}
-                >
-                  <BlogCard post={post} variant="default" />
-                </motion.div>
-              ))}
-            </div>
+            <>
+              <div className="flex items-center justify-between mb-6">
+                <p className="text-sm text-gray-500">
+                  Showing {filteredPosts.length} of {posts.length} article{posts.length !== 1 ? 's' : ''}
+                </p>
+                {(activeCategory || searchQuery) && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setActiveCategory(null)
+                      setSearchQuery('')
+                    }}
+                    className="text-sm font-medium text-blue-600 hover:text-blue-700"
+                  >
+                    Reset filters
+                  </button>
+                )}
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filteredPosts.map((post, index) => (
+                  <motion.div
+                    key={post.slug}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4, delay: index * 0.05 }}
+                  >
+                    <BlogCard post={post} variant="default" />
+                  </motion.div>
+                ))}
+              </div>
+            </>
           )}
         </main>
 
