@@ -12,12 +12,6 @@ export default function Document() {
           crossOrigin="anonymous"
           referrerPolicy="no-referrer"
         />
-        {/* Google AdSense — replace ca-pub-XXXXXXXXXXXXXXXX with your Publisher ID after approval */}
-        <script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
-          crossOrigin="anonymous"
-        />
       </Head>
       <body>
         <Main />

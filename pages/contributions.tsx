@@ -138,7 +138,7 @@ const ContributionsPage: NextPage = () => {
         <title>Blog & Contributions - Sachin Sarawgi</title>
         <meta 
           name="description" 
-          content="Technical blogs and StackOverflow contributions by Sachin Sarawgi" 
+          content="Technical blogs and Stack Overflow contributions by Sachin Sarawgi"
         />
       </Head>
 
@@ -158,7 +158,7 @@ const ContributionsPage: NextPage = () => {
                 Blog & Contributions
               </h1>
               <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-                Sharing knowledge through technical writing and helping developers on StackOverflow
+                Sharing knowledge through technical writing and helping developers on Stack Overflow
               </p>
             </motion.div>
           </div>
@@ -203,10 +203,10 @@ const ContributionsPage: NextPage = () => {
           </div>
         </section>
 
-        {/* StackOverflow Section */}
+        {/* Stack Overflow Section */}
         <section className="py-20 bg-white">
           <div className="container mx-auto px-4">
-            <h2 className="text-3xl font-bold text-gray-900 mb-12">StackOverflow Contributions</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-12">Stack Overflow Contributions</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {stackOverflowAnswers.map((answer, index) => (
                 <motion.a
@@ -243,4 +243,4 @@ const ContributionsPage: NextPage = () => {
   )
 }
 
-export default ContributionsPage 
+export default ContributionsPage

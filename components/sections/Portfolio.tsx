@@ -54,7 +54,7 @@ const writing = [
   {
     platform: 'CodeSprintPro',
     description: '30+ in-depth articles on Kafka, Redis, System Design, Java 21, AWS, and distributed systems — the site you\'re reading right now.',
-    href: '/blog',
+    href: '/blog/',
     internal: true,
   },
   {
@@ -64,7 +64,7 @@ const writing = [
     internal: false,
   },
   {
-    platform: 'StackOverflow',
+    platform: 'Stack Overflow',
     description: 'Active contributor with answers focused on Java, Spring Boot, and database optimization.',
     href: 'https://stackoverflow.com/users/2663579/sachinsarawgi',
     internal: false,

@@ -7,14 +7,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ```bash
 npm run dev      # Start local dev server at http://localhost:3000
 npm run build    # Static export to /out (required for GitHub Pages deploy)
-npm run lint     # ESLint via next lint
+npx tsc --noEmit # Run TypeScript type-checking without producing output
 ```
 
 There are no tests. The build (`npm run build`) is the primary validation step — it runs TypeScript type-checking and generates the static export.
 
 ## Architecture
 
-This is a **Next.js 13 Pages Router** site deployed as a **fully static export** to GitHub Pages at `codesprintpro.com`. `output: 'export'` in `next.config.js` is a hard constraint — no server-side features (API routes, ISR, `next/image` optimization) are available.
+This is a **Next.js 15 Pages Router** site deployed as a **fully static export** to GitHub Pages at `codesprintpro.com`. `output: 'export'` in `next.config.js` is a hard constraint — no server-side features (API routes, ISR, `next/image` optimization) are available.
 
 ### Data Flow
 
@@ -59,8 +59,7 @@ Prism runs **client-side only** in `pages/blog/[slug].tsx` via a `loadPrism()` `
 
 ### Monetization
 
-- **Google AdSense**: Script tag in `pages/_document.tsx` — the publisher ID placeholder `ca-pub-XXXXXXXXXXXXXXXX` must be replaced with the real ID after AdSense approval.
-- **Affiliate links**: Defined in `components/blog/AffiliateSection.tsx` as `AFFILIATE_PRESETS`. A post opts in by setting `affiliateSection: "<preset-key>"` in its frontmatter.
+**Affiliate links** are defined in `components/blog/AffiliateSection.tsx` as `AFFILIATE_PRESETS`. A post opts in by setting `affiliateSection: "<preset-key>"` in its frontmatter.
 
 ### Key Non-Obvious Patterns
 

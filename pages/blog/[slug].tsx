@@ -53,7 +53,7 @@ export default function ArticlePage({ post, relatedPosts }: ArticlePageProps) {
   const canonicalUrl = `https://codesprintpro.com/blog/${post.slug}/`
   const ogImage = post.coverImage
     ? `https://codesprintpro.com${post.coverImage}`
-    : 'https://codesprintpro.com/images/og-default.jpg'
+    : 'https://codesprintpro.com/images/profile.jpg'
 
   const formattedDate = new Date(post.date).toLocaleDateString('en-US', {
     year: 'numeric',
@@ -179,7 +179,7 @@ export default function ArticlePage({ post, relatedPosts }: ArticlePageProps) {
               <nav className="flex items-center gap-2 text-sm text-gray-400 mb-6">
                 <Link href="/" className="hover:text-white transition-colors">Home</Link>
                 <span>/</span>
-                <Link href="/blog" className="hover:text-white transition-colors">Blog</Link>
+                <Link href="/blog/" className="hover:text-white transition-colors">Blog</Link>
                 <span>/</span>
                 <span className="text-gray-300 truncate max-w-xs">{post.title}</span>
               </nav>
@@ -290,7 +290,7 @@ export default function ArticlePage({ post, relatedPosts }: ArticlePageProps) {
             {/* Back to blog */}
             <div className="mt-12 text-center">
               <Link
-                href="/blog"
+                href="/blog/"
                 className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium transition-colors"
               >
                 ← Back to all articles
