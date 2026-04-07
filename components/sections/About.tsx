@@ -24,7 +24,7 @@ export const About: React.FC<{ totalArticles?: number }> = ({ totalArticles }) =
   const stats = [
     { value: '10+', label: 'Years of experience' },
     { value: '7', label: 'Companies across fintech, SaaS & startups' },
-    { value: totalArticles ? `${totalArticles}+` : '60+', label: 'Technical articles published' },
+    { value: totalArticles ? `${totalArticles}` : '60+', label: 'Technical articles published' },
   ]
   return (
     <section id="about" className="py-20 bg-white">

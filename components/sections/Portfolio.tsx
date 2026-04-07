@@ -50,28 +50,33 @@ const achievements: Achievement[] = [
   },
 ]
 
-const writing = [
-  {
-    platform: 'CodeSprintPro',
-    description: '30+ in-depth articles on Kafka, Redis, System Design, Java 21, AWS, and distributed systems — the site you\'re reading right now.',
-    href: '/blog/',
-    internal: true,
-  },
-  {
-    platform: 'Medium',
-    description: 'Earlier writing on Java, Spring Boot, and system architecture. 100K+ views across published articles.',
-    href: 'https://medium.com/@codesprintpro',
-    internal: false,
-  },
-  {
-    platform: 'Stack Overflow',
-    description: 'Active contributor with answers focused on Java, Spring Boot, and database optimization.',
-    href: 'https://stackoverflow.com/users/2663579/sachinsarawgi',
-    internal: false,
-  },
-]
+interface PortfolioProps {
+  totalArticles?: number
+}
 
-export const Portfolio: React.FC = () => {
+export const Portfolio: React.FC<PortfolioProps> = ({ totalArticles }) => {
+  const articleCount = totalArticles ? `${totalArticles}` : '60+'
+  const writing = [
+    {
+      platform: 'CodeSprintPro',
+      description: `${articleCount} in-depth articles on Kafka, Redis, System Design, Java 21, AWS, and distributed systems — the site you're reading right now.`,
+      href: '/blog/',
+      internal: true,
+    },
+    {
+      platform: 'Medium',
+      description: 'Earlier writing on Java, Spring Boot, and system architecture. 100K+ views across published articles.',
+      href: 'https://medium.com/@codesprintpro',
+      internal: false,
+    },
+    {
+      platform: 'Stack Overflow',
+      description: 'Active contributor with answers focused on Java, Spring Boot, and database optimization.',
+      href: 'https://stackoverflow.com/users/2663579/sachinsarawgi',
+      internal: false,
+    },
+  ]
+
   return (
     <section id="portfolio" className="py-20 bg-gray-50">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">

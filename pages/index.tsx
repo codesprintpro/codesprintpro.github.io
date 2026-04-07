@@ -9,19 +9,20 @@ import { Contact } from '@/components/sections/Contact'
 import { Navbar } from '@/components/Navbar'
 import { Footer } from '@/components/Footer'
 import { BlogCard } from '@/components/blog/BlogCard'
-import { getFeaturedPosts, getAllCategories, getAllPosts, BlogPostMeta, BlogCategory } from '@/lib/blog'
+import { getAllCategories, getAllPosts, BlogPostMeta, BlogCategory } from '@/lib/blog'
 
 interface HomeProps {
-  featuredPosts: BlogPostMeta[]
+  latestPosts: BlogPostMeta[]
   categories: Array<{ name: BlogCategory; count: number }>
   totalArticles: number
 }
 
 export const getStaticProps: GetStaticProps<HomeProps> = async () => {
-  const featuredPosts = getFeaturedPosts(5)
+  const allPosts = getAllPosts()
+  const latestPosts = allPosts.slice(0, 5)
   const categories = getAllCategories()
-  const totalArticles = getAllPosts().length
-  return { props: { featuredPosts, categories, totalArticles } }
+  const totalArticles = allPosts.length
+  return { props: { latestPosts, categories, totalArticles } }
 }
 
 const CATEGORY_CONFIG: Record<string, { icon: string; color: string; border: string }> = {
@@ -34,8 +35,8 @@ const CATEGORY_CONFIG: Record<string, { icon: string; color: string; border: str
   'Data Engineering': { icon: '⚡', color: 'bg-teal-50',   border: 'border-teal-200' },
 }
 
-export default function Home({ featuredPosts, categories, totalArticles }: HomeProps) {
-  const [mainFeatured, ...restFeatured] = featuredPosts
+export default function Home({ latestPosts, categories, totalArticles }: HomeProps) {
+  const [mainLatestPost, ...restLatestPosts] = latestPosts
 
   return (
     <>
@@ -109,7 +110,7 @@ export default function Home({ featuredPosts, categories, totalArticles }: HomeP
 
         <main>
           {/* 1. Hero */}
-          <Hero />
+          <Hero totalArticles={totalArticles} />
 
           {/* 2. Category Grid */}
           {categories.length > 0 && (
@@ -153,8 +154,8 @@ export default function Home({ featuredPosts, categories, totalArticles }: HomeP
             </section>
           )}
 
-          {/* 3. Featured Posts */}
-          {featuredPosts.length > 0 && (
+          {/* 3. Latest Posts */}
+          {latestPosts.length > 0 && (
             <section className="py-16 bg-gray-50">
               <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                 <motion.div
@@ -165,8 +166,8 @@ export default function Home({ featuredPosts, categories, totalArticles }: HomeP
                   className="flex items-center justify-between mb-10"
                 >
                   <div>
-                    <h2 className="text-3xl font-bold text-gray-900 mb-1">Featured Articles</h2>
-                    <p className="text-gray-500">In-depth guides and deep dives worth your time</p>
+                    <h2 className="text-3xl font-bold text-gray-900 mb-1">Latest Articles</h2>
+                    <p className="text-gray-500">Fresh practical guides and deep dives worth your time</p>
                   </div>
                   <Link
                     href="/blog/"
@@ -176,21 +177,21 @@ export default function Home({ featuredPosts, categories, totalArticles }: HomeP
                   </Link>
                 </motion.div>
 
-                {/* Featured layout: 1 large + 2 standard, then remaining standard */}
+                {/* Latest layout: 1 large + 2 standard, then remaining standard */}
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-                  {mainFeatured && (
+                  {mainLatestPost && (
                     <div className="lg:col-span-2">
-                      <BlogCard post={mainFeatured} variant="featured" />
+                      <BlogCard post={mainLatestPost} variant="featured" />
                     </div>
                   )}
-                  {restFeatured.slice(0, 2).map((post) => (
+                  {restLatestPosts.slice(0, 2).map((post) => (
                     <BlogCard key={post.slug} post={post} variant="default" />
                   ))}
                 </div>
 
-                {restFeatured.length > 2 && (
+                {restLatestPosts.length > 2 && (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {restFeatured.slice(2).map((post) => (
+                    {restLatestPosts.slice(2).map((post) => (
                       <BlogCard key={post.slug} post={post} variant="default" />
                     ))}
                   </div>
@@ -212,7 +213,7 @@ export default function Home({ featuredPosts, categories, totalArticles }: HomeP
           <About totalArticles={totalArticles} />
 
           {/* 5. Portfolio */}
-          <Portfolio />
+          <Portfolio totalArticles={totalArticles} />
 
           {/* 6. Contact */}
           <Contact />
