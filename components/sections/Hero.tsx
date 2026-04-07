@@ -9,13 +9,17 @@ const socialLinks = [
   { name: 'Medium', url: 'https://medium.com/@codesprintpro', icon: 'medium' },
 ]
 
-const stats = [
-  { value: '10+', label: 'Articles' },
-  { value: '10+', label: 'Yrs Exp' },
-  { value: '7', label: 'Topics' },
-]
+interface HeroProps {
+  totalArticles?: number
+}
 
-export const Hero: React.FC = () => {
+export const Hero: React.FC<HeroProps> = ({ totalArticles }) => {
+  const stats = [
+    { value: totalArticles ? `${totalArticles}` : '60+', label: 'Articles' },
+    { value: '10+', label: 'Yrs Exp' },
+    { value: '7', label: 'Topics' },
+  ]
+
   return (
     <section className="relative min-h-[85vh] flex items-center bg-gradient-to-br from-gray-900 via-blue-950 to-gray-900 py-24 overflow-hidden">
       {/* Background grid pattern */}
