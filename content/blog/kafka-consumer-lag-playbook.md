@@ -1,7 +1,7 @@
 ---
 title: "Kafka Consumer Lag: Causes, Diagnosis, and Production Fixes"
 description: "A practical Kafka consumer lag playbook covering partition skew, slow processing, rebalances, max.poll settings, poison messages, autoscaling, metrics, and safe recovery strategies."
-date: "2025-07-28"
+date: "2026-04-07"
 category: "Messaging"
 tags: ["kafka", "consumer lag", "messaging", "streaming", "distributed systems", "production debugging"]
 featured: false

@@ -1,7 +1,7 @@
 ---
 title: "Multi-Region Architecture: Active-Active, Active-Passive, and Consistency Trade-Offs"
 description: "A practical guide to multi-region system design: active-active vs active-passive, DNS failover, RPO/RTO, data replication, conflict resolution, global databases, and when not to go multi-region."
-date: "2025-07-30"
+date: "2026-04-07"
 category: "System Design"
 tags: ["multi-region", "system design", "distributed systems", "aws", "reliability", "disaster recovery"]
 featured: false

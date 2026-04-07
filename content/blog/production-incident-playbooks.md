@@ -1,7 +1,7 @@
 ---
 title: "Production Incident Playbooks: Debugging Latency, Errors, and Traffic Spikes"
 description: "A practical incident response playbook for backend engineers: how to triage production latency, error-rate spikes, database issues, queue backlogs, and rollback decisions without guessing under pressure."
-date: "2025-07-12"
+date: "2026-04-07"
 category: "System Design"
 tags: ["incident response", "production debugging", "observability", "sre", "backend engineering", "playbooks"]
 featured: false

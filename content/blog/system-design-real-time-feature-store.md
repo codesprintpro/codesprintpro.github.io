@@ -1,7 +1,7 @@
 ---
 title: "System Design: Building a Feature Store for Real-Time Machine Learning"
 description: "Design a practical feature store for production ML systems: offline and online features, point-in-time correctness, streaming updates, Redis/DynamoDB serving, monitoring, and training-serving skew."
-date: "2025-07-26"
+date: "2026-04-07"
 category: "AI/ML"
 tags: ["feature store", "machine learning", "system design", "real-time ml", "data engineering", "ml infrastructure"]
 featured: false

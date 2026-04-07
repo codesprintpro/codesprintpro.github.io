@@ -1,7 +1,7 @@
 ---
 title: "Spring Boot Production Readiness Checklist: Timeouts, Pools, Health Checks, and Observability"
 description: "A practical Spring Boot production checklist covering HTTP timeouts, HikariCP, thread pools, Actuator health checks, graceful shutdown, structured logging, metrics, resilience, and deployment safety."
-date: "2025-07-20"
+date: "2026-04-07"
 category: "Java"
 tags: ["spring boot", "production readiness", "java", "observability", "resilience", "backend engineering"]
 featured: false
