@@ -18,6 +18,59 @@ interface HomeProps {
   totalArticles: number
 }
 
+const LEARNING_PATHS = [
+  {
+    title: 'Backend Systems',
+    description: 'Architecture trade-offs, reliability, scale, and incident response for production services.',
+    href: getCategoryHref('System Design'),
+    links: [
+      { label: 'System Design', href: getCategoryHref('System Design') },
+      { label: 'Incident Playbooks', href: '/blog/production-incident-playbooks/' },
+      { label: 'Idempotency Keys', href: '/blog/api-idempotency-keys/' },
+    ],
+  },
+  {
+    title: 'Java Production',
+    description: 'Spring Boot readiness, JVM behavior, connection pools, and performance tuning.',
+    href: getCategoryHref('Java'),
+    links: [
+      { label: 'Java Guides', href: getCategoryHref('Java') },
+      { label: 'Spring Boot Checklist', href: '/blog/spring-boot-production-readiness-checklist/' },
+      { label: 'Connection Pools', href: '/blog/database-connection-pool-tuning/' },
+    ],
+  },
+  {
+    title: 'Data & Caching',
+    description: 'Database performance, cache invalidation, indexing, and production data access patterns.',
+    href: getCategoryHref('Databases'),
+    links: [
+      { label: 'Database Guides', href: getCategoryHref('Databases') },
+      { label: 'Cache Invalidation', href: '/blog/cache-invalidation-patterns/' },
+      { label: 'PostgreSQL Tuning', href: '/blog/postgresql-performance-tuning/' },
+    ],
+  },
+  {
+    title: 'Kafka & Events',
+    description: 'Consumer lag, reliable publishing, exactly-once trade-offs, and event-driven systems.',
+    href: getCategoryHref('Messaging'),
+    links: [
+      { label: 'Messaging Guides', href: getCategoryHref('Messaging') },
+      { label: 'Kafka Lag Playbook', href: '/blog/kafka-consumer-lag-playbook/' },
+      { label: 'Transactional Outbox', href: '/blog/transactional-outbox-pattern/' },
+    ],
+  },
+  {
+    title: 'AI Engineering',
+    description: 'RAG, embeddings, feature stores, agents, and production AI infrastructure.',
+    href: getCategoryHref('AI/ML'),
+    links: [
+      { label: 'AI/ML Guides', href: getCategoryHref('AI/ML') },
+      { label: 'Feature Store Design', href: '/blog/system-design-real-time-feature-store/' },
+      { label: 'Production RAG', href: '/blog/building-rag-system-langchain/' },
+    ],
+  },
+]
+
 export const getStaticProps: GetStaticProps<HomeProps> = async () => {
   const allPosts = getAllPosts()
   const latestPosts = allPosts.slice(0, 5)
@@ -145,9 +198,66 @@ export default function Home({ latestPosts, categories, totalArticles }: HomePro
             </section>
           )}
 
-          {/* 3. Latest Posts */}
+          {/* 3. Learning Paths */}
+          <section className="py-16 bg-gray-50">
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5 }}
+                className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10"
+              >
+                <div>
+                  <h2 className="text-3xl font-bold text-gray-900 mb-3">Start Here</h2>
+                  <p className="text-gray-500 max-w-2xl">
+                    Follow a practical track and build momentum from fundamentals to production trade-offs.
+                  </p>
+                </div>
+                <Link
+                  href="/blog/"
+                  className="text-blue-600 hover:text-blue-700 font-medium transition-colors text-sm"
+                >
+                  Browse everything →
+                </Link>
+              </motion.div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-5">
+                {LEARNING_PATHS.map((path, index) => (
+                  <motion.article
+                    key={path.title}
+                    initial={{ opacity: 0, y: 18 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4, delay: index * 0.05 }}
+                    className="bg-white rounded-xl border border-gray-200 p-5 hover:border-blue-300 hover:shadow-lg transition-all"
+                  >
+                    <h3 className="text-lg font-bold text-gray-900 mb-2">
+                      <Link href={path.href} className="hover:text-blue-600 transition-colors">
+                        {path.title}
+                      </Link>
+                    </h3>
+                    <p className="text-sm text-gray-600 leading-relaxed mb-5">{path.description}</p>
+                    <div className="space-y-2">
+                      {path.links.map((link) => (
+                        <Link
+                          key={link.href}
+                          href={link.href}
+                          className="block text-sm font-medium text-blue-600 hover:text-blue-700"
+                        >
+                          {link.label} →
+                        </Link>
+                      ))}
+                    </div>
+                  </motion.article>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* 4. Latest Posts */}
           {latestPosts.length > 0 && (
-            <section className="py-16 bg-gray-50">
+            <section className="py-16 bg-white">
               <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
@@ -200,13 +310,13 @@ export default function Home({ latestPosts, categories, totalArticles }: HomePro
             </section>
           )}
 
-          {/* 4. About */}
+          {/* 5. About */}
           <About totalArticles={totalArticles} />
 
-          {/* 5. Portfolio */}
+          {/* 6. Portfolio */}
           <Portfolio totalArticles={totalArticles} />
 
-          {/* 6. Contact */}
+          {/* 7. Contact */}
           <Contact />
         </main>
 
