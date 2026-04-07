@@ -281,7 +281,7 @@ export default function ArticlePage({ post, relatedPosts }: ArticlePageProps) {
 
         <div className="pt-20">
           {/* Article Header */}
-          <div className="bg-gradient-to-br from-gray-900 to-blue-950 py-16">
+          <div id="article-top" className="bg-gradient-to-br from-gray-900 to-blue-950 py-16">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl">
               {/* Breadcrumb */}
               <nav className="flex items-center gap-2 text-sm text-gray-400 mb-6">
@@ -328,6 +328,14 @@ export default function ArticlePage({ post, relatedPosts }: ArticlePageProps) {
 
           {/* Article Body */}
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl py-12">
+            <div className="mb-8 lg:hidden">
+              <TableOfContents
+                items={post.tableOfContents}
+                activeId={activeHeadingId}
+                variant="mobile"
+              />
+            </div>
+
             <div className="flex gap-12">
               {/* Main Content */}
               <div className="flex-1 min-w-0">
