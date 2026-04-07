@@ -1,7 +1,7 @@
 ---
 title: "Idempotency Keys in APIs: Retries, Duplicate Requests, and Exactly-Once Illusions"
 description: "A production guide to designing idempotent APIs with idempotency keys, request fingerprinting, response replay, database constraints, TTL cleanup, and race-condition handling."
-date: "2025-07-14"
+date: "2026-04-07"
 category: "System Design"
 tags: ["idempotency", "api design", "distributed systems", "retries", "backend engineering", "payments"]
 featured: false

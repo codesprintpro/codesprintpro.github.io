@@ -1,7 +1,7 @@
 ---
 title: "Database Connection Pool Tuning: HikariCP, PostgreSQL, and Traffic Spikes"
 description: "A practical guide to tuning database connection pools for Spring Boot services: pool sizing, HikariCP settings, PostgreSQL limits, slow query impact, metrics, and production failure modes."
-date: "2025-07-16"
+date: "2026-04-07"
 category: "Java"
 tags: ["spring boot", "hikaricp", "postgresql", "database", "performance", "connection pooling"]
 featured: false

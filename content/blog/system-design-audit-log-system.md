@@ -1,7 +1,7 @@
 ---
 title: "System Design: Building an Audit Log System for Compliance and Debugging"
 description: "Design a production audit log system with immutable events, schema design, write paths, search, retention, tamper resistance, PII controls, partitioning, and compliance tradeoffs."
-date: "2025-07-24"
+date: "2026-04-07"
 category: "System Design"
 tags: ["system design", "audit logs", "compliance", "security", "event architecture", "backend engineering"]
 featured: false

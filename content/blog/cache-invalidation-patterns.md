@@ -1,7 +1,7 @@
 ---
 title: "Cache Invalidation Patterns: TTL, Write-Through, Cache-Aside, and Event-Driven Eviction"
 description: "A practical guide to cache invalidation in production systems: TTLs, cache-aside, write-through, versioned keys, event-driven eviction, stampede prevention, and stale-read tradeoffs."
-date: "2025-07-22"
+date: "2026-04-07"
 category: "Databases"
 tags: ["cache invalidation", "redis", "caching", "distributed systems", "performance", "backend engineering"]
 featured: false

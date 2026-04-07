@@ -1,7 +1,7 @@
 ---
 title: "Transactional Outbox Pattern: Reliable Event Publishing Without Dual Writes"
 description: "A production guide to the transactional outbox pattern: schema design, polling publishers, Debezium CDC, Kafka publishing, retries, ordering, cleanup, and exactly-once myths."
-date: "2025-07-18"
+date: "2026-04-07"
 category: "System Design"
 tags: ["transactional outbox", "kafka", "event driven architecture", "distributed systems", "debezium", "reliability"]
 featured: false
