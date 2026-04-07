@@ -359,3 +359,9 @@ This is the real guarantee you care about: if the service commits business data,
 - Document event schema ownership
 
 The outbox pattern is not glamorous, but it is one of the highest-leverage reliability patterns in backend architecture. It turns a fragile dual write into a durable local transaction plus an asynchronous publisher, which is exactly the kind of tradeoff production systems need.
+
+## Read Next
+
+- [Change Data Capture with Debezium: Real-Time Data Synchronization Patterns](/blog/cdc-debezium-kafka-patterns/)
+- [Kafka Exactly-Once Semantics: Myth vs Production Reality](/blog/kafka-exactly-once-semantics/)
+- [Kafka Internals Deep Dive: Partitions, Offsets, and Consumer Groups](/blog/kafka-internals-deep-dive/)

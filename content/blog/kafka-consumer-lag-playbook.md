@@ -230,3 +230,9 @@ This skips unprocessed messages. Use only when the business accepts data loss or
 - Document replay procedures
 
 Consumer lag is a symptom with many possible causes. The best Kafka teams do not just add consumers. They read the lag shape, identify the bottleneck, and choose a fix that preserves correctness.
+
+## Read Next
+
+- [Kafka Internals Deep Dive: Partitions, Offsets, and Consumer Groups](/blog/kafka-internals-deep-dive/)
+- [Kafka Exactly-Once Semantics: Myth vs Production Reality](/blog/kafka-exactly-once-semantics/)
+- [SQS vs Kafka vs EventBridge: Choosing the Right Messaging System on AWS](/blog/sqs-kafka-eventbridge-aws-comparison/)

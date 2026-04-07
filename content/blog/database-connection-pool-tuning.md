@@ -306,3 +306,9 @@ Pool tuning is often about protecting critical paths from less critical work.
 - Load test with realistic pod counts, not one local instance
 
 Connection pools are backpressure. Treat them as a deliberate concurrency limit and they will protect your database. Treat them as an arbitrary large number and they will turn traffic spikes into cascading failures.
+
+## Read Next
+
+- [Spring Boot Performance Tuning: From 200 to 2000 RPS](/blog/spring-boot-performance/)
+- [Thread Pool Exhaustion in Spring Boot: Diagnosis, Prevention, and Recovery](/blog/spring-boot-thread-pool-exhaustion/)
+- [PostgreSQL Performance Tuning: From Slow Queries to Sub-Millisecond Reads](/blog/postgresql-performance-tuning/)

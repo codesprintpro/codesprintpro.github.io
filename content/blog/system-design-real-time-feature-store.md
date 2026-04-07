@@ -240,3 +240,9 @@ Alert on freshness per feature group. A fraud model using a 6-hour-old velocity 
 - Keep inference feature fetch latency within the model SLA
 
 A feature store is not just an ML platform component. It is a data correctness system. If features are stale, inconsistent, or leaked from the future, even the best model will behave badly in production.
+
+## Read Next
+
+- [Building a Production RAG System: Embeddings, Vector DBs, and Retrieval](/blog/building-rag-system-langchain/)
+- [Vector Embeddings: The Foundation of Modern AI Applications](/blog/vector-embeddings-deep-dive/)
+- [Change Data Capture with Debezium: Real-Time Data Synchronization Patterns](/blog/cdc-debezium-kafka-patterns/)

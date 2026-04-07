@@ -156,3 +156,9 @@ Do not debate this endlessly. If rollback is safe and impact is high, roll back 
 - Write a blameless postmortem within 48 hours
 
 The best incident response culture is not one where nothing fails. It is one where teams fail safely, detect quickly, restore confidently, and learn without hiding the truth.
+
+## Read Next
+
+- [Designing a Retry System Without Causing a Retry Storm](/blog/retry-storm-prevention/)
+- [Building Production Observability with OpenTelemetry and Grafana Stack](/blog/observability-opentelemetry-production/)
+- [Feature Flags and Progressive Delivery: Safe Releases at Scale](/blog/feature-flags-progressive-delivery/)
