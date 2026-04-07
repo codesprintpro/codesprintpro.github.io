@@ -315,3 +315,9 @@ Insert the event ID before doing work. If the insert conflicts, acknowledge the 
 - Add metrics for key conflicts, processing state age, and replay rate
 
 Idempotency is not a fancy payment-system feature. It is a basic reliability pattern for every API that accepts retries. Once you design for duplicate delivery, distributed systems become much less surprising.
+
+## Read Next
+
+- [Designing Idempotent Payment Systems in Distributed Architecture](/blog/idempotent-payment-systems/)
+- [Designing a Retry System Without Causing a Retry Storm](/blog/retry-storm-prevention/)
+- [Transactional Outbox Pattern: Reliable Event Publishing Without Dual Writes](/blog/transactional-outbox-pattern/)

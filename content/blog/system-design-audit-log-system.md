@@ -222,3 +222,9 @@ PII rules:
 - Consider hash chaining or WORM storage for tamper evidence
 
 An audit log system is not just a compliance checkbox. It is the memory of your product. Design it as a reliable event system, and it will pay for itself during the first serious investigation.
+
+## Read Next
+
+- [Transactional Outbox Pattern: Reliable Event Publishing Without Dual Writes](/blog/transactional-outbox-pattern/)
+- [Distributed Tracing with OpenTelemetry: End-to-End Observability](/blog/distributed-tracing-opentelemetry/)
+- [Designing a Database Sharding Strategy for 100 Million Users](/blog/database-sharding-100-million-users/)

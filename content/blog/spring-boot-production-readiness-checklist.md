@@ -249,3 +249,9 @@ For database changes, follow expand-contract:
 - Alerts tied to user impact
 
 Spring Boot gives you strong defaults for development. Production readiness comes from making every important failure mode explicit.
+
+## Read Next
+
+- [Spring Boot Performance Tuning: From 200 to 2000 RPS](/blog/spring-boot-performance/)
+- [Thread Pool Exhaustion in Spring Boot: Diagnosis, Prevention, and Recovery](/blog/spring-boot-thread-pool-exhaustion/)
+- [Zero-Downtime Database Migrations: Patterns for Production](/blog/zero-downtime-database-migrations/)
