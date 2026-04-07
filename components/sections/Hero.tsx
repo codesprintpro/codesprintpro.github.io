@@ -53,7 +53,7 @@ export const Hero: React.FC = () => {
 
             <div className="flex gap-4 justify-center lg:justify-start mb-10">
               <Link
-                href="/blog"
+                href="/blog/"
                 className="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-500 transition-colors font-medium text-base"
               >
                 Browse Articles

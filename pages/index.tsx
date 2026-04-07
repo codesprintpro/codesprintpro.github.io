@@ -53,7 +53,6 @@ export default function Home({ featuredPosts, categories, totalArticles }: HomeP
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-96x96.png" />
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-96x96.png" />
         <link rel="manifest" href="/favicon/site.webmanifest" />
-        <link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#5bbad5" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="application-name" content="CodeSprintPro" />
         <link rel="icon" sizes="192x192" href="/favicon/android-chrome-192x192.png" />
@@ -67,7 +66,7 @@ export default function Home({ featuredPosts, categories, totalArticles }: HomeP
           content="Deep-dive articles on System Design, Java, Kafka, Redis, AI/ML and AWS by Sachin Sarawgi."
         />
         <meta property="og:url" content="https://codesprintpro.com/" />
-        <meta property="og:image" content="https://codesprintpro.com/images/og-default.jpg" />
+        <meta property="og:image" content="https://codesprintpro.com/images/profile.jpg" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta property="og:site_name" content="CodeSprintPro" />
@@ -79,7 +78,7 @@ export default function Home({ featuredPosts, categories, totalArticles }: HomeP
           name="twitter:description"
           content="Deep-dive articles on System Design, Java, Kafka, Redis, AI/ML and AWS by Sachin Sarawgi."
         />
-        <meta name="twitter:image" content="https://codesprintpro.com/images/og-default.jpg" />
+        <meta name="twitter:image" content="https://codesprintpro.com/images/profile.jpg" />
 
         {/* Keywords */}
         <meta
@@ -139,7 +138,7 @@ export default function Home({ featuredPosts, categories, totalArticles }: HomeP
                         whileHover={{ y: -4 }}
                       >
                         <Link
-                          href="/blog"
+                          href="/blog/"
                           className={`flex flex-col items-center p-5 rounded-xl border ${cfg.color} ${cfg.border} hover:shadow-md transition-all text-center`}
                         >
                           <span className="text-3xl mb-2">{cfg.icon}</span>
@@ -170,7 +169,7 @@ export default function Home({ featuredPosts, categories, totalArticles }: HomeP
                     <p className="text-gray-500">In-depth guides and deep dives worth your time</p>
                   </div>
                   <Link
-                    href="/blog"
+                    href="/blog/"
                     className="hidden md:flex items-center gap-1 text-blue-600 hover:text-blue-700 font-medium transition-colors text-sm"
                   >
                     All Articles →
@@ -199,7 +198,7 @@ export default function Home({ featuredPosts, categories, totalArticles }: HomeP
 
                 <div className="text-center mt-10">
                   <Link
-                    href="/blog"
+                    href="/blog/"
                     className="inline-flex items-center gap-2 bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium"
                   >
                     Explore All Articles →

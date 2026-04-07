@@ -127,7 +127,9 @@ export const Contact: React.FC = () => {
                   whileHover={{ y: -2 }}
                 >
                   <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                    <i className={`fab fa-${info.icon === 'envelope' ? 'fas fa' : 'fab fa'}-${info.icon} text-blue-600 text-xl`} />
+                    <i
+                      className={`${info.icon === 'envelope' ? 'fas' : 'fab'} fa-${info.icon} text-blue-600 text-xl`}
+                    />
                   </div>
                   <div className="ml-6">
                     <h3 className="text-lg font-semibold text-gray-900">
@@ -232,4 +234,4 @@ export const Contact: React.FC = () => {
       </div>
     </section>
   )
-} 
+}

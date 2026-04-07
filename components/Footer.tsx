@@ -3,19 +3,19 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 
 const quickLinks = [
-  { name: 'Blog', href: '/blog' },
+  { name: 'Blog', href: '/blog/' },
   { name: 'About', href: '/#about' },
   { name: 'Portfolio', href: '/#portfolio' },
   { name: 'Contact', href: '/#contact' },
 ]
 
 const categoryLinks = [
-  { name: 'System Design', href: '/blog' },
-  { name: 'Java', href: '/blog' },
-  { name: 'Databases', href: '/blog' },
-  { name: 'AI/ML', href: '/blog' },
-  { name: 'AWS', href: '/blog' },
-  { name: 'Messaging', href: '/blog' },
+  { name: 'System Design', href: '/blog/' },
+  { name: 'Java', href: '/blog/' },
+  { name: 'Databases', href: '/blog/' },
+  { name: 'AI/ML', href: '/blog/' },
+  { name: 'AWS', href: '/blog/' },
+  { name: 'Messaging', href: '/blog/' },
 ]
 
 const socialLinks = [

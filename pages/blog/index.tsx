@@ -42,7 +42,7 @@ export default function BlogIndex({ posts, categories }: BlogIndexProps) {
           content="Deep-dive articles on System Design, Java, Databases, AI/ML, and distributed systems."
         />
         <meta property="og:url" content="https://codesprintpro.com/blog/" />
-        <meta property="og:image" content="https://codesprintpro.com/images/og-default.jpg" />
+        <meta property="og:image" content="https://codesprintpro.com/images/profile.jpg" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta property="og:site_name" content="CodeSprintPro" />
@@ -54,7 +54,7 @@ export default function BlogIndex({ posts, categories }: BlogIndexProps) {
           name="twitter:description"
           content="Deep-dive articles on System Design, Java, Databases, AI/ML, and distributed systems."
         />
-        <meta name="twitter:image" content="https://codesprintpro.com/images/og-default.jpg" />
+        <meta name="twitter:image" content="https://codesprintpro.com/images/profile.jpg" />
 
         {/* Keywords */}
         <meta

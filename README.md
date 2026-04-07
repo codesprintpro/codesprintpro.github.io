@@ -6,11 +6,11 @@ A modern, responsive portfolio website built with Next.js, TypeScript, and Tailw
 
 - Responsive design that works on all devices
 - Smooth animations using Framer Motion
-- Server-side rendering with Next.js
+- Static export with Next.js
 - Type-safe development with TypeScript
 - Modern styling with TailwindCSS
 - Contact form with Supabase integration
-- Blog section integrated with Medium posts
+- File-backed blog powered by Markdown posts
 - Portfolio section showcasing projects
 - Accessibility features
 - Mobile-friendly navigation
@@ -20,14 +20,14 @@ A modern, responsive portfolio website built with Next.js, TypeScript, and Tailw
 
 ## 🛠️ Tech Stack
 
-- **Framework**: Next.js 13
+- **Framework**: Next.js 15
 - **Language**: TypeScript
 - **Styling**: TailwindCSS
 - **Animations**: Framer Motion
 - **Database**: Supabase
 - **Icons**: Font Awesome
 - **Font**: Inter (Google Fonts)
-- **Development Tools**: ESLint, Prettier
+- **Development Tools**: TypeScript
 - **Deployment**: GitHub Pages
 
 ## 💻 Development
@@ -60,8 +60,8 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon
 - `npm run dev`: Start development server
 - `npm run build`: Build for production
 - `npm run start`: Start production server
-- `npm run lint`: Run ESLint
-- `npm run type-check`: Run TypeScript compiler
+- `npm run lint`: Configure/run Next.js linting if ESLint has been set up
+- `npx tsc --noEmit`: Run TypeScript compiler
 
 ## 🤝 Contributing
 
@@ -104,6 +104,4 @@ The portfolio is optimized for search engines with:
 
 - All external links use `rel="noopener noreferrer"`
 - Form validation and sanitization
-- Protected API routes
 - Secure headers
-- CSRF protection

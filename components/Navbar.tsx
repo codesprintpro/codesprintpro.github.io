@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 
 const NAV_ITEMS = [
-  { label: 'Blog', href: '/blog' },
+  { label: 'Blog', href: '/blog/' },
   { label: 'About', href: '/#about' },
   { label: 'Portfolio', href: '/#portfolio' },
   { label: 'Contact', href: '/#contact' },
@@ -72,7 +72,7 @@ export const Navbar: React.FC = () => {
           <div className="hidden md:flex items-center space-x-8">
             {NAV_ITEMS.map((item) => {
               const isActive =
-                item.href === '/blog'
+                item.href === '/blog/'
                   ? router.pathname.startsWith('/blog')
                   : false
               return (

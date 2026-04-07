@@ -27,7 +27,7 @@ export const BlogCard: React.FC<BlogCardProps> = ({ post, variant = 'default' })
 
   if (variant === 'compact') {
     return (
-      <Link href={`/blog/${post.slug}`}>
+      <Link href={`/blog/${post.slug}/`}>
         <motion.div
           whileHover={{ x: 4 }}
           className="flex gap-3 py-3 border-b border-gray-100 last:border-0 cursor-pointer group"
@@ -48,7 +48,7 @@ export const BlogCard: React.FC<BlogCardProps> = ({ post, variant = 'default' })
 
   if (variant === 'featured') {
     return (
-      <Link href={`/blog/${post.slug}`}>
+      <Link href={`/blog/${post.slug}/`}>
         <motion.article
           whileHover={{ y: -4 }}
           transition={{ duration: 0.2 }}
@@ -84,7 +84,7 @@ export const BlogCard: React.FC<BlogCardProps> = ({ post, variant = 'default' })
 
   // default variant
   return (
-    <Link href={`/blog/${post.slug}`}>
+    <Link href={`/blog/${post.slug}/`}>
       <motion.article
         whileHover={{ y: -5 }}
         transition={{ duration: 0.2 }}
