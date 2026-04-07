@@ -14,6 +14,7 @@ import { Footer } from '@/components/Footer'
 import { BlogCard } from '@/components/blog/BlogCard'
 import { TableOfContents } from '@/components/blog/TableOfContents'
 import { AffiliateSection } from '@/components/blog/AffiliateSection'
+import { AuthorBio } from '@/components/blog/AuthorBio'
 
 // Load Prism language components for client-side syntax highlighting
 const loadPrism = () => {
@@ -244,6 +245,9 @@ export default function ArticlePage({ post, relatedPosts }: ArticlePageProps) {
                 {post.affiliateSection && (
                   <AffiliateSection variant={post.affiliateSection} />
                 )}
+
+                {/* Author Bio */}
+                <AuthorBio />
 
                 {/* Share */}
                 <div className="mt-10 pt-8 border-t border-gray-100">
