@@ -125,6 +125,145 @@ Check:
 
 If every partition is lagging evenly, add consumers up to the partition count. If one partition is hot, scaling will not help much. You need to fix the partition key, split the hot tenant, or add special handling for the hot key.
 
+## Traffic Spike Playbook
+
+Traffic spikes are not automatically bad. The question is whether the spike is legitimate demand, retry amplification, bot traffic, or a client bug.
+
+Start with segmentation:
+
+```
+requests_per_second by route
+requests_per_second by user_agent
+requests_per_second by client_version
+requests_per_second by tenant_id
+requests_per_second by source_ip_prefix
+```
+
+If one endpoint dominates, look for a client loop or a cache miss pattern. If one tenant dominates, apply tenant-level throttling. If retry traffic is visible, reduce retries or enable server-side rate limiting before scaling the whole system.
+
+Scaling is useful only when the bottleneck is stateless application capacity. Scaling application pods does not fix:
+
+- database lock contention
+- exhausted database connections
+- downstream dependency throttling
+- hot Kafka partitions
+- Redis single-key hotspots
+
+During a spike, a quick protection layer can save the system:
+
+```java
+if (loadShedding.enabled() && systemLoad.isCritical()) {
+    if (!request.isHighPriority()) {
+        throw new ServiceUnavailableException("Temporarily shedding low-priority traffic");
+    }
+}
+```
+
+Load shedding is not pretty, but returning a controlled 503 for non-critical traffic is better than letting the entire service collapse.
+
+## Memory and GC Playbook
+
+Java memory incidents often look like latency incidents first. The service appears alive, but p99 latency climbs because the JVM is spending too much time in garbage collection.
+
+Check:
+
+```
+jvm.memory.used
+jvm.memory.committed
+jvm.gc.pause
+jvm.gc.overhead
+process.cpu.usage
+http.server.requests p99
+```
+
+Then correlate GC pause spikes with request latency. If both move together, inspect allocation rate and recent code changes.
+
+Common triggers:
+
+- loading large result sets into memory
+- accidentally logging huge objects
+- unbounded caches
+- batch jobs running on API pods
+- large JSON payload serialization
+- thread pools holding many queued tasks
+
+If the heap is climbing and never returning to baseline after GC, suspect a leak. If memory returns to baseline but GC is frequent, suspect allocation pressure.
+
+Temporary mitigation might be increasing memory or rolling pods. Permanent mitigation is finding the allocation path:
+
+```bash
+jcmd <pid> GC.class_histogram
+jcmd <pid> Thread.print
+```
+
+In Kubernetes, avoid guessing from pod restarts alone. Check whether restarts are OOM kills:
+
+```bash
+kubectl describe pod checkout-api-abc123 | grep -A5 "Last State"
+```
+
+## Communication Template
+
+Good incident communication is short, factual, and regular. Avoid speculation in status updates.
+
+Use a template:
+
+```
+Status: Investigating / Mitigating / Monitoring / Resolved
+Impact: Checkout API p95 latency elevated for all users
+Start time: 10:02 IST
+Current action: Rolling back checkout-api v214 to v213
+Next update: 10:30 IST
+```
+
+For internal engineering channels, add evidence:
+
+```
+Evidence:
+- p95 latency rose from 280ms to 2.4s at 09:59
+- Error rate remains below 1%
+- Tax-service client timeout change deployed at 09:58
+- DB and Redis latency normal
+```
+
+This keeps leadership informed without pulling engineers away from mitigation every two minutes.
+
+## Postmortem Structure
+
+The incident is not done when graphs recover. It is done when the system is less likely to fail the same way again.
+
+A useful postmortem includes:
+
+```markdown
+# Incident: Checkout latency spike on 2025-07-12
+
+## Impact
+Who was affected, for how long, and how badly?
+
+## Timeline
+What happened, in timestamped order?
+
+## Root Cause
+What technical condition made the incident possible?
+
+## Detection
+How did we notice? Was the alert early enough?
+
+## Resolution
+What restored service?
+
+## What Went Well
+What helped?
+
+## What Went Poorly
+What slowed us down?
+
+## Action Items
+- Owner, action, due date
+```
+
+Avoid action items like "be more careful." Good action items change systems: add an alert, enforce a timeout, reduce a retry count, add a migration guardrail, or improve rollback automation.
+
 ## Rollback vs Fix Forward
 
 Rollback when:
@@ -150,9 +289,11 @@ Do not debate this endlessly. If rollback is safe and impact is high, roll back 
 - Record a timeline
 - Check recent changes
 - Split metrics by route, version, region, tenant, and dependency
+- Use load shedding when low-priority traffic threatens critical flows
 - Prefer rollback for recent bad deploys
 - Avoid retry amplification
 - Communicate status every 15-30 minutes
+- Write action items with owners and due dates
 - Write a blameless postmortem within 48 hours
 
 The best incident response culture is not one where nothing fails. It is one where teams fail safely, detect quickly, restore confidently, and learn without hiding the truth.
