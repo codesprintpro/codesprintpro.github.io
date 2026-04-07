@@ -36,7 +36,7 @@ A modern, responsive portfolio website built with Next.js, TypeScript, and Tailw
 
 - Node.js 18 or later
 - npm or yarn
-- Supabase account for contact form
+- Supabase account for contact form and newsletter signup
 
 ### Environment Variables
 
@@ -46,6 +46,12 @@ Create a `.env.local` file in the root directory:
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon
 ```
+
+### Supabase Tables
+
+The contact form writes to `contact_messages`. Newsletter signup writes to
+`newsletter_subscribers`; run `supabase/newsletter-subscribers.sql` in the
+Supabase SQL editor so reader signups can be stored.
 
 ### Code Style
 

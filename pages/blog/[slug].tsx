@@ -15,6 +15,7 @@ import { BlogCard } from '@/components/blog/BlogCard'
 import { TableOfContents } from '@/components/blog/TableOfContents'
 import { AffiliateSection } from '@/components/blog/AffiliateSection'
 import { AuthorBio } from '@/components/blog/AuthorBio'
+import { NewsletterCTA } from '@/components/blog/NewsletterCTA'
 import { getCategoryHref } from '@/lib/blogCategories'
 
 // Load Prism language components for client-side syntax highlighting
@@ -351,6 +352,9 @@ export default function ArticlePage({ post, relatedPosts }: ArticlePageProps) {
                 {post.affiliateSection && (
                   <AffiliateSection variant={post.affiliateSection} />
                 )}
+
+                {/* Newsletter */}
+                <NewsletterCTA source={`article:${post.slug}`} />
 
                 {/* Author Bio */}
                 <AuthorBio />

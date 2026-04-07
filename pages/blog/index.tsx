@@ -7,6 +7,7 @@ import { Navbar } from '@/components/Navbar'
 import { Footer } from '@/components/Footer'
 import { BlogCard } from '@/components/blog/BlogCard'
 import { CategoryFilter } from '@/components/blog/CategoryFilter'
+import { NewsletterCTA } from '@/components/blog/NewsletterCTA'
 
 interface BlogIndexProps {
   posts: BlogPostMeta[]
@@ -173,6 +174,10 @@ export default function BlogIndex({ posts, categories }: BlogIndexProps) {
             onCategoryChange={setActiveCategory}
             totalCount={posts.length}
           />
+
+          <div className="mb-8">
+            <NewsletterCTA source="blog-index" compact />
+          </div>
 
           {/* Posts Grid */}
           {filteredPosts.length === 0 ? (
