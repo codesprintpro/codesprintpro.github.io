@@ -146,6 +146,146 @@ String fingerprint = sha256(
 
 Do not include unstable fields like timestamps, trace IDs, or auth tokens. The same logical request should produce the same fingerprint.
 
+## HTTP Response Semantics
+
+Idempotent APIs should be predictable for clients. A useful convention:
+
+| Situation | Response |
+|---|---|
+| First request succeeds | `201 Created` or `200 OK` |
+| Same key and same payload after success | Replay original response |
+| Same key but different payload | `409 Conflict` |
+| Same key while first request is processing | `409 Conflict` or `202 Accepted` |
+| Missing key for required endpoint | `400 Bad Request` |
+
+For public APIs, replaying the original status code is usually best. If the first request created an order and returned `201`, the retry should return the same `201` body or a clearly documented replay response.
+
+Example replay response:
+
+```http
+HTTP/1.1 201 Created
+Idempotency-Replayed: true
+Content-Type: application/json
+
+{
+  "orderId": "ord_123",
+  "status": "CREATED"
+}
+```
+
+That header is not required, but it helps debugging. Clients can tell whether the server performed new work or replayed a previous result.
+
+## Full Service Flow
+
+Here is a more complete service flow:
+
+```java
+public OrderResponse createOrder(CreateOrderRequest request, String key) {
+    if (key == null || key.isBlank()) {
+        throw new BadRequestException("Idempotency-Key is required");
+    }
+
+    String requestHash = fingerprint(request);
+    Optional<IdempotencyRecord> existing = repository.findByKey(key);
+
+    if (existing.isPresent()) {
+        return handleExistingRecord(existing.get(), requestHash);
+    }
+
+    boolean claimed = repository.tryCreateProcessingRecord(key, requestHash);
+    if (!claimed) {
+        // Another request inserted the key between findByKey and insert.
+        return handleExistingRecord(repository.findByKey(key).orElseThrow(), requestHash);
+    }
+
+    try {
+        Order order = orderService.create(request);
+        OrderResponse response = OrderResponse.from(order);
+
+        repository.markSucceeded(
+            key,
+            201,
+            objectMapper.writeValueAsString(response),
+            "ORDER",
+            order.getId()
+        );
+
+        return response;
+    } catch (ValidationException ex) {
+        repository.markFailedDeterministically(key, 400, errorBody(ex));
+        throw ex;
+    } catch (Exception ex) {
+        repository.releaseForRetry(key);
+        throw ex;
+    }
+}
+```
+
+The important distinction is deterministic vs transient failure. A validation failure can be saved and replayed. A database timeout should not become the permanent result for that key.
+
+## State Machine
+
+Avoid letting idempotency records become ambiguous. Treat them as a small state machine:
+
+```
+NEW -> PROCESSING -> SUCCEEDED
+NEW -> PROCESSING -> FAILED_DETERMINISTIC
+NEW -> PROCESSING -> RETRYABLE_FAILED
+```
+
+If a request finds `PROCESSING`, there are two common strategies:
+
+1. Return `409 Conflict` and ask the client to retry later
+2. Return `202 Accepted` with a status endpoint
+
+For synchronous APIs, `409` is simpler:
+
+```json
+{
+  "error": "request_in_progress",
+  "message": "A request with this idempotency key is already being processed."
+}
+```
+
+For long-running workflows, `202` is better:
+
+```http
+HTTP/1.1 202 Accepted
+Location: /orders/status/idem_123
+```
+
+The API style should match the operation. Creating a small order should not need polling. Starting a large export job probably should.
+
+## TTL and Cleanup Details
+
+TTL is not just a storage decision. It defines how long clients can safely retry.
+
+If you advertise a 24-hour idempotency window, a retry after 25 hours may create a second operation. That is acceptable only if it is documented.
+
+Cleanup query:
+
+```sql
+DELETE FROM idempotency_keys
+WHERE expires_at < now()
+  AND status IN ('SUCCEEDED', 'FAILED_DETERMINISTIC')
+LIMIT 1000;
+```
+
+For PostgreSQL, `DELETE ... LIMIT` is not directly supported, so use:
+
+```sql
+DELETE FROM idempotency_keys
+WHERE key IN (
+  SELECT key
+  FROM idempotency_keys
+  WHERE expires_at < now()
+    AND status IN ('SUCCEEDED', 'FAILED_DETERMINISTIC')
+  LIMIT 1000
+);
+```
+
+Clean in batches to avoid table bloat and long locks.
+
 ## Webhook Idempotency
 
 Webhook handlers need the same pattern, but the key usually comes from the provider event ID:
@@ -167,9 +307,11 @@ Insert the event ID before doing work. If the insert conflicts, acknowledge the 
 - Store request hash and reject key reuse with different payloads
 - Use a database unique constraint, not only an application check
 - Replay the original success response
+- Choose clear behavior for in-progress duplicate requests
 - Set a clear TTL and cleanup job
 - Do not cache transient 5xx responses as final outcomes
 - Make webhook handlers idempotent by event ID
+- Document the idempotency window for clients
 - Add metrics for key conflicts, processing state age, and replay rate
 
 Idempotency is not a fancy payment-system feature. It is a basic reliability pattern for every API that accepts retries. Once you design for duplicate delivery, distributed systems become much less surprising.
