@@ -10,6 +10,7 @@ import { Navbar } from '@/components/Navbar'
 import { Footer } from '@/components/Footer'
 import { BlogCard } from '@/components/blog/BlogCard'
 import { getAllCategories, getAllPosts, BlogPostMeta, BlogCategory } from '@/lib/blog'
+import { BLOG_CATEGORY_BY_NAME, getCategoryHref } from '@/lib/blogCategories'
 
 interface HomeProps {
   latestPosts: BlogPostMeta[]
@@ -23,16 +24,6 @@ export const getStaticProps: GetStaticProps<HomeProps> = async () => {
   const categories = getAllCategories()
   const totalArticles = allPosts.length
   return { props: { latestPosts, categories, totalArticles } }
-}
-
-const CATEGORY_CONFIG: Record<string, { icon: string; color: string; border: string }> = {
-  'System Design':    { icon: '🏗', color: 'bg-blue-50',   border: 'border-blue-200' },
-  'Java':             { icon: '☕', color: 'bg-orange-50', border: 'border-orange-200' },
-  'Databases':        { icon: '🗄️', color: 'bg-green-50',  border: 'border-green-200' },
-  'AI/ML':            { icon: '🤖', color: 'bg-purple-50', border: 'border-purple-200' },
-  'AWS':              { icon: '☁️', color: 'bg-yellow-50', border: 'border-yellow-200' },
-  'Messaging':        { icon: '📨', color: 'bg-red-50',    border: 'border-red-200' },
-  'Data Engineering': { icon: '⚡', color: 'bg-teal-50',   border: 'border-teal-200' },
 }
 
 export default function Home({ latestPosts, categories, totalArticles }: HomeProps) {
@@ -128,7 +119,7 @@ export default function Home({ latestPosts, categories, totalArticles }: HomePro
                 </motion.div>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   {categories.map(({ name, count }, i) => {
-                    const cfg = CATEGORY_CONFIG[name] ?? { icon: '📄', color: 'bg-gray-50', border: 'border-gray-200' }
+                    const cfg = BLOG_CATEGORY_BY_NAME[name]
                     return (
                       <motion.div
                         key={name}
@@ -139,7 +130,7 @@ export default function Home({ latestPosts, categories, totalArticles }: HomePro
                         whileHover={{ y: -4 }}
                       >
                         <Link
-                          href="/blog/"
+                          href={getCategoryHref(name)}
                           className={`flex flex-col items-center p-5 rounded-xl border ${cfg.color} ${cfg.border} hover:shadow-md transition-all text-center`}
                         >
                           <span className="text-3xl mb-2">{cfg.icon}</span>

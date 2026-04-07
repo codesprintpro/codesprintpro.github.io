@@ -1,6 +1,7 @@
 import React from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
+import { BLOG_CATEGORIES, getCategoryHref } from '@/lib/blogCategories'
 
 const quickLinks = [
   { name: 'Blog', href: '/blog/' },
@@ -9,14 +10,10 @@ const quickLinks = [
   { name: 'Contact', href: '/#contact' },
 ]
 
-const categoryLinks = [
-  { name: 'System Design', href: '/blog/' },
-  { name: 'Java', href: '/blog/' },
-  { name: 'Databases', href: '/blog/' },
-  { name: 'AI/ML', href: '/blog/' },
-  { name: 'AWS', href: '/blog/' },
-  { name: 'Messaging', href: '/blog/' },
-]
+const categoryLinks = BLOG_CATEGORIES.map((category) => ({
+  name: category.name,
+  href: getCategoryHref(category.name),
+}))
 
 const socialLinks = [
   { name: 'GitHub',   url: 'https://github.com/codesprintpro',          icon: 'github' },
