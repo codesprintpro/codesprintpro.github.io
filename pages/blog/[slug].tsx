@@ -65,7 +65,8 @@ export const getStaticProps: GetStaticProps<ArticlePageProps> = async ({ params 
 export default function ArticlePage({ post, relatedPosts }: ArticlePageProps) {
   const [activeHeadingId, setActiveHeadingId] = useState<string>('')
   const canonicalUrl = `${SITE_URL}/blog/${post.slug}/`
-  const categoryUrl = `${SITE_URL}${getCategoryHref(post.category)}`
+  const categoryHref = getCategoryHref(post.category)
+  const categoryUrl = `${SITE_URL}${categoryHref}`
   const ogImage = post.coverImage
     ? `${SITE_URL}${post.coverImage}`
     : `${SITE_URL}/images/profile.jpg`
@@ -284,17 +285,27 @@ export default function ArticlePage({ post, relatedPosts }: ArticlePageProps) {
           <div id="article-top" className="bg-gradient-to-br from-gray-900 to-blue-950 py-16">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl">
               {/* Breadcrumb */}
-              <nav className="flex items-center gap-2 text-sm text-gray-400 mb-6">
+              <nav
+                aria-label="Breadcrumb"
+                className="flex items-center gap-2 text-sm text-gray-400 mb-6"
+              >
                 <Link href="/" className="hover:text-white transition-colors">Home</Link>
                 <span>/</span>
                 <Link href="/blog/" className="hover:text-white transition-colors">Blog</Link>
                 <span>/</span>
+                <Link href={categoryHref} className="hover:text-white transition-colors">
+                  {post.category}
+                </Link>
+                <span>/</span>
                 <span className="text-gray-300 truncate max-w-xs">{post.title}</span>
               </nav>
 
-              <span className="inline-block text-xs font-semibold px-3 py-1 rounded-full bg-blue-100 text-blue-700 mb-4">
+              <Link
+                href={categoryHref}
+                className="inline-block text-xs font-semibold px-3 py-1 rounded-full bg-blue-100 text-blue-700 mb-4 transition-colors hover:bg-blue-200"
+              >
                 {post.category}
-              </span>
+              </Link>
               <h1 className="text-3xl md:text-5xl font-bold text-white mb-4 leading-tight">
                 {post.title}
               </h1>
