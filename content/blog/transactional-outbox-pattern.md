@@ -230,6 +230,119 @@ WHERE id IN (
 
 Large deletes can create table bloat. Monitor autovacuum and consider partitioning by `created_at`.
 
+## Event Versioning
+
+The outbox table is also where you should become disciplined about event contracts. A common mistake is treating event payloads like internal DTOs. Internal DTOs can change with application code. Events are public contracts once another service consumes them.
+
+Add an explicit schema version:
+
+```json
+{
+  "eventId": "51ea2ed9-7ac9-4c18-8cc2-05f36c4f30a1",
+  "eventType": "ORDER_CREATED",
+  "schemaVersion": 2,
+  "occurredAt": "2025-07-18T10:15:30Z",
+  "data": {
+    "orderId": "ord_123",
+    "userId": "u_456",
+    "amount": 1299,
+    "currency": "INR"
+  }
+}
+```
+
+Rules that keep event evolution safe:
+
+- Add fields instead of renaming fields
+- Keep old fields until all consumers migrate
+- Use nullable fields for optional data
+- Do not change the meaning of an existing field
+- Version breaking changes with a new event type or schema version
+
+For example, changing `amount` from rupees to paise without renaming it is a breaking change. Prefer `amountInPaise` or include a `minorUnitAmount` field and migrate consumers deliberately.
+
+## Poison Events
+
+A poison event is an event that fails every time it is published or consumed. In the outbox publisher, poison events usually happen because of malformed payloads, serialization bugs, topic authorization problems, or payloads larger than Kafka's max message size.
+
+If you retry poison events forever, they can block the queue and hide newer valid events. Add a terminal state:
+
+```sql
+ALTER TABLE outbox_events
+ADD COLUMN last_error TEXT,
+ADD COLUMN failed_at TIMESTAMP;
+```
+
+Then mark events as failed after a maximum retry count:
+
+```java
+if (event.getRetryCount() >= 10) {
+    outboxRepository.markFailed(event.getId(), exception.getMessage());
+    alertingService.raise("Outbox event moved to FAILED: " + event.getId());
+    return;
+}
+
+outboxRepository.markForRetry(event.getId(), backoff(event.getRetryCount()));
+```
+
+Failed events should be visible in dashboards and easy to replay after a fix. Do not silently drop them.
+
+## Monitoring the Outbox
+
+Outbox failures are dangerous because the user-facing request can still succeed while downstream systems stop receiving events. You need explicit outbox health metrics:
+
+```
+outbox.pending.count
+outbox.pending.oldest_age_seconds
+outbox.publish.success.count
+outbox.publish.failure.count
+outbox.publish.duration
+outbox.failed.count
+outbox.retry.count
+```
+
+The most important alert is usually age, not count:
+
+```
+alert: OutboxPublisherStuck
+condition: outbox.pending.oldest_age_seconds > 300 for 5 minutes
+```
+
+A sudden count spike may be normal during a traffic spike. An event that has been pending for 20 minutes is almost always a problem.
+
+## Testing the Pattern
+
+Unit tests are not enough. Test failure windows explicitly:
+
+1. Database commit succeeds, application crashes before publishing
+2. Kafka publish succeeds, database update to `PUBLISHED` fails
+3. Publisher processes the same event twice
+4. Consumer receives the same event twice
+5. Poison event exceeds retry limit
+6. Cleanup job deletes only published events
+
+A useful integration test:
+
+```java
+@Test
+void shouldRecoverEventAfterApplicationCrash() {
+    Order order = orderService.createOrder(request);
+
+    // Simulate publisher not running during request handling.
+    assertThat(outboxRepository.findPendingByAggregateId(order.getId()))
+        .hasSize(1);
+
+    outboxPublisher.publishPendingEvents();
+
+    assertThat(kafkaTestConsumer.receivedEvent("ORDER_CREATED", order.getId()))
+        .isTrue();
+    assertThat(outboxRepository.findByAggregateId(order.getId()).getStatus())
+        .isEqualTo("PUBLISHED");
+}
+```
+
+This is the real guarantee you care about: if the service commits business data, the event remains recoverable even if publishing does not happen immediately.
+
 ## Production Checklist
 
 - Write business data and outbox row in the same database transaction
@@ -237,6 +350,9 @@ Large deletes can create table bloat. Monitor autovacuum and consider partitioni
 - Publish with aggregate ID as Kafka key when per-entity ordering matters
 - Make consumers idempotent
 - Add retry with backoff
+- Move poison events to a visible failed state
+- Version event schemas deliberately
+- Alert on the age of the oldest pending event
 - Alert on old pending events
 - Alert on repeated publishing failures
 - Batch cleanup of published events
