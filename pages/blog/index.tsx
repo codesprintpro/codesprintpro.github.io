@@ -56,6 +56,12 @@ export default function BlogIndex({ posts, categories }: BlogIndexProps) {
           content="Deep-dive technical articles on Kafka, Redis, System Design, Java 21 Virtual Threads, RAG systems, AWS architecture, and more — by Sachin Sarawgi."
         />
         <link rel="canonical" href="https://codesprintpro.com/blog/" />
+        <link
+          rel="alternate"
+          type="application/rss+xml"
+          title="CodeSprintPro Tech Blog RSS Feed"
+          href="https://codesprintpro.com/feed.xml"
+        />
         <meta property="og:type" content="website" />
         <meta property="og:title" content="Tech Blog — CodeSprintPro" />
         <meta

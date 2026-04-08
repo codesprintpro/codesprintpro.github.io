@@ -92,6 +92,12 @@ export default function Home({ latestPosts, categories, totalArticles }: HomePro
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="canonical" href="https://codesprintpro.com/" />
+        <link
+          rel="alternate"
+          type="application/rss+xml"
+          title="CodeSprintPro Tech Blog RSS Feed"
+          href="https://codesprintpro.com/feed.xml"
+        />
 
         {/* Favicon */}
         <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
