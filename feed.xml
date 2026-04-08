@@ -80,6 +80,14 @@
       <category>Java</category><category>spring boot</category><category>timeouts</category><category>java</category><category>resilience</category><category>hikari</category><category>redis</category><category>kafka</category><category>production</category>
     </item>
     <item>
+      <title>System Design: Building an API Gateway Platform</title>
+      <link>https://codesprintpro.com/blog/system-design-api-gateway-platform/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/system-design-api-gateway-platform/</guid>
+      <description>Design a production API gateway platform with routing, authentication, authorization, rate limiting, request shaping, canary releases, retries, timeouts, config rollout, observability, and failure isolation.</description>
+      <pubDate>Wed, 08 Apr 2026 00:00:00 GMT</pubDate>
+      <category>System Design</category><category>system design</category><category>api gateway</category><category>rate limiting</category><category>authentication</category><category>routing</category><category>observability</category><category>backend engineering</category>
+    </item>
+    <item>
       <title>System Design: Building a Feature Flag Platform</title>
       <link>https://codesprintpro.com/blog/system-design-feature-flag-platform/</link>
       <guid isPermaLink="true">https://codesprintpro.com/blog/system-design-feature-flag-platform/</guid>
@@ -398,14 +406,6 @@
       <description>Cache stampede, penetration, avalanche, eviction policy selection, clustering, and persistence trade-offs for production Redis deployments. With Java examples and a real production incident walkthrough.</description>
       <pubDate>Sat, 03 May 2025 00:00:00 GMT</pubDate>
       <category>Databases</category><category>redis</category><category>caching</category><category>java</category><category>spring boot</category><category>performance</category><category>distributed systems</category><category>cache stampede</category>
-    </item>
-    <item>
-      <title>Cloud Cost Optimization: Engineering Practices That Cut AWS Bills by 50%</title>
-      <link>https://codesprintpro.com/blog/cloud-cost-optimization/</link>
-      <guid isPermaLink="true">https://codesprintpro.com/blog/cloud-cost-optimization/</guid>
-      <description>Systematic AWS cost reduction: right-sizing EC2 and RDS instances, Savings Plans vs Reserved Instances, S3 lifecycle policies, data transfer cost elimination, EKS node optimization, RDS read replicas vs caching, and the observability stack for cost monitoring.</description>
-      <pubDate>Tue, 29 Apr 2025 00:00:00 GMT</pubDate>
-      <category>AWS</category><category>aws</category><category>cost optimization</category><category>ec2</category><category>rds</category><category>s3</category><category>eks</category><category>savings plans</category><category>finops</category>
     </item>
   </channel>
 </rss>
