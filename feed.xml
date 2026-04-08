@@ -112,6 +112,14 @@
       <category>System Design</category><category>system design</category><category>metrics</category><category>observability</category><category>time series</category><category>prometheus</category><category>alerting</category><category>distributed systems</category>
     </item>
     <item>
+      <title>System Design: Building a Usage Metering and Billing Platform</title>
+      <link>https://codesprintpro.com/blog/system-design-usage-metering-billing/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/system-design-usage-metering-billing/</guid>
+      <description>Design a production usage metering and billing platform: event ingestion, idempotency, aggregation, pricing, quotas, invoices, reconciliation, audit logs, backfills, and failure recovery for SaaS products.</description>
+      <pubDate>Wed, 08 Apr 2026 00:00:00 GMT</pubDate>
+      <category>System Design</category><category>system design</category><category>billing</category><category>usage metering</category><category>idempotency</category><category>saas</category><category>event driven architecture</category><category>distributed systems</category>
+    </item>
+    <item>
       <title>System Design: Building a Webhook Delivery Platform</title>
       <link>https://codesprintpro.com/blog/system-design-webhook-delivery-platform/</link>
       <guid isPermaLink="true">https://codesprintpro.com/blog/system-design-webhook-delivery-platform/</guid>
@@ -398,14 +406,6 @@
       <description>Systematic AWS cost reduction: right-sizing EC2 and RDS instances, Savings Plans vs Reserved Instances, S3 lifecycle policies, data transfer cost elimination, EKS node optimization, RDS read replicas vs caching, and the observability stack for cost monitoring.</description>
       <pubDate>Tue, 29 Apr 2025 00:00:00 GMT</pubDate>
       <category>AWS</category><category>aws</category><category>cost optimization</category><category>ec2</category><category>rds</category><category>s3</category><category>eks</category><category>savings plans</category><category>finops</category>
-    </item>
-    <item>
-      <title>Designing Idempotent Payment Systems in Distributed Architecture</title>
-      <link>https://codesprintpro.com/blog/idempotent-payment-systems/</link>
-      <guid isPermaLink="true">https://codesprintpro.com/blog/idempotent-payment-systems/</guid>
-      <description>How duplicate payments happen in real systems, idempotency key design, race condition handling, Redis vs DB for idempotency stores, and the production incident that shaped our architecture.</description>
-      <pubDate>Sat, 26 Apr 2025 00:00:00 GMT</pubDate>
-      <category>System Design</category><category>payments</category><category>idempotency</category><category>distributed systems</category><category>java</category><category>spring boot</category><category>fintech</category><category>system design</category>
     </item>
   </channel>
 </rss>
