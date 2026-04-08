@@ -96,6 +96,14 @@
       <category>System Design</category><category>system design</category><category>authorization</category><category>permissions</category><category>rbac</category><category>abac</category><category>security</category><category>distributed systems</category>
     </item>
     <item>
+      <title>System Design: Building a Data Export Platform</title>
+      <link>https://codesprintpro.com/blog/system-design-data-export-platform/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/system-design-data-export-platform/</guid>
+      <description>Design a production data export platform for CSV, JSON, and Parquet exports with async jobs, snapshots, object storage, authorization, audit logs, retention, throttling, and failure recovery.</description>
+      <pubDate>Wed, 08 Apr 2026 00:00:00 GMT</pubDate>
+      <category>System Design</category><category>system design</category><category>data export</category><category>async jobs</category><category>object storage</category><category>audit logs</category><category>backend engineering</category><category>saas</category>
+    </item>
+    <item>
       <title>System Design: Building a Distributed Lock Service</title>
       <link>https://codesprintpro.com/blog/system-design-distributed-lock-service/</link>
       <guid isPermaLink="true">https://codesprintpro.com/blog/system-design-distributed-lock-service/</guid>
@@ -398,14 +406,6 @@
       <description>Production Terraform: module design, state management with S3 and DynamoDB locking, workspace strategies for multi-environment deployments, sensitive variable handling, drift detection, and the Terraform anti-patterns that cause outages.</description>
       <pubDate>Wed, 14 May 2025 00:00:00 GMT</pubDate>
       <category>AWS</category><category>terraform</category><category>infrastructure as code</category><category>aws</category><category>devops</category><category>s3</category><category>modules</category><category>ci/cd</category>
-    </item>
-    <item>
-      <title>Designing a High-Throughput Notification System for 100K Events per Second</title>
-      <link>https://codesprintpro.com/blog/notification-system-100k-per-second/</link>
-      <guid isPermaLink="true">https://codesprintpro.com/blog/notification-system-100k-per-second/</guid>
-      <description>End-to-end architecture for a notification system handling 100,000 events per second: capacity planning, Kafka partition sizing, fan-out strategy, rate limiting, idempotency, and incident simulation.</description>
-      <pubDate>Sat, 10 May 2025 00:00:00 GMT</pubDate>
-      <category>System Design</category><category>system design</category><category>notifications</category><category>kafka</category><category>throughput</category><category>capacity planning</category><category>distributed systems</category>
     </item>
   </channel>
 </rss>
