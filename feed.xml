@@ -112,6 +112,14 @@
       <category>System Design</category><category>system design</category><category>distributed locks</category><category>leases</category><category>redis</category><category>postgresql</category><category>idempotency</category><category>distributed systems</category>
     </item>
     <item>
+      <title>System Design: Building an Email Delivery Platform</title>
+      <link>https://codesprintpro.com/blog/system-design-email-delivery-platform/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/system-design-email-delivery-platform/</guid>
+      <description>Design a production email delivery platform with queues, templates, provider failover, idempotency, suppression lists, bounce handling, unsubscribe flows, rate limits, and observability.</description>
+      <pubDate>Wed, 08 Apr 2026 00:00:00 GMT</pubDate>
+      <category>System Design</category><category>system design</category><category>email delivery</category><category>queues</category><category>rate limiting</category><category>idempotency</category><category>notifications</category><category>backend engineering</category>
+    </item>
+    <item>
       <title>System Design: Building a Feature Flag Platform</title>
       <link>https://codesprintpro.com/blog/system-design-feature-flag-platform/</link>
       <guid isPermaLink="true">https://codesprintpro.com/blog/system-design-feature-flag-platform/</guid>
@@ -398,14 +406,6 @@
       <description>A contrarian but technically grounded case for starting with a well-structured monolith. Distributed transaction costs, network latency math, observability overhead, and when to actually break services apart.</description>
       <pubDate>Fri, 16 May 2025 00:00:00 GMT</pubDate>
       <category>System Design</category><category>microservices</category><category>monolith</category><category>architecture</category><category>system design</category><category>distributed systems</category><category>startups</category>
-    </item>
-    <item>
-      <title>Terraform Infrastructure as Code: Production Patterns and Pitfalls</title>
-      <link>https://codesprintpro.com/blog/terraform-infrastructure-as-code/</link>
-      <guid isPermaLink="true">https://codesprintpro.com/blog/terraform-infrastructure-as-code/</guid>
-      <description>Production Terraform: module design, state management with S3 and DynamoDB locking, workspace strategies for multi-environment deployments, sensitive variable handling, drift detection, and the Terraform anti-patterns that cause outages.</description>
-      <pubDate>Wed, 14 May 2025 00:00:00 GMT</pubDate>
-      <category>AWS</category><category>terraform</category><category>infrastructure as code</category><category>aws</category><category>devops</category><category>s3</category><category>modules</category><category>ci/cd</category>
     </item>
   </channel>
 </rss>
