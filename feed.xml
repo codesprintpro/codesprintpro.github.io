@@ -88,6 +88,14 @@
       <category>System Design</category><category>system design</category><category>api gateway</category><category>rate limiting</category><category>authentication</category><category>routing</category><category>observability</category><category>backend engineering</category>
     </item>
     <item>
+      <title>System Design: Building a Distributed Lock Service</title>
+      <link>https://codesprintpro.com/blog/system-design-distributed-lock-service/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/system-design-distributed-lock-service/</guid>
+      <description>Design a distributed lock service for production coordination: leases, fencing tokens, TTLs, renewal, Redis vs PostgreSQL vs etcd tradeoffs, failure modes, idempotency, and safe usage patterns.</description>
+      <pubDate>Wed, 08 Apr 2026 00:00:00 GMT</pubDate>
+      <category>System Design</category><category>system design</category><category>distributed locks</category><category>leases</category><category>redis</category><category>postgresql</category><category>idempotency</category><category>distributed systems</category>
+    </item>
+    <item>
       <title>System Design: Building a Feature Flag Platform</title>
       <link>https://codesprintpro.com/blog/system-design-feature-flag-platform/</link>
       <guid isPermaLink="true">https://codesprintpro.com/blog/system-design-feature-flag-platform/</guid>
@@ -398,14 +406,6 @@
       <description>Building real-time features at scale: WebSocket vs SSE trade-offs, Spring Boot WebSocket implementation with STOMP, connection management, horizontal scaling with Redis pub/sub, SSE for one-directional streaming, and handling reconnection and backpressure.</description>
       <pubDate>Sun, 04 May 2025 00:00:00 GMT</pubDate>
       <category>System Design</category><category>websocket</category><category>sse</category><category>real-time</category><category>spring boot</category><category>redis</category><category>stomp</category><category>pub-sub</category><category>system design</category>
-    </item>
-    <item>
-      <title>Redis Caching Strategy at Scale: Beyond Simple Key-Value</title>
-      <link>https://codesprintpro.com/blog/redis-caching-strategy-at-scale/</link>
-      <guid isPermaLink="true">https://codesprintpro.com/blog/redis-caching-strategy-at-scale/</guid>
-      <description>Cache stampede, penetration, avalanche, eviction policy selection, clustering, and persistence trade-offs for production Redis deployments. With Java examples and a real production incident walkthrough.</description>
-      <pubDate>Sat, 03 May 2025 00:00:00 GMT</pubDate>
-      <category>Databases</category><category>redis</category><category>caching</category><category>java</category><category>spring boot</category><category>performance</category><category>distributed systems</category><category>cache stampede</category>
     </item>
   </channel>
 </rss>
