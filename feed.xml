@@ -16,6 +16,14 @@
       <category>AI/ML</category><category>aws</category><category>sagemaker</category><category>gpu</category><category>eks</category><category>inferentia</category><category>ml infrastructure</category><category>cost optimization</category><category>ai</category>
     </item>
     <item>
+      <title>Kubernetes for AI Inference: GPUs, Autoscaling, Queues, and Cost Control</title>
+      <link>https://codesprintpro.com/blog/kubernetes-ai-inference/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/kubernetes-ai-inference/</guid>
+      <description>A practical guide to running AI inference on Kubernetes: GPU scheduling, node pools, taints and tolerations, model servers, queue-based autoscaling with KEDA, admission controls, observability, and cost guardrails.</description>
+      <pubDate>Wed, 08 Apr 2026 00:00:00 GMT</pubDate>
+      <category>AI/ML</category><category>kubernetes</category><category>gpu</category><category>ai infrastructure</category><category>inference</category><category>autoscaling</category><category>keda</category><category>cost optimization</category>
+    </item>
+    <item>
       <title>LLM Evaluation at Scale: LLM-as-Judge, RAGAS, and Building Automated Eval Pipelines</title>
       <link>https://codesprintpro.com/blog/llm-evaluation-at-scale/</link>
       <guid isPermaLink="true">https://codesprintpro.com/blog/llm-evaluation-at-scale/</guid>
@@ -398,14 +406,6 @@
       <description>A senior engineer&apos;s guide to selecting between Amazon SQS, Apache Kafka on AWS, and EventBridge. Throughput benchmarks, cost breakdowns, ordering guarantees, and real production trade-offs.</description>
       <pubDate>Wed, 02 Apr 2025 00:00:00 GMT</pubDate>
       <category>Messaging</category><category>aws</category><category>sqs</category><category>kafka</category><category>eventbridge</category><category>distributed systems</category><category>messaging</category><category>msk</category>
-    </item>
-    <item>
-      <title>Service Mesh with Istio: mTLS, Traffic Management, and Observability</title>
-      <link>https://codesprintpro.com/blog/service-mesh-istio/</link>
-      <guid isPermaLink="true">https://codesprintpro.com/blog/service-mesh-istio/</guid>
-      <description>Implement Istio service mesh for mutual TLS encryption, canary deployments, circuit breaking, and distributed tracing across Kubernetes microservices. Includes production traffic management patterns.</description>
-      <pubDate>Mon, 31 Mar 2025 00:00:00 GMT</pubDate>
-      <category>System Design</category><category>istio</category><category>service mesh</category><category>kubernetes</category><category>mtls</category><category>canary deployment</category><category>observability</category>
     </item>
   </channel>
 </rss>
