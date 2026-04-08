@@ -246,6 +246,12 @@ export default function ArticlePage({ post, relatedPosts }: ArticlePageProps) {
         <meta name="description" content={post.description} />
         <meta name="author" content="Sachin Sarawgi" />
         <link rel="canonical" href={canonicalUrl} />
+        <link
+          rel="alternate"
+          type="application/rss+xml"
+          title="CodeSprintPro Tech Blog RSS Feed"
+          href={`${SITE_URL}/feed.xml`}
+        />
 
         {/* Open Graph */}
         <meta property="og:type" content="article" />

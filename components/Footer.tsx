@@ -5,6 +5,7 @@ import { BLOG_CATEGORIES, getCategoryHref } from '@/lib/blogCategories'
 
 const quickLinks = [
   { name: 'Blog', href: '/blog/' },
+  { name: 'RSS Feed', href: '/feed.xml' },
   { name: 'About', href: '/#about' },
   { name: 'Portfolio', href: '/#portfolio' },
   { name: 'Contact', href: '/#contact' },
