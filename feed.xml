@@ -88,6 +88,14 @@
       <category>System Design</category><category>system design</category><category>job scheduler</category><category>distributed systems</category><category>cron</category><category>queues</category><category>idempotency</category><category>backend engineering</category>
     </item>
     <item>
+      <title>System Design: Building a Metrics Platform Like Prometheus</title>
+      <link>https://codesprintpro.com/blog/system-design-metrics-platform/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/system-design-metrics-platform/</guid>
+      <description>Design a production metrics platform: ingestion, scraping vs push, time-series storage, labels and cardinality, rollups, retention, alerting, query APIs, multi-tenancy, downsampling, and operational guardrails.</description>
+      <pubDate>Wed, 08 Apr 2026 00:00:00 GMT</pubDate>
+      <category>System Design</category><category>system design</category><category>metrics</category><category>observability</category><category>time series</category><category>prometheus</category><category>alerting</category><category>distributed systems</category>
+    </item>
+    <item>
       <title>System Design: Building a Webhook Delivery Platform</title>
       <link>https://codesprintpro.com/blog/system-design-webhook-delivery-platform/</link>
       <guid isPermaLink="true">https://codesprintpro.com/blog/system-design-webhook-delivery-platform/</guid>
@@ -398,14 +406,6 @@
       <description>What Kafka&apos;s exactly-once guarantee actually covers, where duplicates still happen in practice, and how to design genuinely idempotent consumers with Spring Kafka. Real production mistakes and their fixes.</description>
       <pubDate>Sun, 20 Apr 2025 00:00:00 GMT</pubDate>
       <category>Messaging</category><category>kafka</category><category>exactly-once</category><category>spring kafka</category><category>distributed systems</category><category>transactions</category><category>java</category>
-    </item>
-    <item>
-      <title>Designing a Database Sharding Strategy for 100 Million Users</title>
-      <link>https://codesprintpro.com/blog/database-sharding-100-million-users/</link>
-      <guid isPermaLink="true">https://codesprintpro.com/blog/database-sharding-100-million-users/</guid>
-      <description>A practical guide to horizontal sharding at scale: shard key selection, hot shard prevention, consistent hashing, cross-shard queries, and zero-downtime data migration with real fintech architecture examples.</description>
-      <pubDate>Mon, 14 Apr 2025 00:00:00 GMT</pubDate>
-      <category>Databases</category><category>databases</category><category>sharding</category><category>postgresql</category><category>system design</category><category>distributed systems</category><category>scaling</category>
     </item>
   </channel>
 </rss>
