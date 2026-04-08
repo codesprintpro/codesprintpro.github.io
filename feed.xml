@@ -16,6 +16,14 @@
       <category>AI/ML</category><category>aws</category><category>sagemaker</category><category>gpu</category><category>eks</category><category>inferentia</category><category>ml infrastructure</category><category>cost optimization</category><category>ai</category>
     </item>
     <item>
+      <title>LLM Evaluation at Scale: LLM-as-Judge, RAGAS, and Building Automated Eval Pipelines</title>
+      <link>https://codesprintpro.com/blog/llm-evaluation-at-scale/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/llm-evaluation-at-scale/</guid>
+      <description>How to evaluate LLM systems in production: LLM-as-judge patterns with bias mitigation, RAGAS metrics for RAG pipelines (faithfulness, context recall, answer relevancy), BERTScore vs ROUGE trade-offs, building regression test suites for prompts, and the statistical rigor needed to trust eval results.</description>
+      <pubDate>Wed, 08 Apr 2026 00:00:00 GMT</pubDate>
+      <category>AI/ML</category><category>llm evaluation</category><category>ragas</category><category>llm-as-judge</category><category>rag</category><category>bertScore</category><category>hallucination</category><category>ai</category><category>testing</category>
+    </item>
+    <item>
       <title>Idempotency Keys in APIs: Retries, Duplicate Requests, and Exactly-Once Illusions</title>
       <link>https://codesprintpro.com/blog/api-idempotency-keys/</link>
       <guid isPermaLink="true">https://codesprintpro.com/blog/api-idempotency-keys/</guid>
@@ -398,14 +406,6 @@
       <description>Design a video streaming platform handling 250M users and 15% of global internet traffic. Covers video transcoding pipeline, CDN architecture, adaptive bitrate streaming, and recommendation systems.</description>
       <pubDate>Wed, 19 Mar 2025 00:00:00 GMT</pubDate>
       <category>System Design</category><category>system design</category><category>video streaming</category><category>cdn</category><category>aws</category><category>distributed systems</category><category>hls</category>
-    </item>
-    <item>
-      <title>System Design: Real-Time Chat Application at Scale</title>
-      <link>https://codesprintpro.com/blog/system-design-real-time-chat/</link>
-      <guid isPermaLink="true">https://codesprintpro.com/blog/system-design-real-time-chat/</guid>
-      <description>Design a real-time chat system like WhatsApp or Slack handling 1 billion messages per day. Covers WebSocket connection management, message delivery guarantees, presence detection, and storage.</description>
-      <pubDate>Mon, 17 Mar 2025 00:00:00 GMT</pubDate>
-      <category>System Design</category><category>system design</category><category>websocket</category><category>real-time</category><category>kafka</category><category>redis</category><category>cassandra</category><category>distributed systems</category>
     </item>
   </channel>
 </rss>
