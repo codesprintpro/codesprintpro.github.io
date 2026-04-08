@@ -88,6 +88,14 @@
       <category>System Design</category><category>system design</category><category>api gateway</category><category>rate limiting</category><category>authentication</category><category>routing</category><category>observability</category><category>backend engineering</category>
     </item>
     <item>
+      <title>System Design: Building an Authorization Service</title>
+      <link>https://codesprintpro.com/blog/system-design-authorization-service/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/system-design-authorization-service/</guid>
+      <description>Design a production authorization service with RBAC, ABAC, policy evaluation, relationship-based permissions, caching, audit logs, consistency tradeoffs, and safe rollout patterns.</description>
+      <pubDate>Wed, 08 Apr 2026 00:00:00 GMT</pubDate>
+      <category>System Design</category><category>system design</category><category>authorization</category><category>permissions</category><category>rbac</category><category>abac</category><category>security</category><category>distributed systems</category>
+    </item>
+    <item>
       <title>System Design: Building a Distributed Lock Service</title>
       <link>https://codesprintpro.com/blog/system-design-distributed-lock-service/</link>
       <guid isPermaLink="true">https://codesprintpro.com/blog/system-design-distributed-lock-service/</guid>
@@ -398,14 +406,6 @@
       <description>End-to-end architecture for a notification system handling 100,000 events per second: capacity planning, Kafka partition sizing, fan-out strategy, rate limiting, idempotency, and incident simulation.</description>
       <pubDate>Sat, 10 May 2025 00:00:00 GMT</pubDate>
       <category>System Design</category><category>system design</category><category>notifications</category><category>kafka</category><category>throughput</category><category>capacity planning</category><category>distributed systems</category>
-    </item>
-    <item>
-      <title>Java Profiling and Heap Analysis: Finding Memory Leaks and CPU Bottlenecks</title>
-      <link>https://codesprintpro.com/blog/java-profiling-heap-analysis/</link>
-      <guid isPermaLink="true">https://codesprintpro.com/blog/java-profiling-heap-analysis/</guid>
-      <description>Production Java profiling: async-profiler for CPU and allocation profiling, heap dump analysis with Eclipse MAT, finding memory leaks, GC log analysis, detecting thread contention, JVM flags for profiling in production, and reading flame graphs.</description>
-      <pubDate>Fri, 09 May 2025 00:00:00 GMT</pubDate>
-      <category>Java</category><category>java</category><category>profiling</category><category>heap analysis</category><category>memory leak</category><category>jvm</category><category>performance</category><category>async-profiler</category><category>gc</category>
     </item>
   </channel>
 </rss>
