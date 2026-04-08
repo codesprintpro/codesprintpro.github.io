@@ -88,6 +88,14 @@
       <category>System Design</category><category>system design</category><category>feature flags</category><category>progressive delivery</category><category>experimentation</category><category>kill switches</category><category>distributed systems</category>
     </item>
     <item>
+      <title>System Design: Building a File Upload Platform</title>
+      <link>https://codesprintpro.com/blog/system-design-file-upload-platform/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/system-design-file-upload-platform/</guid>
+      <description>Design a production file upload platform with signed URLs, multipart uploads, object storage, metadata, virus scanning, media processing, access control, deduplication, lifecycle policies, CDN delivery, and failure recovery.</description>
+      <pubDate>Wed, 08 Apr 2026 00:00:00 GMT</pubDate>
+      <category>System Design</category><category>system design</category><category>file upload</category><category>object storage</category><category>s3</category><category>cdn</category><category>security</category><category>backend engineering</category>
+    </item>
+    <item>
       <title>System Design: Building a Distributed Job Scheduler</title>
       <link>https://codesprintpro.com/blog/system-design-job-scheduler/</link>
       <guid isPermaLink="true">https://codesprintpro.com/blog/system-design-job-scheduler/</guid>
@@ -398,14 +406,6 @@
       <description>How duplicate payments happen in real systems, idempotency key design, race condition handling, Redis vs DB for idempotency stores, and the production incident that shaped our architecture.</description>
       <pubDate>Sat, 26 Apr 2025 00:00:00 GMT</pubDate>
       <category>System Design</category><category>payments</category><category>idempotency</category><category>distributed systems</category><category>java</category><category>spring boot</category><category>fintech</category><category>system design</category>
-    </item>
-    <item>
-      <title>Kafka Streams: Real-Time Stream Processing Without a Separate Cluster</title>
-      <link>https://codesprintpro.com/blog/kafka-streams-real-time-processing/</link>
-      <guid isPermaLink="true">https://codesprintpro.com/blog/kafka-streams-real-time-processing/</guid>
-      <description>Production Kafka Streams: KStream vs KTable semantics, stateful transformations with RocksDB state stores, windowed aggregations, stream-table joins, topology design, changelog topics, and the operational patterns for running Kafka Streams in production.</description>
-      <pubDate>Thu, 24 Apr 2025 00:00:00 GMT</pubDate>
-      <category>Data Engineering</category><category>kafka</category><category>kafka streams</category><category>stream processing</category><category>real-time</category><category>java</category><category>rocksdb</category><category>windowing</category><category>data engineering</category>
     </item>
   </channel>
 </rss>
