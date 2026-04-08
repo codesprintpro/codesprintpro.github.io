@@ -128,6 +128,14 @@
       <category>System Design</category><category>system design</category><category>metrics</category><category>observability</category><category>time series</category><category>prometheus</category><category>alerting</category><category>distributed systems</category>
     </item>
     <item>
+      <title>System Design: Building a Secrets Management Platform</title>
+      <link>https://codesprintpro.com/blog/system-design-secrets-management-platform/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/system-design-secrets-management-platform/</guid>
+      <description>Design a production secrets management platform with envelope encryption, versioned secrets, rotation, access control, audit logs, SDK caching, Kubernetes delivery, and incident playbooks.</description>
+      <pubDate>Wed, 08 Apr 2026 00:00:00 GMT</pubDate>
+      <category>System Design</category><category>system design</category><category>secrets management</category><category>security</category><category>encryption</category><category>kubernetes</category><category>access control</category><category>backend engineering</category>
+    </item>
+    <item>
       <title>System Design: Building a Usage Metering and Billing Platform</title>
       <link>https://codesprintpro.com/blog/system-design-usage-metering-billing/</link>
       <guid isPermaLink="true">https://codesprintpro.com/blog/system-design-usage-metering-billing/</guid>
@@ -398,14 +406,6 @@
       <description>Production Java profiling: async-profiler for CPU and allocation profiling, heap dump analysis with Eclipse MAT, finding memory leaks, GC log analysis, detecting thread contention, JVM flags for profiling in production, and reading flame graphs.</description>
       <pubDate>Fri, 09 May 2025 00:00:00 GMT</pubDate>
       <category>Java</category><category>java</category><category>profiling</category><category>heap analysis</category><category>memory leak</category><category>jvm</category><category>performance</category><category>async-profiler</category><category>gc</category>
-    </item>
-    <item>
-      <title>WebSocket and SSE for Real-Time Systems: Architecture and Production Patterns</title>
-      <link>https://codesprintpro.com/blog/websocket-sse-real-time/</link>
-      <guid isPermaLink="true">https://codesprintpro.com/blog/websocket-sse-real-time/</guid>
-      <description>Building real-time features at scale: WebSocket vs SSE trade-offs, Spring Boot WebSocket implementation with STOMP, connection management, horizontal scaling with Redis pub/sub, SSE for one-directional streaming, and handling reconnection and backpressure.</description>
-      <pubDate>Sun, 04 May 2025 00:00:00 GMT</pubDate>
-      <category>System Design</category><category>websocket</category><category>sse</category><category>real-time</category><category>spring boot</category><category>redis</category><category>stomp</category><category>pub-sub</category><category>system design</category>
     </item>
   </channel>
 </rss>
