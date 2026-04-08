@@ -32,6 +32,14 @@
       <category>AI/ML</category><category>llm</category><category>inference</category><category>quantization</category><category>vllm</category><category>tensorrt</category><category>kv-cache</category><category>gpu</category><category>ai infrastructure</category>
     </item>
     <item>
+      <title>LLM Observability in Production: Traces, Evals, Cost, Latency, and Failure Modes</title>
+      <link>https://codesprintpro.com/blog/llm-observability-production/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/llm-observability-production/</guid>
+      <description>A production guide to LLM observability: OpenTelemetry traces, token and cost metrics, RAG retrieval spans, eval results, safety signals, prompt/version tracking, dashboards, alerts, and redaction patterns.</description>
+      <pubDate>Wed, 08 Apr 2026 00:00:00 GMT</pubDate>
+      <category>AI/ML</category><category>llm</category><category>observability</category><category>evals</category><category>cost</category><category>latency</category><category>tracing</category><category>rag</category><category>production</category>
+    </item>
+    <item>
       <title>MCP for Backend Engineers: Tools, Agents, and Production Guardrails</title>
       <link>https://codesprintpro.com/blog/mcp-for-backend-engineers/</link>
       <guid isPermaLink="true">https://codesprintpro.com/blog/mcp-for-backend-engineers/</guid>
@@ -398,14 +406,6 @@
       <description>Decide when fine-tuning beats prompt engineering, how to prepare training data, run LoRA fine-tuning efficiently, and evaluate model quality. Covers OpenAI fine-tuning and open-source with Hugging Face.</description>
       <pubDate>Thu, 27 Mar 2025 00:00:00 GMT</pubDate>
       <category>AI/ML</category><category>ai</category><category>llm</category><category>fine-tuning</category><category>lora</category><category>hugging face</category><category>openai</category><category>machine learning</category>
-    </item>
-    <item>
-      <title>AWS ECS vs EKS: Choosing the Right Container Orchestration</title>
-      <link>https://codesprintpro.com/blog/aws-ecs-eks-comparison/</link>
-      <guid isPermaLink="true">https://codesprintpro.com/blog/aws-ecs-eks-comparison/</guid>
-      <description>Deep comparison of Amazon ECS and EKS for container orchestration. Covers architecture differences, cost models, operational complexity, Fargate vs EC2, and migration strategies.</description>
-      <pubDate>Tue, 25 Mar 2025 00:00:00 GMT</pubDate>
-      <category>AWS</category><category>aws</category><category>ecs</category><category>eks</category><category>kubernetes</category><category>containers</category><category>fargate</category><category>devops</category>
     </item>
   </channel>
 </rss>
