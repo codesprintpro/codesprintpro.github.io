@@ -32,6 +32,14 @@
       <category>AI/ML</category><category>llm</category><category>inference</category><category>quantization</category><category>vllm</category><category>tensorrt</category><category>kv-cache</category><category>gpu</category><category>ai infrastructure</category>
     </item>
     <item>
+      <title>MCP for Backend Engineers: Tools, Agents, and Production Guardrails</title>
+      <link>https://codesprintpro.com/blog/mcp-for-backend-engineers/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/mcp-for-backend-engineers/</guid>
+      <description>A practical backend engineering guide to the Model Context Protocol: host-client-server architecture, tools vs resources vs prompts, JSON-RPC flows, authorization, audit logs, rate limits, idempotency, and production guardrails for AI agents.</description>
+      <pubDate>Wed, 08 Apr 2026 00:00:00 GMT</pubDate>
+      <category>AI/ML</category><category>mcp</category><category>ai agents</category><category>tools</category><category>llm</category><category>backend engineering</category><category>guardrails</category><category>security</category>
+    </item>
+    <item>
       <title>Retrieval Systems for RAG: BM25, Dense Retrieval, Hybrid Search, and Reranking</title>
       <link>https://codesprintpro.com/blog/retrieval-systems-bm25-dense-hybrid/</link>
       <guid isPermaLink="true">https://codesprintpro.com/blog/retrieval-systems-bm25-dense-hybrid/</guid>
@@ -398,14 +406,6 @@
       <description>Deep comparison of Amazon ECS and EKS for container orchestration. Covers architecture differences, cost models, operational complexity, Fargate vs EC2, and migration strategies.</description>
       <pubDate>Tue, 25 Mar 2025 00:00:00 GMT</pubDate>
       <category>AWS</category><category>aws</category><category>ecs</category><category>eks</category><category>kubernetes</category><category>containers</category><category>fargate</category><category>devops</category>
-    </item>
-    <item>
-      <title>Building AI Agents with Tool Use: From Chatbot to Autonomous Agent</title>
-      <link>https://codesprintpro.com/blog/llm-agents-tool-use/</link>
-      <guid isPermaLink="true">https://codesprintpro.com/blog/llm-agents-tool-use/</guid>
-      <description>Build production AI agents using Claude&apos;s tool use API. Learn the agentic loop, error handling, multi-step reasoning, human-in-the-loop patterns, and how to build reliable autonomous systems.</description>
-      <pubDate>Sun, 23 Mar 2025 00:00:00 GMT</pubDate>
-      <category>AI/ML</category><category>ai</category><category>agents</category><category>claude</category><category>tool use</category><category>llm</category><category>autonomous systems</category><category>python</category>
     </item>
   </channel>
 </rss>
