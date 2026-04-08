@@ -48,6 +48,14 @@
       <category>AI/ML</category><category>mcp</category><category>ai agents</category><category>tools</category><category>llm</category><category>backend engineering</category><category>guardrails</category><category>security</category>
     </item>
     <item>
+      <title>PostgreSQL Locking Playbook: Deadlocks, Blocking Queries, and Timeouts</title>
+      <link>https://codesprintpro.com/blog/postgresql-locking-playbook/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/postgresql-locking-playbook/</guid>
+      <description>A practical PostgreSQL locking guide for production incidents: how to find blocking queries, understand lock modes, debug deadlocks, use lock_timeout and statement_timeout, avoid idle-in-transaction sessions, and design safer migrations.</description>
+      <pubDate>Wed, 08 Apr 2026 00:00:00 GMT</pubDate>
+      <category>Databases</category><category>postgresql</category><category>locking</category><category>deadlocks</category><category>database</category><category>performance</category><category>production debugging</category><category>sql</category>
+    </item>
+    <item>
       <title>Retrieval Systems for RAG: BM25, Dense Retrieval, Hybrid Search, and Reranking</title>
       <link>https://codesprintpro.com/blog/retrieval-systems-bm25-dense-hybrid/</link>
       <guid isPermaLink="true">https://codesprintpro.com/blog/retrieval-systems-bm25-dense-hybrid/</guid>
@@ -398,14 +406,6 @@
       <description>Choose the right time-series database for metrics, IoT, and observability workloads. Deep comparison of InfluxDB, TimescaleDB, and Prometheus with retention policies, downsampling, and query patterns.</description>
       <pubDate>Sat, 29 Mar 2025 00:00:00 GMT</pubDate>
       <category>Databases</category><category>time-series</category><category>influxdb</category><category>timescaledb</category><category>prometheus</category><category>observability</category><category>iot</category><category>databases</category>
-    </item>
-    <item>
-      <title>Fine-Tuning LLMs: When to Fine-Tune, When to Prompt</title>
-      <link>https://codesprintpro.com/blog/fine-tuning-llms/</link>
-      <guid isPermaLink="true">https://codesprintpro.com/blog/fine-tuning-llms/</guid>
-      <description>Decide when fine-tuning beats prompt engineering, how to prepare training data, run LoRA fine-tuning efficiently, and evaluate model quality. Covers OpenAI fine-tuning and open-source with Hugging Face.</description>
-      <pubDate>Thu, 27 Mar 2025 00:00:00 GMT</pubDate>
-      <category>AI/ML</category><category>ai</category><category>llm</category><category>fine-tuning</category><category>lora</category><category>hugging face</category><category>openai</category><category>machine learning</category>
     </item>
   </channel>
 </rss>
