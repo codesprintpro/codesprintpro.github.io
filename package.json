@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build && next-sitemap && node scripts/generate-rss.js",
+    "check:supabase-env": "node scripts/check-supabase-env.js",
     "start": "next start",
     "lint": "next lint",
     "export": "next export"
