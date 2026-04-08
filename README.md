@@ -40,18 +40,25 @@ A modern, responsive portfolio website built with Next.js, TypeScript, and Tailw
 
 ### Environment Variables
 
-Create a `.env.local` file in the root directory:
+Create a `.env.local` file in the root directory. Use `.env.example` as the
+template:
 
 ```env
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon
 ```
 
+For GitHub Pages deployments, add the same values as repository secrets named
+`NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`. The deploy
+workflow validates that these values are present and that the Supabase project
+hostname resolves before building the static site.
+
 ### Supabase Tables
 
 The contact form writes to `contact_messages`. Newsletter signup writes to
-`newsletter_subscribers`; run `supabase/newsletter-subscribers.sql` in the
-Supabase SQL editor so reader signups can be stored.
+`newsletter_subscribers`; run `supabase/contact-messages.sql` and
+`supabase/newsletter-subscribers.sql` in the Supabase SQL editor so form
+submissions and reader signups can be stored.
 
 ### Code Style
 
