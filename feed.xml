@@ -80,6 +80,14 @@
       <category>Java</category><category>spring boot</category><category>timeouts</category><category>java</category><category>resilience</category><category>hikari</category><category>redis</category><category>kafka</category><category>production</category>
     </item>
     <item>
+      <title>System Design: Building a Webhook Delivery Platform</title>
+      <link>https://codesprintpro.com/blog/system-design-webhook-delivery-platform/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/system-design-webhook-delivery-platform/</guid>
+      <description>Design a production webhook delivery platform with event ingestion, outbox persistence, retries, exponential backoff, signing, endpoint secrets, idempotency, rate limits, dead-letter queues, replay, observability, and tenant isolation.</description>
+      <pubDate>Wed, 08 Apr 2026 00:00:00 GMT</pubDate>
+      <category>System Design</category><category>system design</category><category>webhooks</category><category>event driven architecture</category><category>idempotency</category><category>retries</category><category>distributed systems</category><category>backend engineering</category>
+    </item>
+    <item>
       <title>Idempotency Keys in APIs: Retries, Duplicate Requests, and Exactly-Once Illusions</title>
       <link>https://codesprintpro.com/blog/api-idempotency-keys/</link>
       <guid isPermaLink="true">https://codesprintpro.com/blog/api-idempotency-keys/</guid>
@@ -398,14 +406,6 @@
       <description>How Tomcat thread pools work, why blocking I/O kills throughput, and the production patterns that prevent thread pool exhaustion in Spring Boot services. Includes real outage scenario and JVM tuning.</description>
       <pubDate>Tue, 08 Apr 2025 00:00:00 GMT</pubDate>
       <category>Java</category><category>spring boot</category><category>java</category><category>tomcat</category><category>thread pool</category><category>async</category><category>performance</category><category>resilience</category>
-    </item>
-    <item>
-      <title>SQS vs Kafka vs EventBridge: Choosing the Right Messaging System on AWS</title>
-      <link>https://codesprintpro.com/blog/sqs-kafka-eventbridge-aws-comparison/</link>
-      <guid isPermaLink="true">https://codesprintpro.com/blog/sqs-kafka-eventbridge-aws-comparison/</guid>
-      <description>A senior engineer&apos;s guide to selecting between Amazon SQS, Apache Kafka on AWS, and EventBridge. Throughput benchmarks, cost breakdowns, ordering guarantees, and real production trade-offs.</description>
-      <pubDate>Wed, 02 Apr 2025 00:00:00 GMT</pubDate>
-      <category>Messaging</category><category>aws</category><category>sqs</category><category>kafka</category><category>eventbridge</category><category>distributed systems</category><category>messaging</category><category>msk</category>
     </item>
   </channel>
 </rss>
