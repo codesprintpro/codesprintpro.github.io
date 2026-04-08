@@ -80,6 +80,14 @@
       <category>Java</category><category>spring boot</category><category>timeouts</category><category>java</category><category>resilience</category><category>hikari</category><category>redis</category><category>kafka</category><category>production</category>
     </item>
     <item>
+      <title>System Design: Building a Feature Flag Platform</title>
+      <link>https://codesprintpro.com/blog/system-design-feature-flag-platform/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/system-design-feature-flag-platform/</guid>
+      <description>Design a production feature flag platform: flag schemas, targeting rules, percentage rollouts, local SDK evaluation, streaming updates, audit logs, kill switches, experiments, consistency tradeoffs, and flag lifecycle management.</description>
+      <pubDate>Wed, 08 Apr 2026 00:00:00 GMT</pubDate>
+      <category>System Design</category><category>system design</category><category>feature flags</category><category>progressive delivery</category><category>experimentation</category><category>kill switches</category><category>distributed systems</category>
+    </item>
+    <item>
       <title>System Design: Building a Distributed Job Scheduler</title>
       <link>https://codesprintpro.com/blog/system-design-job-scheduler/</link>
       <guid isPermaLink="true">https://codesprintpro.com/blog/system-design-job-scheduler/</guid>
@@ -398,14 +406,6 @@
       <description>Production Kafka Streams: KStream vs KTable semantics, stateful transformations with RocksDB state stores, windowed aggregations, stream-table joins, topology design, changelog topics, and the operational patterns for running Kafka Streams in production.</description>
       <pubDate>Thu, 24 Apr 2025 00:00:00 GMT</pubDate>
       <category>Data Engineering</category><category>kafka</category><category>kafka streams</category><category>stream processing</category><category>real-time</category><category>java</category><category>rocksdb</category><category>windowing</category><category>data engineering</category>
-    </item>
-    <item>
-      <title>Kafka Exactly-Once Semantics: Myth vs Production Reality</title>
-      <link>https://codesprintpro.com/blog/kafka-exactly-once-semantics/</link>
-      <guid isPermaLink="true">https://codesprintpro.com/blog/kafka-exactly-once-semantics/</guid>
-      <description>What Kafka&apos;s exactly-once guarantee actually covers, where duplicates still happen in practice, and how to design genuinely idempotent consumers with Spring Kafka. Real production mistakes and their fixes.</description>
-      <pubDate>Sun, 20 Apr 2025 00:00:00 GMT</pubDate>
-      <category>Messaging</category><category>kafka</category><category>exactly-once</category><category>spring kafka</category><category>distributed systems</category><category>transactions</category><category>java</category>
     </item>
   </channel>
 </rss>
