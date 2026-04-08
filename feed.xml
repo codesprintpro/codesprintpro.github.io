@@ -1,0 +1,411 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>CodeSprintPro Tech Blog</title>
+    <link>https://codesprintpro.com/blog/</link>
+    <description>Practical backend engineering, system design, Java, databases, AWS, messaging, and AI infrastructure guides.</description>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 07 Apr 2026 00:00:00 GMT</lastBuildDate>
+    <atom:link href="https://codesprintpro.com/feed.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Idempotency Keys in APIs: Retries, Duplicate Requests, and Exactly-Once Illusions</title>
+      <link>https://codesprintpro.com/blog/api-idempotency-keys/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/api-idempotency-keys/</guid>
+      <description>A production guide to designing idempotent APIs with idempotency keys, request fingerprinting, response replay, database constraints, TTL cleanup, and race-condition handling.</description>
+      <pubDate>Tue, 07 Apr 2026 00:00:00 GMT</pubDate>
+      <category>System Design</category><category>idempotency</category><category>api design</category><category>distributed systems</category><category>retries</category><category>backend engineering</category><category>payments</category>
+    </item>
+    <item>
+      <title>Cache Invalidation Patterns: TTL, Write-Through, Cache-Aside, and Event-Driven Eviction</title>
+      <link>https://codesprintpro.com/blog/cache-invalidation-patterns/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/cache-invalidation-patterns/</guid>
+      <description>A practical guide to cache invalidation in production systems: TTLs, cache-aside, write-through, versioned keys, event-driven eviction, stampede prevention, and stale-read tradeoffs.</description>
+      <pubDate>Tue, 07 Apr 2026 00:00:00 GMT</pubDate>
+      <category>Databases</category><category>cache invalidation</category><category>redis</category><category>caching</category><category>distributed systems</category><category>performance</category><category>backend engineering</category>
+    </item>
+    <item>
+      <title>Database Connection Pool Tuning: HikariCP, PostgreSQL, and Traffic Spikes</title>
+      <link>https://codesprintpro.com/blog/database-connection-pool-tuning/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/database-connection-pool-tuning/</guid>
+      <description>A practical guide to tuning database connection pools for Spring Boot services: pool sizing, HikariCP settings, PostgreSQL limits, slow query impact, metrics, and production failure modes.</description>
+      <pubDate>Tue, 07 Apr 2026 00:00:00 GMT</pubDate>
+      <category>Java</category><category>spring boot</category><category>hikaricp</category><category>postgresql</category><category>database</category><category>performance</category><category>connection pooling</category>
+    </item>
+    <item>
+      <title>Kafka Consumer Lag: Causes, Diagnosis, and Production Fixes</title>
+      <link>https://codesprintpro.com/blog/kafka-consumer-lag-playbook/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/kafka-consumer-lag-playbook/</guid>
+      <description>A practical Kafka consumer lag playbook covering partition skew, slow processing, rebalances, max.poll settings, poison messages, autoscaling, metrics, and safe recovery strategies.</description>
+      <pubDate>Tue, 07 Apr 2026 00:00:00 GMT</pubDate>
+      <category>Messaging</category><category>kafka</category><category>consumer lag</category><category>messaging</category><category>streaming</category><category>distributed systems</category><category>production debugging</category>
+    </item>
+    <item>
+      <title>Multi-Region Architecture: Active-Active, Active-Passive, and Consistency Trade-Offs</title>
+      <link>https://codesprintpro.com/blog/multi-region-architecture-patterns/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/multi-region-architecture-patterns/</guid>
+      <description>A practical guide to multi-region system design: active-active vs active-passive, DNS failover, RPO/RTO, data replication, conflict resolution, global databases, and when not to go multi-region.</description>
+      <pubDate>Tue, 07 Apr 2026 00:00:00 GMT</pubDate>
+      <category>System Design</category><category>multi-region</category><category>system design</category><category>distributed systems</category><category>aws</category><category>reliability</category><category>disaster recovery</category>
+    </item>
+    <item>
+      <title>Production Incident Playbooks: Debugging Latency, Errors, and Traffic Spikes</title>
+      <link>https://codesprintpro.com/blog/production-incident-playbooks/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/production-incident-playbooks/</guid>
+      <description>A practical incident response playbook for backend engineers: how to triage production latency, error-rate spikes, database issues, queue backlogs, and rollback decisions without guessing under pressure.</description>
+      <pubDate>Tue, 07 Apr 2026 00:00:00 GMT</pubDate>
+      <category>System Design</category><category>incident response</category><category>production debugging</category><category>observability</category><category>sre</category><category>backend engineering</category><category>playbooks</category>
+    </item>
+    <item>
+      <title>Spring Boot Production Readiness Checklist: Timeouts, Pools, Health Checks, and Observability</title>
+      <link>https://codesprintpro.com/blog/spring-boot-production-readiness-checklist/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/spring-boot-production-readiness-checklist/</guid>
+      <description>A practical Spring Boot production checklist covering HTTP timeouts, HikariCP, thread pools, Actuator health checks, graceful shutdown, structured logging, metrics, resilience, and deployment safety.</description>
+      <pubDate>Tue, 07 Apr 2026 00:00:00 GMT</pubDate>
+      <category>Java</category><category>spring boot</category><category>production readiness</category><category>java</category><category>observability</category><category>resilience</category><category>backend engineering</category>
+    </item>
+    <item>
+      <title>System Design: Building an Audit Log System for Compliance and Debugging</title>
+      <link>https://codesprintpro.com/blog/system-design-audit-log-system/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/system-design-audit-log-system/</guid>
+      <description>Design a production audit log system with immutable events, schema design, write paths, search, retention, tamper resistance, PII controls, partitioning, and compliance tradeoffs.</description>
+      <pubDate>Tue, 07 Apr 2026 00:00:00 GMT</pubDate>
+      <category>System Design</category><category>system design</category><category>audit logs</category><category>compliance</category><category>security</category><category>event architecture</category><category>backend engineering</category>
+    </item>
+    <item>
+      <title>System Design: Building a Feature Store for Real-Time Machine Learning</title>
+      <link>https://codesprintpro.com/blog/system-design-real-time-feature-store/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/system-design-real-time-feature-store/</guid>
+      <description>Design a practical feature store for production ML systems: offline and online features, point-in-time correctness, streaming updates, Redis/DynamoDB serving, monitoring, and training-serving skew.</description>
+      <pubDate>Tue, 07 Apr 2026 00:00:00 GMT</pubDate>
+      <category>AI/ML</category><category>feature store</category><category>machine learning</category><category>system design</category><category>real-time ml</category><category>data engineering</category><category>ml infrastructure</category>
+    </item>
+    <item>
+      <title>Transactional Outbox Pattern: Reliable Event Publishing Without Dual Writes</title>
+      <link>https://codesprintpro.com/blog/transactional-outbox-pattern/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/transactional-outbox-pattern/</guid>
+      <description>A production guide to the transactional outbox pattern: schema design, polling publishers, Debezium CDC, Kafka publishing, retries, ordering, cleanup, and exactly-once myths.</description>
+      <pubDate>Tue, 07 Apr 2026 00:00:00 GMT</pubDate>
+      <category>System Design</category><category>transactional outbox</category><category>kafka</category><category>event driven architecture</category><category>distributed systems</category><category>debezium</category><category>reliability</category>
+    </item>
+    <item>
+      <title>Using Open Source Models with Claude Code: A Developer&apos;s Guide</title>
+      <link>https://codesprintpro.com/blog/open-source-models-with-claude-code/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/open-source-models-with-claude-code/</guid>
+      <description>Learn how to leverage open source AI models with Claude Code CLI for enhanced productivity, from local inference to custom agents. Perfect for developers who value privacy and customization.</description>
+      <pubDate>Sun, 22 Mar 2026 00:00:00 GMT</pubDate>
+      <category>AI/ML</category><category>claude code</category><category>open source</category><category>llm</category><category>local inference</category><category>ai agents</category><category>ollama</category><category>llama.cpp</category>
+    </item>
+    <item>
+      <title>Java Concurrency Patterns: CompletableFuture, Structured Concurrency, and Thread-Safe Design</title>
+      <link>https://codesprintpro.com/blog/java-concurrency-patterns/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/java-concurrency-patterns/</guid>
+      <description>Production Java concurrency: CompletableFuture pipelines, handling exceptions in async chains, Java 21 structured concurrency, thread-safe collection patterns, and the concurrency bugs that cause data corruption.</description>
+      <pubDate>Tue, 08 Jul 2025 00:00:00 GMT</pubDate>
+      <category>Java</category><category>java</category><category>concurrency</category><category>completablefuture</category><category>virtual threads</category><category>java21</category><category>thread-safe</category><category>async</category>
+    </item>
+    <item>
+      <title>Building Production Observability with OpenTelemetry and Grafana Stack</title>
+      <link>https://codesprintpro.com/blog/observability-opentelemetry-production/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/observability-opentelemetry-production/</guid>
+      <description>End-to-end observability implementation: distributed tracing with OpenTelemetry, metrics with Prometheus, structured logging with Loki, and the dashboards and alerts that actually help during incidents.</description>
+      <pubDate>Thu, 03 Jul 2025 00:00:00 GMT</pubDate>
+      <category>System Design</category><category>observability</category><category>opentelemetry</category><category>prometheus</category><category>grafana</category><category>loki</category><category>tracing</category><category>spring boot</category><category>monitoring</category>
+    </item>
+    <item>
+      <title>AWS Lambda in Production: Cold Starts, Concurrency, and Cost Optimization</title>
+      <link>https://codesprintpro.com/blog/aws-lambda-production-patterns/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/aws-lambda-production-patterns/</guid>
+      <description>How Lambda execution environments work, cold start mitigation strategies, concurrency limits and throttling, Lambda power tuning, VPC networking costs, and when Lambda is the wrong tool.</description>
+      <pubDate>Sat, 28 Jun 2025 00:00:00 GMT</pubDate>
+      <category>AWS</category><category>aws</category><category>lambda</category><category>serverless</category><category>java</category><category>cold start</category><category>performance</category><category>cost optimization</category>
+    </item>
+    <item>
+      <title>Event Sourcing and CQRS in Production: Beyond the Theory</title>
+      <link>https://codesprintpro.com/blog/event-sourcing-cqrs-production/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/event-sourcing-cqrs-production/</guid>
+      <description>What event sourcing actually looks like in production Java systems: event store design, snapshot strategies, projection rebuilding, CQRS read model synchronization, and the operational challenges nobody talks about.</description>
+      <pubDate>Mon, 23 Jun 2025 00:00:00 GMT</pubDate>
+      <category>System Design</category><category>event sourcing</category><category>cqrs</category><category>system design</category><category>java</category><category>distributed systems</category><category>kafka</category><category>spring boot</category>
+    </item>
+    <item>
+      <title>Cassandra Data Modeling: Design for Queries, Not Entities</title>
+      <link>https://codesprintpro.com/blog/cassandra-data-modeling/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/cassandra-data-modeling/</guid>
+      <description>Apache Cassandra data modeling from first principles: partition key design, clustering columns, denormalization strategies, avoiding hot partitions, materialized views vs. manual duplication, and the anti-patterns that kill Cassandra performance.</description>
+      <pubDate>Wed, 18 Jun 2025 00:00:00 GMT</pubDate>
+      <category>Databases</category><category>cassandra</category><category>nosql</category><category>data modeling</category><category>distributed databases</category><category>partition key</category><category>cql</category><category>time series</category>
+    </item>
+    <item>
+      <title>gRPC vs REST vs GraphQL: Choosing the Right API Protocol</title>
+      <link>https://codesprintpro.com/blog/grpc-vs-rest-vs-graphql/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/grpc-vs-rest-vs-graphql/</guid>
+      <description>A technical comparison of REST, gRPC, and GraphQL across performance, developer experience, schema evolution, streaming, and real production use cases. When each protocol wins and where each falls short.</description>
+      <pubDate>Wed, 18 Jun 2025 00:00:00 GMT</pubDate>
+      <category>System Design</category><category>grpc</category><category>rest</category><category>graphql</category><category>api design</category><category>system design</category><category>microservices</category><category>protocol buffers</category>
+    </item>
+    <item>
+      <title>DynamoDB Advanced Patterns: Single-Table Design and Beyond</title>
+      <link>https://codesprintpro.com/blog/dynamodb-advanced-patterns/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/dynamodb-advanced-patterns/</guid>
+      <description>Production DynamoDB: single-table design with access pattern mapping, GSI overloading, sparse indexes, adjacency lists for graph relationships, DynamoDB Streams for event-driven architectures, and the read/write capacity math that prevents bill shock.</description>
+      <pubDate>Fri, 13 Jun 2025 00:00:00 GMT</pubDate>
+      <category>Databases</category><category>dynamodb</category><category>aws</category><category>nosql</category><category>single-table design</category><category>gsi</category><category>dynamodb streams</category><category>serverless</category>
+    </item>
+    <item>
+      <title>Java Memory Management Deep Dive: Heap, GC, and Production Tuning</title>
+      <link>https://codesprintpro.com/blog/java-memory-management-deep-dive/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/java-memory-management-deep-dive/</guid>
+      <description>How the JVM allocates memory, how G1GC and ZGC work under the hood, heap analysis with JVM tools, and the GC tuning decisions that eliminate latency spikes in production Java services.</description>
+      <pubDate>Fri, 13 Jun 2025 00:00:00 GMT</pubDate>
+      <category>Java</category><category>java</category><category>jvm</category><category>garbage collection</category><category>g1gc</category><category>zgc</category><category>heap</category><category>memory management</category><category>performance</category>
+    </item>
+    <item>
+      <title>Kubernetes in Production: Patterns Every Backend Engineer Must Know</title>
+      <link>https://codesprintpro.com/blog/kubernetes-production-best-practices/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/kubernetes-production-best-practices/</guid>
+      <description>Resource requests and limits, liveness vs readiness probes, rolling deployments, HPA configuration, pod disruption budgets, and the mistakes that cause production outages in Kubernetes.</description>
+      <pubDate>Sun, 08 Jun 2025 00:00:00 GMT</pubDate>
+      <category>AWS</category><category>kubernetes</category><category>k8s</category><category>devops</category><category>containers</category><category>deployment</category><category>aws</category><category>eks</category>
+    </item>
+    <item>
+      <title>Zero-Downtime Database Migrations: Patterns for Production</title>
+      <link>https://codesprintpro.com/blog/zero-downtime-database-migrations/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/zero-downtime-database-migrations/</guid>
+      <description>How to safely migrate production databases without downtime: expand-contract pattern, backward-compatible schema changes, rolling deployments with dual-write, column renaming strategies, and the PostgreSQL-specific techniques for large table alterations.</description>
+      <pubDate>Sun, 08 Jun 2025 00:00:00 GMT</pubDate>
+      <category>Databases</category><category>database</category><category>migrations</category><category>postgresql</category><category>zero downtime</category><category>devops</category><category>schema evolution</category><category>flyway</category><category>liquibase</category>
+    </item>
+    <item>
+      <title>PostgreSQL Performance Tuning: From Slow Queries to Sub-Millisecond Reads</title>
+      <link>https://codesprintpro.com/blog/postgresql-performance-tuning/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/postgresql-performance-tuning/</guid>
+      <description>A production guide to PostgreSQL query optimization: EXPLAIN ANALYZE, index design, VACUUM tuning, connection pooling with PgBouncer, partitioning, and the configuration changes that actually move the needle.</description>
+      <pubDate>Tue, 03 Jun 2025 00:00:00 GMT</pubDate>
+      <category>Databases</category><category>postgresql</category><category>databases</category><category>performance</category><category>sql</category><category>indexing</category><category>query optimization</category>
+    </item>
+    <item>
+      <title>Spring Security OAuth2 and JWT: Production Implementation Guide</title>
+      <link>https://codesprintpro.com/blog/spring-security-oauth2-jwt/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/spring-security-oauth2-jwt/</guid>
+      <description>Complete Spring Security OAuth2 implementation: JWT token validation, Resource Server configuration, method-level security, custom UserDetailsService, refresh token rotation, and the security pitfalls that lead to authentication bypasses.</description>
+      <pubDate>Tue, 03 Jun 2025 00:00:00 GMT</pubDate>
+      <category>Java</category><category>spring security</category><category>oauth2</category><category>jwt</category><category>spring boot</category><category>authentication</category><category>authorization</category><category>java</category><category>security</category>
+    </item>
+    <item>
+      <title>Elasticsearch Query Optimization: From Slow to Sub-100ms</title>
+      <link>https://codesprintpro.com/blog/elasticsearch-query-optimization/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/elasticsearch-query-optimization/</guid>
+      <description>Elasticsearch performance tuning in production: query vs filter context, mapping optimization, shard sizing strategy, field data vs doc values, aggregation performance, index lifecycle management, and the profiling tools that identify bottlenecks.</description>
+      <pubDate>Thu, 29 May 2025 00:00:00 GMT</pubDate>
+      <category>Databases</category><category>elasticsearch</category><category>search</category><category>performance</category><category>indexing</category><category>aggregations</category><category>kibana</category><category>spring boot</category>
+    </item>
+    <item>
+      <title>Scaling Spring Boot Applications to Handle 10 Million Daily Active Users</title>
+      <link>https://codesprintpro.com/blog/scaling-spring-boot-10m-dau/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/scaling-spring-boot-10m-dau/</guid>
+      <description>A practical performance engineering guide: load balancing, horizontal scaling, database tuning, JVM optimization, autoscaling, and the observability stack to find and fix bottlenecks before they page you.</description>
+      <pubDate>Wed, 28 May 2025 00:00:00 GMT</pubDate>
+      <category>Java</category><category>spring boot</category><category>java</category><category>scaling</category><category>performance</category><category>jvm</category><category>kubernetes</category><category>prometheus</category><category>grafana</category>
+    </item>
+    <item>
+      <title>Multi-Tenancy Architecture: Database, Application, and Infrastructure Patterns</title>
+      <link>https://codesprintpro.com/blog/multi-tenancy-architecture/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/multi-tenancy-architecture/</guid>
+      <description>Production multi-tenancy: database isolation models (shared schema, shared database, separate database), tenant routing, data partitioning strategies, cross-tenant query prevention, Spring Boot tenant context propagation, and the trade-offs at each isolation level.</description>
+      <pubDate>Sat, 24 May 2025 00:00:00 GMT</pubDate>
+      <category>System Design</category><category>multi-tenancy</category><category>saas</category><category>system design</category><category>database</category><category>spring boot</category><category>architecture</category><category>isolation</category>
+    </item>
+    <item>
+      <title>Designing a Retry System Without Causing a Retry Storm</title>
+      <link>https://codesprintpro.com/blog/retry-storm-prevention/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/retry-storm-prevention/</guid>
+      <description>Exponential backoff with jitter, circuit breakers, bulkhead isolation, Kafka retry topics, and the retry amplification problem — with Java implementations and a real outage postmortem.</description>
+      <pubDate>Thu, 22 May 2025 00:00:00 GMT</pubDate>
+      <category>System Design</category><category>retry</category><category>circuit breaker</category><category>resilience</category><category>spring boot</category><category>kafka</category><category>distributed systems</category><category>java</category>
+    </item>
+    <item>
+      <title>Feature Flags and Progressive Delivery: Safe Releases at Scale</title>
+      <link>https://codesprintpro.com/blog/feature-flags-progressive-delivery/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/feature-flags-progressive-delivery/</guid>
+      <description>Production feature flag implementation: flag evaluation architecture, percentage rollouts, user targeting, kill switches, flag lifecycle management, OpenFeature SDK, LaunchDarkly patterns, and how progressive delivery eliminates release fear.</description>
+      <pubDate>Mon, 19 May 2025 00:00:00 GMT</pubDate>
+      <category>System Design</category><category>feature flags</category><category>progressive delivery</category><category>deployment</category><category>system design</category><category>spring boot</category><category>launchdarkly</category><category>openfeature</category>
+    </item>
+    <item>
+      <title>Microservices Are Overrated for Most Startups</title>
+      <link>https://codesprintpro.com/blog/microservices-overrated-startups/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/microservices-overrated-startups/</guid>
+      <description>A contrarian but technically grounded case for starting with a well-structured monolith. Distributed transaction costs, network latency math, observability overhead, and when to actually break services apart.</description>
+      <pubDate>Fri, 16 May 2025 00:00:00 GMT</pubDate>
+      <category>System Design</category><category>microservices</category><category>monolith</category><category>architecture</category><category>system design</category><category>distributed systems</category><category>startups</category>
+    </item>
+    <item>
+      <title>Terraform Infrastructure as Code: Production Patterns and Pitfalls</title>
+      <link>https://codesprintpro.com/blog/terraform-infrastructure-as-code/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/terraform-infrastructure-as-code/</guid>
+      <description>Production Terraform: module design, state management with S3 and DynamoDB locking, workspace strategies for multi-environment deployments, sensitive variable handling, drift detection, and the Terraform anti-patterns that cause outages.</description>
+      <pubDate>Wed, 14 May 2025 00:00:00 GMT</pubDate>
+      <category>AWS</category><category>terraform</category><category>infrastructure as code</category><category>aws</category><category>devops</category><category>s3</category><category>modules</category><category>ci/cd</category>
+    </item>
+    <item>
+      <title>Designing a High-Throughput Notification System for 100K Events per Second</title>
+      <link>https://codesprintpro.com/blog/notification-system-100k-per-second/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/notification-system-100k-per-second/</guid>
+      <description>End-to-end architecture for a notification system handling 100,000 events per second: capacity planning, Kafka partition sizing, fan-out strategy, rate limiting, idempotency, and incident simulation.</description>
+      <pubDate>Sat, 10 May 2025 00:00:00 GMT</pubDate>
+      <category>System Design</category><category>system design</category><category>notifications</category><category>kafka</category><category>throughput</category><category>capacity planning</category><category>distributed systems</category>
+    </item>
+    <item>
+      <title>Java Profiling and Heap Analysis: Finding Memory Leaks and CPU Bottlenecks</title>
+      <link>https://codesprintpro.com/blog/java-profiling-heap-analysis/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/java-profiling-heap-analysis/</guid>
+      <description>Production Java profiling: async-profiler for CPU and allocation profiling, heap dump analysis with Eclipse MAT, finding memory leaks, GC log analysis, detecting thread contention, JVM flags for profiling in production, and reading flame graphs.</description>
+      <pubDate>Fri, 09 May 2025 00:00:00 GMT</pubDate>
+      <category>Java</category><category>java</category><category>profiling</category><category>heap analysis</category><category>memory leak</category><category>jvm</category><category>performance</category><category>async-profiler</category><category>gc</category>
+    </item>
+    <item>
+      <title>WebSocket and SSE for Real-Time Systems: Architecture and Production Patterns</title>
+      <link>https://codesprintpro.com/blog/websocket-sse-real-time/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/websocket-sse-real-time/</guid>
+      <description>Building real-time features at scale: WebSocket vs SSE trade-offs, Spring Boot WebSocket implementation with STOMP, connection management, horizontal scaling with Redis pub/sub, SSE for one-directional streaming, and handling reconnection and backpressure.</description>
+      <pubDate>Sun, 04 May 2025 00:00:00 GMT</pubDate>
+      <category>System Design</category><category>websocket</category><category>sse</category><category>real-time</category><category>spring boot</category><category>redis</category><category>stomp</category><category>pub-sub</category><category>system design</category>
+    </item>
+    <item>
+      <title>Redis Caching Strategy at Scale: Beyond Simple Key-Value</title>
+      <link>https://codesprintpro.com/blog/redis-caching-strategy-at-scale/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/redis-caching-strategy-at-scale/</guid>
+      <description>Cache stampede, penetration, avalanche, eviction policy selection, clustering, and persistence trade-offs for production Redis deployments. With Java examples and a real production incident walkthrough.</description>
+      <pubDate>Sat, 03 May 2025 00:00:00 GMT</pubDate>
+      <category>Databases</category><category>redis</category><category>caching</category><category>java</category><category>spring boot</category><category>performance</category><category>distributed systems</category><category>cache stampede</category>
+    </item>
+    <item>
+      <title>Cloud Cost Optimization: Engineering Practices That Cut AWS Bills by 50%</title>
+      <link>https://codesprintpro.com/blog/cloud-cost-optimization/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/cloud-cost-optimization/</guid>
+      <description>Systematic AWS cost reduction: right-sizing EC2 and RDS instances, Savings Plans vs Reserved Instances, S3 lifecycle policies, data transfer cost elimination, EKS node optimization, RDS read replicas vs caching, and the observability stack for cost monitoring.</description>
+      <pubDate>Tue, 29 Apr 2025 00:00:00 GMT</pubDate>
+      <category>AWS</category><category>aws</category><category>cost optimization</category><category>ec2</category><category>rds</category><category>s3</category><category>eks</category><category>savings plans</category><category>finops</category>
+    </item>
+    <item>
+      <title>Designing Idempotent Payment Systems in Distributed Architecture</title>
+      <link>https://codesprintpro.com/blog/idempotent-payment-systems/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/idempotent-payment-systems/</guid>
+      <description>How duplicate payments happen in real systems, idempotency key design, race condition handling, Redis vs DB for idempotency stores, and the production incident that shaped our architecture.</description>
+      <pubDate>Sat, 26 Apr 2025 00:00:00 GMT</pubDate>
+      <category>System Design</category><category>payments</category><category>idempotency</category><category>distributed systems</category><category>java</category><category>spring boot</category><category>fintech</category><category>system design</category>
+    </item>
+    <item>
+      <title>Kafka Streams: Real-Time Stream Processing Without a Separate Cluster</title>
+      <link>https://codesprintpro.com/blog/kafka-streams-real-time-processing/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/kafka-streams-real-time-processing/</guid>
+      <description>Production Kafka Streams: KStream vs KTable semantics, stateful transformations with RocksDB state stores, windowed aggregations, stream-table joins, topology design, changelog topics, and the operational patterns for running Kafka Streams in production.</description>
+      <pubDate>Thu, 24 Apr 2025 00:00:00 GMT</pubDate>
+      <category>Data Engineering</category><category>kafka</category><category>kafka streams</category><category>stream processing</category><category>real-time</category><category>java</category><category>rocksdb</category><category>windowing</category><category>data engineering</category>
+    </item>
+    <item>
+      <title>Kafka Exactly-Once Semantics: Myth vs Production Reality</title>
+      <link>https://codesprintpro.com/blog/kafka-exactly-once-semantics/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/kafka-exactly-once-semantics/</guid>
+      <description>What Kafka&apos;s exactly-once guarantee actually covers, where duplicates still happen in practice, and how to design genuinely idempotent consumers with Spring Kafka. Real production mistakes and their fixes.</description>
+      <pubDate>Sun, 20 Apr 2025 00:00:00 GMT</pubDate>
+      <category>Messaging</category><category>kafka</category><category>exactly-once</category><category>spring kafka</category><category>distributed systems</category><category>transactions</category><category>java</category>
+    </item>
+    <item>
+      <title>Designing a Database Sharding Strategy for 100 Million Users</title>
+      <link>https://codesprintpro.com/blog/database-sharding-100-million-users/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/database-sharding-100-million-users/</guid>
+      <description>A practical guide to horizontal sharding at scale: shard key selection, hot shard prevention, consistent hashing, cross-shard queries, and zero-downtime data migration with real fintech architecture examples.</description>
+      <pubDate>Mon, 14 Apr 2025 00:00:00 GMT</pubDate>
+      <category>Databases</category><category>databases</category><category>sharding</category><category>postgresql</category><category>system design</category><category>distributed systems</category><category>scaling</category>
+    </item>
+    <item>
+      <title>Thread Pool Exhaustion in Spring Boot: Diagnosis, Prevention, and Recovery</title>
+      <link>https://codesprintpro.com/blog/spring-boot-thread-pool-exhaustion/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/spring-boot-thread-pool-exhaustion/</guid>
+      <description>How Tomcat thread pools work, why blocking I/O kills throughput, and the production patterns that prevent thread pool exhaustion in Spring Boot services. Includes real outage scenario and JVM tuning.</description>
+      <pubDate>Tue, 08 Apr 2025 00:00:00 GMT</pubDate>
+      <category>Java</category><category>spring boot</category><category>java</category><category>tomcat</category><category>thread pool</category><category>async</category><category>performance</category><category>resilience</category>
+    </item>
+    <item>
+      <title>SQS vs Kafka vs EventBridge: Choosing the Right Messaging System on AWS</title>
+      <link>https://codesprintpro.com/blog/sqs-kafka-eventbridge-aws-comparison/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/sqs-kafka-eventbridge-aws-comparison/</guid>
+      <description>A senior engineer&apos;s guide to selecting between Amazon SQS, Apache Kafka on AWS, and EventBridge. Throughput benchmarks, cost breakdowns, ordering guarantees, and real production trade-offs.</description>
+      <pubDate>Wed, 02 Apr 2025 00:00:00 GMT</pubDate>
+      <category>Messaging</category><category>aws</category><category>sqs</category><category>kafka</category><category>eventbridge</category><category>distributed systems</category><category>messaging</category><category>msk</category>
+    </item>
+    <item>
+      <title>Service Mesh with Istio: mTLS, Traffic Management, and Observability</title>
+      <link>https://codesprintpro.com/blog/service-mesh-istio/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/service-mesh-istio/</guid>
+      <description>Implement Istio service mesh for mutual TLS encryption, canary deployments, circuit breaking, and distributed tracing across Kubernetes microservices. Includes production traffic management patterns.</description>
+      <pubDate>Mon, 31 Mar 2025 00:00:00 GMT</pubDate>
+      <category>System Design</category><category>istio</category><category>service mesh</category><category>kubernetes</category><category>mtls</category><category>canary deployment</category><category>observability</category>
+    </item>
+    <item>
+      <title>Time-Series Databases: InfluxDB vs TimescaleDB vs Prometheus</title>
+      <link>https://codesprintpro.com/blog/time-series-databases/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/time-series-databases/</guid>
+      <description>Choose the right time-series database for metrics, IoT, and observability workloads. Deep comparison of InfluxDB, TimescaleDB, and Prometheus with retention policies, downsampling, and query patterns.</description>
+      <pubDate>Sat, 29 Mar 2025 00:00:00 GMT</pubDate>
+      <category>Databases</category><category>time-series</category><category>influxdb</category><category>timescaledb</category><category>prometheus</category><category>observability</category><category>iot</category><category>databases</category>
+    </item>
+    <item>
+      <title>Fine-Tuning LLMs: When to Fine-Tune, When to Prompt</title>
+      <link>https://codesprintpro.com/blog/fine-tuning-llms/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/fine-tuning-llms/</guid>
+      <description>Decide when fine-tuning beats prompt engineering, how to prepare training data, run LoRA fine-tuning efficiently, and evaluate model quality. Covers OpenAI fine-tuning and open-source with Hugging Face.</description>
+      <pubDate>Thu, 27 Mar 2025 00:00:00 GMT</pubDate>
+      <category>AI/ML</category><category>ai</category><category>llm</category><category>fine-tuning</category><category>lora</category><category>hugging face</category><category>openai</category><category>machine learning</category>
+    </item>
+    <item>
+      <title>AWS ECS vs EKS: Choosing the Right Container Orchestration</title>
+      <link>https://codesprintpro.com/blog/aws-ecs-eks-comparison/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/aws-ecs-eks-comparison/</guid>
+      <description>Deep comparison of Amazon ECS and EKS for container orchestration. Covers architecture differences, cost models, operational complexity, Fargate vs EC2, and migration strategies.</description>
+      <pubDate>Tue, 25 Mar 2025 00:00:00 GMT</pubDate>
+      <category>AWS</category><category>aws</category><category>ecs</category><category>eks</category><category>kubernetes</category><category>containers</category><category>fargate</category><category>devops</category>
+    </item>
+    <item>
+      <title>Building AI Agents with Tool Use: From Chatbot to Autonomous Agent</title>
+      <link>https://codesprintpro.com/blog/llm-agents-tool-use/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/llm-agents-tool-use/</guid>
+      <description>Build production AI agents using Claude&apos;s tool use API. Learn the agentic loop, error handling, multi-step reasoning, human-in-the-loop patterns, and how to build reliable autonomous systems.</description>
+      <pubDate>Sun, 23 Mar 2025 00:00:00 GMT</pubDate>
+      <category>AI/ML</category><category>ai</category><category>agents</category><category>claude</category><category>tool use</category><category>llm</category><category>autonomous systems</category><category>python</category>
+    </item>
+    <item>
+      <title>Java Streams API: Advanced Patterns and Performance</title>
+      <link>https://codesprintpro.com/blog/java-streams-advanced/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/java-streams-advanced/</guid>
+      <description>Go beyond map/filter/collect. Master Java Streams API with flatMap, collectors, parallel streams, custom collectors, and performance considerations for production code.</description>
+      <pubDate>Fri, 21 Mar 2025 00:00:00 GMT</pubDate>
+      <category>Java</category><category>java</category><category>streams</category><category>functional programming</category><category>collections</category><category>performance</category>
+    </item>
+    <item>
+      <title>System Design: Video Streaming Platform at Netflix Scale</title>
+      <link>https://codesprintpro.com/blog/system-design-video-streaming/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/system-design-video-streaming/</guid>
+      <description>Design a video streaming platform handling 250M users and 15% of global internet traffic. Covers video transcoding pipeline, CDN architecture, adaptive bitrate streaming, and recommendation systems.</description>
+      <pubDate>Wed, 19 Mar 2025 00:00:00 GMT</pubDate>
+      <category>System Design</category><category>system design</category><category>video streaming</category><category>cdn</category><category>aws</category><category>distributed systems</category><category>hls</category>
+    </item>
+    <item>
+      <title>System Design: Real-Time Chat Application at Scale</title>
+      <link>https://codesprintpro.com/blog/system-design-real-time-chat/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/system-design-real-time-chat/</guid>
+      <description>Design a real-time chat system like WhatsApp or Slack handling 1 billion messages per day. Covers WebSocket connection management, message delivery guarantees, presence detection, and storage.</description>
+      <pubDate>Mon, 17 Mar 2025 00:00:00 GMT</pubDate>
+      <category>System Design</category><category>system design</category><category>websocket</category><category>real-time</category><category>kafka</category><category>redis</category><category>cassandra</category><category>distributed systems</category>
+    </item>
+    <item>
+      <title>Java Design Patterns: When to Use Them, When to Avoid Them</title>
+      <link>https://codesprintpro.com/blog/java-design-patterns/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/java-design-patterns/</guid>
+      <description>Practical guide to Java design patterns with production examples. Covers Builder, Factory, Strategy, Observer, Decorator, and Command patterns with Spring Boot integration.</description>
+      <pubDate>Sat, 15 Mar 2025 00:00:00 GMT</pubDate>
+      <category>Java</category><category>java</category><category>design patterns</category><category>spring boot</category><category>solid</category><category>clean code</category>
+    </item>
+  </channel>
+</rss>
