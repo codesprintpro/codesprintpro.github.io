@@ -16,6 +16,14 @@
       <category>System Design</category><category>system design</category><category>distributed cache</category><category>redis</category><category>caching</category><category>distributed systems</category><category>backend engineering</category>
     </item>
     <item>
+      <title>System Design: Building a Distributed Configuration Platform</title>
+      <link>https://codesprintpro.com/blog/system-design-distributed-configuration-platform/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/system-design-distributed-configuration-platform/</guid>
+      <description>Design a production distributed configuration platform with versioned config, rollout safety, snapshots, watchers, audit logs, multi-environment isolation, and safe client-side caching.</description>
+      <pubDate>Fri, 10 Apr 2026 00:00:00 GMT</pubDate>
+      <category>System Design</category><category>system design</category><category>configuration</category><category>distributed systems</category><category>platform engineering</category><category>microservices</category><category>backend engineering</category>
+    </item>
+    <item>
       <title>System Design: Building a Fraud Detection Platform</title>
       <link>https://codesprintpro.com/blog/system-design-fraud-detection-platform/</link>
       <guid isPermaLink="true">https://codesprintpro.com/blog/system-design-fraud-detection-platform/</guid>
@@ -398,14 +406,6 @@
       <description>Complete Spring Security OAuth2 implementation: JWT token validation, Resource Server configuration, method-level security, custom UserDetailsService, refresh token rotation, and the security pitfalls that lead to authentication bypasses.</description>
       <pubDate>Tue, 03 Jun 2025 00:00:00 GMT</pubDate>
       <category>Java</category><category>spring security</category><category>oauth2</category><category>jwt</category><category>spring boot</category><category>authentication</category><category>authorization</category><category>java</category><category>security</category>
-    </item>
-    <item>
-      <title>Elasticsearch Query Optimization: From Slow to Sub-100ms</title>
-      <link>https://codesprintpro.com/blog/elasticsearch-query-optimization/</link>
-      <guid isPermaLink="true">https://codesprintpro.com/blog/elasticsearch-query-optimization/</guid>
-      <description>Elasticsearch performance tuning in production: query vs filter context, mapping optimization, shard sizing strategy, field data vs doc values, aggregation performance, index lifecycle management, and the profiling tools that identify bottlenecks.</description>
-      <pubDate>Thu, 29 May 2025 00:00:00 GMT</pubDate>
-      <category>Databases</category><category>elasticsearch</category><category>search</category><category>performance</category><category>indexing</category><category>aggregations</category><category>kibana</category><category>spring boot</category>
     </item>
   </channel>
 </rss>
