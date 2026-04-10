@@ -47,16 +47,22 @@ template:
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon
 NEXT_PUBLIC_GA_MEASUREMENT_ID=G-XXXXXXXXXX
+NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION=google-site-verification-token
 ```
 
 For GitHub Pages deployments, add the same values as repository secrets named
-`NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`. The deploy
-workflow validates that these values are present and that the Supabase project
-hostname resolves before building the static site.
+`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`,
+`NEXT_PUBLIC_GA_MEASUREMENT_ID`, and `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` as
+needed. The deploy workflow validates the Supabase values before building the
+static site.
 
 If you want Google Analytics 4 tracking, also add
 `NEXT_PUBLIC_GA_MEASUREMENT_ID`. This is the GA4 web data stream identifier and
 usually starts with `G-`.
+
+If you want Google Search Console verification by meta tag, add
+`NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION`. This is the token Google gives you when
+you choose the HTML meta tag verification method.
 
 ### Supabase Tables
 
