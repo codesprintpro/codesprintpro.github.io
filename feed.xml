@@ -16,6 +16,14 @@
       <category>System Design</category><category>system design</category><category>distributed cache</category><category>redis</category><category>caching</category><category>distributed systems</category><category>backend engineering</category>
     </item>
     <item>
+      <title>System Design: Building a Fraud Detection Platform</title>
+      <link>https://codesprintpro.com/blog/system-design-fraud-detection-platform/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/system-design-fraud-detection-platform/</guid>
+      <description>Design a production fraud detection platform with real-time scoring, rules, ML models, feature stores, case management, feedback loops, and safe decision workflows for payments and account abuse.</description>
+      <pubDate>Fri, 10 Apr 2026 00:00:00 GMT</pubDate>
+      <category>System Design</category><category>system design</category><category>fraud detection</category><category>payments</category><category>machine learning</category><category>risk</category><category>distributed systems</category><category>backend engineering</category>
+    </item>
+    <item>
       <title>System Design: Building an Inventory Reservation System</title>
       <link>https://codesprintpro.com/blog/system-design-inventory-reservation/</link>
       <guid isPermaLink="true">https://codesprintpro.com/blog/system-design-inventory-reservation/</guid>
@@ -398,14 +406,6 @@
       <description>A practical performance engineering guide: load balancing, horizontal scaling, database tuning, JVM optimization, autoscaling, and the observability stack to find and fix bottlenecks before they page you.</description>
       <pubDate>Wed, 28 May 2025 00:00:00 GMT</pubDate>
       <category>Java</category><category>spring boot</category><category>java</category><category>scaling</category><category>performance</category><category>jvm</category><category>kubernetes</category><category>prometheus</category><category>grafana</category>
-    </item>
-    <item>
-      <title>Multi-Tenancy Architecture: Database, Application, and Infrastructure Patterns</title>
-      <link>https://codesprintpro.com/blog/multi-tenancy-architecture/</link>
-      <guid isPermaLink="true">https://codesprintpro.com/blog/multi-tenancy-architecture/</guid>
-      <description>Production multi-tenancy: database isolation models (shared schema, shared database, separate database), tenant routing, data partitioning strategies, cross-tenant query prevention, Spring Boot tenant context propagation, and the trade-offs at each isolation level.</description>
-      <pubDate>Sat, 24 May 2025 00:00:00 GMT</pubDate>
-      <category>System Design</category><category>multi-tenancy</category><category>saas</category><category>system design</category><category>database</category><category>spring boot</category><category>architecture</category><category>isolation</category>
     </item>
   </channel>
 </rss>
