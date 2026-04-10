@@ -40,6 +40,14 @@
       <category>System Design</category><category>system design</category><category>payments</category><category>reconciliation</category><category>distributed systems</category><category>databases</category><category>fintech</category><category>backend engineering</category>
     </item>
     <item>
+      <title>System Design: Building a Search Indexing Platform</title>
+      <link>https://codesprintpro.com/blog/system-design-search-indexing-platform/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/system-design-search-indexing-platform/</guid>
+      <description>Design a production search indexing platform with change capture, indexing pipelines, mapping strategy, backfills, reindexing, partial updates, consistency trade-offs, and operational recovery.</description>
+      <pubDate>Fri, 10 Apr 2026 00:00:00 GMT</pubDate>
+      <category>System Design</category><category>system design</category><category>search</category><category>elasticsearch</category><category>indexing</category><category>cdc</category><category>distributed systems</category><category>backend engineering</category>
+    </item>
+    <item>
       <title>AI Infrastructure on AWS: SageMaker, EKS GPU Scheduling, and Cost-Efficient Inference</title>
       <link>https://codesprintpro.com/blog/ai-infrastructure-aws/</link>
       <guid isPermaLink="true">https://codesprintpro.com/blog/ai-infrastructure-aws/</guid>
@@ -398,14 +406,6 @@
       <description>Elasticsearch performance tuning in production: query vs filter context, mapping optimization, shard sizing strategy, field data vs doc values, aggregation performance, index lifecycle management, and the profiling tools that identify bottlenecks.</description>
       <pubDate>Thu, 29 May 2025 00:00:00 GMT</pubDate>
       <category>Databases</category><category>elasticsearch</category><category>search</category><category>performance</category><category>indexing</category><category>aggregations</category><category>kibana</category><category>spring boot</category>
-    </item>
-    <item>
-      <title>Scaling Spring Boot Applications to Handle 10 Million Daily Active Users</title>
-      <link>https://codesprintpro.com/blog/scaling-spring-boot-10m-dau/</link>
-      <guid isPermaLink="true">https://codesprintpro.com/blog/scaling-spring-boot-10m-dau/</guid>
-      <description>A practical performance engineering guide: load balancing, horizontal scaling, database tuning, JVM optimization, autoscaling, and the observability stack to find and fix bottlenecks before they page you.</description>
-      <pubDate>Wed, 28 May 2025 00:00:00 GMT</pubDate>
-      <category>Java</category><category>spring boot</category><category>java</category><category>scaling</category><category>performance</category><category>jvm</category><category>kubernetes</category><category>prometheus</category><category>grafana</category>
     </item>
   </channel>
 </rss>
