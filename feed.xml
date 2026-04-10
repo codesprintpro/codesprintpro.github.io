@@ -16,6 +16,14 @@
       <category>System Design</category><category>system design</category><category>distributed cache</category><category>redis</category><category>caching</category><category>distributed systems</category><category>backend engineering</category>
     </item>
     <item>
+      <title>System Design: Building an Inventory Reservation System</title>
+      <link>https://codesprintpro.com/blog/system-design-inventory-reservation/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/system-design-inventory-reservation/</guid>
+      <description>Design a production inventory reservation system that prevents oversells across carts, checkout, payments, cancellations, and expirations with idempotency, hold timeouts, and operational recovery.</description>
+      <pubDate>Fri, 10 Apr 2026 00:00:00 GMT</pubDate>
+      <category>System Design</category><category>system design</category><category>inventory</category><category>ecommerce</category><category>distributed systems</category><category>idempotency</category><category>databases</category><category>payments</category>
+    </item>
+    <item>
       <title>System Design: Building a Payment Reconciliation Engine</title>
       <link>https://codesprintpro.com/blog/system-design-payment-reconciliation-engine/</link>
       <guid isPermaLink="true">https://codesprintpro.com/blog/system-design-payment-reconciliation-engine/</guid>
@@ -398,14 +406,6 @@
       <description>Production multi-tenancy: database isolation models (shared schema, shared database, separate database), tenant routing, data partitioning strategies, cross-tenant query prevention, Spring Boot tenant context propagation, and the trade-offs at each isolation level.</description>
       <pubDate>Sat, 24 May 2025 00:00:00 GMT</pubDate>
       <category>System Design</category><category>multi-tenancy</category><category>saas</category><category>system design</category><category>database</category><category>spring boot</category><category>architecture</category><category>isolation</category>
-    </item>
-    <item>
-      <title>Designing a Retry System Without Causing a Retry Storm</title>
-      <link>https://codesprintpro.com/blog/retry-storm-prevention/</link>
-      <guid isPermaLink="true">https://codesprintpro.com/blog/retry-storm-prevention/</guid>
-      <description>Exponential backoff with jitter, circuit breakers, bulkhead isolation, Kafka retry topics, and the retry amplification problem — with Java implementations and a real outage postmortem.</description>
-      <pubDate>Thu, 22 May 2025 00:00:00 GMT</pubDate>
-      <category>System Design</category><category>retry</category><category>circuit breaker</category><category>resilience</category><category>spring boot</category><category>kafka</category><category>distributed systems</category><category>java</category>
     </item>
   </channel>
 </rss>
