@@ -8,6 +8,14 @@
     <lastBuildDate>Fri, 10 Apr 2026 00:00:00 GMT</lastBuildDate>
     <atom:link href="https://codesprintpro.com/feed.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>System Design: Building a Distributed Cache</title>
+      <link>https://codesprintpro.com/blog/system-design-distributed-cache/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/system-design-distributed-cache/</guid>
+      <description>Design a production distributed cache with sharding, replication, eviction, invalidation, hot-key protection, consistency trade-offs, write patterns, and failure handling.</description>
+      <pubDate>Fri, 10 Apr 2026 00:00:00 GMT</pubDate>
+      <category>System Design</category><category>system design</category><category>distributed cache</category><category>redis</category><category>caching</category><category>distributed systems</category><category>backend engineering</category>
+    </item>
+    <item>
       <title>System Design: Building a Payment Reconciliation Engine</title>
       <link>https://codesprintpro.com/blog/system-design-payment-reconciliation-engine/</link>
       <guid isPermaLink="true">https://codesprintpro.com/blog/system-design-payment-reconciliation-engine/</guid>
@@ -398,14 +406,6 @@
       <description>Exponential backoff with jitter, circuit breakers, bulkhead isolation, Kafka retry topics, and the retry amplification problem — with Java implementations and a real outage postmortem.</description>
       <pubDate>Thu, 22 May 2025 00:00:00 GMT</pubDate>
       <category>System Design</category><category>retry</category><category>circuit breaker</category><category>resilience</category><category>spring boot</category><category>kafka</category><category>distributed systems</category><category>java</category>
-    </item>
-    <item>
-      <title>Feature Flags and Progressive Delivery: Safe Releases at Scale</title>
-      <link>https://codesprintpro.com/blog/feature-flags-progressive-delivery/</link>
-      <guid isPermaLink="true">https://codesprintpro.com/blog/feature-flags-progressive-delivery/</guid>
-      <description>Production feature flag implementation: flag evaluation architecture, percentage rollouts, user targeting, kill switches, flag lifecycle management, OpenFeature SDK, LaunchDarkly patterns, and how progressive delivery eliminates release fear.</description>
-      <pubDate>Mon, 19 May 2025 00:00:00 GMT</pubDate>
-      <category>System Design</category><category>feature flags</category><category>progressive delivery</category><category>deployment</category><category>system design</category><category>spring boot</category><category>launchdarkly</category><category>openfeature</category>
     </item>
   </channel>
 </rss>
