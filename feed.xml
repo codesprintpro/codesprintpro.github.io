@@ -5,8 +5,16 @@
     <link>https://codesprintpro.com/blog/</link>
     <description>Practical backend engineering, system design, Java, databases, AWS, messaging, and AI infrastructure guides.</description>
     <language>en-us</language>
-    <lastBuildDate>Wed, 08 Apr 2026 00:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Fri, 10 Apr 2026 00:00:00 GMT</lastBuildDate>
     <atom:link href="https://codesprintpro.com/feed.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>System Design: Building a Payment Reconciliation Engine</title>
+      <link>https://codesprintpro.com/blog/system-design-payment-reconciliation-engine/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/system-design-payment-reconciliation-engine/</guid>
+      <description>Design a production payment reconciliation engine that matches gateway events, bank settlements, internal ledgers, refunds, chargebacks, and reversals with idempotency, tolerance rules, and operational workflows.</description>
+      <pubDate>Fri, 10 Apr 2026 00:00:00 GMT</pubDate>
+      <category>System Design</category><category>system design</category><category>payments</category><category>reconciliation</category><category>distributed systems</category><category>databases</category><category>fintech</category><category>backend engineering</category>
+    </item>
     <item>
       <title>AI Infrastructure on AWS: SageMaker, EKS GPU Scheduling, and Cost-Efficient Inference</title>
       <link>https://codesprintpro.com/blog/ai-infrastructure-aws/</link>
@@ -398,14 +406,6 @@
       <description>Production feature flag implementation: flag evaluation architecture, percentage rollouts, user targeting, kill switches, flag lifecycle management, OpenFeature SDK, LaunchDarkly patterns, and how progressive delivery eliminates release fear.</description>
       <pubDate>Mon, 19 May 2025 00:00:00 GMT</pubDate>
       <category>System Design</category><category>feature flags</category><category>progressive delivery</category><category>deployment</category><category>system design</category><category>spring boot</category><category>launchdarkly</category><category>openfeature</category>
-    </item>
-    <item>
-      <title>Microservices Are Overrated for Most Startups</title>
-      <link>https://codesprintpro.com/blog/microservices-overrated-startups/</link>
-      <guid isPermaLink="true">https://codesprintpro.com/blog/microservices-overrated-startups/</guid>
-      <description>A contrarian but technically grounded case for starting with a well-structured monolith. Distributed transaction costs, network latency math, observability overhead, and when to actually break services apart.</description>
-      <pubDate>Fri, 16 May 2025 00:00:00 GMT</pubDate>
-      <category>System Design</category><category>microservices</category><category>monolith</category><category>architecture</category><category>system design</category><category>distributed systems</category><category>startups</category>
     </item>
   </channel>
 </rss>
