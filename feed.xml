@@ -8,6 +8,14 @@
     <lastBuildDate>Sat, 18 Apr 2026 00:00:00 GMT</lastBuildDate>
     <atom:link href="https://codesprintpro.com/feed.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>System Design: Building a Service Discovery Platform</title>
+      <link>https://codesprintpro.com/blog/system-design-service-discovery-platform/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/system-design-service-discovery-platform/</guid>
+      <description>Design a production service discovery platform with registration, health checks, heartbeats, client-side and server-side discovery, zone awareness, rollout safety, and failure isolation.</description>
+      <pubDate>Sat, 18 Apr 2026 00:00:00 GMT</pubDate>
+      <category>System Design</category><category>system design</category><category>service discovery</category><category>microservices</category><category>distributed systems</category><category>platform engineering</category><category>backend engineering</category>
+    </item>
+    <item>
       <title>System Design: Building a Session Management Platform</title>
       <link>https://codesprintpro.com/blog/system-design-session-management-platform/</link>
       <guid isPermaLink="true">https://codesprintpro.com/blog/system-design-session-management-platform/</guid>
@@ -398,14 +406,6 @@
       <description>How to safely migrate production databases without downtime: expand-contract pattern, backward-compatible schema changes, rolling deployments with dual-write, column renaming strategies, and the PostgreSQL-specific techniques for large table alterations.</description>
       <pubDate>Sun, 08 Jun 2025 00:00:00 GMT</pubDate>
       <category>Databases</category><category>database</category><category>migrations</category><category>postgresql</category><category>zero downtime</category><category>devops</category><category>schema evolution</category><category>flyway</category><category>liquibase</category>
-    </item>
-    <item>
-      <title>PostgreSQL Performance Tuning: From Slow Queries to Sub-Millisecond Reads</title>
-      <link>https://codesprintpro.com/blog/postgresql-performance-tuning/</link>
-      <guid isPermaLink="true">https://codesprintpro.com/blog/postgresql-performance-tuning/</guid>
-      <description>A production guide to PostgreSQL query optimization: EXPLAIN ANALYZE, index design, VACUUM tuning, connection pooling with PgBouncer, partitioning, and the configuration changes that actually move the needle.</description>
-      <pubDate>Tue, 03 Jun 2025 00:00:00 GMT</pubDate>
-      <category>Databases</category><category>postgresql</category><category>databases</category><category>performance</category><category>sql</category><category>indexing</category><category>query optimization</category>
     </item>
   </channel>
 </rss>
