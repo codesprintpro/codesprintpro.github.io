@@ -50,10 +50,10 @@ export default function BlogIndex({ posts, categories }: BlogIndexProps) {
   return (
     <>
       <Head>
-        <title>Tech Blog — System Design, Java & Distributed Systems | CodeSprintPro</title>
+        <title>Tech Blog — System Design, DSA, Java & Distributed Systems | CodeSprintPro</title>
         <meta
           name="description"
-          content="Deep-dive technical articles on Kafka, Redis, System Design, Java 21 Virtual Threads, RAG systems, AWS architecture, and more — by Sachin Sarawgi."
+          content="Deep-dive technical articles on DSA, Kafka, Redis, System Design, Java 21, RAG systems, AWS architecture, and more — by Sachin Sarawgi."
         />
         <link rel="canonical" href="https://codesprintpro.com/blog/" />
         <link
@@ -66,7 +66,7 @@ export default function BlogIndex({ posts, categories }: BlogIndexProps) {
         <meta property="og:title" content="Tech Blog — CodeSprintPro" />
         <meta
           property="og:description"
-          content="Deep-dive articles on System Design, Java, Databases, AI/ML, and distributed systems."
+          content="Deep-dive articles on DSA, System Design, Java, Databases, AI/ML, and distributed systems."
         />
         <meta property="og:url" content="https://codesprintpro.com/blog/" />
         <meta property="og:image" content="https://codesprintpro.com/images/profile.jpg" />
@@ -79,14 +79,14 @@ export default function BlogIndex({ posts, categories }: BlogIndexProps) {
         <meta name="twitter:title" content="Tech Blog — CodeSprintPro" />
         <meta
           name="twitter:description"
-          content="Deep-dive articles on System Design, Java, Databases, AI/ML, and distributed systems."
+          content="Deep-dive articles on DSA, System Design, Java, Databases, AI/ML, and distributed systems."
         />
         <meta name="twitter:image" content="https://codesprintpro.com/images/profile.jpg" />
 
         {/* Keywords */}
         <meta
           name="keywords"
-          content="system design, java, kafka, redis, postgresql, aws, backend engineering, microservices, data engineering"
+          content="dsa, data structures and algorithms, java, system design, kafka, redis, postgresql, aws, backend engineering, microservices, data engineering"
         />
         <script
           type="application/ld+json"

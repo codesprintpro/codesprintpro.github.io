@@ -10,6 +10,7 @@ interface CategoryFilterProps {
 const CATEGORY_ICONS: Record<string, string> = {
   'System Design': '🏗',
   'Java': '☕',
+  'DSA': '🧠',
   'Databases': '🗄️',
   'AI/ML': '🤖',
   'AWS': '☁️',
