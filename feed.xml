@@ -144,6 +144,14 @@
       <category>System Design</category><category>system design</category><category>workflow orchestration</category><category>distributed systems</category><category>queues</category><category>saga</category><category>backend engineering</category>
     </item>
     <item>
+      <title>Topological Sort in Java: Handling Dependencies with Kahn&apos;s Algorithm</title>
+      <link>https://codesprintpro.com/blog/topological-sort-kahns-algorithm-java/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/topological-sort-kahns-algorithm-java/</guid>
+      <description>Master Topological Sort in Java using Kahn&apos;s Algorithm for ordering tasks with dependencies. Learn its intuition, implementation, dry runs, and complexity analysis for various scheduling and dependency problems.</description>
+      <pubDate>Sat, 18 Apr 2026 00:00:00 GMT</pubDate>
+      <category>DSA</category><category>dsa</category><category>java</category><category>topological sort</category><category>kahn&apos;s algorithm</category><category>graph</category><category>dag</category><category>dependency resolution</category><category>interview preparation</category><category>algorithms</category>
+    </item>
+    <item>
       <title>Two Pointers Pattern in Java: Solve Array and String Problems Efficiently</title>
       <link>https://codesprintpro.com/blog/two-pointers-pattern-java/</link>
       <guid isPermaLink="true">https://codesprintpro.com/blog/two-pointers-pattern-java/</guid>
@@ -398,14 +406,6 @@
       <description>A practical Kafka consumer lag playbook covering partition skew, slow processing, rebalances, max.poll settings, poison messages, autoscaling, metrics, and safe recovery strategies.</description>
       <pubDate>Tue, 07 Apr 2026 00:00:00 GMT</pubDate>
       <category>Messaging</category><category>kafka</category><category>consumer lag</category><category>messaging</category><category>streaming</category><category>distributed systems</category><category>production debugging</category>
-    </item>
-    <item>
-      <title>Multi-Region Architecture: Active-Active, Active-Passive, and Consistency Trade-Offs</title>
-      <link>https://codesprintpro.com/blog/multi-region-architecture-patterns/</link>
-      <guid isPermaLink="true">https://codesprintpro.com/blog/multi-region-architecture-patterns/</guid>
-      <description>A practical guide to multi-region system design: active-active vs active-passive, DNS failover, RPO/RTO, data replication, conflict resolution, global databases, and when not to go multi-region.</description>
-      <pubDate>Tue, 07 Apr 2026 00:00:00 GMT</pubDate>
-      <category>System Design</category><category>multi-region</category><category>system design</category><category>distributed systems</category><category>aws</category><category>reliability</category><category>disaster recovery</category>
     </item>
   </channel>
 </rss>
