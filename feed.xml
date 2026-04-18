@@ -24,6 +24,14 @@
       <category>DSA</category><category>dsa</category><category>java</category><category>dutch national flag</category><category>arrays</category><category>partitioning</category><category>interview preparation</category><category>algorithms</category>
     </item>
     <item>
+      <title>Fast &amp; Slow Pointers in Java: Detecting Cycles and Finding Middle Elements</title>
+      <link>https://codesprintpro.com/blog/fast-slow-pointers-java/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/fast-slow-pointers-java/</guid>
+      <description>Master the Fast &amp; Slow Pointers pattern in Java for efficient cycle detection, finding middle elements, and other linked list problems. Learn its intuition, algorithm, dry runs, and complexity analysis.</description>
+      <pubDate>Sat, 18 Apr 2026 00:00:00 GMT</pubDate>
+      <category>DSA</category><category>dsa</category><category>java</category><category>fast slow pointers</category><category>linked list</category><category>cycle detection</category><category>interview preparation</category><category>algorithms</category>
+    </item>
+    <item>
       <title>Kadane’s Algorithm in Java: Finding the Maximum Subarray Sum Efficiently</title>
       <link>https://codesprintpro.com/blog/kadanes-algorithm-java/</link>
       <guid isPermaLink="true">https://codesprintpro.com/blog/kadanes-algorithm-java/</guid>
@@ -398,14 +406,6 @@
       <description>Production Java concurrency: CompletableFuture pipelines, handling exceptions in async chains, Java 21 structured concurrency, thread-safe collection patterns, and the concurrency bugs that cause data corruption.</description>
       <pubDate>Tue, 08 Jul 2025 00:00:00 GMT</pubDate>
       <category>Java</category><category>java</category><category>concurrency</category><category>completablefuture</category><category>virtual threads</category><category>java21</category><category>thread-safe</category><category>async</category>
-    </item>
-    <item>
-      <title>Building Production Observability with OpenTelemetry and Grafana Stack</title>
-      <link>https://codesprintpro.com/blog/observability-opentelemetry-production/</link>
-      <guid isPermaLink="true">https://codesprintpro.com/blog/observability-opentelemetry-production/</guid>
-      <description>End-to-end observability implementation: distributed tracing with OpenTelemetry, metrics with Prometheus, structured logging with Loki, and the dashboards and alerts that actually help during incidents.</description>
-      <pubDate>Thu, 03 Jul 2025 00:00:00 GMT</pubDate>
-      <category>System Design</category><category>observability</category><category>opentelemetry</category><category>prometheus</category><category>grafana</category><category>loki</category><category>tracing</category><category>spring boot</category><category>monitoring</category>
     </item>
   </channel>
 </rss>
