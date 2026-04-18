@@ -40,6 +40,14 @@
       <category>DSA</category><category>dsa</category><category>java</category><category>dfs</category><category>depth first search</category><category>tree traversal</category><category>graph traversal</category><category>interview preparation</category><category>algorithms</category>
     </item>
     <item>
+      <title>Dijkstra’s Algorithm in Java: Finding Shortest Paths in Weighted Graphs</title>
+      <link>https://codesprintpro.com/blog/dijkstras-algorithm-java/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/dijkstras-algorithm-java/</guid>
+      <description>Master Dijkstra&apos;s Algorithm in Java for finding the shortest paths from a single source to all other vertices in a weighted, non-negative edge graph. Learn its intuition, implementation with a PriorityQueue, dry runs, and complexity analysis.</description>
+      <pubDate>Sat, 18 Apr 2026 00:00:00 GMT</pubDate>
+      <category>DSA</category><category>dsa</category><category>java</category><category>dijkstra</category><category>shortest path</category><category>weighted graph</category><category>priority queue</category><category>interview preparation</category><category>algorithms</category>
+    </item>
+    <item>
       <title>Dutch National Flag Pattern in Java: Efficient Three-Way Partitioning</title>
       <link>https://codesprintpro.com/blog/dutch-national-flag-pattern-java/</link>
       <guid isPermaLink="true">https://codesprintpro.com/blog/dutch-national-flag-pattern-java/</guid>
@@ -398,14 +406,6 @@
       <description>A practical guide to cache invalidation in production systems: TTLs, cache-aside, write-through, versioned keys, event-driven eviction, stampede prevention, and stale-read tradeoffs.</description>
       <pubDate>Tue, 07 Apr 2026 00:00:00 GMT</pubDate>
       <category>Databases</category><category>cache invalidation</category><category>redis</category><category>caching</category><category>distributed systems</category><category>performance</category><category>backend engineering</category>
-    </item>
-    <item>
-      <title>Database Connection Pool Tuning: HikariCP, PostgreSQL, and Traffic Spikes</title>
-      <link>https://codesprintpro.com/blog/database-connection-pool-tuning/</link>
-      <guid isPermaLink="true">https://codesprintpro.com/blog/database-connection-pool-tuning/</guid>
-      <description>A practical guide to tuning database connection pools for Spring Boot services: pool sizing, HikariCP settings, PostgreSQL limits, slow query impact, metrics, and production failure modes.</description>
-      <pubDate>Tue, 07 Apr 2026 00:00:00 GMT</pubDate>
-      <category>Java</category><category>spring boot</category><category>hikaricp</category><category>postgresql</category><category>database</category><category>performance</category><category>connection pooling</category>
     </item>
   </channel>
 </rss>
