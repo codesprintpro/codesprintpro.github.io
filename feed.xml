@@ -8,6 +8,14 @@
     <lastBuildDate>Sat, 18 Apr 2026 00:00:00 GMT</lastBuildDate>
     <atom:link href="https://codesprintpro.com/feed.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>System Design: Building a Distributed Tracing Platform</title>
+      <link>https://codesprintpro.com/blog/system-design-distributed-tracing-platform/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/system-design-distributed-tracing-platform/</guid>
+      <description>Design a production distributed tracing platform with trace ingestion, context propagation, sampling, span storage, trace query, retention, tenant isolation, and cost controls.</description>
+      <pubDate>Sat, 18 Apr 2026 00:00:00 GMT</pubDate>
+      <category>System Design</category><category>system design</category><category>distributed tracing</category><category>observability</category><category>opentelemetry</category><category>jaeger</category><category>distributed systems</category><category>backend engineering</category>
+    </item>
+    <item>
       <title>System Design: Building a Service Discovery Platform</title>
       <link>https://codesprintpro.com/blog/system-design-service-discovery-platform/</link>
       <guid isPermaLink="true">https://codesprintpro.com/blog/system-design-service-discovery-platform/</guid>
@@ -398,14 +406,6 @@
       <description>How the JVM allocates memory, how G1GC and ZGC work under the hood, heap analysis with JVM tools, and the GC tuning decisions that eliminate latency spikes in production Java services.</description>
       <pubDate>Fri, 13 Jun 2025 00:00:00 GMT</pubDate>
       <category>Java</category><category>java</category><category>jvm</category><category>garbage collection</category><category>g1gc</category><category>zgc</category><category>heap</category><category>memory management</category><category>performance</category>
-    </item>
-    <item>
-      <title>Kubernetes in Production: Patterns Every Backend Engineer Must Know</title>
-      <link>https://codesprintpro.com/blog/kubernetes-production-best-practices/</link>
-      <guid isPermaLink="true">https://codesprintpro.com/blog/kubernetes-production-best-practices/</guid>
-      <description>Resource requests and limits, liveness vs readiness probes, rolling deployments, HPA configuration, pod disruption budgets, and the mistakes that cause production outages in Kubernetes.</description>
-      <pubDate>Sun, 08 Jun 2025 00:00:00 GMT</pubDate>
-      <category>AWS</category><category>kubernetes</category><category>k8s</category><category>devops</category><category>containers</category><category>deployment</category><category>aws</category><category>eks</category>
     </item>
   </channel>
 </rss>
