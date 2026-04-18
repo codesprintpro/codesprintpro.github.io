@@ -16,6 +16,14 @@
       <category>DSA</category><category>dsa</category><category>java</category><category>big-o</category><category>time complexity</category><category>space complexity</category><category>interview preparation</category><category>algorithms</category>
     </item>
     <item>
+      <title>Sliding Window Pattern in Java: Efficiently Solve Array and String Subarray Problems</title>
+      <link>https://codesprintpro.com/blog/sliding-window-pattern-java/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/sliding-window-pattern-java/</guid>
+      <description>Master the sliding window pattern in Java for array and string problems. Learn fixed and variable-size windows, dry runs, and complexity analysis for optimal solutions.</description>
+      <pubDate>Sat, 18 Apr 2026 00:00:00 GMT</pubDate>
+      <category>DSA</category><category>dsa</category><category>java</category><category>sliding window</category><category>arrays</category><category>strings</category><category>interview preparation</category><category>algorithms</category>
+    </item>
+    <item>
       <title>System Design: Building a Distributed Tracing Platform</title>
       <link>https://codesprintpro.com/blog/system-design-distributed-tracing-platform/</link>
       <guid isPermaLink="true">https://codesprintpro.com/blog/system-design-distributed-tracing-platform/</guid>
@@ -398,14 +406,6 @@
       <description>Apache Cassandra data modeling from first principles: partition key design, clustering columns, denormalization strategies, avoiding hot partitions, materialized views vs. manual duplication, and the anti-patterns that kill Cassandra performance.</description>
       <pubDate>Wed, 18 Jun 2025 00:00:00 GMT</pubDate>
       <category>Databases</category><category>cassandra</category><category>nosql</category><category>data modeling</category><category>distributed databases</category><category>partition key</category><category>cql</category><category>time series</category>
-    </item>
-    <item>
-      <title>gRPC vs REST vs GraphQL: Choosing the Right API Protocol</title>
-      <link>https://codesprintpro.com/blog/grpc-vs-rest-vs-graphql/</link>
-      <guid isPermaLink="true">https://codesprintpro.com/blog/grpc-vs-rest-vs-graphql/</guid>
-      <description>A technical comparison of REST, gRPC, and GraphQL across performance, developer experience, schema evolution, streaming, and real production use cases. When each protocol wins and where each falls short.</description>
-      <pubDate>Wed, 18 Jun 2025 00:00:00 GMT</pubDate>
-      <category>System Design</category><category>grpc</category><category>rest</category><category>graphql</category><category>api design</category><category>system design</category><category>microservices</category><category>protocol buffers</category>
     </item>
   </channel>
 </rss>
