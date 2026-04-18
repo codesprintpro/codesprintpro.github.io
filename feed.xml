@@ -24,6 +24,14 @@
       <category>DSA</category><category>dsa</category><category>java</category><category>binary search</category><category>arrays</category><category>searching</category><category>interview preparation</category><category>algorithms</category>
     </item>
     <item>
+      <title>DFS (Depth First Search) in Java: Tree and Graph Traversals</title>
+      <link>https://codesprintpro.com/blog/dfs-tree-graph-traversals-java/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/dfs-tree-graph-traversals-java/</guid>
+      <description>Master Depth First Search (DFS) in Java for traversing trees and graphs. Learn its intuition, iterative and recursive implementations, dry runs, and complexity analysis for various applications.</description>
+      <pubDate>Sat, 18 Apr 2026 00:00:00 GMT</pubDate>
+      <category>DSA</category><category>dsa</category><category>java</category><category>dfs</category><category>depth first search</category><category>tree traversal</category><category>graph traversal</category><category>interview preparation</category><category>algorithms</category>
+    </item>
+    <item>
       <title>Dutch National Flag Pattern in Java: Efficient Three-Way Partitioning</title>
       <link>https://codesprintpro.com/blog/dutch-national-flag-pattern-java/</link>
       <guid isPermaLink="true">https://codesprintpro.com/blog/dutch-national-flag-pattern-java/</guid>
@@ -398,14 +406,6 @@
       <description>A practical incident response playbook for backend engineers: how to triage production latency, error-rate spikes, database issues, queue backlogs, and rollback decisions without guessing under pressure.</description>
       <pubDate>Tue, 07 Apr 2026 00:00:00 GMT</pubDate>
       <category>System Design</category><category>incident response</category><category>production debugging</category><category>observability</category><category>sre</category><category>backend engineering</category><category>playbooks</category>
-    </item>
-    <item>
-      <title>Spring Boot Production Readiness Checklist: Timeouts, Pools, Health Checks, and Observability</title>
-      <link>https://codesprintpro.com/blog/spring-boot-production-readiness-checklist/</link>
-      <guid isPermaLink="true">https://codesprintpro.com/blog/spring-boot-production-readiness-checklist/</guid>
-      <description>A practical Spring Boot production checklist covering HTTP timeouts, HikariCP, thread pools, Actuator health checks, graceful shutdown, structured logging, metrics, resilience, and deployment safety.</description>
-      <pubDate>Tue, 07 Apr 2026 00:00:00 GMT</pubDate>
-      <category>Java</category><category>spring boot</category><category>production readiness</category><category>java</category><category>observability</category><category>resilience</category><category>backend engineering</category>
     </item>
   </channel>
 </rss>
