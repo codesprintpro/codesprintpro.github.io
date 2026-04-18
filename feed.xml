@@ -56,6 +56,14 @@
       <category>DSA</category><category>dsa</category><category>java</category><category>kadane&apos;s algorithm</category><category>arrays</category><category>dynamic programming</category><category>interview preparation</category><category>algorithms</category>
     </item>
     <item>
+      <title>Monotonic Queue Pattern in Java: Efficiently Solving Sliding Window Maximum</title>
+      <link>https://codesprintpro.com/blog/monotonic-queue-pattern-java/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/monotonic-queue-pattern-java/</guid>
+      <description>Master the Monotonic Queue pattern in Java for efficiently solving sliding window maximum/minimum problems. Learn its intuition, algorithm, dry runs, and complexity analysis.</description>
+      <pubDate>Sat, 18 Apr 2026 00:00:00 GMT</pubDate>
+      <category>DSA</category><category>dsa</category><category>java</category><category>monotonic queue</category><category>queue</category><category>sliding window</category><category>deque</category><category>interview preparation</category><category>algorithms</category>
+    </item>
+    <item>
       <title>Monotonic Stack Pattern in Java: Efficiently Finding Next Greater/Smaller Elements</title>
       <link>https://codesprintpro.com/blog/monotonic-stack-pattern-java/</link>
       <guid isPermaLink="true">https://codesprintpro.com/blog/monotonic-stack-pattern-java/</guid>
@@ -398,14 +406,6 @@
       <description>A practical Spring Boot production checklist covering HTTP timeouts, HikariCP, thread pools, Actuator health checks, graceful shutdown, structured logging, metrics, resilience, and deployment safety.</description>
       <pubDate>Tue, 07 Apr 2026 00:00:00 GMT</pubDate>
       <category>Java</category><category>spring boot</category><category>production readiness</category><category>java</category><category>observability</category><category>resilience</category><category>backend engineering</category>
-    </item>
-    <item>
-      <title>System Design: Building an Audit Log System for Compliance and Debugging</title>
-      <link>https://codesprintpro.com/blog/system-design-audit-log-system/</link>
-      <guid isPermaLink="true">https://codesprintpro.com/blog/system-design-audit-log-system/</guid>
-      <description>Design a production audit log system with immutable events, schema design, write paths, search, retention, tamper resistance, PII controls, partitioning, and compliance tradeoffs.</description>
-      <pubDate>Tue, 07 Apr 2026 00:00:00 GMT</pubDate>
-      <category>System Design</category><category>system design</category><category>audit logs</category><category>compliance</category><category>security</category><category>event architecture</category><category>backend engineering</category>
     </item>
   </channel>
 </rss>
