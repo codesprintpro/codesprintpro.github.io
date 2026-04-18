@@ -16,6 +16,14 @@
       <category>DSA</category><category>dsa</category><category>java</category><category>big-o</category><category>time complexity</category><category>space complexity</category><category>interview preparation</category><category>algorithms</category>
     </item>
     <item>
+      <title>Kadane’s Algorithm in Java: Finding the Maximum Subarray Sum Efficiently</title>
+      <link>https://codesprintpro.com/blog/kadanes-algorithm-java/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/kadanes-algorithm-java/</guid>
+      <description>Master Kadane&apos;s Algorithm in Java to find the maximum sum of a contiguous subarray. Learn its intuition, dynamic programming approach, dry runs, and complexity analysis for optimal solutions.</description>
+      <pubDate>Sat, 18 Apr 2026 00:00:00 GMT</pubDate>
+      <category>DSA</category><category>dsa</category><category>java</category><category>kadane&apos;s algorithm</category><category>arrays</category><category>dynamic programming</category><category>interview preparation</category><category>algorithms</category>
+    </item>
+    <item>
       <title>Prefix Sum Pattern in Java: Efficiently Calculate Range Sums and Subarray Properties</title>
       <link>https://codesprintpro.com/blog/prefix-sum-pattern-java/</link>
       <guid isPermaLink="true">https://codesprintpro.com/blog/prefix-sum-pattern-java/</guid>
@@ -398,14 +406,6 @@
       <description>How Lambda execution environments work, cold start mitigation strategies, concurrency limits and throttling, Lambda power tuning, VPC networking costs, and when Lambda is the wrong tool.</description>
       <pubDate>Sat, 28 Jun 2025 00:00:00 GMT</pubDate>
       <category>AWS</category><category>aws</category><category>lambda</category><category>serverless</category><category>java</category><category>cold start</category><category>performance</category><category>cost optimization</category>
-    </item>
-    <item>
-      <title>Event Sourcing and CQRS in Production: Beyond the Theory</title>
-      <link>https://codesprintpro.com/blog/event-sourcing-cqrs-production/</link>
-      <guid isPermaLink="true">https://codesprintpro.com/blog/event-sourcing-cqrs-production/</guid>
-      <description>What event sourcing actually looks like in production Java systems: event store design, snapshot strategies, projection rebuilding, CQRS read model synchronization, and the operational challenges nobody talks about.</description>
-      <pubDate>Mon, 23 Jun 2025 00:00:00 GMT</pubDate>
-      <category>System Design</category><category>event sourcing</category><category>cqrs</category><category>system design</category><category>java</category><category>distributed systems</category><category>kafka</category><category>spring boot</category>
     </item>
   </channel>
 </rss>
