@@ -160,6 +160,14 @@
       <category>DSA</category><category>dsa</category><category>java</category><category>two pointers</category><category>arrays</category><category>strings</category><category>interview preparation</category><category>algorithms</category>
     </item>
     <item>
+      <title>Union Find (DSU) in Java: Connectivity and Cycle Detection</title>
+      <link>https://codesprintpro.com/blog/union-find-dsu-java/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/union-find-dsu-java/</guid>
+      <description>Master the Union Find (Disjoint Set Union) data structure in Java for efficiently managing disjoint sets, checking connectivity, and detecting cycles in undirected graphs. Learn its intuition, implementation, dry runs, and complexity analysis.</description>
+      <pubDate>Sat, 18 Apr 2026 00:00:00 GMT</pubDate>
+      <category>DSA</category><category>dsa</category><category>java</category><category>union find</category><category>disjoint set union</category><category>dsu</category><category>graph</category><category>connectivity</category><category>cycle detection</category><category>interview preparation</category><category>algorithms</category>
+    </item>
+    <item>
       <title>System Design: Building a Distributed Cache</title>
       <link>https://codesprintpro.com/blog/system-design-distributed-cache/</link>
       <guid isPermaLink="true">https://codesprintpro.com/blog/system-design-distributed-cache/</guid>
@@ -398,14 +406,6 @@
       <description>A practical guide to tuning database connection pools for Spring Boot services: pool sizing, HikariCP settings, PostgreSQL limits, slow query impact, metrics, and production failure modes.</description>
       <pubDate>Tue, 07 Apr 2026 00:00:00 GMT</pubDate>
       <category>Java</category><category>spring boot</category><category>hikaricp</category><category>postgresql</category><category>database</category><category>performance</category><category>connection pooling</category>
-    </item>
-    <item>
-      <title>Kafka Consumer Lag: Causes, Diagnosis, and Production Fixes</title>
-      <link>https://codesprintpro.com/blog/kafka-consumer-lag-playbook/</link>
-      <guid isPermaLink="true">https://codesprintpro.com/blog/kafka-consumer-lag-playbook/</guid>
-      <description>A practical Kafka consumer lag playbook covering partition skew, slow processing, rebalances, max.poll settings, poison messages, autoscaling, metrics, and safe recovery strategies.</description>
-      <pubDate>Tue, 07 Apr 2026 00:00:00 GMT</pubDate>
-      <category>Messaging</category><category>kafka</category><category>consumer lag</category><category>messaging</category><category>streaming</category><category>distributed systems</category><category>production debugging</category>
     </item>
   </channel>
 </rss>
