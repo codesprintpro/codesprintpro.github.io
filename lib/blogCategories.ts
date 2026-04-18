@@ -40,6 +40,19 @@ export const BLOG_CATEGORIES: BlogCategoryMeta[] = [
       'Practical Java and Spring Boot articles on JVM tuning, virtual threads, performance, production readiness, connection pools, and backend engineering.',
   },
   {
+    name: 'DSA',
+    slug: 'dsa',
+    icon: '🧠',
+    color: 'bg-indigo-50',
+    border: 'border-indigo-200',
+    accent: 'text-indigo-700',
+    description:
+      'A Java-first DSA series covering complexity, patterns, data structures, dry runs, and interview problem-solving without hand-wavy explanations.',
+    seoTitle: 'DSA in Java Series | CodeSprintPro',
+    seoDescription:
+      'Learn data structures and algorithms in Java with practical guides on Big-O, two pointers, binary search, sliding window, trees, graphs, and interview patterns.',
+  },
+  {
     name: 'Databases',
     slug: 'databases',
     icon: '🗄️',

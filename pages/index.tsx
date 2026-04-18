@@ -40,6 +40,16 @@ const LEARNING_PATHS = [
     ],
   },
   {
+    title: 'DSA in Java',
+    description: 'A step-by-step interview track for complexity analysis, core patterns, and clean Java solutions.',
+    href: getCategoryHref('DSA'),
+    links: [
+      { label: 'DSA Series', href: getCategoryHref('DSA') },
+      { label: 'Big-O in Java', href: '/blog/big-o-notation-java-interview-problem-solving/' },
+      { label: 'Two Pointers Pattern', href: '/blog/two-pointers-pattern-java/' },
+    ],
+  },
+  {
     title: 'Data & Caching',
     description: 'Database performance, cache invalidation, indexing, and production data access patterns.',
     href: getCategoryHref('Databases'),
@@ -85,10 +95,10 @@ export default function Home({ latestPosts, categories, totalArticles }: HomePro
   return (
     <>
       <Head>
-        <title>CodeSprintPro — Tech Blog Hub | System Design, Java, Distributed Systems</title>
+        <title>CodeSprintPro — Tech Blog Hub | System Design, DSA, Java, Distributed Systems</title>
         <meta
           name="description"
-          content="Deep-dive technical articles on Kafka, Redis, System Design, Java 21, AI/ML, and AWS architecture by Sachin Sarawgi — Engineering Manager with 10+ years at scale."
+          content="Deep-dive technical articles on DSA, System Design, Kafka, Redis, Java 21, AI/ML, and AWS architecture by Sachin Sarawgi — Engineering Manager with 10+ years at scale."
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="canonical" href="https://codesprintpro.com/" />
@@ -114,7 +124,7 @@ export default function Home({ latestPosts, categories, totalArticles }: HomePro
         <meta property="og:title" content="CodeSprintPro — Tech Blog Hub" />
         <meta
           property="og:description"
-          content="Deep-dive articles on System Design, Java, Kafka, Redis, AI/ML and AWS by Sachin Sarawgi."
+          content="Deep-dive articles on DSA, System Design, Java, Kafka, Redis, AI/ML and AWS by Sachin Sarawgi."
         />
         <meta property="og:url" content="https://codesprintpro.com/" />
         <meta property="og:image" content="https://codesprintpro.com/images/profile.jpg" />
@@ -228,7 +238,7 @@ export default function Home({ latestPosts, categories, totalArticles }: HomePro
                 </Link>
               </motion.div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-5">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-6 gap-5">
                 {LEARNING_PATHS.map((path, index) => (
                   <motion.article
                     key={path.title}

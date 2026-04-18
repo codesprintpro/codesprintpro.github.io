@@ -9,6 +9,7 @@ import readingTime from 'reading-time'
 export type BlogCategory =
   | 'System Design'
   | 'Java'
+  | 'DSA'
   | 'Databases'
   | 'AI/ML'
   | 'AWS'

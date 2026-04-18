@@ -37,7 +37,7 @@ export const Footer: React.FC = () => {
               </Link>
             </motion.div>
             <p className="text-gray-400 text-sm mb-4 leading-relaxed">
-              Deep-dive technical content on System Design, Java, Databases, AI/ML, and AWS — by Sachin Sarawgi.
+              Deep-dive technical content on System Design, DSA, Java, Databases, AI/ML, and AWS — by Sachin Sarawgi.
             </p>
             <div className="flex space-x-4">
               {socialLinks.map((link) => (
