@@ -16,6 +16,14 @@
       <category>DSA</category><category>dsa</category><category>java</category><category>big-o</category><category>time complexity</category><category>space complexity</category><category>interview preparation</category><category>algorithms</category>
     </item>
     <item>
+      <title>Binary Search Pattern in Java: Efficiently Searching Sorted Data</title>
+      <link>https://codesprintpro.com/blog/binary-search-pattern-java/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/binary-search-pattern-java/</guid>
+      <description>Master the Binary Search pattern in Java for efficiently searching sorted arrays. Learn its intuition, algorithm, dry runs, and variations like searching in rotated arrays and on answers.</description>
+      <pubDate>Sat, 18 Apr 2026 00:00:00 GMT</pubDate>
+      <category>DSA</category><category>dsa</category><category>java</category><category>binary search</category><category>arrays</category><category>searching</category><category>interview preparation</category><category>algorithms</category>
+    </item>
+    <item>
       <title>Dutch National Flag Pattern in Java: Efficient Three-Way Partitioning</title>
       <link>https://codesprintpro.com/blog/dutch-national-flag-pattern-java/</link>
       <guid isPermaLink="true">https://codesprintpro.com/blog/dutch-national-flag-pattern-java/</guid>
@@ -398,14 +406,6 @@
       <description>A production guide to the transactional outbox pattern: schema design, polling publishers, Debezium CDC, Kafka publishing, retries, ordering, cleanup, and exactly-once myths.</description>
       <pubDate>Tue, 07 Apr 2026 00:00:00 GMT</pubDate>
       <category>System Design</category><category>transactional outbox</category><category>kafka</category><category>event driven architecture</category><category>distributed systems</category><category>debezium</category><category>reliability</category>
-    </item>
-    <item>
-      <title>Using Open Source Models with Claude Code: A Developer&apos;s Guide</title>
-      <link>https://codesprintpro.com/blog/open-source-models-with-claude-code/</link>
-      <guid isPermaLink="true">https://codesprintpro.com/blog/open-source-models-with-claude-code/</guid>
-      <description>Learn how to leverage open source AI models with Claude Code CLI for enhanced productivity, from local inference to custom agents. Perfect for developers who value privacy and customization.</description>
-      <pubDate>Sun, 22 Mar 2026 00:00:00 GMT</pubDate>
-      <category>AI/ML</category><category>claude code</category><category>open source</category><category>llm</category><category>local inference</category><category>ai agents</category><category>ollama</category><category>llama.cpp</category>
     </item>
   </channel>
 </rss>
