@@ -24,6 +24,14 @@
       <category>System Design</category><category>system design</category><category>session management</category><category>authentication</category><category>security</category><category>distributed systems</category><category>backend engineering</category>
     </item>
     <item>
+      <title>System Design: Building a Workflow Orchestration Platform</title>
+      <link>https://codesprintpro.com/blog/system-design-workflow-orchestration-platform/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/system-design-workflow-orchestration-platform/</guid>
+      <description>Design a production workflow orchestration platform with durable workflow state, retries, compensation, timeouts, signals, timers, idempotent activities, and operational recovery.</description>
+      <pubDate>Sat, 18 Apr 2026 00:00:00 GMT</pubDate>
+      <category>System Design</category><category>system design</category><category>workflow orchestration</category><category>distributed systems</category><category>queues</category><category>saga</category><category>backend engineering</category>
+    </item>
+    <item>
       <title>System Design: Building a Distributed Cache</title>
       <link>https://codesprintpro.com/blog/system-design-distributed-cache/</link>
       <guid isPermaLink="true">https://codesprintpro.com/blog/system-design-distributed-cache/</guid>
@@ -398,14 +406,6 @@
       <description>Resource requests and limits, liveness vs readiness probes, rolling deployments, HPA configuration, pod disruption budgets, and the mistakes that cause production outages in Kubernetes.</description>
       <pubDate>Sun, 08 Jun 2025 00:00:00 GMT</pubDate>
       <category>AWS</category><category>kubernetes</category><category>k8s</category><category>devops</category><category>containers</category><category>deployment</category><category>aws</category><category>eks</category>
-    </item>
-    <item>
-      <title>Zero-Downtime Database Migrations: Patterns for Production</title>
-      <link>https://codesprintpro.com/blog/zero-downtime-database-migrations/</link>
-      <guid isPermaLink="true">https://codesprintpro.com/blog/zero-downtime-database-migrations/</guid>
-      <description>How to safely migrate production databases without downtime: expand-contract pattern, backward-compatible schema changes, rolling deployments with dual-write, column renaming strategies, and the PostgreSQL-specific techniques for large table alterations.</description>
-      <pubDate>Sun, 08 Jun 2025 00:00:00 GMT</pubDate>
-      <category>Databases</category><category>database</category><category>migrations</category><category>postgresql</category><category>zero downtime</category><category>devops</category><category>schema evolution</category><category>flyway</category><category>liquibase</category>
     </item>
   </channel>
 </rss>
