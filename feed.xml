@@ -5,8 +5,16 @@
     <link>https://codesprintpro.com/blog/</link>
     <description>Practical backend engineering, system design, Java, databases, AWS, messaging, and AI infrastructure guides.</description>
     <language>en-us</language>
-    <lastBuildDate>Fri, 10 Apr 2026 00:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Sat, 18 Apr 2026 00:00:00 GMT</lastBuildDate>
     <atom:link href="https://codesprintpro.com/feed.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>System Design: Building a Session Management Platform</title>
+      <link>https://codesprintpro.com/blog/system-design-session-management-platform/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/system-design-session-management-platform/</guid>
+      <description>Design a production session management platform with login sessions, refresh tokens, revocation, multi-device control, risk signals, expiry, and safe cache-backed validation.</description>
+      <pubDate>Sat, 18 Apr 2026 00:00:00 GMT</pubDate>
+      <category>System Design</category><category>system design</category><category>session management</category><category>authentication</category><category>security</category><category>distributed systems</category><category>backend engineering</category>
+    </item>
     <item>
       <title>System Design: Building a Distributed Cache</title>
       <link>https://codesprintpro.com/blog/system-design-distributed-cache/</link>
@@ -398,14 +406,6 @@
       <description>A production guide to PostgreSQL query optimization: EXPLAIN ANALYZE, index design, VACUUM tuning, connection pooling with PgBouncer, partitioning, and the configuration changes that actually move the needle.</description>
       <pubDate>Tue, 03 Jun 2025 00:00:00 GMT</pubDate>
       <category>Databases</category><category>postgresql</category><category>databases</category><category>performance</category><category>sql</category><category>indexing</category><category>query optimization</category>
-    </item>
-    <item>
-      <title>Spring Security OAuth2 and JWT: Production Implementation Guide</title>
-      <link>https://codesprintpro.com/blog/spring-security-oauth2-jwt/</link>
-      <guid isPermaLink="true">https://codesprintpro.com/blog/spring-security-oauth2-jwt/</guid>
-      <description>Complete Spring Security OAuth2 implementation: JWT token validation, Resource Server configuration, method-level security, custom UserDetailsService, refresh token rotation, and the security pitfalls that lead to authentication bypasses.</description>
-      <pubDate>Tue, 03 Jun 2025 00:00:00 GMT</pubDate>
-      <category>Java</category><category>spring security</category><category>oauth2</category><category>jwt</category><category>spring boot</category><category>authentication</category><category>authorization</category><category>java</category><category>security</category>
     </item>
   </channel>
 </rss>
