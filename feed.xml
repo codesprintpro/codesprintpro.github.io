@@ -32,6 +32,14 @@
       <category>DSA</category><category>dsa</category><category>java</category><category>fast slow pointers</category><category>linked list</category><category>cycle detection</category><category>interview preparation</category><category>algorithms</category>
     </item>
     <item>
+      <title>In-place Reversal of a Linked List in Java: Efficient Memory Management</title>
+      <link>https://codesprintpro.com/blog/in-place-linked-list-reversal-java/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/in-place-linked-list-reversal-java/</guid>
+      <description>Master the in-place reversal of a linked list in Java. Learn the iterative and recursive approaches, their intuition, dry runs, and complexity analysis for optimal memory usage.</description>
+      <pubDate>Sat, 18 Apr 2026 00:00:00 GMT</pubDate>
+      <category>DSA</category><category>dsa</category><category>java</category><category>linked list</category><category>in-place reversal</category><category>interview preparation</category><category>algorithms</category>
+    </item>
+    <item>
       <title>Kadane’s Algorithm in Java: Finding the Maximum Subarray Sum Efficiently</title>
       <link>https://codesprintpro.com/blog/kadanes-algorithm-java/</link>
       <guid isPermaLink="true">https://codesprintpro.com/blog/kadanes-algorithm-java/</guid>
@@ -398,14 +406,6 @@
       <description>Learn how to leverage open source AI models with Claude Code CLI for enhanced productivity, from local inference to custom agents. Perfect for developers who value privacy and customization.</description>
       <pubDate>Sun, 22 Mar 2026 00:00:00 GMT</pubDate>
       <category>AI/ML</category><category>claude code</category><category>open source</category><category>llm</category><category>local inference</category><category>ai agents</category><category>ollama</category><category>llama.cpp</category>
-    </item>
-    <item>
-      <title>Java Concurrency Patterns: CompletableFuture, Structured Concurrency, and Thread-Safe Design</title>
-      <link>https://codesprintpro.com/blog/java-concurrency-patterns/</link>
-      <guid isPermaLink="true">https://codesprintpro.com/blog/java-concurrency-patterns/</guid>
-      <description>Production Java concurrency: CompletableFuture pipelines, handling exceptions in async chains, Java 21 structured concurrency, thread-safe collection patterns, and the concurrency bugs that cause data corruption.</description>
-      <pubDate>Tue, 08 Jul 2025 00:00:00 GMT</pubDate>
-      <category>Java</category><category>java</category><category>concurrency</category><category>completablefuture</category><category>virtual threads</category><category>java21</category><category>thread-safe</category><category>async</category>
     </item>
   </channel>
 </rss>
