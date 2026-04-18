@@ -56,6 +56,14 @@
       <category>DSA</category><category>dsa</category><category>java</category><category>kadane&apos;s algorithm</category><category>arrays</category><category>dynamic programming</category><category>interview preparation</category><category>algorithms</category>
     </item>
     <item>
+      <title>Monotonic Stack Pattern in Java: Efficiently Finding Next Greater/Smaller Elements</title>
+      <link>https://codesprintpro.com/blog/monotonic-stack-pattern-java/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/monotonic-stack-pattern-java/</guid>
+      <description>Master the Monotonic Stack pattern in Java for efficiently solving problems like Next Greater Element, Next Smaller Element, and related array/list challenges. Learn its intuition, algorithm, dry runs, and complexity analysis.</description>
+      <pubDate>Sat, 18 Apr 2026 00:00:00 GMT</pubDate>
+      <category>DSA</category><category>dsa</category><category>java</category><category>monotonic stack</category><category>stack</category><category>arrays</category><category>interview preparation</category><category>algorithms</category>
+    </item>
+    <item>
       <title>Prefix Sum Pattern in Java: Efficiently Calculate Range Sums and Subarray Properties</title>
       <link>https://codesprintpro.com/blog/prefix-sum-pattern-java/</link>
       <guid isPermaLink="true">https://codesprintpro.com/blog/prefix-sum-pattern-java/</guid>
@@ -398,14 +406,6 @@
       <description>Design a production audit log system with immutable events, schema design, write paths, search, retention, tamper resistance, PII controls, partitioning, and compliance tradeoffs.</description>
       <pubDate>Tue, 07 Apr 2026 00:00:00 GMT</pubDate>
       <category>System Design</category><category>system design</category><category>audit logs</category><category>compliance</category><category>security</category><category>event architecture</category><category>backend engineering</category>
-    </item>
-    <item>
-      <title>System Design: Building a Feature Store for Real-Time Machine Learning</title>
-      <link>https://codesprintpro.com/blog/system-design-real-time-feature-store/</link>
-      <guid isPermaLink="true">https://codesprintpro.com/blog/system-design-real-time-feature-store/</guid>
-      <description>Design a practical feature store for production ML systems: offline and online features, point-in-time correctness, streaming updates, Redis/DynamoDB serving, monitoring, and training-serving skew.</description>
-      <pubDate>Tue, 07 Apr 2026 00:00:00 GMT</pubDate>
-      <category>AI/ML</category><category>feature store</category><category>machine learning</category><category>system design</category><category>real-time ml</category><category>data engineering</category><category>ml infrastructure</category>
     </item>
   </channel>
 </rss>
