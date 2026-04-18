@@ -72,6 +72,14 @@
       <category>DSA</category><category>dsa</category><category>java</category><category>sliding window</category><category>arrays</category><category>strings</category><category>interview preparation</category><category>algorithms</category>
     </item>
     <item>
+      <title>Sorting Algorithms in Java: QuickSort, MergeSort, and HeapSort Explained</title>
+      <link>https://codesprintpro.com/blog/sorting-algorithms-java/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/sorting-algorithms-java/</guid>
+      <description>Master fundamental sorting algorithms in Java: QuickSort, MergeSort, and HeapSort. Learn their intuition, implementation, complexity analysis, and when to use each for optimal performance.</description>
+      <pubDate>Sat, 18 Apr 2026 00:00:00 GMT</pubDate>
+      <category>DSA</category><category>dsa</category><category>java</category><category>sorting algorithms</category><category>quicksort</category><category>mergesort</category><category>heapsort</category><category>interview preparation</category><category>algorithms</category>
+    </item>
+    <item>
       <title>System Design: Building a Distributed Tracing Platform</title>
       <link>https://codesprintpro.com/blog/system-design-distributed-tracing-platform/</link>
       <guid isPermaLink="true">https://codesprintpro.com/blog/system-design-distributed-tracing-platform/</guid>
@@ -398,14 +406,6 @@
       <description>Design a practical feature store for production ML systems: offline and online features, point-in-time correctness, streaming updates, Redis/DynamoDB serving, monitoring, and training-serving skew.</description>
       <pubDate>Tue, 07 Apr 2026 00:00:00 GMT</pubDate>
       <category>AI/ML</category><category>feature store</category><category>machine learning</category><category>system design</category><category>real-time ml</category><category>data engineering</category><category>ml infrastructure</category>
-    </item>
-    <item>
-      <title>Transactional Outbox Pattern: Reliable Event Publishing Without Dual Writes</title>
-      <link>https://codesprintpro.com/blog/transactional-outbox-pattern/</link>
-      <guid isPermaLink="true">https://codesprintpro.com/blog/transactional-outbox-pattern/</guid>
-      <description>A production guide to the transactional outbox pattern: schema design, polling publishers, Debezium CDC, Kafka publishing, retries, ordering, cleanup, and exactly-once myths.</description>
-      <pubDate>Tue, 07 Apr 2026 00:00:00 GMT</pubDate>
-      <category>System Design</category><category>transactional outbox</category><category>kafka</category><category>event driven architecture</category><category>distributed systems</category><category>debezium</category><category>reliability</category>
     </item>
   </channel>
 </rss>
