@@ -8,6 +8,14 @@
     <lastBuildDate>Sat, 18 Apr 2026 00:00:00 GMT</lastBuildDate>
     <atom:link href="https://codesprintpro.com/feed.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>BFS (Breadth First Search) in Java: Level-Order and Shortest Path</title>
+      <link>https://codesprintpro.com/blog/bfs-tree-graph-traversals-java/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/bfs-tree-graph-traversals-java/</guid>
+      <description>Master Breadth First Search (BFS) in Java for traversing trees and graphs. Learn its intuition, iterative implementation, dry runs, and complexity analysis for level-order traversal and shortest path problems.</description>
+      <pubDate>Sat, 18 Apr 2026 00:00:00 GMT</pubDate>
+      <category>DSA</category><category>dsa</category><category>java</category><category>bfs</category><category>breadth first search</category><category>tree traversal</category><category>graph traversal</category><category>shortest path</category><category>level order</category><category>interview preparation</category><category>algorithms</category>
+    </item>
+    <item>
       <title>Big-O Notation in Java: Time and Space Complexity for Interview Problem Solving</title>
       <link>https://codesprintpro.com/blog/big-o-notation-java-interview-problem-solving/</link>
       <guid isPermaLink="true">https://codesprintpro.com/blog/big-o-notation-java-interview-problem-solving/</guid>
@@ -398,14 +406,6 @@
       <description>A practical guide to multi-region system design: active-active vs active-passive, DNS failover, RPO/RTO, data replication, conflict resolution, global databases, and when not to go multi-region.</description>
       <pubDate>Tue, 07 Apr 2026 00:00:00 GMT</pubDate>
       <category>System Design</category><category>multi-region</category><category>system design</category><category>distributed systems</category><category>aws</category><category>reliability</category><category>disaster recovery</category>
-    </item>
-    <item>
-      <title>Production Incident Playbooks: Debugging Latency, Errors, and Traffic Spikes</title>
-      <link>https://codesprintpro.com/blog/production-incident-playbooks/</link>
-      <guid isPermaLink="true">https://codesprintpro.com/blog/production-incident-playbooks/</guid>
-      <description>A practical incident response playbook for backend engineers: how to triage production latency, error-rate spikes, database issues, queue backlogs, and rollback decisions without guessing under pressure.</description>
-      <pubDate>Tue, 07 Apr 2026 00:00:00 GMT</pubDate>
-      <category>System Design</category><category>incident response</category><category>production debugging</category><category>observability</category><category>sre</category><category>backend engineering</category><category>playbooks</category>
     </item>
   </channel>
 </rss>
