@@ -16,6 +16,14 @@
       <category>DSA</category><category>dsa</category><category>java</category><category>big-o</category><category>time complexity</category><category>space complexity</category><category>interview preparation</category><category>algorithms</category>
     </item>
     <item>
+      <title>Dutch National Flag Pattern in Java: Efficient Three-Way Partitioning</title>
+      <link>https://codesprintpro.com/blog/dutch-national-flag-pattern-java/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/dutch-national-flag-pattern-java/</guid>
+      <description>Master the Dutch National Flag (DNF) pattern in Java for efficient in-place three-way partitioning of arrays. Learn its intuition, algorithm, dry runs, and complexity analysis for optimal solutions.</description>
+      <pubDate>Sat, 18 Apr 2026 00:00:00 GMT</pubDate>
+      <category>DSA</category><category>dsa</category><category>java</category><category>dutch national flag</category><category>arrays</category><category>partitioning</category><category>interview preparation</category><category>algorithms</category>
+    </item>
+    <item>
       <title>Kadane’s Algorithm in Java: Finding the Maximum Subarray Sum Efficiently</title>
       <link>https://codesprintpro.com/blog/kadanes-algorithm-java/</link>
       <guid isPermaLink="true">https://codesprintpro.com/blog/kadanes-algorithm-java/</guid>
@@ -398,14 +406,6 @@
       <description>End-to-end observability implementation: distributed tracing with OpenTelemetry, metrics with Prometheus, structured logging with Loki, and the dashboards and alerts that actually help during incidents.</description>
       <pubDate>Thu, 03 Jul 2025 00:00:00 GMT</pubDate>
       <category>System Design</category><category>observability</category><category>opentelemetry</category><category>prometheus</category><category>grafana</category><category>loki</category><category>tracing</category><category>spring boot</category><category>monitoring</category>
-    </item>
-    <item>
-      <title>AWS Lambda in Production: Cold Starts, Concurrency, and Cost Optimization</title>
-      <link>https://codesprintpro.com/blog/aws-lambda-production-patterns/</link>
-      <guid isPermaLink="true">https://codesprintpro.com/blog/aws-lambda-production-patterns/</guid>
-      <description>How Lambda execution environments work, cold start mitigation strategies, concurrency limits and throttling, Lambda power tuning, VPC networking costs, and when Lambda is the wrong tool.</description>
-      <pubDate>Sat, 28 Jun 2025 00:00:00 GMT</pubDate>
-      <category>AWS</category><category>aws</category><category>lambda</category><category>serverless</category><category>java</category><category>cold start</category><category>performance</category><category>cost optimization</category>
     </item>
   </channel>
 </rss>
