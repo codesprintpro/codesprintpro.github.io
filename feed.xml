@@ -8,6 +8,14 @@
     <lastBuildDate>Sat, 18 Apr 2026 00:00:00 GMT</lastBuildDate>
     <atom:link href="https://codesprintpro.com/feed.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Big-O Notation in Java: Time and Space Complexity for Interview Problem Solving</title>
+      <link>https://codesprintpro.com/blog/big-o-notation-java-interview-problem-solving/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/big-o-notation-java-interview-problem-solving/</guid>
+      <description>A practical Java-first guide to Big-O notation for interviews. Learn how to analyze loops, recursion, collections, amortized complexity, and common mistakes with clear code examples.</description>
+      <pubDate>Sat, 18 Apr 2026 00:00:00 GMT</pubDate>
+      <category>DSA</category><category>dsa</category><category>java</category><category>big-o</category><category>time complexity</category><category>space complexity</category><category>interview preparation</category><category>algorithms</category>
+    </item>
+    <item>
       <title>System Design: Building a Distributed Tracing Platform</title>
       <link>https://codesprintpro.com/blog/system-design-distributed-tracing-platform/</link>
       <guid isPermaLink="true">https://codesprintpro.com/blog/system-design-distributed-tracing-platform/</guid>
@@ -38,6 +46,14 @@
       <description>Design a production workflow orchestration platform with durable workflow state, retries, compensation, timeouts, signals, timers, idempotent activities, and operational recovery.</description>
       <pubDate>Sat, 18 Apr 2026 00:00:00 GMT</pubDate>
       <category>System Design</category><category>system design</category><category>workflow orchestration</category><category>distributed systems</category><category>queues</category><category>saga</category><category>backend engineering</category>
+    </item>
+    <item>
+      <title>Two Pointers Pattern in Java: Solve Array and String Problems Efficiently</title>
+      <link>https://codesprintpro.com/blog/two-pointers-pattern-java/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/two-pointers-pattern-java/</guid>
+      <description>Learn the two pointers pattern in Java with clear intuition, reusable templates, dry runs, and interview-style examples for arrays, strings, and in-place problems.</description>
+      <pubDate>Sat, 18 Apr 2026 00:00:00 GMT</pubDate>
+      <category>DSA</category><category>dsa</category><category>java</category><category>two pointers</category><category>arrays</category><category>strings</category><category>interview preparation</category><category>algorithms</category>
     </item>
     <item>
       <title>System Design: Building a Distributed Cache</title>
@@ -390,22 +406,6 @@
       <description>A technical comparison of REST, gRPC, and GraphQL across performance, developer experience, schema evolution, streaming, and real production use cases. When each protocol wins and where each falls short.</description>
       <pubDate>Wed, 18 Jun 2025 00:00:00 GMT</pubDate>
       <category>System Design</category><category>grpc</category><category>rest</category><category>graphql</category><category>api design</category><category>system design</category><category>microservices</category><category>protocol buffers</category>
-    </item>
-    <item>
-      <title>DynamoDB Advanced Patterns: Single-Table Design and Beyond</title>
-      <link>https://codesprintpro.com/blog/dynamodb-advanced-patterns/</link>
-      <guid isPermaLink="true">https://codesprintpro.com/blog/dynamodb-advanced-patterns/</guid>
-      <description>Production DynamoDB: single-table design with access pattern mapping, GSI overloading, sparse indexes, adjacency lists for graph relationships, DynamoDB Streams for event-driven architectures, and the read/write capacity math that prevents bill shock.</description>
-      <pubDate>Fri, 13 Jun 2025 00:00:00 GMT</pubDate>
-      <category>Databases</category><category>dynamodb</category><category>aws</category><category>nosql</category><category>single-table design</category><category>gsi</category><category>dynamodb streams</category><category>serverless</category>
-    </item>
-    <item>
-      <title>Java Memory Management Deep Dive: Heap, GC, and Production Tuning</title>
-      <link>https://codesprintpro.com/blog/java-memory-management-deep-dive/</link>
-      <guid isPermaLink="true">https://codesprintpro.com/blog/java-memory-management-deep-dive/</guid>
-      <description>How the JVM allocates memory, how G1GC and ZGC work under the hood, heap analysis with JVM tools, and the GC tuning decisions that eliminate latency spikes in production Java services.</description>
-      <pubDate>Fri, 13 Jun 2025 00:00:00 GMT</pubDate>
-      <category>Java</category><category>java</category><category>jvm</category><category>garbage collection</category><category>g1gc</category><category>zgc</category><category>heap</category><category>memory management</category><category>performance</category>
     </item>
   </channel>
 </rss>
