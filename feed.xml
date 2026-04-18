@@ -16,6 +16,14 @@
       <category>DSA</category><category>dsa</category><category>java</category><category>big-o</category><category>time complexity</category><category>space complexity</category><category>interview preparation</category><category>algorithms</category>
     </item>
     <item>
+      <title>Prefix Sum Pattern in Java: Efficiently Calculate Range Sums and Subarray Properties</title>
+      <link>https://codesprintpro.com/blog/prefix-sum-pattern-java/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/prefix-sum-pattern-java/</guid>
+      <description>Master the Prefix Sum pattern in Java to optimize solutions for problems involving range sums, subarray properties, and contiguous segments. Learn precomputation, dry runs, and complexity analysis.</description>
+      <pubDate>Sat, 18 Apr 2026 00:00:00 GMT</pubDate>
+      <category>DSA</category><category>dsa</category><category>java</category><category>prefix sum</category><category>arrays</category><category>interview preparation</category><category>algorithms</category>
+    </item>
+    <item>
       <title>Sliding Window Pattern in Java: Efficiently Solve Array and String Subarray Problems</title>
       <link>https://codesprintpro.com/blog/sliding-window-pattern-java/</link>
       <guid isPermaLink="true">https://codesprintpro.com/blog/sliding-window-pattern-java/</guid>
@@ -398,14 +406,6 @@
       <description>What event sourcing actually looks like in production Java systems: event store design, snapshot strategies, projection rebuilding, CQRS read model synchronization, and the operational challenges nobody talks about.</description>
       <pubDate>Mon, 23 Jun 2025 00:00:00 GMT</pubDate>
       <category>System Design</category><category>event sourcing</category><category>cqrs</category><category>system design</category><category>java</category><category>distributed systems</category><category>kafka</category><category>spring boot</category>
-    </item>
-    <item>
-      <title>Cassandra Data Modeling: Design for Queries, Not Entities</title>
-      <link>https://codesprintpro.com/blog/cassandra-data-modeling/</link>
-      <guid isPermaLink="true">https://codesprintpro.com/blog/cassandra-data-modeling/</guid>
-      <description>Apache Cassandra data modeling from first principles: partition key design, clustering columns, denormalization strategies, avoiding hot partitions, materialized views vs. manual duplication, and the anti-patterns that kill Cassandra performance.</description>
-      <pubDate>Wed, 18 Jun 2025 00:00:00 GMT</pubDate>
-      <category>Databases</category><category>cassandra</category><category>nosql</category><category>data modeling</category><category>distributed databases</category><category>partition key</category><category>cql</category><category>time series</category>
     </item>
   </channel>
 </rss>
