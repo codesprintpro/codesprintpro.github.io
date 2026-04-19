@@ -59,5 +59,8 @@ Goal: Build a comprehensive, interview-focused DSA series for Java engineers.
 | ✅ | Monotonic Stack/Queue | `monotonic-stack-queue-java.md` |
 | ✅ | Topological Sort | `topological-sort-java.md` |
 | ✅ | Union Find (Disjoint Set Union) | `union-find-dsu-java.md` |
-| ⏳ | Dijkstra's Algorithm | `dijkstras-algorithm-java.md` |
+| ✅ | Dijkstra's Algorithm | `dijkstras-algorithm-java.md` |
+| ✅ | Kruskal's Algorithm | `kruskals-algorithm-java.md` |
+| ✅ | Prim's Algorithm | `prims-algorithm-java.md` |
+| ⏳ | Floyd-Warshall Algorithm | `floyd-warshall-java.md` |
 
