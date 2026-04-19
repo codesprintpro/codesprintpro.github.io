@@ -58,5 +58,6 @@ Goal: Build a comprehensive, interview-focused DSA series for Java engineers.
 | ✅ | Bit Manipulation Hacks | `bit-manipulation-java-hacks.md` |
 | ✅ | Monotonic Stack/Queue | `monotonic-stack-queue-java.md` |
 | ✅ | Topological Sort | `topological-sort-java.md` |
-| ⏳ | Union Find (Disjoint Set Union) | `union-find-dsu-java.md` |
+| ✅ | Union Find (Disjoint Set Union) | `union-find-dsu-java.md` |
+| ⏳ | Dijkstra's Algorithm | `dijkstras-algorithm-java.md` |
 
