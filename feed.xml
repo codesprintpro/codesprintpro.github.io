@@ -48,6 +48,14 @@
       <category>DSA</category><category>dsa</category><category>java</category><category>algorithms</category><category>majority element</category><category>boyer-moore</category><category>interview preparation</category>
     </item>
     <item>
+      <title>Dijkstra&apos;s Algorithm in Java: Finding the Shortest Path</title>
+      <link>https://codesprintpro.com/blog/dijkstras-algorithm-java/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/dijkstras-algorithm-java/</guid>
+      <description>Master Dijkstra&apos;s shortest path algorithm in Java. Learn the greedy logic, how to use PriorityQueue for efficiency, and how to solve common weighted graph interview problems.</description>
+      <pubDate>Sun, 19 Apr 2026 00:00:00 GMT</pubDate>
+      <category>DSA</category><category>dsa</category><category>java</category><category>graph</category><category>shortest path</category><category>dijkstra</category><category>interview preparation</category><category>algorithms</category>
+    </item>
+    <item>
       <title>Kruskal’s Algorithm in Java: Minimum Spanning Trees (MST)</title>
       <link>https://codesprintpro.com/blog/kruskals-algorithm-java/</link>
       <guid isPermaLink="true">https://codesprintpro.com/blog/kruskals-algorithm-java/</guid>
@@ -102,14 +110,6 @@
       <description>Master Depth First Search (DFS) in Java for traversing trees and graphs. Learn its intuition, iterative and recursive implementations, dry runs, and complexity analysis for various applications.</description>
       <pubDate>Sat, 18 Apr 2026 00:00:00 GMT</pubDate>
       <category>DSA</category><category>dsa</category><category>java</category><category>dfs</category><category>depth first search</category><category>tree traversal</category><category>graph traversal</category><category>interview preparation</category><category>algorithms</category>
-    </item>
-    <item>
-      <title>Dijkstra’s Algorithm in Java: Finding Shortest Paths in Weighted Graphs</title>
-      <link>https://codesprintpro.com/blog/dijkstras-algorithm-java/</link>
-      <guid isPermaLink="true">https://codesprintpro.com/blog/dijkstras-algorithm-java/</guid>
-      <description>Master Dijkstra&apos;s Algorithm in Java for finding the shortest paths from a single source to all other vertices in a weighted, non-negative edge graph. Learn its intuition, implementation with a PriorityQueue, dry runs, and complexity analysis.</description>
-      <pubDate>Sat, 18 Apr 2026 00:00:00 GMT</pubDate>
-      <category>DSA</category><category>dsa</category><category>java</category><category>dijkstra</category><category>shortest path</category><category>weighted graph</category><category>priority queue</category><category>interview preparation</category><category>algorithms</category>
     </item>
     <item>
       <title>Dutch National Flag Pattern in Java: Efficient Three-Way Partitioning</title>
