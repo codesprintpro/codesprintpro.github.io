@@ -53,5 +53,6 @@ Goal: Build a comprehensive, interview-focused DSA series for Java engineers.
 | ✅ | Top K Elements (Heaps) | `top-k-elements-heaps-java.md` |
 | ✅ | BFS/DFS Fundamentals | `bfs-dfs-java-fundamentals.md` |
 | ✅ | Backtracking Patterns | `backtracking-patterns-java.md` |
-| ⏳ | Dynamic Programming Basics | `dynamic-programming-basics-java.md` |
+| ✅ | Dynamic Programming Basics | `dynamic-programming-basics-java.md` |
+| ⏳ | Trie (Prefix Tree) | `trie-prefix-tree-java.md` |
 
