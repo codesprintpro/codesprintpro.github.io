@@ -40,6 +40,14 @@
       <category>DSA</category><category>dsa</category><category>java</category><category>algorithms</category><category>bloom filter</category><category>probabilistic</category><category>hashing</category><category>interview preparation</category>
     </item>
     <item>
+      <title>Boyer-Moore Voting Algorithm in Java: Finding the Majority Element</title>
+      <link>https://codesprintpro.com/blog/boyer-moore-voting-java/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/boyer-moore-voting-java/</guid>
+      <description>Learn the Boyer-Moore Voting Algorithm in Java. Discover how to find the majority element in an array in linear time and constant space, a common and elegant interview favorite.</description>
+      <pubDate>Sun, 19 Apr 2026 00:00:00 GMT</pubDate>
+      <category>DSA</category><category>dsa</category><category>java</category><category>algorithms</category><category>majority element</category><category>boyer-moore</category><category>interview preparation</category>
+    </item>
+    <item>
       <title>Kruskal’s Algorithm in Java: Minimum Spanning Trees (MST)</title>
       <link>https://codesprintpro.com/blog/kruskals-algorithm-java/</link>
       <guid isPermaLink="true">https://codesprintpro.com/blog/kruskals-algorithm-java/</guid>
@@ -398,14 +406,6 @@
       <description>Design a production feature flag platform: flag schemas, targeting rules, percentage rollouts, local SDK evaluation, streaming updates, audit logs, kill switches, experiments, consistency tradeoffs, and flag lifecycle management.</description>
       <pubDate>Wed, 08 Apr 2026 00:00:00 GMT</pubDate>
       <category>System Design</category><category>system design</category><category>feature flags</category><category>progressive delivery</category><category>experimentation</category><category>kill switches</category><category>distributed systems</category>
-    </item>
-    <item>
-      <title>System Design: Building a File Upload Platform</title>
-      <link>https://codesprintpro.com/blog/system-design-file-upload-platform/</link>
-      <guid isPermaLink="true">https://codesprintpro.com/blog/system-design-file-upload-platform/</guid>
-      <description>Design a production file upload platform with signed URLs, multipart uploads, object storage, metadata, virus scanning, media processing, access control, deduplication, lifecycle policies, CDN delivery, and failure recovery.</description>
-      <pubDate>Wed, 08 Apr 2026 00:00:00 GMT</pubDate>
-      <category>System Design</category><category>system design</category><category>file upload</category><category>object storage</category><category>s3</category><category>cdn</category><category>security</category><category>backend engineering</category>
     </item>
   </channel>
 </rss>
