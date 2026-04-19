@@ -5,6 +5,8 @@ This file provides project-specific instructions and context for Gemini CLI.
 ## Foundational Mandates
 - **Static Export Constraint:** This project is a fully static Next.js export (`output: 'export'`). NEVER use server-side features like `getServerSideProps`, API routes, ISR, or `next/image` optimization.
 - **Trailing Slashes:** `trailingSlash: true` is enabled. All internal links MUST include a trailing slash (e.g., `<Link href="/blog/">`).
+- **PR Workflow:** Do NOT push directly to `master`. Create a feature branch and raise a PR for every change.
+- **Efficiency:** Minimize tool calls and context usage to remain within free usage limits.
 - **Prism Styling:** Prism CSS is imported in `pages/_app.tsx`. Do NOT move it to `globals.css` as PostCSS will not resolve it.
 - **ESM Transpilation:** New ESM packages used in `getStaticProps` or `getStaticPaths` MUST be added to `transpilePackages` in `next.config.js`.
 
@@ -59,5 +61,7 @@ Goal: Build a comprehensive, interview-focused DSA series for Java engineers.
 | ✅ | Monotonic Stack/Queue | `monotonic-stack-queue-java.md` |
 | ✅ | Topological Sort | `topological-sort-java.md` |
 | ✅ | Union Find (Disjoint Set Union) | `union-find-dsu-java.md` |
-| ⏳ | Dijkstra's Algorithm | `dijkstras-algorithm-java.md` |
+| ✅ | Dijkstra's Algorithm | `dijkstras-algorithm-java.md` |
+| ✅ | Kruskal's Algorithm | `kruskals-algorithm-java.md` |
+| ⏳ | Prim's Algorithm | `prims-algorithm-java.md` |
 
