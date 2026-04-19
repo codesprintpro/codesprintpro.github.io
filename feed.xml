@@ -136,6 +136,14 @@
       <category>DSA</category><category>dsa</category><category>java</category><category>segment tree</category><category>range query</category><category>optimization</category><category>interview preparation</category><category>algorithms</category>
     </item>
     <item>
+      <title>Z-Algorithm in Java: Linear Time String Matching</title>
+      <link>https://codesprintpro.com/blog/z-algorithm-java/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/z-algorithm-java/</guid>
+      <description>Master the Z-Algorithm in Java. Learn how to find all occurrences of a pattern in a text in linear time using the Z-array, a powerful alternative to KMP.</description>
+      <pubDate>Sun, 19 Apr 2026 00:00:00 GMT</pubDate>
+      <category>DSA</category><category>dsa</category><category>java</category><category>algorithms</category><category>string matching</category><category>z-algorithm</category><category>interview preparation</category>
+    </item>
+    <item>
       <title>BFS (Breadth First Search) in Java: Level-Order and Shortest Path</title>
       <link>https://codesprintpro.com/blog/bfs-tree-graph-traversals-java/</link>
       <guid isPermaLink="true">https://codesprintpro.com/blog/bfs-tree-graph-traversals-java/</guid>
@@ -398,14 +406,6 @@
       <description>How modern retrieval pipelines work: BM25 internals (TF-IDF, k1/b parameters), bi-encoder dense retrieval, why hybrid search beats both individually, Reciprocal Rank Fusion, cross-encoder reranking with ColBERT, HyDE query expansion, chunking strategies, and evaluating retrieval quality with NDCG and Recall@K.</description>
       <pubDate>Wed, 08 Apr 2026 00:00:00 GMT</pubDate>
       <category>AI/ML</category><category>retrieval</category><category>bm25</category><category>rag</category><category>hybrid search</category><category>reranking</category><category>colbert</category><category>elasticsearch</category><category>dense retrieval</category>
-    </item>
-    <item>
-      <title>Spring Boot Timeouts: The Production Guide for HTTP, DB, Redis, and Kafka</title>
-      <link>https://codesprintpro.com/blog/spring-boot-timeouts-production-guide/</link>
-      <guid isPermaLink="true">https://codesprintpro.com/blog/spring-boot-timeouts-production-guide/</guid>
-      <description>A practical Spring Boot timeout guide covering server shutdown, RestClient/WebClient, database pools, PostgreSQL statement timeouts, Redis, Kafka producers/consumers, retries, circuit breakers, and production defaults.</description>
-      <pubDate>Wed, 08 Apr 2026 00:00:00 GMT</pubDate>
-      <category>Java</category><category>spring boot</category><category>timeouts</category><category>java</category><category>resilience</category><category>hikari</category><category>redis</category><category>kafka</category><category>production</category>
     </item>
   </channel>
 </rss>
