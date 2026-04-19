@@ -64,6 +64,14 @@
       <category>DSA</category><category>dsa</category><category>java</category><category>graph</category><category>shortest path</category><category>dijkstra</category><category>interview preparation</category><category>algorithms</category>
     </item>
     <item>
+      <title>Fenwick Trees (Binary Indexed Trees) in Java</title>
+      <link>https://codesprintpro.com/blog/fenwick-tree-java/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/fenwick-tree-java/</guid>
+      <description>Learn how to implement a Fenwick Tree in Java. Discover the power of Binary Indexed Trees (BIT) for efficient prefix sum queries and point updates in logarithmic time.</description>
+      <pubDate>Sun, 19 Apr 2026 00:00:00 GMT</pubDate>
+      <category>DSA</category><category>dsa</category><category>java</category><category>fenwick tree</category><category>bit</category><category>range query</category><category>interview preparation</category><category>algorithms</category>
+    </item>
+    <item>
       <title>Floyd-Warshall Algorithm in Java: All-Pairs Shortest Paths</title>
       <link>https://codesprintpro.com/blog/floyd-warshall-java/</link>
       <guid isPermaLink="true">https://codesprintpro.com/blog/floyd-warshall-java/</guid>
@@ -398,14 +406,6 @@
       <description>A production guide to LLM observability: OpenTelemetry traces, token and cost metrics, RAG retrieval spans, eval results, safety signals, prompt/version tracking, dashboards, alerts, and redaction patterns.</description>
       <pubDate>Wed, 08 Apr 2026 00:00:00 GMT</pubDate>
       <category>AI/ML</category><category>llm</category><category>observability</category><category>evals</category><category>cost</category><category>latency</category><category>tracing</category><category>rag</category><category>production</category>
-    </item>
-    <item>
-      <title>MCP for Backend Engineers: Tools, Agents, and Production Guardrails</title>
-      <link>https://codesprintpro.com/blog/mcp-for-backend-engineers/</link>
-      <guid isPermaLink="true">https://codesprintpro.com/blog/mcp-for-backend-engineers/</guid>
-      <description>A practical backend engineering guide to the Model Context Protocol: host-client-server architecture, tools vs resources vs prompts, JSON-RPC flows, authorization, audit logs, rate limits, idempotency, and production guardrails for AI agents.</description>
-      <pubDate>Wed, 08 Apr 2026 00:00:00 GMT</pubDate>
-      <category>AI/ML</category><category>mcp</category><category>ai agents</category><category>tools</category><category>llm</category><category>backend engineering</category><category>guardrails</category><category>security</category>
     </item>
   </channel>
 </rss>
