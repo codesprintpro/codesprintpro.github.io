@@ -96,6 +96,14 @@
       <category>DSA</category><category>dsa</category><category>java</category><category>graph</category><category>mst</category><category>kruskal</category><category>union find</category><category>interview preparation</category><category>algorithms</category>
     </item>
     <item>
+      <title>Longest Common Subsequence (LCS) in Java: Dynamic Programming Guide</title>
+      <link>https://codesprintpro.com/blog/longest-common-subsequence-java/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/longest-common-subsequence-java/</guid>
+      <description>Master the Longest Common Subsequence (LCS) problem in Java. Learn the recursive approach with memoization and the optimized bottom-up tabulation method.</description>
+      <pubDate>Sun, 19 Apr 2026 00:00:00 GMT</pubDate>
+      <category>DSA</category><category>dsa</category><category>java</category><category>algorithms</category><category>lcs</category><category>dynamic programming</category><category>strings</category><category>interview preparation</category>
+    </item>
+    <item>
       <title>LRU Cache Implementation in Java: $O(1)$ Strategy</title>
       <link>https://codesprintpro.com/blog/lru-cache-java-implementation/</link>
       <guid isPermaLink="true">https://codesprintpro.com/blog/lru-cache-java-implementation/</guid>
@@ -398,14 +406,6 @@
       <description>A practical backend engineering guide to the Model Context Protocol: host-client-server architecture, tools vs resources vs prompts, JSON-RPC flows, authorization, audit logs, rate limits, idempotency, and production guardrails for AI agents.</description>
       <pubDate>Wed, 08 Apr 2026 00:00:00 GMT</pubDate>
       <category>AI/ML</category><category>mcp</category><category>ai agents</category><category>tools</category><category>llm</category><category>backend engineering</category><category>guardrails</category><category>security</category>
-    </item>
-    <item>
-      <title>PostgreSQL Locking Playbook: Deadlocks, Blocking Queries, and Timeouts</title>
-      <link>https://codesprintpro.com/blog/postgresql-locking-playbook/</link>
-      <guid isPermaLink="true">https://codesprintpro.com/blog/postgresql-locking-playbook/</guid>
-      <description>A practical PostgreSQL locking guide for production incidents: how to find blocking queries, understand lock modes, debug deadlocks, use lock_timeout and statement_timeout, avoid idle-in-transaction sessions, and design safer migrations.</description>
-      <pubDate>Wed, 08 Apr 2026 00:00:00 GMT</pubDate>
-      <category>Databases</category><category>postgresql</category><category>locking</category><category>deadlocks</category><category>database</category><category>performance</category><category>production debugging</category><category>sql</category>
     </item>
   </channel>
 </rss>
