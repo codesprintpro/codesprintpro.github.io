@@ -64,6 +64,14 @@
       <category>DSA</category><category>dsa</category><category>java</category><category>graph</category><category>shortest path</category><category>dijkstra</category><category>interview preparation</category><category>algorithms</category>
     </item>
     <item>
+      <title>Floyd-Warshall Algorithm in Java: All-Pairs Shortest Paths</title>
+      <link>https://codesprintpro.com/blog/floyd-warshall-java/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/floyd-warshall-java/</guid>
+      <description>Master the Floyd-Warshall algorithm in Java. Learn how to find the shortest distances between all pairs of vertices in a weighted graph, including those with negative edge weights.</description>
+      <pubDate>Sun, 19 Apr 2026 00:00:00 GMT</pubDate>
+      <category>DSA</category><category>dsa</category><category>java</category><category>graph</category><category>shortest path</category><category>floyd-warshall</category><category>dynamic programming</category><category>interview preparation</category><category>algorithms</category>
+    </item>
+    <item>
       <title>Huffman Coding in Java: Lossless Data Compression</title>
       <link>https://codesprintpro.com/blog/huffman-coding-java/</link>
       <guid isPermaLink="true">https://codesprintpro.com/blog/huffman-coding-java/</guid>
@@ -398,14 +406,6 @@
       <description>Design a production data export platform for CSV, JSON, and Parquet exports with async jobs, snapshots, object storage, authorization, audit logs, retention, throttling, and failure recovery.</description>
       <pubDate>Wed, 08 Apr 2026 00:00:00 GMT</pubDate>
       <category>System Design</category><category>system design</category><category>data export</category><category>async jobs</category><category>object storage</category><category>audit logs</category><category>backend engineering</category><category>saas</category>
-    </item>
-    <item>
-      <title>System Design: Building a Distributed Lock Service</title>
-      <link>https://codesprintpro.com/blog/system-design-distributed-lock-service/</link>
-      <guid isPermaLink="true">https://codesprintpro.com/blog/system-design-distributed-lock-service/</guid>
-      <description>Design a distributed lock service for production coordination: leases, fencing tokens, TTLs, renewal, Redis vs PostgreSQL vs etcd tradeoffs, failure modes, idempotency, and safe usage patterns.</description>
-      <pubDate>Wed, 08 Apr 2026 00:00:00 GMT</pubDate>
-      <category>System Design</category><category>system design</category><category>distributed locks</category><category>leases</category><category>redis</category><category>postgresql</category><category>idempotency</category><category>distributed systems</category>
     </item>
   </channel>
 </rss>
