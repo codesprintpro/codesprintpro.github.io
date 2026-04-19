@@ -8,6 +8,14 @@
     <lastBuildDate>Sun, 19 Apr 2026 00:00:00 GMT</lastBuildDate>
     <atom:link href="https://codesprintpro.com/feed.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>B-Trees and B+ Trees in Java: The Engines of Modern Databases</title>
+      <link>https://codesprintpro.com/blog/b-tree-b-plus-tree-java/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/b-tree-b-plus-tree-java/</guid>
+      <description>Understand the architecture of B-Trees and B+ Trees. Learn why these self-balancing trees are the standard for file systems and database indexing, and how they differ from Binary Search Trees.</description>
+      <pubDate>Sun, 19 Apr 2026 00:00:00 GMT</pubDate>
+      <category>DSA</category><category>dsa</category><category>java</category><category>algorithms</category><category>database</category><category>tree</category><category>b-tree</category><category>b+ tree</category><category>interview preparation</category>
+    </item>
+    <item>
       <title>Bellman-Ford Algorithm in Java: Shortest Paths with Negative Weights</title>
       <link>https://codesprintpro.com/blog/bellman-ford-algorithm-java/</link>
       <guid isPermaLink="true">https://codesprintpro.com/blog/bellman-ford-algorithm-java/</guid>
@@ -398,14 +406,6 @@
       <description>Design a production metrics platform: ingestion, scraping vs push, time-series storage, labels and cardinality, rollups, retention, alerting, query APIs, multi-tenancy, downsampling, and operational guardrails.</description>
       <pubDate>Wed, 08 Apr 2026 00:00:00 GMT</pubDate>
       <category>System Design</category><category>system design</category><category>metrics</category><category>observability</category><category>time series</category><category>prometheus</category><category>alerting</category><category>distributed systems</category>
-    </item>
-    <item>
-      <title>System Design: Building a Secrets Management Platform</title>
-      <link>https://codesprintpro.com/blog/system-design-secrets-management-platform/</link>
-      <guid isPermaLink="true">https://codesprintpro.com/blog/system-design-secrets-management-platform/</guid>
-      <description>Design a production secrets management platform with envelope encryption, versioned secrets, rotation, access control, audit logs, SDK caching, Kubernetes delivery, and incident playbooks.</description>
-      <pubDate>Wed, 08 Apr 2026 00:00:00 GMT</pubDate>
-      <category>System Design</category><category>system design</category><category>secrets management</category><category>security</category><category>encryption</category><category>kubernetes</category><category>access control</category><category>backend engineering</category>
     </item>
   </channel>
 </rss>
