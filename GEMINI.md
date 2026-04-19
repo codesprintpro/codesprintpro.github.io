@@ -49,7 +49,7 @@ Goal: Build a comprehensive, interview-focused DSA series for Java engineers.
 | ✅ | Two Pointers | `two-pointers-pattern-java.md` |
 | ✅ | Sliding Window | `sliding-window-pattern-java.md` |
 | ✅ | Binary Search (Templates) | `binary-search-templates-java.md` |
-| ⏳ | Fast & Slow Pointers | `fast-slow-pointers-java.md` |
+| ✅ | Fast & Slow Pointers | `fast-slow-pointers-java.md` |
 | ⏳ | Top K Elements (Heaps) | `top-k-elements-heaps-java.md` |
 | ⏳ | BFS/DFS Fundamentals | `bfs-dfs-java-fundamentals.md` |
 
