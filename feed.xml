@@ -16,6 +16,14 @@
       <category>DSA</category><category>dsa</category><category>java</category><category>matrix</category><category>grid</category><category>traversal</category><category>spiral order</category><category>diagonal traversal</category><category>flood fill</category><category>interview preparation</category><category>algorithms</category>
     </item>
     <item>
+      <title>Prim’s Algorithm in Java: Minimum Spanning Trees (MST)</title>
+      <link>https://codesprintpro.com/blog/prims-algorithm-java/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/prims-algorithm-java/</guid>
+      <description>Master Prim&apos;s Algorithm in Java for finding the Minimum Spanning Tree (MST) of a connected, undirected, weighted graph. Learn its intuition, implementation with a PriorityQueue, dry runs, and complexity analysis.</description>
+      <pubDate>Sun, 19 Apr 2026 00:00:00 GMT</pubDate>
+      <category>DSA</category><category>dsa</category><category>java</category><category>prim&apos;s algorithm</category><category>mst</category><category>minimum spanning tree</category><category>graph</category><category>priority queue</category><category>interview preparation</category><category>algorithms</category>
+    </item>
+    <item>
       <title>BFS (Breadth First Search) in Java: Level-Order and Shortest Path</title>
       <link>https://codesprintpro.com/blog/bfs-tree-graph-traversals-java/</link>
       <guid isPermaLink="true">https://codesprintpro.com/blog/bfs-tree-graph-traversals-java/</guid>
@@ -398,14 +406,6 @@
       <description>Design a production webhook delivery platform with event ingestion, outbox persistence, retries, exponential backoff, signing, endpoint secrets, idempotency, rate limits, dead-letter queues, replay, observability, and tenant isolation.</description>
       <pubDate>Wed, 08 Apr 2026 00:00:00 GMT</pubDate>
       <category>System Design</category><category>system design</category><category>webhooks</category><category>event driven architecture</category><category>idempotency</category><category>retries</category><category>distributed systems</category><category>backend engineering</category>
-    </item>
-    <item>
-      <title>Idempotency Keys in APIs: Retries, Duplicate Requests, and Exactly-Once Illusions</title>
-      <link>https://codesprintpro.com/blog/api-idempotency-keys/</link>
-      <guid isPermaLink="true">https://codesprintpro.com/blog/api-idempotency-keys/</guid>
-      <description>A production guide to designing idempotent APIs with idempotency keys, request fingerprinting, response replay, database constraints, TTL cleanup, and race-condition handling.</description>
-      <pubDate>Tue, 07 Apr 2026 00:00:00 GMT</pubDate>
-      <category>System Design</category><category>idempotency</category><category>api design</category><category>distributed systems</category><category>retries</category><category>backend engineering</category><category>payments</category>
     </item>
   </channel>
 </rss>
