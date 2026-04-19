@@ -52,5 +52,6 @@ Goal: Build a comprehensive, interview-focused DSA series for Java engineers.
 | ✅ | Fast & Slow Pointers | `fast-slow-pointers-java.md` |
 | ✅ | Top K Elements (Heaps) | `top-k-elements-heaps-java.md` |
 | ✅ | BFS/DFS Fundamentals | `bfs-dfs-java-fundamentals.md` |
-| ⏳ | Backtracking Patterns | `backtracking-patterns-java.md` |
+| ✅ | Backtracking Patterns | `backtracking-patterns-java.md` |
+| ⏳ | Dynamic Programming Basics | `dynamic-programming-basics-java.md` |
 
