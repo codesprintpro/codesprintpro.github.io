@@ -8,6 +8,14 @@
     <lastBuildDate>Sun, 19 Apr 2026 00:00:00 GMT</lastBuildDate>
     <atom:link href="https://codesprintpro.com/feed.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>A* Search Algorithm in Java: Heuristic Pathfinding</title>
+      <link>https://codesprintpro.com/blog/a-star-search-java/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/a-star-search-java/</guid>
+      <description>Master the A* search algorithm in Java. Learn how it combines Dijkstra&apos;s logic with heuristics to find the shortest path significantly faster in maps and grids.</description>
+      <pubDate>Sun, 19 Apr 2026 00:00:00 GMT</pubDate>
+      <category>DSA</category><category>dsa</category><category>java</category><category>graph</category><category>shortest path</category><category>a-star</category><category>heuristic</category><category>interview preparation</category><category>algorithms</category>
+    </item>
+    <item>
       <title>B-Trees and B+ Trees in Java: The Engines of Modern Databases</title>
       <link>https://codesprintpro.com/blog/b-tree-b-plus-tree-java/</link>
       <guid isPermaLink="true">https://codesprintpro.com/blog/b-tree-b-plus-tree-java/</guid>
@@ -398,14 +406,6 @@
       <description>Design a distributed lock service for production coordination: leases, fencing tokens, TTLs, renewal, Redis vs PostgreSQL vs etcd tradeoffs, failure modes, idempotency, and safe usage patterns.</description>
       <pubDate>Wed, 08 Apr 2026 00:00:00 GMT</pubDate>
       <category>System Design</category><category>system design</category><category>distributed locks</category><category>leases</category><category>redis</category><category>postgresql</category><category>idempotency</category><category>distributed systems</category>
-    </item>
-    <item>
-      <title>System Design: Building an Email Delivery Platform</title>
-      <link>https://codesprintpro.com/blog/system-design-email-delivery-platform/</link>
-      <guid isPermaLink="true">https://codesprintpro.com/blog/system-design-email-delivery-platform/</guid>
-      <description>Design a production email delivery platform with queues, templates, provider failover, idempotency, suppression lists, bounce handling, unsubscribe flows, rate limits, and observability.</description>
-      <pubDate>Wed, 08 Apr 2026 00:00:00 GMT</pubDate>
-      <category>System Design</category><category>system design</category><category>email delivery</category><category>queues</category><category>rate limiting</category><category>idempotency</category><category>notifications</category><category>backend engineering</category>
     </item>
   </channel>
 </rss>
