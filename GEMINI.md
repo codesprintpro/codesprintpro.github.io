@@ -56,5 +56,6 @@ Goal: Build a comprehensive, interview-focused DSA series for Java engineers.
 | ✅ | Dynamic Programming Basics | `dynamic-programming-basics-java.md` |
 | ✅ | Trie (Prefix Tree) | `trie-prefix-tree-java.md` |
 | ✅ | Bit Manipulation Hacks | `bit-manipulation-java-hacks.md` |
-| ⏳ | Monotonic Stack/Queue | `monotonic-stack-queue-java.md` |
+| ✅ | Monotonic Stack/Queue | `monotonic-stack-queue-java.md` |
+| ⏳ | Topological Sort | `topological-sort-java.md` |
 
