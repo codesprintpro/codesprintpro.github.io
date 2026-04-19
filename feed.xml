@@ -32,6 +32,14 @@
       <category>DSA</category><category>dsa</category><category>java</category><category>graph</category><category>shortest path</category><category>bellman-ford</category><category>negative weights</category><category>interview preparation</category><category>algorithms</category>
     </item>
     <item>
+      <title>Bloom Filters in Java: Probabilistic Data Structures</title>
+      <link>https://codesprintpro.com/blog/bloom-filters-java/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/bloom-filters-java/</guid>
+      <description>Master Bloom Filters in Java. Learn how this memory-efficient probabilistic data structure checks for set membership with zero false negatives and controllable false positives.</description>
+      <pubDate>Sun, 19 Apr 2026 00:00:00 GMT</pubDate>
+      <category>DSA</category><category>dsa</category><category>java</category><category>algorithms</category><category>bloom filter</category><category>probabilistic</category><category>hashing</category><category>interview preparation</category>
+    </item>
+    <item>
       <title>Kruskal’s Algorithm in Java: Minimum Spanning Trees (MST)</title>
       <link>https://codesprintpro.com/blog/kruskals-algorithm-java/</link>
       <guid isPermaLink="true">https://codesprintpro.com/blog/kruskals-algorithm-java/</guid>
@@ -398,14 +406,6 @@
       <description>Design a production file upload platform with signed URLs, multipart uploads, object storage, metadata, virus scanning, media processing, access control, deduplication, lifecycle policies, CDN delivery, and failure recovery.</description>
       <pubDate>Wed, 08 Apr 2026 00:00:00 GMT</pubDate>
       <category>System Design</category><category>system design</category><category>file upload</category><category>object storage</category><category>s3</category><category>cdn</category><category>security</category><category>backend engineering</category>
-    </item>
-    <item>
-      <title>System Design: Building a Distributed Job Scheduler</title>
-      <link>https://codesprintpro.com/blog/system-design-job-scheduler/</link>
-      <guid isPermaLink="true">https://codesprintpro.com/blog/system-design-job-scheduler/</guid>
-      <description>Design a production job scheduler like Quartz, Airflow, or Cloud Scheduler: cron parsing, durable job storage, leases, retries, idempotency, delayed execution, worker pools, multi-tenancy, observability, and failure recovery.</description>
-      <pubDate>Wed, 08 Apr 2026 00:00:00 GMT</pubDate>
-      <category>System Design</category><category>system design</category><category>job scheduler</category><category>distributed systems</category><category>cron</category><category>queues</category><category>idempotency</category><category>backend engineering</category>
     </item>
   </channel>
 </rss>
