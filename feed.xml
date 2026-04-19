@@ -120,6 +120,14 @@
       <category>DSA</category><category>dsa</category><category>java</category><category>graph</category><category>mst</category><category>prim</category><category>priority queue</category><category>interview preparation</category><category>algorithms</category>
     </item>
     <item>
+      <title>Rabin-Karp Algorithm in Java: Efficient String Searching with Hashing</title>
+      <link>https://codesprintpro.com/blog/rabin-karp-java/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/rabin-karp-java/</guid>
+      <description>Master the Rabin-Karp algorithm in Java. Learn how to use rolling hashes to find a pattern in a text in average linear time, and how to handle hash collisions effectively.</description>
+      <pubDate>Sun, 19 Apr 2026 00:00:00 GMT</pubDate>
+      <category>DSA</category><category>dsa</category><category>java</category><category>algorithms</category><category>string matching</category><category>hashing</category><category>rabin-karp</category><category>interview preparation</category>
+    </item>
+    <item>
       <title>BFS (Breadth First Search) in Java: Level-Order and Shortest Path</title>
       <link>https://codesprintpro.com/blog/bfs-tree-graph-traversals-java/</link>
       <guid isPermaLink="true">https://codesprintpro.com/blog/bfs-tree-graph-traversals-java/</guid>
@@ -398,14 +406,6 @@
       <description>Design a production API gateway platform with routing, authentication, authorization, rate limiting, request shaping, canary releases, retries, timeouts, config rollout, observability, and failure isolation.</description>
       <pubDate>Wed, 08 Apr 2026 00:00:00 GMT</pubDate>
       <category>System Design</category><category>system design</category><category>api gateway</category><category>rate limiting</category><category>authentication</category><category>routing</category><category>observability</category><category>backend engineering</category>
-    </item>
-    <item>
-      <title>System Design: Building an Authorization Service</title>
-      <link>https://codesprintpro.com/blog/system-design-authorization-service/</link>
-      <guid isPermaLink="true">https://codesprintpro.com/blog/system-design-authorization-service/</guid>
-      <description>Design a production authorization service with RBAC, ABAC, policy evaluation, relationship-based permissions, caching, audit logs, consistency tradeoffs, and safe rollout patterns.</description>
-      <pubDate>Wed, 08 Apr 2026 00:00:00 GMT</pubDate>
-      <category>System Design</category><category>system design</category><category>authorization</category><category>permissions</category><category>rbac</category><category>abac</category><category>security</category><category>distributed systems</category>
     </item>
   </channel>
 </rss>
