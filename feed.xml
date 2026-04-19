@@ -128,6 +128,14 @@
       <category>DSA</category><category>dsa</category><category>java</category><category>algorithms</category><category>string matching</category><category>hashing</category><category>rabin-karp</category><category>interview preparation</category>
     </item>
     <item>
+      <title>Segment Trees in Java: Efficient Range Queries and Updates</title>
+      <link>https://codesprintpro.com/blog/segment-tree-java/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/segment-tree-java/</guid>
+      <description>Master Segment Trees in Java. Learn how to perform range sum or range min/max queries and point updates in O(log n) time, a must-know for competitive programming.</description>
+      <pubDate>Sun, 19 Apr 2026 00:00:00 GMT</pubDate>
+      <category>DSA</category><category>dsa</category><category>java</category><category>segment tree</category><category>range query</category><category>optimization</category><category>interview preparation</category><category>algorithms</category>
+    </item>
+    <item>
       <title>BFS (Breadth First Search) in Java: Level-Order and Shortest Path</title>
       <link>https://codesprintpro.com/blog/bfs-tree-graph-traversals-java/</link>
       <guid isPermaLink="true">https://codesprintpro.com/blog/bfs-tree-graph-traversals-java/</guid>
@@ -398,14 +406,6 @@
       <description>A practical Spring Boot timeout guide covering server shutdown, RestClient/WebClient, database pools, PostgreSQL statement timeouts, Redis, Kafka producers/consumers, retries, circuit breakers, and production defaults.</description>
       <pubDate>Wed, 08 Apr 2026 00:00:00 GMT</pubDate>
       <category>Java</category><category>spring boot</category><category>timeouts</category><category>java</category><category>resilience</category><category>hikari</category><category>redis</category><category>kafka</category><category>production</category>
-    </item>
-    <item>
-      <title>System Design: Building an API Gateway Platform</title>
-      <link>https://codesprintpro.com/blog/system-design-api-gateway-platform/</link>
-      <guid isPermaLink="true">https://codesprintpro.com/blog/system-design-api-gateway-platform/</guid>
-      <description>Design a production API gateway platform with routing, authentication, authorization, rate limiting, request shaping, canary releases, retries, timeouts, config rollout, observability, and failure isolation.</description>
-      <pubDate>Wed, 08 Apr 2026 00:00:00 GMT</pubDate>
-      <category>System Design</category><category>system design</category><category>api gateway</category><category>rate limiting</category><category>authentication</category><category>routing</category><category>observability</category><category>backend engineering</category>
     </item>
   </channel>
 </rss>
