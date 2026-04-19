@@ -8,6 +8,14 @@
     <lastBuildDate>Sun, 19 Apr 2026 00:00:00 GMT</lastBuildDate>
     <atom:link href="https://codesprintpro.com/feed.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Bellman-Ford Algorithm in Java: Shortest Paths with Negative Weights</title>
+      <link>https://codesprintpro.com/blog/bellman-ford-algorithm-java/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/bellman-ford-algorithm-java/</guid>
+      <description>Master Bellman-Ford Algorithm in Java for finding shortest paths in weighted graphs, including those with negative edge weights. Learn its intuition, implementation, dry runs, and how to detect negative cycles.</description>
+      <pubDate>Sun, 19 Apr 2026 00:00:00 GMT</pubDate>
+      <category>DSA</category><category>dsa</category><category>java</category><category>bellman-ford</category><category>shortest path</category><category>weighted graph</category><category>negative weights</category><category>negative cycle</category><category>interview preparation</category><category>algorithms</category>
+    </item>
+    <item>
       <title>Kruskal’s Algorithm in Java: Minimum Spanning Trees (MST)</title>
       <link>https://codesprintpro.com/blog/kruskals-algorithm-java/</link>
       <guid isPermaLink="true">https://codesprintpro.com/blog/kruskals-algorithm-java/</guid>
@@ -398,14 +406,6 @@
       <description>Design a production secrets management platform with envelope encryption, versioned secrets, rotation, access control, audit logs, SDK caching, Kubernetes delivery, and incident playbooks.</description>
       <pubDate>Wed, 08 Apr 2026 00:00:00 GMT</pubDate>
       <category>System Design</category><category>system design</category><category>secrets management</category><category>security</category><category>encryption</category><category>kubernetes</category><category>access control</category><category>backend engineering</category>
-    </item>
-    <item>
-      <title>System Design: Building a Usage Metering and Billing Platform</title>
-      <link>https://codesprintpro.com/blog/system-design-usage-metering-billing/</link>
-      <guid isPermaLink="true">https://codesprintpro.com/blog/system-design-usage-metering-billing/</guid>
-      <description>Design a production usage metering and billing platform: event ingestion, idempotency, aggregation, pricing, quotas, invoices, reconciliation, audit logs, backfills, and failure recovery for SaaS products.</description>
-      <pubDate>Wed, 08 Apr 2026 00:00:00 GMT</pubDate>
-      <category>System Design</category><category>system design</category><category>billing</category><category>usage metering</category><category>idempotency</category><category>saas</category><category>event driven architecture</category><category>distributed systems</category>
     </item>
   </channel>
 </rss>
