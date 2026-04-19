@@ -57,5 +57,6 @@ Goal: Build a comprehensive, interview-focused DSA series for Java engineers.
 | ✅ | Trie (Prefix Tree) | `trie-prefix-tree-java.md` |
 | ✅ | Bit Manipulation Hacks | `bit-manipulation-java-hacks.md` |
 | ✅ | Monotonic Stack/Queue | `monotonic-stack-queue-java.md` |
-| ⏳ | Topological Sort | `topological-sort-java.md` |
+| ✅ | Topological Sort | `topological-sort-java.md` |
+| ⏳ | Union Find (Disjoint Set Union) | `union-find-dsu-java.md` |
 
