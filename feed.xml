@@ -56,6 +56,14 @@
       <category>DSA</category><category>dsa</category><category>java</category><category>graph</category><category>shortest path</category><category>dijkstra</category><category>interview preparation</category><category>algorithms</category>
     </item>
     <item>
+      <title>Kadane&apos;s Algorithm in Java: Maximum Sum Subarray</title>
+      <link>https://codesprintpro.com/blog/kadanes-algorithm-java/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/kadanes-algorithm-java/</guid>
+      <description>Master Kadane&apos;s Algorithm in Java. Learn how to find the maximum sum of a contiguous subarray in linear time using dynamic programming principles.</description>
+      <pubDate>Sun, 19 Apr 2026 00:00:00 GMT</pubDate>
+      <category>DSA</category><category>dsa</category><category>java</category><category>algorithms</category><category>kadane</category><category>subarray</category><category>dynamic programming</category><category>interview preparation</category>
+    </item>
+    <item>
       <title>Kruskal’s Algorithm in Java: Minimum Spanning Trees (MST)</title>
       <link>https://codesprintpro.com/blog/kruskals-algorithm-java/</link>
       <guid isPermaLink="true">https://codesprintpro.com/blog/kruskals-algorithm-java/</guid>
@@ -134,14 +142,6 @@
       <description>Master the in-place reversal of a linked list in Java. Learn the iterative and recursive approaches, their intuition, dry runs, and complexity analysis for optimal memory usage.</description>
       <pubDate>Sat, 18 Apr 2026 00:00:00 GMT</pubDate>
       <category>DSA</category><category>dsa</category><category>java</category><category>linked list</category><category>in-place reversal</category><category>interview preparation</category><category>algorithms</category>
-    </item>
-    <item>
-      <title>Kadane’s Algorithm in Java: Finding the Maximum Subarray Sum Efficiently</title>
-      <link>https://codesprintpro.com/blog/kadanes-algorithm-java/</link>
-      <guid isPermaLink="true">https://codesprintpro.com/blog/kadanes-algorithm-java/</guid>
-      <description>Master Kadane&apos;s Algorithm in Java to find the maximum sum of a contiguous subarray. Learn its intuition, dynamic programming approach, dry runs, and complexity analysis for optimal solutions.</description>
-      <pubDate>Sat, 18 Apr 2026 00:00:00 GMT</pubDate>
-      <category>DSA</category><category>dsa</category><category>java</category><category>kadane&apos;s algorithm</category><category>arrays</category><category>dynamic programming</category><category>interview preparation</category><category>algorithms</category>
     </item>
     <item>
       <title>Monotonic Queue Pattern in Java: Efficiently Solving Sliding Window Maximum</title>
