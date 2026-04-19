@@ -54,5 +54,6 @@ Goal: Build a comprehensive, interview-focused DSA series for Java engineers.
 | ✅ | BFS/DFS Fundamentals | `bfs-dfs-java-fundamentals.md` |
 | ✅ | Backtracking Patterns | `backtracking-patterns-java.md` |
 | ✅ | Dynamic Programming Basics | `dynamic-programming-basics-java.md` |
-| ⏳ | Trie (Prefix Tree) | `trie-prefix-tree-java.md` |
+| ✅ | Trie (Prefix Tree) | `trie-prefix-tree-java.md` |
+| ⏳ | Bit Manipulation Hacks | `bit-manipulation-java-hacks.md` |
 
