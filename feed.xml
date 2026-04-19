@@ -5,8 +5,16 @@
     <link>https://codesprintpro.com/blog/</link>
     <description>Practical backend engineering, system design, Java, databases, AWS, messaging, and AI infrastructure guides.</description>
     <language>en-us</language>
-    <lastBuildDate>Sat, 18 Apr 2026 00:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 19 Apr 2026 00:00:00 GMT</lastBuildDate>
     <atom:link href="https://codesprintpro.com/feed.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Matrix Traversal in Java: Spiral, Diagonal, and Flood Fill</title>
+      <link>https://codesprintpro.com/blog/matrix-traversal-java/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/matrix-traversal-java/</guid>
+      <description>Master various matrix traversal techniques in Java, including spiral order, diagonal traversal, and flood fill. Learn their intuition, implementation, dry runs, and complexity analysis for solving common grid-based problems.</description>
+      <pubDate>Sun, 19 Apr 2026 00:00:00 GMT</pubDate>
+      <category>DSA</category><category>dsa</category><category>java</category><category>matrix</category><category>grid</category><category>traversal</category><category>spiral order</category><category>diagonal traversal</category><category>flood fill</category><category>interview preparation</category><category>algorithms</category>
+    </item>
     <item>
       <title>BFS (Breadth First Search) in Java: Level-Order and Shortest Path</title>
       <link>https://codesprintpro.com/blog/bfs-tree-graph-traversals-java/</link>
@@ -398,14 +406,6 @@
       <description>A production guide to designing idempotent APIs with idempotency keys, request fingerprinting, response replay, database constraints, TTL cleanup, and race-condition handling.</description>
       <pubDate>Tue, 07 Apr 2026 00:00:00 GMT</pubDate>
       <category>System Design</category><category>idempotency</category><category>api design</category><category>distributed systems</category><category>retries</category><category>backend engineering</category><category>payments</category>
-    </item>
-    <item>
-      <title>Cache Invalidation Patterns: TTL, Write-Through, Cache-Aside, and Event-Driven Eviction</title>
-      <link>https://codesprintpro.com/blog/cache-invalidation-patterns/</link>
-      <guid isPermaLink="true">https://codesprintpro.com/blog/cache-invalidation-patterns/</guid>
-      <description>A practical guide to cache invalidation in production systems: TTLs, cache-aside, write-through, versioned keys, event-driven eviction, stampede prevention, and stale-read tradeoffs.</description>
-      <pubDate>Tue, 07 Apr 2026 00:00:00 GMT</pubDate>
-      <category>Databases</category><category>cache invalidation</category><category>redis</category><category>caching</category><category>distributed systems</category><category>performance</category><category>backend engineering</category>
     </item>
   </channel>
 </rss>
