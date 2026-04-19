@@ -8,6 +8,14 @@
     <lastBuildDate>Sun, 19 Apr 2026 00:00:00 GMT</lastBuildDate>
     <atom:link href="https://codesprintpro.com/feed.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Kruskal’s Algorithm in Java: Minimum Spanning Trees (MST)</title>
+      <link>https://codesprintpro.com/blog/kruskals-algorithm-java/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/kruskals-algorithm-java/</guid>
+      <description>Master Kruskal&apos;s Algorithm in Java for finding the Minimum Spanning Tree (MST) of a connected, undirected, weighted graph. Learn its intuition, implementation with Union-Find, dry runs, and complexity analysis.</description>
+      <pubDate>Sun, 19 Apr 2026 00:00:00 GMT</pubDate>
+      <category>DSA</category><category>dsa</category><category>java</category><category>kruskal&apos;s algorithm</category><category>mst</category><category>minimum spanning tree</category><category>graph</category><category>union find</category><category>interview preparation</category><category>algorithms</category>
+    </item>
+    <item>
       <title>Matrix Traversal in Java: Spiral, Diagonal, and Flood Fill</title>
       <link>https://codesprintpro.com/blog/matrix-traversal-java/</link>
       <guid isPermaLink="true">https://codesprintpro.com/blog/matrix-traversal-java/</guid>
@@ -398,14 +406,6 @@
       <description>Design a production usage metering and billing platform: event ingestion, idempotency, aggregation, pricing, quotas, invoices, reconciliation, audit logs, backfills, and failure recovery for SaaS products.</description>
       <pubDate>Wed, 08 Apr 2026 00:00:00 GMT</pubDate>
       <category>System Design</category><category>system design</category><category>billing</category><category>usage metering</category><category>idempotency</category><category>saas</category><category>event driven architecture</category><category>distributed systems</category>
-    </item>
-    <item>
-      <title>System Design: Building a Webhook Delivery Platform</title>
-      <link>https://codesprintpro.com/blog/system-design-webhook-delivery-platform/</link>
-      <guid isPermaLink="true">https://codesprintpro.com/blog/system-design-webhook-delivery-platform/</guid>
-      <description>Design a production webhook delivery platform with event ingestion, outbox persistence, retries, exponential backoff, signing, endpoint secrets, idempotency, rate limits, dead-letter queues, replay, observability, and tenant isolation.</description>
-      <pubDate>Wed, 08 Apr 2026 00:00:00 GMT</pubDate>
-      <category>System Design</category><category>system design</category><category>webhooks</category><category>event driven architecture</category><category>idempotency</category><category>retries</category><category>distributed systems</category><category>backend engineering</category>
     </item>
   </channel>
 </rss>
