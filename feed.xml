@@ -24,6 +24,14 @@
       <category>DSA</category><category>dsa</category><category>java</category><category>bellman-ford</category><category>shortest path</category><category>weighted graph</category><category>negative weights</category><category>negative cycle</category><category>interview preparation</category><category>algorithms</category>
     </item>
     <item>
+      <title>Bellman-Ford Algorithm in Java: Shortest Paths with Negative Weights</title>
+      <link>https://codesprintpro.com/blog/bellman-ford-java/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/bellman-ford-java/</guid>
+      <description>Master the Bellman-Ford algorithm in Java. Learn how it handles negative edge weights and detects negative cycles in a weighted graph, and how it compares to Dijkstra.</description>
+      <pubDate>Sun, 19 Apr 2026 00:00:00 GMT</pubDate>
+      <category>DSA</category><category>dsa</category><category>java</category><category>graph</category><category>shortest path</category><category>bellman-ford</category><category>negative weights</category><category>interview preparation</category><category>algorithms</category>
+    </item>
+    <item>
       <title>Kruskal’s Algorithm in Java: Minimum Spanning Trees (MST)</title>
       <link>https://codesprintpro.com/blog/kruskals-algorithm-java/</link>
       <guid isPermaLink="true">https://codesprintpro.com/blog/kruskals-algorithm-java/</guid>
@@ -398,14 +406,6 @@
       <description>Design a production job scheduler like Quartz, Airflow, or Cloud Scheduler: cron parsing, durable job storage, leases, retries, idempotency, delayed execution, worker pools, multi-tenancy, observability, and failure recovery.</description>
       <pubDate>Wed, 08 Apr 2026 00:00:00 GMT</pubDate>
       <category>System Design</category><category>system design</category><category>job scheduler</category><category>distributed systems</category><category>cron</category><category>queues</category><category>idempotency</category><category>backend engineering</category>
-    </item>
-    <item>
-      <title>System Design: Building a Metrics Platform Like Prometheus</title>
-      <link>https://codesprintpro.com/blog/system-design-metrics-platform/</link>
-      <guid isPermaLink="true">https://codesprintpro.com/blog/system-design-metrics-platform/</guid>
-      <description>Design a production metrics platform: ingestion, scraping vs push, time-series storage, labels and cardinality, rollups, retention, alerting, query APIs, multi-tenancy, downsampling, and operational guardrails.</description>
-      <pubDate>Wed, 08 Apr 2026 00:00:00 GMT</pubDate>
-      <category>System Design</category><category>system design</category><category>metrics</category><category>observability</category><category>time series</category><category>prometheus</category><category>alerting</category><category>distributed systems</category>
     </item>
   </channel>
 </rss>
