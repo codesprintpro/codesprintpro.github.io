@@ -136,6 +136,14 @@
       <category>DSA</category><category>dsa</category><category>java</category><category>segment tree</category><category>range query</category><category>optimization</category><category>interview preparation</category><category>algorithms</category>
     </item>
     <item>
+      <title>Suffix Arrays and Suffix Trees in Java: Advanced String Structures</title>
+      <link>https://codesprintpro.com/blog/suffix-array-tree-java/</link>
+      <guid isPermaLink="true">https://codesprintpro.com/blog/suffix-array-tree-java/</guid>
+      <description>Master Suffix Arrays and Suffix Trees in Java. Learn how these advanced structures enable O(m log n) substring searching and solve complex string problems in linear time.</description>
+      <pubDate>Sun, 19 Apr 2026 00:00:00 GMT</pubDate>
+      <category>DSA</category><category>dsa</category><category>java</category><category>algorithms</category><category>string</category><category>suffix array</category><category>suffix tree</category><category>interview preparation</category>
+    </item>
+    <item>
       <title>Z-Algorithm in Java: Linear Time String Matching</title>
       <link>https://codesprintpro.com/blog/z-algorithm-java/</link>
       <guid isPermaLink="true">https://codesprintpro.com/blog/z-algorithm-java/</guid>
@@ -398,14 +406,6 @@
       <description>A practical PostgreSQL locking guide for production incidents: how to find blocking queries, understand lock modes, debug deadlocks, use lock_timeout and statement_timeout, avoid idle-in-transaction sessions, and design safer migrations.</description>
       <pubDate>Wed, 08 Apr 2026 00:00:00 GMT</pubDate>
       <category>Databases</category><category>postgresql</category><category>locking</category><category>deadlocks</category><category>database</category><category>performance</category><category>production debugging</category><category>sql</category>
-    </item>
-    <item>
-      <title>Retrieval Systems for RAG: BM25, Dense Retrieval, Hybrid Search, and Reranking</title>
-      <link>https://codesprintpro.com/blog/retrieval-systems-bm25-dense-hybrid/</link>
-      <guid isPermaLink="true">https://codesprintpro.com/blog/retrieval-systems-bm25-dense-hybrid/</guid>
-      <description>How modern retrieval pipelines work: BM25 internals (TF-IDF, k1/b parameters), bi-encoder dense retrieval, why hybrid search beats both individually, Reciprocal Rank Fusion, cross-encoder reranking with ColBERT, HyDE query expansion, chunking strategies, and evaluating retrieval quality with NDCG and Recall@K.</description>
-      <pubDate>Wed, 08 Apr 2026 00:00:00 GMT</pubDate>
-      <category>AI/ML</category><category>retrieval</category><category>bm25</category><category>rag</category><category>hybrid search</category><category>reranking</category><category>colbert</category><category>elasticsearch</category><category>dense retrieval</category>
     </item>
   </channel>
 </rss>
