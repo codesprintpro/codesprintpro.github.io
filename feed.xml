@@ -96,12 +96,12 @@
       <category>DSA</category><category>dsa</category><category>java</category><category>matrix</category><category>grid</category><category>traversal</category><category>spiral order</category><category>diagonal traversal</category><category>flood fill</category><category>interview preparation</category><category>algorithms</category>
     </item>
     <item>
-      <title>Prim’s Algorithm in Java: Minimum Spanning Trees (MST)</title>
+      <title>Prim&apos;s Algorithm in Java: Minimum Spanning Tree via Greedy Growth</title>
       <link>https://codesprintpro.com/blog/prims-algorithm-java/</link>
       <guid isPermaLink="true">https://codesprintpro.com/blog/prims-algorithm-java/</guid>
-      <description>Master Prim&apos;s Algorithm in Java for finding the Minimum Spanning Tree (MST) of a connected, undirected, weighted graph. Learn its intuition, implementation with a PriorityQueue, dry runs, and complexity analysis.</description>
+      <description>Master Prim&apos;s algorithm in Java. Learn how to use a PriorityQueue to build a Minimum Spanning Tree (MST) by growing it one vertex at a time from a starting node.</description>
       <pubDate>Sun, 19 Apr 2026 00:00:00 GMT</pubDate>
-      <category>DSA</category><category>dsa</category><category>java</category><category>prim&apos;s algorithm</category><category>mst</category><category>minimum spanning tree</category><category>graph</category><category>priority queue</category><category>interview preparation</category><category>algorithms</category>
+      <category>DSA</category><category>dsa</category><category>java</category><category>graph</category><category>mst</category><category>prim</category><category>priority queue</category><category>interview preparation</category><category>algorithms</category>
     </item>
     <item>
       <title>BFS (Breadth First Search) in Java: Level-Order and Shortest Path</title>
